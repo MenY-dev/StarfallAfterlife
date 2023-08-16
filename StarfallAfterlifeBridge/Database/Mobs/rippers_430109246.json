@@ -1,0 +1,384 @@
+{
+	"Id": 430109246,
+	"InternalName": "rippers",
+	"Faction": 11,
+	"Level": 12,
+	"VisionRadius": 3,
+	"Speed": 0.7,
+	"BehaviorTreeName": "/Game/gameplay/ai/fleets/screechers/BT_ScreechersFleet.BT_ScreechersFleet",
+	"MainShipIndex": 0,
+	"Tags": [],
+	"Ships": [
+		{
+			"Data": {
+	"hull": 713411250,
+	"ship_skin": 2118055618,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": []
+		},
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": []
+		},
+		{
+			"hp": "LeftCannons",
+			"eqlist": [
+				{
+					"eq": 356783821,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightCannons",
+			"eqlist": [
+				{
+					"eq": 356783821,
+					"x": 1,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 1778316309,
+					"x": 1,
+					"y": 2
+				},
+				{
+					"eq": 232644897,
+					"x": 3,
+					"y": 1
+				},
+				{
+					"eq": 1239432978,
+					"x": 1,
+					"y": 1
+				},
+				{
+					"eq": 1239432978,
+					"x": 2,
+					"y": 1
+				},
+				{
+					"eq": 232644897,
+					"x": 0,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "CenterCannons",
+			"eqlist": [
+				{
+					"eq": 356783821,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 356783821,
+					"x": 2,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RocketsHardpoint",
+			"eqlist": [
+				{
+					"eq": 2111139409,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RocketsHardpoint1",
+			"eqlist": [
+				{
+					"eq": 2111139409,
+					"x": 2,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 15000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": [],
+				"drop_tree":
+				{
+					"type": 1,
+					"chance": 1,
+					"weight": 1,
+					"childs": [
+						{
+							"type": 2,
+							"chance": 1,
+							"weight": 1,
+							"item_id": 1307159283,
+							"item_type": 2,
+							"item_min": 1,
+							"item_max": 2
+						},
+						{
+							"type": 2,
+							"chance": 1,
+							"weight": 1,
+							"item_id": 568787461,
+							"item_type": 1,
+							"item_min": 1,
+							"item_max": 3
+						}
+					]
+				}
+			}
+		},
+		{
+			"Data": {
+	"hull": 1324692106,
+	"ship_skin": 936615778,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": []
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": []
+		},
+		{
+			"hp": "RocketsHardpoint",
+			"eqlist": [
+				{
+					"eq": 1954187423,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": []
+		},
+		{
+			"hp": "Beams",
+			"eqlist": [
+				{
+					"eq": 329485610,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 329485610,
+					"x": 0,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "Beams1",
+			"eqlist": [
+				{
+					"eq": 329485610,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 329485610,
+					"x": 0,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "Beams2",
+			"eqlist": []
+		},
+		{
+			"hp": "Beams3",
+			"eqlist": []
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 7500,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 1324692106,
+	"ship_skin": 936615778,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": []
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": []
+		},
+		{
+			"hp": "RocketsHardpoint",
+			"eqlist": [
+				{
+					"eq": 1954187423,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": []
+		},
+		{
+			"hp": "Beams",
+			"eqlist": [
+				{
+					"eq": 329485610,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 329485610,
+					"x": 0,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "Beams1",
+			"eqlist": [
+				{
+					"eq": 329485610,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 329485610,
+					"x": 0,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "Beams2",
+			"eqlist": []
+		},
+		{
+			"hp": "Beams3",
+			"eqlist": []
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 7500,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 1324692106,
+	"ship_skin": 936615778,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": []
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": []
+		},
+		{
+			"hp": "RocketsHardpoint",
+			"eqlist": [
+				{
+					"eq": 1954187423,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": []
+		},
+		{
+			"hp": "Beams",
+			"eqlist": [
+				{
+					"eq": 329485610,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 329485610,
+					"x": 0,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "Beams1",
+			"eqlist": [
+				{
+					"eq": 329485610,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 329485610,
+					"x": 0,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "Beams2",
+			"eqlist": []
+		},
+		{
+			"hp": "Beams3",
+			"eqlist": []
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 7500,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		}
+	]
+}

@@ -1,0 +1,271 @@
+{
+	"Id": 1663159383,
+	"InternalName": "coyotes",
+	"Faction": 11,
+	"Level": 34,
+	"VisionRadius": 3,
+	"Speed": 0.7,
+	"BehaviorTreeName": "/Game/gameplay/ai/fleets/screechers/BT_ScreechersFleet.BT_ScreechersFleet",
+	"MainShipIndex": 0,
+	"Tags": [],
+	"Ships": [
+		{
+			"Data": {
+	"hull": 848458912,
+	"ship_skin": 1773439841,
+	"hplist": [
+		{
+			"hp": "LeftLeftCannons",
+			"eqlist": [
+				{
+					"eq": 659285409,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 659285409,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightMiddleCannons",
+			"eqlist": [
+				{
+					"eq": 659285409,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 659285409,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Rockets",
+			"eqlist": [
+				{
+					"eq": 815859592,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "LeftEngine",
+			"eqlist": [
+				{
+					"eq": 6723219,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightEngine",
+			"eqlist": [
+				{
+					"eq": 6723219,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay_1",
+			"eqlist": []
+		},
+		{
+			"hp": "EngineeringBay_2",
+			"eqlist": []
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 20000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 848458912,
+	"ship_skin": 1773439841,
+	"hplist": [
+		{
+			"hp": "LeftLeftCannons",
+			"eqlist": [
+				{
+					"eq": 659285409,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 659285409,
+					"x": 2,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightMiddleCannons",
+			"eqlist": [
+				{
+					"eq": 659285409,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 659285409,
+					"x": 2,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Rockets",
+			"eqlist": [
+				{
+					"eq": 815859592,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "LeftEngine",
+			"eqlist": [
+				{
+					"eq": 6723219,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightEngine",
+			"eqlist": [
+				{
+					"eq": 6723219,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay_1",
+			"eqlist": []
+		},
+		{
+			"hp": "EngineeringBay_2",
+			"eqlist": []
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 20000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 848458912,
+	"ship_skin": 1773439841,
+	"hplist": [
+		{
+			"hp": "LeftLeftCannons",
+			"eqlist": [
+				{
+					"eq": 659285409,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 659285409,
+					"x": 2,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightMiddleCannons",
+			"eqlist": [
+				{
+					"eq": 659285409,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 659285409,
+					"x": 2,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Rockets",
+			"eqlist": [
+				{
+					"eq": 815859592,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "LeftEngine",
+			"eqlist": [
+				{
+					"eq": 6723219,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightEngine",
+			"eqlist": [
+				{
+					"eq": 6723219,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay_1",
+			"eqlist": []
+		},
+		{
+			"hp": "EngineeringBay_2",
+			"eqlist": []
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 20000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		}
+	]
+}

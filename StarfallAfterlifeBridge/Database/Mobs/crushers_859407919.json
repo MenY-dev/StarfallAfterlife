@@ -1,0 +1,615 @@
+{
+	"Id": 859407919,
+	"InternalName": "crushers",
+	"Faction": 11,
+	"Level": 85,
+	"VisionRadius": 3,
+	"Speed": 0.7,
+	"BehaviorTreeName": "/Game/gameplay/ai/fleets/screechers/BT_ScreechersFleet.BT_ScreechersFleet",
+	"MainShipIndex": 0,
+	"Tags": [],
+	"Ships": [
+		{
+			"Data": {
+	"hull": 1940726437,
+	"ship_skin": 1332877173,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 1881686706,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": [
+				{
+					"eq": 1881686706,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint2",
+			"eqlist": [
+				{
+					"eq": 1881686706,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "CarrierHardpoint2",
+			"eqlist": [
+				{
+					"eq": 1221453526,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 576507715,
+					"x": 3,
+					"y": 0
+				},
+				{
+					"eq": 1640790496,
+					"x": 5,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "CarrierHardpoint3",
+			"eqlist": [
+				{
+					"eq": 2032592200,
+					"x": 3,
+					"y": 0
+				},
+				{
+					"eq": 1778316309,
+					"x": 1,
+					"y": 0
+				},
+				{
+					"eq": 1239432978,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "LeftRockets",
+			"eqlist": [
+				{
+					"eq": 929709523,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 929709523,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 929709523,
+					"x": 1,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightRockets",
+			"eqlist": [
+				{
+					"eq": 929709523,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 929709523,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 929709523,
+					"x": 1,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 329266154,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay4",
+			"eqlist": [
+				{
+					"eq": 3576156,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay5",
+			"eqlist": [
+				{
+					"eq": 1993373720,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay6",
+			"eqlist": [
+				{
+					"eq": 1993373720,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontCannons",
+			"eqlist": [
+				{
+					"eq": 2089211041,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 2089211041,
+					"x": 2,
+					"y": 3
+				},
+				{
+					"eq": 2089211041,
+					"x": 4,
+					"y": 0
+				},
+				{
+					"eq": 2089211041,
+					"x": 4,
+					"y": 3
+				},
+				{
+					"eq": 2089211041,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 2089211041,
+					"x": 0,
+					"y": 3
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 100000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "/Game/gameplay/ai/ships/BT_Sniper.BT_Sniper",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 194536920,
+	"ship_skin": 949013273,
+	"hplist": [
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 70194464,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay1",
+			"eqlist": [
+				{
+					"eq": 807996385,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontLaser",
+			"eqlist": [
+				{
+					"eq": 1573381788,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1573381788,
+					"x": 2,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontLeftCannons",
+			"eqlist": [
+				{
+					"eq": 1573381788,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1573381788,
+					"x": 1,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightCannons",
+			"eqlist": [
+				{
+					"eq": 576507715,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 576507715,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": [
+				{
+					"eq": 1461734848,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontRightCannons",
+			"eqlist": [
+				{
+					"eq": 1573381788,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1573381788,
+					"x": 1,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "LeftCannons",
+			"eqlist": [
+				{
+					"eq": 576507715,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 576507715,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 1461734848,
+					"x": 0,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 50000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "/Game/gameplay/ai/ships/BT_Sniper.BT_Sniper",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 194536920,
+	"ship_skin": 949013273,
+	"hplist": [
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 70194464,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay1",
+			"eqlist": [
+				{
+					"eq": 807996385,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontLaser",
+			"eqlist": [
+				{
+					"eq": 1573381788,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 1573381788,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontLeftCannons",
+			"eqlist": [
+				{
+					"eq": 1573381788,
+					"x": 1,
+					"y": 0
+				},
+				{
+					"eq": 1573381788,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightCannons",
+			"eqlist": [
+				{
+					"eq": 576507715,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 576507715,
+					"x": 0,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": [
+				{
+					"eq": 1461734848,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontRightCannons",
+			"eqlist": [
+				{
+					"eq": 1573381788,
+					"x": 1,
+					"y": 0
+				},
+				{
+					"eq": 1573381788,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "LeftCannons",
+			"eqlist": [
+				{
+					"eq": 576507715,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 576507715,
+					"x": 0,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 1461734848,
+					"x": 0,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 50000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "/Game/gameplay/ai/ships/BT_Sniper.BT_Sniper",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 194536920,
+	"ship_skin": 949013273,
+	"hplist": [
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 70194464,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay1",
+			"eqlist": [
+				{
+					"eq": 807996385,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontLaser",
+			"eqlist": [
+				{
+					"eq": 1573381788,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 1573381788,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontLeftCannons",
+			"eqlist": [
+				{
+					"eq": 1573381788,
+					"x": 1,
+					"y": 0
+				},
+				{
+					"eq": 1573381788,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightCannons",
+			"eqlist": [
+				{
+					"eq": 576507715,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 576507715,
+					"x": 0,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": [
+				{
+					"eq": 1461734848,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontRightCannons",
+			"eqlist": [
+				{
+					"eq": 1573381788,
+					"x": 1,
+					"y": 0
+				},
+				{
+					"eq": 1573381788,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "LeftCannons",
+			"eqlist": [
+				{
+					"eq": 576507715,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 576507715,
+					"x": 0,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 1461734848,
+					"x": 0,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 50000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "/Game/gameplay/ai/ships/BT_Sniper.BT_Sniper",
+				"tags": []
+			}
+		}
+	]
+}

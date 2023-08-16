@@ -1,0 +1,146 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:controls="using:StarfallAfterlife.Launcher.Controls"
+        xmlns:sys="using:System">
+
+	<ResourceDictionary.MergedDictionaries>
+		<ResourceInclude Source="/Styles/Colors.axaml"/>
+	</ResourceDictionary.MergedDictionaries>
+
+	<Design.PreviewWith>
+		<Border Padding="20" Width="300" Height="400" Background="#404550">
+			<Button Content="Show" VerticalAlignment="Top" HorizontalAlignment="Center">
+				<Button.Flyout>
+					<controls:SfaMenuFlyout>
+						<sys:String>Item 1</sys:String>
+						<sys:String>Item 2</sys:String>
+						<sys:String>Item 3</sys:String>
+						<sys:String>Item 4</sys:String>
+						<sys:String>Item 5</sys:String>
+					</controls:SfaMenuFlyout>
+				</Button.Flyout>
+			</Button>
+		</Border>
+	</Design.PreviewWith>
+
+
+	<ControlTheme x:Key="{x:Type controls:SfaMenuItem}"
+				  TargetType="controls:SfaMenuItem"
+				  BasedOn="{StaticResource {x:Type MenuItem}}">
+		<Setter Property="Background" Value="Transparent" />
+		<Setter Property="Foreground" Value="White" />
+		<Setter Property="Padding" Value="{DynamicResource MenuFlyoutItemThemePaddingNarrow}" />
+		<Setter Property="FontSize" Value="{DynamicResource ControlContentThemeFontSize}" />
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Panel>
+					<Border Name="Background"
+							Background="{TemplateBinding Background}"/>
+
+					<Border Name="Border"
+							BorderBrush="{TemplateBinding BorderBrush}"
+							BorderThickness="{TemplateBinding BorderThickness}"
+							Opacity="0.75"/>
+					<Border Background="Transparent" Padding="{TemplateBinding Padding}">
+						<Grid>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="Auto"
+												  SharedSizeGroup="MenuItemIcon" />
+								<ColumnDefinition Width="*" />
+								<ColumnDefinition Width="Auto"
+												  SharedSizeGroup="MenuItemIGT" />
+								<ColumnDefinition Width="Auto"
+												  SharedSizeGroup="MenuItemChevron" />
+							</Grid.ColumnDefinitions>
+
+							<Viewbox Name="PART_IconPresenter"
+									 Margin="{DynamicResource MenuIconPresenterMargin}"
+									 StretchDirection="DownOnly"
+									 HorizontalAlignment="Center"
+									 VerticalAlignment="Center"
+									 IsVisible="False"
+									 Width="16" Height="16">
+								<ContentPresenter Content="{TemplateBinding Icon}"/>
+							</Viewbox>
+
+							<ContentPresenter Name="PART_HeaderPresenter"
+											  Content="{TemplateBinding Header}"
+											  ContentTemplate="{TemplateBinding HeaderTemplate}"
+											  VerticalAlignment="Center"
+											  HorizontalAlignment="Stretch"
+											  RecognizesAccessKey="True"
+											  Grid.Column="1"/>
+							<TextBlock x:Name="PART_InputGestureText"
+									   Grid.Column="2"
+									   Classes="CaptionTextBlockStyle"
+									   Margin="{DynamicResource MenuInputGestureTextMargin}"
+									   Text="{TemplateBinding InputGesture, Converter={StaticResource KeyGestureConverter}}"
+									   HorizontalAlignment="Right"
+									   VerticalAlignment="Center"
+									   Foreground="{DynamicResource MenuFlyoutItemKeyboardAcceleratorTextForeground}"/>
+							<Path Name="PART_ChevronPath"
+								  Stretch="Uniform"
+								  Width="8"
+								  Height="16"
+								  Data="{StaticResource MenuItemChevronPathData}"
+								  Fill="{DynamicResource MenuFlyoutSubItemChevron}"
+								  Margin="{DynamicResource MenuFlyoutItemChevronMargin}"
+								  VerticalAlignment="Center"
+								  Grid.Column="3" />
+						</Grid>
+					</Border>
+					<Popup Name="PART_Popup"
+						   WindowManagerAddShadowHint="False"
+						   Placement="RightEdgeAlignedTop"
+						   HorizontalOffset="{DynamicResource MenuFlyoutSubItemPopupHorizontalOffset}"
+						   IsLightDismissEnabled="False"
+						   IsOpen="{TemplateBinding IsSubMenuOpen, Mode=TwoWay}">
+						<Border Background="{DynamicResource MenuFlyoutPresenterBackground}"
+								BorderBrush="{DynamicResource MenuFlyoutPresenterBorderBrush}"
+								BorderThickness="{DynamicResource MenuFlyoutPresenterBorderThemeThickness}"
+								Padding="{DynamicResource MenuFlyoutPresenterThemePadding}"
+								MaxWidth="{DynamicResource FlyoutThemeMaxWidth}"
+								MinHeight="{DynamicResource MenuFlyoutThemeMinHeight}"
+								HorizontalAlignment="Stretch"
+								CornerRadius="{DynamicResource OverlayCornerRadius}">
+							<ScrollViewer Theme="{StaticResource FluentMenuScrollViewer}">
+								<ItemsPresenter Name="PART_ItemsPresenter"
+												ItemsPanel="{TemplateBinding ItemsPanel}"
+												Margin="{DynamicResource MenuFlyoutScrollerMargin}"
+												Grid.IsSharedSizeScope="True" />
+							</ScrollViewer>
+						</Border>
+					</Popup>
+				</Panel>
+			</ControlTemplate>
+		</Setter>
+
+		<!--  PointerOver state  -->
+		<Style Selector="^:selected">
+			<Setter Property="Background" Value="Black"/>
+			<Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+			<Setter Property="BorderThickness" Value="1" />
+
+			<Style Selector="^ /template/ Border#Background">
+				<Setter Property="Opacity" Value="0.1" />
+			</Style>
+			<Style Selector="^ /template/ ContentPresenter#PART_HeaderPresenter">
+				<Setter Property="Foreground" Value="{TemplateBinding Foreground}" />
+			</Style>
+		</Style>
+
+		<!--  Disabled state  -->
+		<Style Selector="^:disabled">
+			<Setter Property="Opacity" Value="0.5"/>
+		</Style>
+
+		<!--  Pressed state  -->
+		<Style Selector="^:pressed">
+			<Setter Property="Background" Value="Black"/>
+			<Style Selector="^ /template/ Border#Background">
+				<Setter Property="Background" Value="Black"/>
+				<Setter Property="Opacity" Value="0.2" />
+			</Style>
+		</Style>
+	</ControlTheme>
+</ResourceDictionary>

@@ -1,0 +1,497 @@
+{
+	"Id": 333348730,
+	"InternalName": "Meritocrats",
+	"Faction": 11,
+	"Level": 66,
+	"VisionRadius": 3,
+	"Speed": 0.7,
+	"BehaviorTreeName": "/Game/gameplay/ai/fleets/screechers/BT_ScreechersFleet.BT_ScreechersFleet",
+	"MainShipIndex": 0,
+	"Tags": [],
+	"Ships": [
+		{
+			"Data": {
+	"hull": 66449208,
+	"ship_skin": 1062151801,
+	"hplist": [
+		{
+			"hp": "LeftCannons",
+			"eqlist": [
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "Right Cannons",
+			"eqlist": [
+				{
+					"eq": 974781291,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 974781291,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RocketsHardpoint",
+			"eqlist": [
+				{
+					"eq": 488301825,
+					"x": 1,
+					"y": 0
+				},
+				{
+					"eq": 488301825,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 488301825,
+					"x": 2,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 1280464671,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": [
+				{
+					"eq": 1280464671,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay2",
+			"eqlist": [
+				{
+					"eq": 2029438327,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1456543784,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 1177626061,
+					"x": 2,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "LeftBeams",
+			"eqlist": []
+		},
+		{
+			"hp": "Right Beams",
+			"eqlist": []
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 30000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 66449208,
+	"ship_skin": 1062151801,
+	"hplist": [
+		{
+			"hp": "LeftCannons",
+			"eqlist": [
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 2
+				},
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Right Cannons",
+			"eqlist": [
+				{
+					"eq": 974781291,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 974781291,
+					"x": 0,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "RocketsHardpoint",
+			"eqlist": [
+				{
+					"eq": 488301825,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 488301825,
+					"x": 1,
+					"y": 0
+				},
+				{
+					"eq": 488301825,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 1280464671,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": [
+				{
+					"eq": 1280464671,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay2",
+			"eqlist": [
+				{
+					"eq": 2029438327,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1456543784,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 1177626061,
+					"x": 2,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "LeftBeams",
+			"eqlist": []
+		},
+		{
+			"hp": "Right Beams",
+			"eqlist": []
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 30000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 66449208,
+	"ship_skin": 1062151801,
+	"hplist": [
+		{
+			"hp": "LeftCannons",
+			"eqlist": [
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 2
+				},
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Right Cannons",
+			"eqlist": [
+				{
+					"eq": 974781291,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 974781291,
+					"x": 0,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "RocketsHardpoint",
+			"eqlist": [
+				{
+					"eq": 488301825,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 488301825,
+					"x": 1,
+					"y": 0
+				},
+				{
+					"eq": 488301825,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 1280464671,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": [
+				{
+					"eq": 1280464671,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay2",
+			"eqlist": [
+				{
+					"eq": 2029438327,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1456543784,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 1177626061,
+					"x": 2,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "LeftBeams",
+			"eqlist": []
+		},
+		{
+			"hp": "Right Beams",
+			"eqlist": []
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 30000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 66449208,
+	"ship_skin": 1062151801,
+	"hplist": [
+		{
+			"hp": "LeftCannons",
+			"eqlist": [
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 2
+				},
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Right Cannons",
+			"eqlist": [
+				{
+					"eq": 974781291,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 974781291,
+					"x": 0,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "RocketsHardpoint",
+			"eqlist": [
+				{
+					"eq": 488301825,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 488301825,
+					"x": 1,
+					"y": 0
+				},
+				{
+					"eq": 488301825,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 1280464671,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": [
+				{
+					"eq": 1280464671,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay2",
+			"eqlist": [
+				{
+					"eq": 2029438327,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1456543784,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 1177626061,
+					"x": 2,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "LeftBeams",
+			"eqlist": []
+		},
+		{
+			"hp": "Right Beams",
+			"eqlist": []
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 30000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		}
+	]
+}

@@ -1,0 +1,108 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sys="using:System"
+        xmlns:me="using:StarfallAfterlife.Launcher.MobsEditor"
+        xmlns:c="using:StarfallAfterlife.Launcher.Controls"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+		Width="1200" Height="800"
+        x:Class="StarfallAfterlife.Launcher.MobsEditor.ShipSelector"
+		Title="Ships"
+		Background="#90000000"
+		TransparencyLevelHint="AcrylicBlur"
+		WindowStartupLocation="CenterScreen"
+		RequestedThemeVariant="Dark">
+
+	<Window.Resources>
+		<sys:Boolean x:Key="True">True</sys:Boolean>
+		<sys:Boolean x:Key="False">False</sys:Boolean>
+	</Window.Resources>
+
+	<DockPanel LastChildFill="True" Margin="10">
+		<Panel DockPanel.Dock="Top" Margin="0 0 0 10">
+			<Label Content="Select Ship" FontSize="20" FontWeight="DemiBold" HorizontalAlignment="Left"/>
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Spacing="5">
+				<TextBlock Text="{Binding Ships.Count, StringFormat='{}{0} Ships  '}" VerticalAlignment="Center" Foreground="White" Opacity="0.5"/>
+				<TextBox Width="150" Watermark="Name" Text="{Binding NameFilter}"/>
+				<ComboBox Width="150" ItemsSource="{x:Static c:SfaUtils.FactionValues}" SelectedItem="{Binding FactionFilter}"/>
+				<ComboBox Width="150" ItemsSource="{x:Static c:SfaUtils.ShipClassValues}" SelectedItem="{Binding ShipClassFilter}"/>
+				<ComboBox Width="150" ItemsSource="{x:Static c:SfaUtils.TechTypeValues}" SelectedItem="{Binding TechTypeFilter}"/>
+			</StackPanel>
+		</Panel>
+		<Panel DockPanel.Dock="Bottom">
+			<StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Right" Margin="0 10 0 0">
+				<Button Content="Cancel" Command="{Binding Close}" CommandParameter="{StaticResource False}"/>
+				<Button Content="Select" Command="{Binding Close}" CommandParameter="{StaticResource True}"/>
+			</StackPanel>
+		</Panel>
+		<Panel>
+			<Rectangle Fill="White" Opacity="0.1" VerticalAlignment="Top" Height="1"/>
+			<Rectangle Fill="White" Opacity="0.1" VerticalAlignment="Bottom" Height="1"/>
+			<Grid ColumnDefinitions="1*,Auto">
+				<Panel Grid.Column="0">
+					<TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom" FontSize="30" FontWeight="Bold" Foreground="White" Opacity="0.25" Text="{Binding Selection.HullName}"/>
+					<me:ShipLayoutView Foreground="White" CellSize="40" Hardpoints="{Binding Selection.Hardpoints}"/>
+				</Panel>
+				<Panel Grid.Column="1">
+					<ListBox Width="500" Background="Transparent" ItemsSource="{Binding Ships}" SelectedItem="{Binding Selection}">
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<Panel HorizontalAlignment="Stretch">
+									<Rectangle Opacity="0.15" Fill="{Binding Faction, Converter={x:Static c:SfaUtils.FactionToBrushConverter}}"/>
+									<Grid RowDefinitions="Auto" ColumnDefinitions="Auto, 10, *">
+										<me:ShipLayoutView Width="120" Height="120" Grid.Column="0" CellSize="8" ShowText="False" Foreground="White" VerticalAlignment="Center" Hardpoints="{Binding Hardpoints}"/>
+										<StackPanel VerticalAlignment="Center" Grid.Column="2" Spacing="2" HorizontalAlignment="Stretch">
+											
+											<StackPanel Orientation="Horizontal">
+												<TextBlock Text="{Binding HullName}" FontSize="20" FontWeight="DemiBold"/>
+												<TextBlock Text="{Binding HullClass, StringFormat=' ({0})'}" FontSize="12" FontWeight="DemiBold" Opacity="0.5" VerticalAlignment="Center"/>
+											</StackPanel>
+											
+											<StackPanel Orientation="Horizontal" Spacing="5">
+												<Panel>
+													<Border BorderBrush="{Binding Faction, Converter={x:Static c:SfaUtils.FactionToBrushConverter}}" BorderThickness="1"/>
+													<TextBlock Text="{Binding Faction}" Foreground="{Binding Faction, Converter={x:Static c:SfaUtils.FactionToBrushConverter}}" FontSize="12" FontWeight="Bold" Margin="5 2"/>
+												</Panel>
+												<ItemsRepeater ItemsSource="{Binding Hardpoints, Converter={x:Static c:SfaUtils.HardpointsToShipSpecConverter}}">
+													<ItemsRepeater.Layout>
+														<StackLayout Orientation="Horizontal" Spacing="5"/>
+													</ItemsRepeater.Layout>
+													<ItemsRepeater.ItemTemplate>
+														<DataTemplate>
+															<Panel>
+																<Border BorderBrush="White" BorderThickness="1"/>
+																<TextBlock FontSize="12" FontWeight="Normal" Text="{Binding}" Margin="5 2"/>
+															</Panel>
+														</DataTemplate>
+													</ItemsRepeater.ItemTemplate>
+												</ItemsRepeater>
+											</StackPanel>
+											
+											<Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto,Auto,Auto,Auto" HorizontalAlignment="Stretch">
+												<TextBlock Foreground="#FF77FE51" FontSize="14" FontWeight="Bold" Grid.Row="1" Grid.Column="0" Text="{Binding HullStructure, StringFormat='{}{0}  &#xFF0B;'}"/>
+												<TextBlock Foreground="#FFBBBBBD" FontSize="14" FontWeight="Bold" Grid.Row="1" Grid.Column="1" Text="{Binding HullArmor, StringFormat='{}{0}  &#x2591;'}"/>
+												<TextBlock Foreground="#FF00D2FF" FontSize="14" FontWeight="Bold" Grid.Row="1" Grid.Column="2" Text="{Binding HullShieldPoints, StringFormat='{}{0}  &#128737;'}"/>
+												<TextBlock Foreground="#FFC7ECF7" FontSize="14" FontWeight="Bold" Grid.Row="2" Grid.Column="0" Text="{Binding HullSpeed, StringFormat='{}{0}  &#8667;'}"/>
+												<TextBlock Foreground="#FF00E9FF" FontSize="14" FontWeight="Bold" Grid.Row="2" Grid.Column="1" Text="{Binding HullCapacity, StringFormat='{}{0}  &#x1F50B;'}"/>
+												<TextBlock Foreground="#FFC7ECF7" FontSize="14" FontWeight="Bold" Grid.Row="2" Grid.Column="2" Text="{Binding HullMass, StringFormat='{}{0}  &#x2696;'}"/>
+											</Grid>
+											
+										</StackPanel>
+									</Grid>
+								</Panel>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+						<ListBox.Styles>
+							<Style Selector="ListBoxItem">
+								<Setter Property="Padding" Value="0"/>
+								<Setter Property="Margin" Value="0 5 0 5"/>
+							</Style>
+						</ListBox.Styles>
+					</ListBox>
+				</Panel>
+			</Grid>
+		</Panel>
+	</DockPanel>
+	
+</Window>

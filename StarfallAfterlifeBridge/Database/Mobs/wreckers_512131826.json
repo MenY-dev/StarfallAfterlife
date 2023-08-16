@@ -1,0 +1,2046 @@
+{
+	"Id": 512131826,
+	"InternalName": "wreckers",
+	"Faction": 13,
+	"Level": 93,
+	"VisionRadius": 3,
+	"Speed": 0.7,
+	"BehaviorTreeName": "",
+	"MainShipIndex": 0,
+	"Tags": [],
+	"Ships": [
+		{
+			"Data": {
+	"hull": 1928413438,
+	"ship_skin": 959648479,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 94387676,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 329266154,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1529026193,
+					"x": 3,
+					"y": 0
+				},
+				{
+					"eq": 168180536,
+					"x": 5,
+					"y": 1
+				},
+				{
+					"eq": 168180536,
+					"x": 7,
+					"y": 0
+				},
+				{
+					"eq": 168180536,
+					"x": 7,
+					"y": 1
+				},
+				{
+					"eq": 168180536,
+					"x": 5,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Rockets",
+			"eqlist": [
+				{
+					"eq": 1531641947,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1531641947,
+					"x": 0,
+					"y": 2
+				},
+				{
+					"eq": 1531641947,
+					"x": 0,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "SingleTurretHardpoint",
+			"eqlist": []
+		},
+		{
+			"hp": "SingleTurretHardpoint1",
+			"eqlist": []
+		},
+		{
+			"hp": "RightBeams",
+			"eqlist": []
+		},
+		{
+			"hp": "LeftBeams",
+			"eqlist": []
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 20000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "/Game/gameplay/ai/BtScout.BtScout",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 519720064,
+	"ship_skin": 1095973313,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 94387676,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": [
+				{
+					"eq": 94387676,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint2",
+			"eqlist": [
+				{
+					"eq": 94387676,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 329266154,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1439388296,
+					"x": 3,
+					"y": 0
+				},
+				{
+					"eq": 2032592200,
+					"x": 11,
+					"y": 1
+				},
+				{
+					"eq": 2032592200,
+					"x": 9,
+					"y": 0
+				},
+				{
+					"eq": 2032592200,
+					"x": 8,
+					"y": 1
+				},
+				{
+					"eq": 2032592200,
+					"x": 5,
+					"y": 1
+				},
+				{
+					"eq": 168180536,
+					"x": 7,
+					"y": 0
+				},
+				{
+					"eq": 168180536,
+					"x": 5,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "CenterBeams",
+			"eqlist": []
+		},
+		{
+			"hp": "RightBeams1",
+			"eqlist": []
+		},
+		{
+			"hp": "LeftBeams1",
+			"eqlist": []
+		},
+		{
+			"hp": "Rockets",
+			"eqlist": [
+				{
+					"eq": 1531641947,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1531641947,
+					"x": 0,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay1",
+			"eqlist": []
+		},
+		{
+			"hp": "EngineeringBay2",
+			"eqlist": []
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 20000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "/Game/gameplay/ai/BtScout.BtScout",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"elid": 0,
+	"plid": 0,
+	"hull": 1928413438,
+	"xp": 0,
+	"armor": 0,
+	"structure": 0,
+	"detachment": 0,
+	"slot": 0,
+	"ship_skin": 959648479,
+	"skin_color_1": 0,
+	"skin_color_2": 0,
+	"skin_color_3": 0,
+	"shipdecal": 0,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 94387676,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 329266154,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 1529026193,
+					"id": 0,
+					"x": 3,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 5,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 5,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 7,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 7,
+					"y": 1,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "Rockets",
+			"eqlist": [
+				{
+					"eq": 1531641947,
+					"id": 0,
+					"x": 0,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 1531641947,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 1531641947,
+					"id": 0,
+					"x": 0,
+					"y": 2,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "SingleTurretHardpoint",
+			"eqlist": []
+		},
+		{
+			"hp": "SingleTurretHardpoint1",
+			"eqlist": []
+		},
+		{
+			"hp": "RightBeams",
+			"eqlist": []
+		},
+		{
+			"hp": "LeftBeams",
+			"eqlist": []
+		}
+	],
+	"progression": [],
+	"cargo_hold_size": 0,
+	"cargo_list": []
+},
+			"ServiceData":
+			{
+				"xp": 20000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "/Game/gameplay/ai/BtScout.BtScout",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"elid": 0,
+	"plid": 0,
+	"hull": 519720064,
+	"xp": 0,
+	"armor": 0,
+	"structure": 0,
+	"detachment": 0,
+	"slot": 0,
+	"ship_skin": 1095973313,
+	"skin_color_1": 0,
+	"skin_color_2": 0,
+	"skin_color_3": 0,
+	"shipdecal": 0,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 94387676,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": [
+				{
+					"eq": 94387676,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint2",
+			"eqlist": [
+				{
+					"eq": 94387676,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 329266154,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 1439388296,
+					"id": 0,
+					"x": 3,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 2032592200,
+					"id": 0,
+					"x": 5,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 2032592200,
+					"id": 0,
+					"x": 11,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 2032592200,
+					"id": 0,
+					"x": 9,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 2032592200,
+					"id": 0,
+					"x": 8,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 5,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 7,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "CenterBeams",
+			"eqlist": []
+		},
+		{
+			"hp": "RightBeams1",
+			"eqlist": []
+		},
+		{
+			"hp": "LeftBeams1",
+			"eqlist": []
+		},
+		{
+			"hp": "Rockets",
+			"eqlist": [
+				{
+					"eq": 1531641947,
+					"id": 0,
+					"x": 0,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 1531641947,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay1",
+			"eqlist": []
+		},
+		{
+			"hp": "EngineeringBay2",
+			"eqlist": []
+		}
+	],
+	"progression": [],
+	"cargo_hold_size": 0,
+	"cargo_list": []
+},
+			"ServiceData":
+			{
+				"xp": 20000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "/Game/gameplay/ai/BtScout.BtScout",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"elid": 0,
+	"plid": 0,
+	"hull": 1928413438,
+	"xp": 0,
+	"armor": 0,
+	"structure": 0,
+	"detachment": 0,
+	"slot": 0,
+	"ship_skin": 959648479,
+	"skin_color_1": 0,
+	"skin_color_2": 0,
+	"skin_color_3": 0,
+	"shipdecal": 0,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 94387676,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 329266154,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 1529026193,
+					"id": 0,
+					"x": 3,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 5,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 5,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 7,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 7,
+					"y": 1,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "Rockets",
+			"eqlist": [
+				{
+					"eq": 1531641947,
+					"id": 0,
+					"x": 0,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 1531641947,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 1531641947,
+					"id": 0,
+					"x": 0,
+					"y": 2,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "SingleTurretHardpoint",
+			"eqlist": []
+		},
+		{
+			"hp": "SingleTurretHardpoint1",
+			"eqlist": []
+		},
+		{
+			"hp": "RightBeams",
+			"eqlist": []
+		},
+		{
+			"hp": "LeftBeams",
+			"eqlist": []
+		}
+	],
+	"progression": [],
+	"cargo_hold_size": 0,
+	"cargo_list": []
+},
+			"ServiceData":
+			{
+				"xp": 20000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "/Game/gameplay/ai/BtScout.BtScout",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"elid": 0,
+	"plid": 0,
+	"hull": 519720064,
+	"xp": 0,
+	"armor": 0,
+	"structure": 0,
+	"detachment": 0,
+	"slot": 0,
+	"ship_skin": 1095973313,
+	"skin_color_1": 0,
+	"skin_color_2": 0,
+	"skin_color_3": 0,
+	"shipdecal": 0,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 94387676,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": [
+				{
+					"eq": 94387676,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint2",
+			"eqlist": [
+				{
+					"eq": 94387676,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 329266154,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 1439388296,
+					"id": 0,
+					"x": 3,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 2032592200,
+					"id": 0,
+					"x": 5,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 2032592200,
+					"id": 0,
+					"x": 11,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 2032592200,
+					"id": 0,
+					"x": 9,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 2032592200,
+					"id": 0,
+					"x": 8,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 5,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 7,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "CenterBeams",
+			"eqlist": []
+		},
+		{
+			"hp": "RightBeams1",
+			"eqlist": []
+		},
+		{
+			"hp": "LeftBeams1",
+			"eqlist": []
+		},
+		{
+			"hp": "Rockets",
+			"eqlist": [
+				{
+					"eq": 1531641947,
+					"id": 0,
+					"x": 0,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 1531641947,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay1",
+			"eqlist": []
+		},
+		{
+			"hp": "EngineeringBay2",
+			"eqlist": []
+		}
+	],
+	"progression": [],
+	"cargo_hold_size": 0,
+	"cargo_list": []
+},
+			"ServiceData":
+			{
+				"xp": 20000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "/Game/gameplay/ai/BtScout.BtScout",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"elid": 0,
+	"plid": 0,
+	"hull": 1928413438,
+	"xp": 0,
+	"armor": 0,
+	"structure": 0,
+	"detachment": 0,
+	"slot": 0,
+	"ship_skin": 959648479,
+	"skin_color_1": 0,
+	"skin_color_2": 0,
+	"skin_color_3": 0,
+	"shipdecal": 0,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 94387676,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 329266154,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 1529026193,
+					"id": 0,
+					"x": 3,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 5,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 5,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 7,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 7,
+					"y": 1,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "Rockets",
+			"eqlist": [
+				{
+					"eq": 1531641947,
+					"id": 0,
+					"x": 0,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 1531641947,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 1531641947,
+					"id": 0,
+					"x": 0,
+					"y": 2,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "SingleTurretHardpoint",
+			"eqlist": []
+		},
+		{
+			"hp": "SingleTurretHardpoint1",
+			"eqlist": []
+		},
+		{
+			"hp": "RightBeams",
+			"eqlist": []
+		},
+		{
+			"hp": "LeftBeams",
+			"eqlist": []
+		}
+	],
+	"progression": [],
+	"cargo_hold_size": 0,
+	"cargo_list": []
+},
+			"ServiceData":
+			{
+				"xp": 20000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "/Game/gameplay/ai/BtScout.BtScout",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"elid": 0,
+	"plid": 0,
+	"hull": 519720064,
+	"xp": 0,
+	"armor": 0,
+	"structure": 0,
+	"detachment": 0,
+	"slot": 0,
+	"ship_skin": 1095973313,
+	"skin_color_1": 0,
+	"skin_color_2": 0,
+	"skin_color_3": 0,
+	"shipdecal": 0,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 94387676,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": [
+				{
+					"eq": 94387676,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint2",
+			"eqlist": [
+				{
+					"eq": 94387676,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 329266154,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 1439388296,
+					"id": 0,
+					"x": 3,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 2032592200,
+					"id": 0,
+					"x": 5,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 2032592200,
+					"id": 0,
+					"x": 11,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 2032592200,
+					"id": 0,
+					"x": 9,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 2032592200,
+					"id": 0,
+					"x": 8,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 5,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 7,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "CenterBeams",
+			"eqlist": []
+		},
+		{
+			"hp": "RightBeams1",
+			"eqlist": []
+		},
+		{
+			"hp": "LeftBeams1",
+			"eqlist": []
+		},
+		{
+			"hp": "Rockets",
+			"eqlist": [
+				{
+					"eq": 1531641947,
+					"id": 0,
+					"x": 0,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 1531641947,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay1",
+			"eqlist": []
+		},
+		{
+			"hp": "EngineeringBay2",
+			"eqlist": []
+		}
+	],
+	"progression": [],
+	"cargo_hold_size": 0,
+	"cargo_list": []
+},
+			"ServiceData":
+			{
+				"xp": 20000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "/Game/gameplay/ai/BtScout.BtScout",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"elid": 0,
+	"plid": 0,
+	"hull": 1928413438,
+	"xp": 0,
+	"armor": 0,
+	"structure": 0,
+	"detachment": 0,
+	"slot": 0,
+	"ship_skin": 959648479,
+	"skin_color_1": 0,
+	"skin_color_2": 0,
+	"skin_color_3": 0,
+	"shipdecal": 0,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 94387676,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 329266154,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 1529026193,
+					"id": 0,
+					"x": 3,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 5,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 5,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 7,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 7,
+					"y": 1,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "Rockets",
+			"eqlist": [
+				{
+					"eq": 1531641947,
+					"id": 0,
+					"x": 0,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 1531641947,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 1531641947,
+					"id": 0,
+					"x": 0,
+					"y": 2,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "SingleTurretHardpoint",
+			"eqlist": []
+		},
+		{
+			"hp": "SingleTurretHardpoint1",
+			"eqlist": []
+		},
+		{
+			"hp": "RightBeams",
+			"eqlist": []
+		},
+		{
+			"hp": "LeftBeams",
+			"eqlist": []
+		}
+	],
+	"progression": [],
+	"cargo_hold_size": 0,
+	"cargo_list": []
+},
+			"ServiceData":
+			{
+				"xp": 20000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "/Game/gameplay/ai/BtScout.BtScout",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"elid": 0,
+	"plid": 0,
+	"hull": 519720064,
+	"xp": 0,
+	"armor": 0,
+	"structure": 0,
+	"detachment": 0,
+	"slot": 0,
+	"ship_skin": 1095973313,
+	"skin_color_1": 0,
+	"skin_color_2": 0,
+	"skin_color_3": 0,
+	"shipdecal": 0,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 94387676,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": [
+				{
+					"eq": 94387676,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint2",
+			"eqlist": [
+				{
+					"eq": 94387676,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 329266154,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 1439388296,
+					"id": 0,
+					"x": 3,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 2032592200,
+					"id": 0,
+					"x": 5,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 2032592200,
+					"id": 0,
+					"x": 11,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 2032592200,
+					"id": 0,
+					"x": 9,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 2032592200,
+					"id": 0,
+					"x": 8,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 5,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 7,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "CenterBeams",
+			"eqlist": []
+		},
+		{
+			"hp": "RightBeams1",
+			"eqlist": []
+		},
+		{
+			"hp": "LeftBeams1",
+			"eqlist": []
+		},
+		{
+			"hp": "Rockets",
+			"eqlist": [
+				{
+					"eq": 1531641947,
+					"id": 0,
+					"x": 0,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 1531641947,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay1",
+			"eqlist": []
+		},
+		{
+			"hp": "EngineeringBay2",
+			"eqlist": []
+		}
+	],
+	"progression": [],
+	"cargo_hold_size": 0,
+	"cargo_list": []
+},
+			"ServiceData":
+			{
+				"xp": 20000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "/Game/gameplay/ai/BtScout.BtScout",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"elid": 0,
+	"plid": 0,
+	"hull": 1928413438,
+	"xp": 0,
+	"armor": 0,
+	"structure": 0,
+	"detachment": 0,
+	"slot": 0,
+	"ship_skin": 959648479,
+	"skin_color_1": 0,
+	"skin_color_2": 0,
+	"skin_color_3": 0,
+	"shipdecal": 0,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 94387676,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 329266154,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 1529026193,
+					"id": 0,
+					"x": 3,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 5,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 5,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 7,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 7,
+					"y": 1,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "Rockets",
+			"eqlist": [
+				{
+					"eq": 1531641947,
+					"id": 0,
+					"x": 0,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 1531641947,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 1531641947,
+					"id": 0,
+					"x": 0,
+					"y": 2,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "SingleTurretHardpoint",
+			"eqlist": []
+		},
+		{
+			"hp": "SingleTurretHardpoint1",
+			"eqlist": []
+		},
+		{
+			"hp": "RightBeams",
+			"eqlist": []
+		},
+		{
+			"hp": "LeftBeams",
+			"eqlist": []
+		}
+	],
+	"progression": [],
+	"cargo_hold_size": 0,
+	"cargo_list": []
+},
+			"ServiceData":
+			{
+				"xp": 20000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "/Game/gameplay/ai/BtScout.BtScout",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"elid": 0,
+	"plid": 0,
+	"hull": 519720064,
+	"xp": 0,
+	"armor": 0,
+	"structure": 0,
+	"detachment": 0,
+	"slot": 0,
+	"ship_skin": 1095973313,
+	"skin_color_1": 0,
+	"skin_color_2": 0,
+	"skin_color_3": 0,
+	"shipdecal": 0,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 94387676,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": [
+				{
+					"eq": 94387676,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint2",
+			"eqlist": [
+				{
+					"eq": 94387676,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 329266154,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 1439388296,
+					"id": 0,
+					"x": 3,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 2032592200,
+					"id": 0,
+					"x": 5,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 2032592200,
+					"id": 0,
+					"x": 11,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 2032592200,
+					"id": 0,
+					"x": 9,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 2032592200,
+					"id": 0,
+					"x": 8,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 5,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 7,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "CenterBeams",
+			"eqlist": []
+		},
+		{
+			"hp": "RightBeams1",
+			"eqlist": []
+		},
+		{
+			"hp": "LeftBeams1",
+			"eqlist": []
+		},
+		{
+			"hp": "Rockets",
+			"eqlist": [
+				{
+					"eq": 1531641947,
+					"id": 0,
+					"x": 0,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 1531641947,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay1",
+			"eqlist": []
+		},
+		{
+			"hp": "EngineeringBay2",
+			"eqlist": []
+		}
+	],
+	"progression": [],
+	"cargo_hold_size": 0,
+	"cargo_list": []
+},
+			"ServiceData":
+			{
+				"xp": 20000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "/Game/gameplay/ai/BtScout.BtScout",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"elid": 0,
+	"plid": 0,
+	"hull": 1928413438,
+	"xp": 0,
+	"armor": 0,
+	"structure": 0,
+	"detachment": 0,
+	"slot": 0,
+	"ship_skin": 959648479,
+	"skin_color_1": 0,
+	"skin_color_2": 0,
+	"skin_color_3": 0,
+	"shipdecal": 0,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 94387676,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 329266154,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 1529026193,
+					"id": 0,
+					"x": 3,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 5,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 5,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 7,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 7,
+					"y": 1,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "Rockets",
+			"eqlist": [
+				{
+					"eq": 1531641947,
+					"id": 0,
+					"x": 0,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 1531641947,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 1531641947,
+					"id": 0,
+					"x": 0,
+					"y": 2,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "SingleTurretHardpoint",
+			"eqlist": []
+		},
+		{
+			"hp": "SingleTurretHardpoint1",
+			"eqlist": []
+		},
+		{
+			"hp": "RightBeams",
+			"eqlist": []
+		},
+		{
+			"hp": "LeftBeams",
+			"eqlist": []
+		}
+	],
+	"progression": [],
+	"cargo_hold_size": 0,
+	"cargo_list": []
+},
+			"ServiceData":
+			{
+				"xp": 20000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "/Game/gameplay/ai/BtScout.BtScout",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"elid": 0,
+	"plid": 0,
+	"hull": 519720064,
+	"xp": 0,
+	"armor": 0,
+	"structure": 0,
+	"detachment": 0,
+	"slot": 0,
+	"ship_skin": 1095973313,
+	"skin_color_1": 0,
+	"skin_color_2": 0,
+	"skin_color_3": 0,
+	"shipdecal": 0,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 94387676,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": [
+				{
+					"eq": 94387676,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint2",
+			"eqlist": [
+				{
+					"eq": 94387676,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 329266154,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 1439388296,
+					"id": 0,
+					"x": 3,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 2032592200,
+					"id": 0,
+					"x": 5,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 2032592200,
+					"id": 0,
+					"x": 11,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 2032592200,
+					"id": 0,
+					"x": 9,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 2032592200,
+					"id": 0,
+					"x": 8,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 5,
+					"y": 0,
+					"destroyed": 0
+				},
+				{
+					"eq": 168180536,
+					"id": 0,
+					"x": 7,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "CenterBeams",
+			"eqlist": []
+		},
+		{
+			"hp": "RightBeams1",
+			"eqlist": []
+		},
+		{
+			"hp": "LeftBeams1",
+			"eqlist": []
+		},
+		{
+			"hp": "Rockets",
+			"eqlist": [
+				{
+					"eq": 1531641947,
+					"id": 0,
+					"x": 0,
+					"y": 1,
+					"destroyed": 0
+				},
+				{
+					"eq": 1531641947,
+					"id": 0,
+					"x": 0,
+					"y": 0,
+					"destroyed": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay1",
+			"eqlist": []
+		},
+		{
+			"hp": "EngineeringBay2",
+			"eqlist": []
+		}
+	],
+	"progression": [],
+	"cargo_hold_size": 0,
+	"cargo_list": []
+},
+			"ServiceData":
+			{
+				"xp": 20000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "/Game/gameplay/ai/ships/BT_Scout.BT_Scout",
+				"tags": []
+			}
+		}
+	]
+}

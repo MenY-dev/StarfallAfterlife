@@ -1,0 +1,88 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:controls="using:StarfallAfterlife.Launcher.Controls">
+
+	<Styles.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceInclude Source="/Styles/Colors.axaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Styles.Resources>
+
+	<Design.PreviewWith>
+        <Border Padding="20" Width="300" Height="400">
+			<controls:SfaAppSidebar Classes="app-sidebar">
+				<StackPanel>
+					<Button Content="Item 1"/>
+					<Button Content="Item 2"/>
+					<Button Content="Item 3"/>
+					<Button Content="Item 4"/>
+					<Button Content="Item 5"/>
+					<Button Content="Item 6"/>
+				</StackPanel>
+			</controls:SfaAppSidebar>
+        </Border>
+    </Design.PreviewWith>
+
+	<Style Selector="controls|SfaAppSidebar">
+		
+		<Setter Property="Width" Value="200"/>
+		<Setter Property="ClipToBounds" Value="false"/>
+		<Setter Property="Template">
+			<ControlTemplate TargetType="controls:SfaTab">
+				<Panel Classes="wrapper" Margin="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+					<Rectangle Classes="background"/>
+					<Rectangle Classes="shadow"/>
+					<ContentPresenter x:Name="PART_ContentPresenter"
+                          Background="{TemplateBinding Background}"
+                          BorderBrush="{TemplateBinding BorderBrush}"
+                          BorderThickness="{TemplateBinding BorderThickness}"
+                          CornerRadius="{TemplateBinding CornerRadius}"
+                          Content="{TemplateBinding Content}"
+                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                          Padding="{TemplateBinding Padding}"
+                          RecognizesAccessKey="True"
+                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+				</Panel>
+			</ControlTemplate>
+		</Setter>
+		
+		<Style Selector="^ /template/ Panel.wrapper">
+			<Setter Property="ClipToBounds" Value="false"/>
+		</Style>
+		
+		<Style Selector="^ /template/ Rectangle.background">
+			<Setter Property="Opacity" Value="0.8"/>
+			<Setter Property="Fill">
+				<LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+					<GradientStop Offset="0" Color="{StaticResource SidebarMainColor}"/>
+					<GradientStop Offset="1" Color="{StaticResource SidebarSecondaryColor}"/>
+				</LinearGradientBrush>
+			</Setter>
+		</Style>
+
+		<Style Selector="^ /template/ Rectangle.shadow">
+			<Setter Property="Width" Value="20"/>
+			<Setter Property="HorizontalAlignment" Value="Right"/>
+			<Setter Property="Fill" Value="Black"/>
+			<Setter Property="Opacity" Value="0.6"/>
+			<Setter Property="Margin" Value="0 0 -20 0"/>
+			<Setter Property="OpacityMask">
+				<LinearGradientBrush StartPoint="100%,0%" EndPoint="0,0">
+					<GradientStop Offset="0" Color="#00FFFFFF"/>
+					<GradientStop Offset="1" Color="#FFFFFFFF"/>
+				</LinearGradientBrush>
+			</Setter>
+		</Style>
+
+		<Style Selector="^ Label.h1">
+			<Setter Property="Foreground" Value="{StaticResource AccentColor}"/>
+			<Setter Property="Padding" Value="12 24 12 12"/>
+			<Setter Property="FontSize" Value="12"/>
+			<Setter Property="FontWeight" Value="DemiBold"/>
+		</Style>
+
+	</Style>
+</Styles>

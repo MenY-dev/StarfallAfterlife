@@ -1,0 +1,34 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sfa="using:StarfallAfterlife.Bridge.Server.Galaxy"
+        xmlns:sys="using:System"
+        mc:Ignorable="d" d:DesignWidth="300" Width="300"
+        x:Class="StarfallAfterlife.Launcher.MapEditor.DeleteShipMessageBox"
+        Title="Delete Ship"
+		SizeToContent="Height"
+		Background="#90000000"
+		TransparencyLevelHint="AcrylicBlur"
+		WindowStartupLocation="CenterScreen"
+		RequestedThemeVariant="Dark">
+
+	<Window.DataContext>
+		<sfa:GalaxyMapStarSystemObject/>
+	</Window.DataContext>
+
+	<Window.Resources>
+		<sys:Boolean x:Key="True">True</sys:Boolean>
+		<sys:Boolean x:Key="False">False</sys:Boolean>
+	</Window.Resources>
+	
+	<StackPanel>
+		<TextBlock Text="{Binding Name, StringFormat='Delete {0}?'}" Padding="10 20"/>
+		<Border Padding="5" Background="#20909090">
+			<StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Right">
+				<Button Content="Delete" Command="{Binding $parent[Window].Close}" CommandParameter="{StaticResource True}"/>
+				<Button Content="Cancel" Command="{Binding $parent[Window].Close}" CommandParameter="{StaticResource False}"/>
+			</StackPanel>
+		</Border>
+	</StackPanel>
+</Window>

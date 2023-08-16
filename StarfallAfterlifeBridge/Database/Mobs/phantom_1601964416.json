@@ -1,0 +1,891 @@
+{
+	"Id": 1601964416,
+	"InternalName": "phantom",
+	"Faction": 12,
+	"Level": 100,
+	"VisionRadius": 3,
+	"Speed": 0.7,
+	"BehaviorTreeName": "",
+	"MainShipIndex": 0,
+	"Tags": [
+		"Mob.Role.Boss",
+		"Mob.Role.Outpost",
+		"Mob.Role.Station"
+	],
+	"Ships": [
+		{
+			"Data": {
+	"hull": 895434508,
+	"ship_skin": 2033244249,
+	"hplist": [
+		{
+			"hp": "UpLasor",
+			"eqlist": [
+				{
+					"eq": 30906950,
+					"x": 0,
+					"y": 2
+				},
+				{
+					"eq": 30906950,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "LeftLasor",
+			"eqlist": [
+				{
+					"eq": 30906950,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 30906950,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontLasOR",
+			"eqlist": [
+				{
+					"eq": 30906950,
+					"x": 0,
+					"y": 2
+				},
+				{
+					"eq": 30906950,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 30906950,
+					"x": 2,
+					"y": 2
+				},
+				{
+					"eq": 30906950,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightLasOR",
+			"eqlist": [
+				{
+					"eq": 30906950,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 30906950,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Engineering Bay",
+			"eqlist": [
+				{
+					"eq": 522212149,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 846047018,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "DownLasOR",
+			"eqlist": [
+				{
+					"eq": 30906950,
+					"x": 0,
+					"y": 2
+				},
+				{
+					"eq": 30906950,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Engineering Bay2",
+			"eqlist": [
+				{
+					"eq": 329266154,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay1",
+			"eqlist": [
+				{
+					"eq": 1439388296,
+					"x": 1,
+					"y": 0
+				},
+				{
+					"eq": 1456543784,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay3",
+			"eqlist": [
+				{
+					"eq": 2077929593,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1456543784,
+					"x": 2,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 100000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": [
+					"mob.specialship.boss",
+					"mob.specialship.elite"
+				]
+			}
+		},
+		{
+			"Data": {
+	"hull": 2009915948,
+	"ship_skin": 982458229,
+	"hplist": [
+		{
+			"hp": "LeftLeftCannons",
+			"eqlist": [
+				{
+					"eq": 2089211041,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "MiddleCannons",
+			"eqlist": [
+				{
+					"eq": 1480978402,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1480978402,
+					"x": 0,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "RightRightCannons",
+			"eqlist": [
+				{
+					"eq": 2089211041,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "LeftRockets",
+			"eqlist": [
+				{
+					"eq": 1728824697,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 726311571,
+					"x": 0,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "RightRockets",
+			"eqlist": [
+				{
+					"eq": 1728824697,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 726311571,
+					"x": 0,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "LeftEngine",
+			"eqlist": [
+				{
+					"eq": 1734255009,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightEngine",
+			"eqlist": [
+				{
+					"eq": 1734255009,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay_1",
+			"eqlist": [
+				{
+					"eq": 1524533717,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 2033128687,
+					"x": 0,
+					"y": 3
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 30000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 2009915948,
+	"ship_skin": 982458229,
+	"hplist": [
+		{
+			"hp": "LeftLeftCannons",
+			"eqlist": [
+				{
+					"eq": 2089211041,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "MiddleCannons",
+			"eqlist": [
+				{
+					"eq": 1480978402,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1480978402,
+					"x": 0,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "RightRightCannons",
+			"eqlist": [
+				{
+					"eq": 2089211041,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "LeftRockets",
+			"eqlist": [
+				{
+					"eq": 1728824697,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 726311571,
+					"x": 0,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "RightRockets",
+			"eqlist": [
+				{
+					"eq": 1728824697,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 726311571,
+					"x": 0,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "LeftEngine",
+			"eqlist": [
+				{
+					"eq": 1734255009,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightEngine",
+			"eqlist": [
+				{
+					"eq": 1734255009,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay_1",
+			"eqlist": [
+				{
+					"eq": 1524533717,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 2033128687,
+					"x": 0,
+					"y": 3
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 30000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 2009915948,
+	"ship_skin": 982458229,
+	"hplist": [
+		{
+			"hp": "LeftLeftCannons",
+			"eqlist": [
+				{
+					"eq": 2089211041,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "MiddleCannons",
+			"eqlist": [
+				{
+					"eq": 1480978402,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1480978402,
+					"x": 0,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "RightRightCannons",
+			"eqlist": [
+				{
+					"eq": 2089211041,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "LeftRockets",
+			"eqlist": [
+				{
+					"eq": 1728824697,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 726311571,
+					"x": 0,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "RightRockets",
+			"eqlist": [
+				{
+					"eq": 1728824697,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 726311571,
+					"x": 0,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "LeftEngine",
+			"eqlist": [
+				{
+					"eq": 1734255009,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightEngine",
+			"eqlist": [
+				{
+					"eq": 1734255009,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay_1",
+			"eqlist": [
+				{
+					"eq": 1524533717,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 2033128687,
+					"x": 0,
+					"y": 3
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 30000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 2009915948,
+	"ship_skin": 982458229,
+	"hplist": [
+		{
+			"hp": "LeftLeftCannons",
+			"eqlist": [
+				{
+					"eq": 2089211041,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "MiddleCannons",
+			"eqlist": [
+				{
+					"eq": 1480978402,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1480978402,
+					"x": 0,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "RightRightCannons",
+			"eqlist": [
+				{
+					"eq": 2089211041,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "LeftRockets",
+			"eqlist": [
+				{
+					"eq": 1728824697,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 726311571,
+					"x": 0,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "RightRockets",
+			"eqlist": [
+				{
+					"eq": 1728824697,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 726311571,
+					"x": 0,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "LeftEngine",
+			"eqlist": [
+				{
+					"eq": 1734255009,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightEngine",
+			"eqlist": [
+				{
+					"eq": 1734255009,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay_1",
+			"eqlist": [
+				{
+					"eq": 1524533717,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 2033128687,
+					"x": 0,
+					"y": 3
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 30000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 2009915948,
+	"ship_skin": 982458229,
+	"hplist": [
+		{
+			"hp": "LeftLeftCannons",
+			"eqlist": [
+				{
+					"eq": 2089211041,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "MiddleCannons",
+			"eqlist": [
+				{
+					"eq": 1480978402,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1480978402,
+					"x": 0,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "RightRightCannons",
+			"eqlist": [
+				{
+					"eq": 2089211041,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "LeftRockets",
+			"eqlist": [
+				{
+					"eq": 1728824697,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 726311571,
+					"x": 0,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "RightRockets",
+			"eqlist": [
+				{
+					"eq": 1728824697,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 726311571,
+					"x": 0,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "LeftEngine",
+			"eqlist": [
+				{
+					"eq": 1734255009,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightEngine",
+			"eqlist": [
+				{
+					"eq": 1734255009,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay_1",
+			"eqlist": [
+				{
+					"eq": 1524533717,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 2033128687,
+					"x": 0,
+					"y": 3
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 30000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 2009915948,
+	"ship_skin": 982458229,
+	"hplist": [
+		{
+			"hp": "LeftLeftCannons",
+			"eqlist": [
+				{
+					"eq": 2089211041,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "MiddleCannons",
+			"eqlist": [
+				{
+					"eq": 1480978402,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1480978402,
+					"x": 0,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "RightRightCannons",
+			"eqlist": [
+				{
+					"eq": 2089211041,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "LeftRockets",
+			"eqlist": [
+				{
+					"eq": 1728824697,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 726311571,
+					"x": 0,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "RightRockets",
+			"eqlist": [
+				{
+					"eq": 1728824697,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 726311571,
+					"x": 0,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "LeftEngine",
+			"eqlist": [
+				{
+					"eq": 1734255009,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightEngine",
+			"eqlist": [
+				{
+					"eq": 1734255009,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay_1",
+			"eqlist": [
+				{
+					"eq": 1524533717,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 2033128687,
+					"x": 0,
+					"y": 3
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 30000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		}
+	]
+}

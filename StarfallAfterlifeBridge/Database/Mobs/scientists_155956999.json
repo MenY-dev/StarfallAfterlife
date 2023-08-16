@@ -1,0 +1,541 @@
+{
+	"Id": 155956999,
+	"InternalName": "scientists",
+	"Faction": 13,
+	"Level": 73,
+	"VisionRadius": 3,
+	"Speed": 0.7,
+	"BehaviorTreeName": "",
+	"MainShipIndex": 0,
+	"Tags": [],
+	"Ships": [
+		{
+			"Data": {
+	"hull": 1225264382,
+	"ship_skin": 447373279,
+	"hplist": [
+		{
+			"hp": "EnginesHardpoint",
+			"eqlist": [
+				{
+					"eq": 390490115,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EnginesHardpoint2",
+			"eqlist": [
+				{
+					"eq": 390490115,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Enginering1",
+			"eqlist": [
+				{
+					"eq": 522212149,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 420503748,
+					"x": 5,
+					"y": 0
+				},
+				{
+					"eq": 2077929593,
+					"x": 3,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Beams",
+			"eqlist": [
+				{
+					"eq": 247975619,
+					"x": 8,
+					"y": 0
+				},
+				{
+					"eq": 247975619,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Rockets",
+			"eqlist": [
+				{
+					"eq": 1303680322,
+					"x": 8,
+					"y": 0
+				},
+				{
+					"eq": 1303680322,
+					"x": 0,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 20000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 1225264382,
+	"ship_skin": 447373279,
+	"hplist": [
+		{
+			"hp": "EnginesHardpoint",
+			"eqlist": [
+				{
+					"eq": 390490115,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EnginesHardpoint2",
+			"eqlist": [
+				{
+					"eq": 390490115,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Enginering1",
+			"eqlist": [
+				{
+					"eq": 522212149,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 420503748,
+					"x": 5,
+					"y": 0
+				},
+				{
+					"eq": 2077929593,
+					"x": 3,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Beams",
+			"eqlist": [
+				{
+					"eq": 247975619,
+					"x": 8,
+					"y": 0
+				},
+				{
+					"eq": 247975619,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Rockets",
+			"eqlist": [
+				{
+					"eq": 1303680322,
+					"x": 8,
+					"y": 0
+				},
+				{
+					"eq": 1303680322,
+					"x": 0,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 20000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 1225264382,
+	"ship_skin": 447373279,
+	"hplist": [
+		{
+			"hp": "EnginesHardpoint",
+			"eqlist": [
+				{
+					"eq": 390490115,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EnginesHardpoint2",
+			"eqlist": [
+				{
+					"eq": 390490115,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Enginering1",
+			"eqlist": [
+				{
+					"eq": 522212149,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 420503748,
+					"x": 5,
+					"y": 0
+				},
+				{
+					"eq": 2077929593,
+					"x": 3,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Beams",
+			"eqlist": [
+				{
+					"eq": 247975619,
+					"x": 8,
+					"y": 0
+				},
+				{
+					"eq": 247975619,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Rockets",
+			"eqlist": [
+				{
+					"eq": 1303680322,
+					"x": 8,
+					"y": 0
+				},
+				{
+					"eq": 1303680322,
+					"x": 0,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 20000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 1225264382,
+	"ship_skin": 447373279,
+	"hplist": [
+		{
+			"hp": "EnginesHardpoint",
+			"eqlist": [
+				{
+					"eq": 390490115,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EnginesHardpoint2",
+			"eqlist": [
+				{
+					"eq": 390490115,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Enginering1",
+			"eqlist": [
+				{
+					"eq": 522212149,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 420503748,
+					"x": 5,
+					"y": 0
+				},
+				{
+					"eq": 2077929593,
+					"x": 3,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Beams",
+			"eqlist": [
+				{
+					"eq": 247975619,
+					"x": 8,
+					"y": 0
+				},
+				{
+					"eq": 247975619,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Rockets",
+			"eqlist": [
+				{
+					"eq": 1303680322,
+					"x": 8,
+					"y": 0
+				},
+				{
+					"eq": 1303680322,
+					"x": 0,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 20000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 1225264382,
+	"ship_skin": 447373279,
+	"hplist": [
+		{
+			"hp": "EnginesHardpoint",
+			"eqlist": [
+				{
+					"eq": 390490115,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EnginesHardpoint2",
+			"eqlist": [
+				{
+					"eq": 390490115,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Enginering1",
+			"eqlist": [
+				{
+					"eq": 522212149,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 420503748,
+					"x": 5,
+					"y": 0
+				},
+				{
+					"eq": 2077929593,
+					"x": 3,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Beams",
+			"eqlist": [
+				{
+					"eq": 247975619,
+					"x": 8,
+					"y": 0
+				},
+				{
+					"eq": 247975619,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Rockets",
+			"eqlist": [
+				{
+					"eq": 1303680322,
+					"x": 8,
+					"y": 0
+				},
+				{
+					"eq": 1303680322,
+					"x": 0,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 20000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 1225264382,
+	"ship_skin": 447373279,
+	"hplist": [
+		{
+			"hp": "EnginesHardpoint",
+			"eqlist": [
+				{
+					"eq": 390490115,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EnginesHardpoint2",
+			"eqlist": [
+				{
+					"eq": 390490115,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Enginering1",
+			"eqlist": [
+				{
+					"eq": 522212149,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 420503748,
+					"x": 5,
+					"y": 0
+				},
+				{
+					"eq": 2077929593,
+					"x": 3,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Beams",
+			"eqlist": [
+				{
+					"eq": 247975619,
+					"x": 8,
+					"y": 0
+				},
+				{
+					"eq": 247975619,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Rockets",
+			"eqlist": [
+				{
+					"eq": 1303680322,
+					"x": 8,
+					"y": 0
+				},
+				{
+					"eq": 1303680322,
+					"x": 0,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 20000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		}
+	]
+}

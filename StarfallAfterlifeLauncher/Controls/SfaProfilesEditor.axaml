@@ -1,0 +1,75 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:c="using:StarfallAfterlife.Launcher.Controls"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="StarfallAfterlife.Launcher.Controls.SfaProfilesEditor"
+			 IsVisible="{Binding ShowEditor}">
+
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceInclude Source="/Styles/Colors.axaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+
+	<Panel>
+		<Rectangle Classes="background" Fill="Black" Opacity="0.5" />
+		<Panel Classes="contentwrapper" Margin="100 10">
+
+			<Panel.Effect>
+				<DropShadowEffect OffsetX="0" OffsetY="10" BlurRadius="20" Color="#55000000"/>
+			</Panel.Effect>
+			
+			<Rectangle Opacity="0.9">
+				<Rectangle.Fill>
+					<RadialGradientBrush GradientOrigin="50% 0%" Center="50% 10%" Radius="1">
+						<GradientStop Offset="0" Color="{StaticResource PageMainColor}"/>
+						<GradientStop Offset="1" Color="{StaticResource PageSecondaryColor}"/>
+					</RadialGradientBrush>
+				</Rectangle.Fill>
+			</Rectangle>
+			
+			<DockPanel LastChildFill="True">
+				<Panel Classes="header" DockPanel.Dock="Top" Margin="20 10">
+					<Label Content="SELECT PROFILE" FontSize="16" FontWeight="DemiBold" Foreground="White"/>
+				</Panel>
+				<Panel Classes="footer" DockPanel.Dock="Bottom" Margin="20 10 20 20">
+					<Panel HorizontalAlignment="Stretch">
+						<StackPanel HorizontalAlignment="Right" Spacing="10" Orientation="Horizontal">
+							<c:SfaButton Content="SELECT" Command="{Binding SelectProfile}"/>
+							<c:SfaButton Content="CANCELL" Command="{Binding CancellSelection}"/>
+						</StackPanel>
+						<StackPanel HorizontalAlignment="Left" Spacing="10" Orientation="Horizontal">
+							<c:SfaButton Content="DELETE" Command="{Binding DeleteProfile}" Background="Red" BorderBrush="Red"/>
+							<c:SfaButton Content="NEW PROFILE" Command="{Binding CreateNewProfile}"/>
+						</StackPanel>
+					</Panel>
+				</Panel>
+				<Panel Classes="profiles">
+					<Grid RowDefinitions="*" ColumnDefinitions="1*, 1*" HorizontalAlignment="Stretch">
+						<c:SfaPanel ShowHeader="True" HeaderText="PROFILES" Grid.Column="0" Margin="20, 0, 10, 0">
+							<c:SfaListBox Padding="10 20 10 20" ItemsSource="{Binding Profiles}" SelectionMode="AlwaysSelected" SelectedItem="{Binding SelectedProfile}">
+								<c:SfaListBox.ItemTemplate>
+									<DataTemplate>
+										<Panel Margin="0">
+											<Label Content="{Binding Name}" Foreground="White" Margin="6"/>
+										</Panel>
+									</DataTemplate>
+								</c:SfaListBox.ItemTemplate>
+							</c:SfaListBox>
+						</c:SfaPanel>
+
+						<c:SfaPanel ShowHeader="True" HeaderText="PROFILE INFO" Grid.Column="1" Margin="10, 0, 20, 0">
+
+						</c:SfaPanel>
+					</Grid>
+				</Panel>
+			</DockPanel>
+
+			<Border BorderBrush="#FF204060" Opacity="0.5" Background="Transparent" IsHitTestVisible="False" BorderThickness="1" CornerRadius="0"/>
+		</Panel>
+	</Panel>
+</UserControl>

@@ -1,0 +1,343 @@
+{
+	"Id": 1009454367,
+	"InternalName": "carvers",
+	"Faction": 11,
+	"Level": 36,
+	"VisionRadius": 3,
+	"Speed": 0.7,
+	"BehaviorTreeName": "/Game/gameplay/ai/fleets/screechers/BT_ScreechersFleet.BT_ScreechersFleet",
+	"MainShipIndex": 0,
+	"Tags": [],
+	"Ships": [
+		{
+			"Data": {
+	"hull": 1274667142,
+	"ship_skin": 1459081622,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": []
+		},
+		{
+			"hp": "EnginneringBay",
+			"eqlist": [
+				{
+					"eq": 2077929593,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 168180536,
+					"x": 0,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "EnginneringBay2",
+			"eqlist": [
+				{
+					"eq": 2003110376,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 168180536,
+					"x": 0,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "RightBeams",
+			"eqlist": [
+				{
+					"eq": 638127272,
+					"x": 1,
+					"y": 0
+				},
+				{
+					"eq": 638127272,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "LeftBeams",
+			"eqlist": [
+				{
+					"eq": 638127272,
+					"x": 1,
+					"y": 0
+				},
+				{
+					"eq": 638127272,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Cannons",
+			"eqlist": []
+		},
+		{
+			"hp": "EngineeringBay1",
+			"eqlist": []
+		},
+		{
+			"hp": "Rockets1",
+			"eqlist": [
+				{
+					"eq": 778267190,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Rockets2",
+			"eqlist": [
+				{
+					"eq": 778267190,
+					"x": 0,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 25000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 1274667142,
+	"ship_skin": 1459081622,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": []
+		},
+		{
+			"hp": "EnginneringBay",
+			"eqlist": [
+				{
+					"eq": 2077929593,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 168180536,
+					"x": 0,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "EnginneringBay2",
+			"eqlist": [
+				{
+					"eq": 2003110376,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 168180536,
+					"x": 0,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "RightBeams",
+			"eqlist": [
+				{
+					"eq": 638127272,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 638127272,
+					"x": 1,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "LeftBeams",
+			"eqlist": [
+				{
+					"eq": 638127272,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 638127272,
+					"x": 1,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Cannons",
+			"eqlist": []
+		},
+		{
+			"hp": "EngineeringBay1",
+			"eqlist": []
+		},
+		{
+			"hp": "Rockets1",
+			"eqlist": [
+				{
+					"eq": 778267190,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Rockets2",
+			"eqlist": [
+				{
+					"eq": 778267190,
+					"x": 0,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 25000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 1274667142,
+	"ship_skin": 1459081622,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": []
+		},
+		{
+			"hp": "EnginneringBay",
+			"eqlist": [
+				{
+					"eq": 2077929593,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 168180536,
+					"x": 0,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "EnginneringBay2",
+			"eqlist": [
+				{
+					"eq": 2003110376,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 168180536,
+					"x": 0,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "RightBeams",
+			"eqlist": [
+				{
+					"eq": 638127272,
+					"x": 1,
+					"y": 0
+				},
+				{
+					"eq": 638127272,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "LeftBeams",
+			"eqlist": [
+				{
+					"eq": 638127272,
+					"x": 1,
+					"y": 0
+				},
+				{
+					"eq": 638127272,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Cannons",
+			"eqlist": []
+		},
+		{
+			"hp": "EngineeringBay1",
+			"eqlist": []
+		},
+		{
+			"hp": "Rockets1",
+			"eqlist": [
+				{
+					"eq": 778267190,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Rockets2",
+			"eqlist": [
+				{
+					"eq": 778267190,
+					"x": 0,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 25000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		}
+	]
+}

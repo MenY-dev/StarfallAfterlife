@@ -1,0 +1,75 @@
+{
+	"Id": 1501931966,
+	"InternalName": "eyelesslvl5",
+	"Faction": 12,
+	"Level": 70,
+	"VisionRadius": 3,
+	"Speed": 0.7,
+	"BehaviorTreeName": "",
+	"MainShipIndex": 0,
+	"Tags": [
+		"Mob.Role.Boss",
+		"Mob.Role.Elite",
+		"Mob.Role.Outpost",
+		"Mob.Role.Station"
+	],
+	"Ships": [
+		{
+			"Data": {
+	"hull": 104293571,
+	"ship_skin": 510644822,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": []
+		},
+		{
+			"hp": "RightCannon",
+			"eqlist": []
+		},
+		{
+			"hp": "LeftCannons",
+			"eqlist": []
+		},
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": []
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": []
+		},
+		{
+			"hp": "RightMissiles01",
+			"eqlist": []
+		},
+		{
+			"hp": "RightMissiles02",
+			"eqlist": []
+		},
+		{
+			"hp": "LeftMissiles01",
+			"eqlist": []
+		},
+		{
+			"hp": "LeftMissiles02",
+			"eqlist": []
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 60000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": [
+					"mob.specialship.boss",
+					"mob.specialship.elite"
+				]
+			}
+		}
+	]
+}

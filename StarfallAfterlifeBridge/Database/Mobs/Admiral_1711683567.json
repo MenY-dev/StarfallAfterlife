@@ -1,0 +1,253 @@
+{
+	"Id": 1711683567,
+	"InternalName": "Admiral",
+	"Faction": 11,
+	"Level": 3,
+	"VisionRadius": 3,
+	"Speed": 0.7,
+	"BehaviorTreeName": "/Game/gameplay/ai/fleets/screechers/BT_ScreechersFleet.BT_ScreechersFleet",
+	"MainShipIndex": 0,
+	"Tags": [],
+	"Ships": [
+		{
+			"Data": {
+	"hull": 141057553,
+	"ship_skin": 1583004546,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": []
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 1439388296,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1778316309,
+					"x": 0,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "LeftCannons",
+			"eqlist": [
+				{
+					"eq": 1106883398,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightCannons",
+			"eqlist": [
+				{
+					"eq": 1106883398,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "LeftRockets",
+			"eqlist": [
+				{
+					"eq": 308815052,
+					"x": 0,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "RightRockets",
+			"eqlist": [
+				{
+					"eq": 308815052,
+					"x": 0,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": []
+		},
+		{
+			"hp": "SingleTurretHardpoint",
+			"eqlist": []
+		},
+		{
+			"hp": "EngineeringBay1",
+			"eqlist": [
+				{
+					"eq": 232644897,
+					"x": 1,
+					"y": 0
+				},
+				{
+					"eq": 232644897,
+					"x": 1,
+					"y": 1
+				},
+				{
+					"eq": 232644897,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 232644897,
+					"x": 0,
+					"y": 2
+				},
+				{
+					"eq": 232644897,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 232644897,
+					"x": 1,
+					"y": 2
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 5000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 141057553,
+	"ship_skin": 1583004546,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": []
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 1439388296,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1778316309,
+					"x": 0,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "LeftCannons",
+			"eqlist": [
+				{
+					"eq": 1106883398,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightCannons",
+			"eqlist": [
+				{
+					"eq": 1106883398,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "LeftRockets",
+			"eqlist": [
+				{
+					"eq": 308815052,
+					"x": 0,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "RightRockets",
+			"eqlist": [
+				{
+					"eq": 308815052,
+					"x": 0,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": []
+		},
+		{
+			"hp": "SingleTurretHardpoint",
+			"eqlist": []
+		},
+		{
+			"hp": "EngineeringBay1",
+			"eqlist": [
+				{
+					"eq": 232644897,
+					"x": 1,
+					"y": 0
+				},
+				{
+					"eq": 232644897,
+					"x": 1,
+					"y": 1
+				},
+				{
+					"eq": 232644897,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 232644897,
+					"x": 0,
+					"y": 2
+				},
+				{
+					"eq": 232644897,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 232644897,
+					"x": 1,
+					"y": 2
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 5000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		}
+	]
+}

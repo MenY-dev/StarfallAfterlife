@@ -1,0 +1,412 @@
+{
+	"Id": 457363893,
+	"InternalName": "Foragers",
+	"Faction": 13,
+	"Level": 47,
+	"VisionRadius": 3,
+	"Speed": 0.7,
+	"BehaviorTreeName": "",
+	"MainShipIndex": 0,
+	"Tags": [],
+	"Ships": [
+		{
+			"Data": {
+	"hull": 1764066418,
+	"ship_skin": 1565461011,
+	"hplist": [
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 2077929593,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 2098849128,
+					"x": 0,
+					"y": 2
+				},
+				{
+					"eq": 2098849128,
+					"x": 2,
+					"y": 1
+				},
+				{
+					"eq": 2098849128,
+					"x": 2,
+					"y": 2
+				},
+				{
+					"eq": 2098849128,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 2098849128,
+					"x": 1,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay1",
+			"eqlist": []
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": [
+				{
+					"eq": 1881686706,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 1881686706,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontLeftTurret",
+			"eqlist": []
+		},
+		{
+			"hp": "FrontRightTurret",
+			"eqlist": []
+		},
+		{
+			"hp": "LeftTurret",
+			"eqlist": []
+		},
+		{
+			"hp": "RightTurret",
+			"eqlist": []
+		},
+		{
+			"hp": "Rockets",
+			"eqlist": [
+				{
+					"eq": 447515486,
+					"x": 4,
+					"y": 0
+				},
+				{
+					"eq": 447515486,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Beams",
+			"eqlist": [
+				{
+					"eq": 1474741090,
+					"x": 1,
+					"y": 0
+				},
+				{
+					"eq": 1474741090,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1474741090,
+					"x": 4,
+					"y": 0
+				},
+				{
+					"eq": 1474741090,
+					"x": 5,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 25000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 1764066418,
+	"ship_skin": 1565461011,
+	"hplist": [
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 2077929593,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 2098849128,
+					"x": 1,
+					"y": 2
+				},
+				{
+					"eq": 2098849128,
+					"x": 0,
+					"y": 2
+				},
+				{
+					"eq": 2098849128,
+					"x": 2,
+					"y": 1
+				},
+				{
+					"eq": 2098849128,
+					"x": 2,
+					"y": 2
+				},
+				{
+					"eq": 2098849128,
+					"x": 2,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay1",
+			"eqlist": []
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": [
+				{
+					"eq": 1881686706,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 1881686706,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontLeftTurret",
+			"eqlist": []
+		},
+		{
+			"hp": "FrontRightTurret",
+			"eqlist": []
+		},
+		{
+			"hp": "LeftTurret",
+			"eqlist": []
+		},
+		{
+			"hp": "RightTurret",
+			"eqlist": []
+		},
+		{
+			"hp": "Rockets",
+			"eqlist": [
+				{
+					"eq": 447515486,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 447515486,
+					"x": 4,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Beams",
+			"eqlist": [
+				{
+					"eq": 1474741090,
+					"x": 5,
+					"y": 0
+				},
+				{
+					"eq": 1474741090,
+					"x": 1,
+					"y": 0
+				},
+				{
+					"eq": 1474741090,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1474741090,
+					"x": 4,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 25000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 1764066418,
+	"ship_skin": 1565461011,
+	"hplist": [
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 2077929593,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 2098849128,
+					"x": 1,
+					"y": 2
+				},
+				{
+					"eq": 2098849128,
+					"x": 0,
+					"y": 2
+				},
+				{
+					"eq": 2098849128,
+					"x": 2,
+					"y": 1
+				},
+				{
+					"eq": 2098849128,
+					"x": 2,
+					"y": 2
+				},
+				{
+					"eq": 2098849128,
+					"x": 2,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay1",
+			"eqlist": []
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": [
+				{
+					"eq": 1881686706,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 1881686706,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontLeftTurret",
+			"eqlist": []
+		},
+		{
+			"hp": "FrontRightTurret",
+			"eqlist": []
+		},
+		{
+			"hp": "LeftTurret",
+			"eqlist": []
+		},
+		{
+			"hp": "RightTurret",
+			"eqlist": []
+		},
+		{
+			"hp": "Rockets",
+			"eqlist": [
+				{
+					"eq": 447515486,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 447515486,
+					"x": 4,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Beams",
+			"eqlist": [
+				{
+					"eq": 1474741090,
+					"x": 5,
+					"y": 0
+				},
+				{
+					"eq": 1474741090,
+					"x": 1,
+					"y": 0
+				},
+				{
+					"eq": 1474741090,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1474741090,
+					"x": 4,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 25000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		}
+	]
+}

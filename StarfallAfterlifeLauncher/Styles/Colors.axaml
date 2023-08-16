@@ -1,0 +1,22 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<Color x:Key="AccentColor">#FFA630</Color>
+	<Color x:Key="HoloColor">#FFE0F0FF</Color>
+
+	<Color x:Key="HeaderMainColor">#657682</Color>
+	<Color x:Key="HeaderSecondaryColor">#272C33</Color>
+
+	<Color x:Key="SidebarMainColor">#657682</Color>
+	<Color x:Key="SidebarSecondaryColor">#272C33</Color>
+
+	<Color x:Key="SidebarTabNormalColor">#00000000</Color>
+	<Color x:Key="SidebarTabHighlightColor">#40000000</Color>
+
+	<Color x:Key="PageMainColor">#505F70</Color>
+	<Color x:Key="PageSecondaryColor">#0F1520</Color>
+
+	<Color x:Key="ButtonNormalColor">#60000000</Color>
+	<Color x:Key="ButtonHighlightColor">#75000000</Color>
+	<Color x:Key="ButtonPressedColor">#90000000</Color>
+	
+</ResourceDictionary>

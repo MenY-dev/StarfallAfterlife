@@ -1,0 +1,119 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:c="using:StarfallAfterlife.Launcher.Controls">
+
+	<Styles.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceInclude Source="/Styles/Colors.axaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Styles.Resources>
+	
+    <Design.PreviewWith>
+        <Border Padding="20" Background="Gray" Width="300" Height="400">
+			<c:SfaPanel HeaderText="1234" ShowHeader="True">
+				<StackPanel>
+					<Button Content="Button___________1" Foreground="White" />
+					<Button Content="Button___________2" Foreground="White" />
+					<Button Content="Button___________3" Foreground="White" />
+				</StackPanel>
+			</c:SfaPanel>
+        </Border>
+    </Design.PreviewWith>
+
+	<Style Selector="c|SfaPanel">
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Panel Classes="sfapanelroot" Background="Transparent" Margin="0">
+					<Rectangle Classes="background"/>
+					<Rectangle Classes="highlight"/>
+					<DockPanel Classes="wrapper" LastChildFill="True">
+						<Panel Classes="header" ZIndex="1" IsVisible="{TemplateBinding  ShowHeader}" DockPanel.Dock="Top">
+							<Rectangle Classes="background"/>
+							<Rectangle Classes="shadow"/>
+							<Label Classes="text" Content="{TemplateBinding HeaderText}"/>
+						</Panel>
+						<ContentPresenter x:Name="PART_ContentPresenter"
+										  Background="{TemplateBinding Background}"
+										  BorderBrush="{TemplateBinding BorderBrush}"
+										  BorderThickness="{TemplateBinding BorderThickness}"
+										  CornerRadius="{TemplateBinding CornerRadius}"
+										  Content="{TemplateBinding Content}"
+										  ContentTemplate="{TemplateBinding ContentTemplate}"
+										  Padding="{TemplateBinding Padding}"
+										  RecognizesAccessKey="True"
+										  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+										  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+										  DockPanel.Dock="Top"/>
+					</DockPanel>
+					<Border Classes="border"/>
+				</Panel>
+			</ControlTemplate>
+		</Setter>
+
+		<Style Selector="^ > Panel.sfapanelroot">
+			<Style Selector="^ > DockPanel.wrapper > Panel.header">
+				<Style Selector="^ Rectangle.background">
+					<Setter Property="Opacity" Value="0.1"/>
+					<Setter Property="Fill" Value="White"/>
+				</Style>
+
+				<Style Selector="^ Label.text">
+					<Setter Property="Foreground" Value="White"/>
+					<Setter Property="HorizontalAlignment" Value="Center"/>
+					<Setter Property="VerticalAlignment" Value="Center"/>
+					<Setter Property="FontSize" Value="16"/>
+					<Setter Property="FontWeight" Value="DemiBold"/>
+				</Style>
+
+				<Style Selector="^ Rectangle.shadow">
+					<Setter Property="Height" Value="20"/>
+					<Setter Property="HorizontalAlignment" Value="Stretch"/>
+					<Setter Property="VerticalAlignment" Value="Bottom"/>
+					<Setter Property="Fill" Value="Black"/>
+					<Setter Property="IsHitTestVisible" Value="False"/>
+					<Setter Property="Opacity" Value="0.6"/>
+					<Setter Property="Margin" Value="0 0 0 -20"/>
+					<Setter Property="OpacityMask">
+						<LinearGradientBrush StartPoint="0,0" EndPoint="0%,100%">
+							<GradientStop Offset="0" Color="#FFFFFFFF"/>
+							<GradientStop Offset="1" Color="#00FFFFFF"/>
+						</LinearGradientBrush>
+					</Setter>
+				</Style>
+			</Style>
+
+			<Style Selector="^ > Rectangle.background">
+				<Setter Property="Fill" Value="Black"/>
+				<Setter Property="Opacity" Value="0.4"/>
+				<Setter Property="OpacityMask">
+					<LinearGradientBrush>
+						<GradientStop Offset="0" Color="#FFFFFFFF"/>
+						<GradientStop Offset="1" Color="#99FFFFFF"/>
+					</LinearGradientBrush>
+				</Setter>
+			</Style>
+			
+			<Style Selector="^ > Rectangle.highlight">
+				<Setter Property="Fill" Value="{DynamicResource AccentColor}"/>
+				<Setter Property="Opacity" Value="0.3"/>
+				<Setter Property="OpacityMask">
+					<RadialGradientBrush  Center="50% 100%" GradientOrigin="50% 100%" Radius="1">
+						<GradientStop Offset="0" Color="#FFFFFFFF"/>
+						<GradientStop Offset="1" Color="#00FFFFFF"/>
+					</RadialGradientBrush>
+				</Setter>
+			</Style>
+
+			<Style Selector="^ > Border.border">
+				<Setter Property="Opacity" Value="0.50"/>
+				<Setter Property="IsHitTestVisible" Value="False"/>
+				<Setter Property="Background" Value="Transparent"/>
+				<Setter Property="BorderBrush" Value="{DynamicResource AccentColor}"/>
+				<Setter Property="BorderThickness" Value="1"/>
+				<Setter Property="CornerRadius" Value="0"/>
+			</Style>
+		</Style>
+	</Style>
+</Styles>

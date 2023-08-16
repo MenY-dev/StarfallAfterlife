@@ -1,0 +1,453 @@
+{
+	"Id": 1737244785,
+	"InternalName": "Lepers",
+	"Faction": 11,
+	"Level": 55,
+	"VisionRadius": 3,
+	"Speed": 0.7,
+	"BehaviorTreeName": "/Game/gameplay/ai/fleets/screechers/BT_ScreechersFleet.BT_ScreechersFleet",
+	"MainShipIndex": 0,
+	"Tags": [],
+	"Ships": [
+		{
+			"Data": {
+	"hull": 598872170,
+	"ship_skin": 1350797946,
+	"hplist": [
+		{
+			"hp": "EngineeringBay2",
+			"eqlist": [
+				{
+					"eq": 1946819719,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 1609741372,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": [
+				{
+					"eq": 1609741372,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontCannons",
+			"eqlist": [
+				{
+					"eq": 2038904590,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 2038904590,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 2038904590,
+					"x": 1,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontLeftRockets",
+			"eqlist": [
+				{
+					"eq": 669319481,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontRightRockets",
+			"eqlist": [
+				{
+					"eq": 669319481,
+					"x": 0,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 20000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 598872170,
+	"ship_skin": 1350797946,
+	"hplist": [
+		{
+			"hp": "EngineeringBay2",
+			"eqlist": [
+				{
+					"eq": 1946819719,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 1609741372,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": [
+				{
+					"eq": 1609741372,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontCannons",
+			"eqlist": [
+				{
+					"eq": 2038904590,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 2038904590,
+					"x": 1,
+					"y": 0
+				},
+				{
+					"eq": 2038904590,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontLeftRockets",
+			"eqlist": [
+				{
+					"eq": 669319481,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontRightRockets",
+			"eqlist": [
+				{
+					"eq": 669319481,
+					"x": 0,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 20000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 598872170,
+	"ship_skin": 1350797946,
+	"hplist": [
+		{
+			"hp": "EngineeringBay2",
+			"eqlist": [
+				{
+					"eq": 1946819719,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 1609741372,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": [
+				{
+					"eq": 1609741372,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontCannons",
+			"eqlist": [
+				{
+					"eq": 2038904590,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 2038904590,
+					"x": 1,
+					"y": 0
+				},
+				{
+					"eq": 2038904590,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontLeftRockets",
+			"eqlist": [
+				{
+					"eq": 669319481,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontRightRockets",
+			"eqlist": [
+				{
+					"eq": 669319481,
+					"x": 0,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 20000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 598872170,
+	"ship_skin": 1350797946,
+	"hplist": [
+		{
+			"hp": "EngineeringBay2",
+			"eqlist": [
+				{
+					"eq": 1946819719,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 1609741372,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": [
+				{
+					"eq": 1609741372,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontCannons",
+			"eqlist": [
+				{
+					"eq": 2038904590,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 2038904590,
+					"x": 1,
+					"y": 0
+				},
+				{
+					"eq": 2038904590,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontLeftRockets",
+			"eqlist": [
+				{
+					"eq": 669319481,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontRightRockets",
+			"eqlist": [
+				{
+					"eq": 669319481,
+					"x": 0,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 20000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 598872170,
+	"ship_skin": 1350797946,
+	"hplist": [
+		{
+			"hp": "EngineeringBay2",
+			"eqlist": [
+				{
+					"eq": 1946819719,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 1609741372,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": [
+				{
+					"eq": 1609741372,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontCannons",
+			"eqlist": [
+				{
+					"eq": 2038904590,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 2038904590,
+					"x": 1,
+					"y": 0
+				},
+				{
+					"eq": 2038904590,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontLeftRockets",
+			"eqlist": [
+				{
+					"eq": 669319481,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontRightRockets",
+			"eqlist": [
+				{
+					"eq": 669319481,
+					"x": 0,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 20000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		}
+	]
+}
