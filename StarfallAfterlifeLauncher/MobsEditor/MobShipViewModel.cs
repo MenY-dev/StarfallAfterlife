@@ -208,7 +208,7 @@ namespace StarfallAfterlife.Launcher.MobsEditor
         {
             if (ServiceData is ShipServiceInfo data)
             {
-                var oldTags = ServiceData?.Tags;
+                var oldTags = data.Tags;
                 var newTags = new HashSet<string>(oldTags ?? new(), StringComparer.InvariantCultureIgnoreCase);
 
                 if (value == true)

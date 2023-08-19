@@ -9,7 +9,7 @@ namespace StarfallAfterlife.Bridge.Database
 {
     public class TagNode : ICloneable
     {
-        public string Name;
+        public string Name { get; set; }
         public TagNode ParentNode { get; set; }
         public List<TagNode> ChildNodes { get; protected set; } = new();
 
@@ -39,7 +39,7 @@ namespace StarfallAfterlife.Bridge.Database
                 if (existNode is null)
                 {
                     var newNode = new TagNode(){ Name = name };
-                    AddTag(newNode);
+                    currentNode.AddTag(newNode);
                     currentNode = newNode;
                 }
                 else

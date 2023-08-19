@@ -1,8 +1,10 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
+using HarfBuzzSharp;
 using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Networking;
+using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Server.Discovery;
 using StarfallAfterlife.Launcher.MapEditor;
 using StarfallAfterlife.Launcher.ViewModels;
@@ -146,6 +148,18 @@ namespace StarfallAfterlife.Launcher.MobsEditor
             return false;
         });
 
+        public static IMultiValueConverter TagCheckedConverter => new FuncMultiValueConverter<object, bool>(context =>
+        {
+            if (context.FirstOrDefault(c => c is TagNode) is TagNode tag &&
+                context.FirstOrDefault(c => c is MobFleetViewModel) is MobFleetViewModel fleet)
+            {
+                string fullTag = tag.GetFullPath();
+                return fleet.Tags?.Contains(fullTag, StringComparer.InvariantCultureIgnoreCase) == true;
+            }
+
+            return false;
+        });
+
         public DiscoveryMobInfo Info
         {
             get => info;
@@ -156,8 +170,42 @@ namespace StarfallAfterlife.Launcher.MobsEditor
             }
         }
 
-
         private DiscoveryMobInfo info;
+
+        public ICollection<string> Tags => Info?.Tags;
+
+        public ObservableCollection<MobTagViewModel> AllMobTags { get; protected set; }
+
+        public MobFleetViewModel()
+        {
+            AllMobTags = new ObservableCollection<MobTagViewModel>(
+                SfaDatabase.Instance.MobTags.ChildNodes.Select(n => MobTagViewModel.Create(n, this)));
+        }
+
+        public void SetTag(string tag, bool value)
+        {
+            if (Info is DiscoveryMobInfo info)
+            {
+                var oldTags = info.Tags;
+                var newTags = new HashSet<string>(oldTags ?? new(), StringComparer.InvariantCultureIgnoreCase);
+
+                if (value == true)
+                    newTags.Add(tag);
+                else
+                    newTags.Remove(tag);
+
+                info.Tags = newTags.ToList();
+                RaisePropertyChanged(oldTags, info.Tags, nameof(Tags));
+            }
+        }
+
+        public bool GetTag(string tag)
+        {
+            if (tag is null)
+                return false;
+
+            return Info?.Tags?.Contains(tag, StringComparer.InvariantCultureIgnoreCase) ?? false;
+        }
 
         public void AddShip(int hull)
         {

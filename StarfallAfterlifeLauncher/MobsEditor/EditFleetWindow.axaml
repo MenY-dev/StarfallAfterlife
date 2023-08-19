@@ -59,6 +59,32 @@
 							</ComboBox.ItemTemplate>
 						</ComboBox>
 					</DockPanel>
+					<DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
+						<Label Content="Tags" Width="100" DockPanel.Dock="Left"/>
+						<Grid RowDefinitions="Auto Auto">
+							<Button Grid.Row="0" Content="Edit" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center">
+								<Button.Flyout>
+									<Flyout>
+										<ScrollViewer MinWidth="240" MaxHeight="400">
+											<TreeView SelectionMode="AlwaysSelected" ItemsSource="{Binding AllMobTags}">
+												<TreeView.ItemTemplate>
+													<TreeDataTemplate ItemsSource="{Binding ChildTags}">
+														<StackPanel Orientation="Horizontal">
+															<CheckBox IsChecked="{Binding Added}" VerticalAlignment="Center"/>
+															<TextBlock Text="{Binding Tag.Name}" VerticalAlignment="Center"/>
+														</StackPanel>
+													</TreeDataTemplate>
+												</TreeView.ItemTemplate>
+											</TreeView>
+										</ScrollViewer>
+									</Flyout>
+								</Button.Flyout>
+							</Button>
+							<ItemsControl Grid.Row="1" ItemsSource="{Binding Tags}">
+								
+							</ItemsControl>
+						</Grid>
+					</DockPanel>
 				</StackPanel>
 			</Panel>
 			<Panel Grid.Column="2" MinWidth="600">
