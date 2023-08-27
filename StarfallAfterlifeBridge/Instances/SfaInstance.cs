@@ -1,7 +1,7 @@
 ﻿using StarfallAfterlife.Bridge.Environment;
 using StarfallAfterlife.Bridge.Networking.Channels;
 using StarfallAfterlife.Bridge.Networking;
-using StarfallAfterlife.Bridge.Serialization.Json;
+using StarfallAfterlife.Bridge.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using StarfallAfterlife.Bridge.Diagnostics;
 using System.Threading;
+using System.Text.Json.Nodes;
 
 namespace StarfallAfterlife.Bridge.Instances
 {
@@ -127,7 +128,7 @@ namespace StarfallAfterlife.Bridge.Instances
                 ["game_mode"] = "",
                 ["is_custom_game"] = 0,
                 ["players_list"] = new JsonArray(),
-                ["characters_list"] = new JsonArray(Info.Characters ?? new()),
+                ["characters_list"] = JsonHelpers.ParseNodeUnbuffered(Info.Characters ?? new()),
             };
         }
 

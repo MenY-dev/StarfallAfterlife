@@ -3,13 +3,13 @@ using StarfallAfterlife.Bridge.Networking;
 using StarfallAfterlife.Bridge.Networking.Messaging;
 using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Serialization;
-using StarfallAfterlife.Bridge.Serialization.Json;
 using StarfallAfterlife.Bridge.Server.Discovery;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -67,7 +67,7 @@ namespace StarfallAfterlife.Bridge.Instances
 
                 if (syncKey is not null &&
                     GetInstanceWithSyncKey(syncKey) is null &&
-                    doc["info"]?.Deserialize<InstanceInfo>() is InstanceInfo info)
+                    JsonHelpers.DeserializeUnbuffered<InstanceInfo>((string)doc["info"]) is InstanceInfo info)
                 {
                     try
                     {
@@ -206,7 +206,7 @@ namespace StarfallAfterlife.Bridge.Instances
                 (int?)doc["mob_id"] is int id &&
                 (string) doc["mob_data"] is string data)
             {
-                MobDataReceived?.Invoke(this, new(auth, id, JsonNode.Parse(data)));
+                MobDataReceived?.Invoke(this, new(auth, id, JsonHelpers.ParseNodeUnbuffered(data)));
             }
         }
 
@@ -226,7 +226,7 @@ namespace StarfallAfterlife.Bridge.Instances
                 (string)doc["name"] is string name &&
                 (string)doc["auth"] is string auth)
             {
-                SpecialFleetReceived?.Invoke(this, new(auth, name, JsonNode.Parse((string)doc["data"])));
+                SpecialFleetReceived?.Invoke(this, new(auth, name, JsonHelpers.ParseNodeUnbuffered((string)doc["data"])));
             }
         }
 
@@ -258,7 +258,7 @@ namespace StarfallAfterlife.Bridge.Instances
                 Send("add_char_ships_xp", new JsonObject
                 {
                     ["char_id"] = charId,
-                    ["ships_xp"] = JsonNode.Parse(shipsXp),
+                    ["ships_xp"] = JsonHelpers.ParseNodeUnbuffered(shipsXp),
                 });
             }
         }

@@ -2,7 +2,6 @@
 using StarfallAfterlife.Bridge.IO;
 using StarfallAfterlife.Bridge.Networking.Channels;
 using StarfallAfterlife.Bridge.Networking.Messaging;
-using StarfallAfterlife.Bridge.Serialization.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -29,12 +28,7 @@ namespace StarfallAfterlife.Bridge.Server
 
         public override void Send(string text) => Send(text, SfaServerAction.None);
 
-        public override void Send(JsonNode node) => Send(node, SfaServerAction.None);
-
         public override void Send(JNode node) => Send(node, SfaServerAction.None);
-
-        public void Send(JsonNode node, SfaServerAction messageType) =>
-            Send(node?.ToJsonString(false) ?? string.Empty, messageType);
 
         public void Send(JNode node, SfaServerAction messageType) =>
             Send(node?.ToJsonStringUnbuffered(false) ?? string.Empty, messageType);
@@ -59,9 +53,6 @@ namespace StarfallAfterlife.Bridge.Server
         {
             base.Send(new byte[] { (byte)SfaServerAction.None }.Concat(bytes).ToArray());
         }
-
-        public Task<SfaClientResponse> SendRequest(SfaServerAction messageType, JsonNode node, int timeout = -1) =>
-            SendRequest(messageType, node?.ToJsonString(false) ?? string.Empty, timeout);
 
         public Task<SfaClientResponse> SendRequest(SfaServerAction messageType, JNode node, int timeout = -1) =>
             SendRequest(messageType, node?.ToJsonStringUnbuffered(false) ?? string.Empty, timeout);

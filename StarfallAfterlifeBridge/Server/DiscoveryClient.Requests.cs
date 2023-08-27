@@ -5,27 +5,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using StarfallAfterlife.Bridge.Serialization.Json;
 using System.Diagnostics;
 using StarfallAfterlife.Bridge.Profiles;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using StarfallAfterlife.Bridge.Database;
-using System.Xml.Linq;
-using StarfallAfterlife.Bridge.Instances;
-using static System.Collections.Specialized.BitVector32;
-using static System.Net.Mime.MediaTypeNames;
 using StarfallAfterlife.Bridge.Server.Discovery;
 using StarfallAfterlife.Bridge.Diagnostics;
 using StarfallAfterlife.Bridge.Server.Quests;
 using StarfallAfterlife.Bridge.Server.Galaxy;
 using StarfallAfterlife.Bridge.Serialization;
 using StarfallAfterlife.Bridge.Realms;
-using System.Security;
 using StarfallAfterlife.Bridge.Server.Inventory;
 using StarfallAfterlife.Bridge.Server.Characters;
 using System.Collections;
-using System.Text.RegularExpressions;
-using static StarfallAfterlife.Bridge.Networking.SFCP;
 
 namespace StarfallAfterlife.Bridge.Server
 {
@@ -48,7 +39,7 @@ namespace StarfallAfterlife.Bridge.Server
             switch (request.Action)
             {
                 case SfaServerAction.SyncCharacterSelect:
-                    ProcessCharacterSelect(JsonNode.Parse(request.Text), request);
+                    ProcessCharacterSelect(JsonHelpers.ParseNodeUnbuffered(request.Text), request);
                     break;
                 case SfaServerAction.GetFullGalaxySessionData:
                     ProcessGetFullGalaxySesionData(JsonHelpers.ParseNodeUnbuffered(request.Text), request);

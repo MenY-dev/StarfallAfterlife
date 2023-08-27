@@ -1,6 +1,6 @@
 ﻿using StarfallAfterlife.Bridge.Collections;
 using StarfallAfterlife.Bridge.Database;
-using StarfallAfterlife.Bridge.Serialization.Json;
+using StarfallAfterlife.Bridge.Serialization;
 using StarfallAfterlife.Bridge.Server.Discovery;
 using StarfallAfterlife.Bridge.Server.Galaxy;
 using StarfallAfterlife.Bridge.Server.Quests;
@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace StarfallAfterlife.Bridge.Generators
@@ -161,7 +162,7 @@ namespace StarfallAfterlife.Bridge.Generators
                                 condition["target_system"] = system.Id;
                                 condition["target_object_id"] = planet.Id;
                                 condition["target_object_type"] = (int)GalaxyMapObjectType.Planet;
-                                condition["planet_types"] = JsonNode.Parse(info.PlanetTypes);
+                                condition["planet_types"] = JsonHelpers.ParseNodeUnbuffered(info.PlanetTypes);
                                 return true;
                             }
                         }
@@ -386,7 +387,7 @@ namespace StarfallAfterlife.Bridge.Generators
                             .ToList();
 
                         if (targetSystems.Count > 0)
-                            condition["star_system_ids"] = JsonNode.Parse(targetSystems);
+                            condition["star_system_ids"] = JsonHelpers.ParseNodeUnbuffered(targetSystems);
 
                         return true;
                     }
@@ -408,7 +409,7 @@ namespace StarfallAfterlife.Bridge.Generators
                     .ToList();
 
                 if (targetSystems.Count > 0)
-                    condition["star_system_ids"] = JsonNode.Parse(targetSystems);
+                    condition["star_system_ids"] = JsonHelpers.ParseNodeUnbuffered(targetSystems);
 
                 return true;
             }
@@ -454,7 +455,7 @@ namespace StarfallAfterlife.Bridge.Generators
                             .ToList();
 
                         if (targetSystems.Count > 0)
-                            condition["star_system_ids"] = JsonNode.Parse(targetSystems);
+                            condition["star_system_ids"] = JsonHelpers.ParseNodeUnbuffered(targetSystems);
 
                         return true;
                     }
@@ -476,7 +477,7 @@ namespace StarfallAfterlife.Bridge.Generators
                     .ToList();
 
                 if (targetSystems.Count > 0)
-                    condition["star_system_ids"] = JsonNode.Parse(targetSystems);
+                    condition["star_system_ids"] = JsonHelpers.ParseNodeUnbuffered(targetSystems);
 
                 return true;
             }
@@ -519,7 +520,7 @@ namespace StarfallAfterlife.Bridge.Generators
                             condition["target_mob_internal_name"] = mobInfo.InternalName;
                             condition["target_object_id"] = targetObject.Id;
                             condition["target_object_type"] = (byte)targetObject.ObjectType;
-                            condition["target_systems"] = JsonNode.Parse(new List<int> { system.Id });
+                            condition["target_systems"] = JsonHelpers.ParseNodeUnbuffered(new List<int> { system.Id });
 
                             return true;
                         }
@@ -566,7 +567,7 @@ namespace StarfallAfterlife.Bridge.Generators
                             condition["target_mob_internal_name"] = mobInfo.InternalName;
                             condition["target_object_id"] = item.FleetId;
                             condition["target_object_type"] = (byte)DiscoveryObjectType.AiFleet;
-                            condition["target_systems"] = JsonNode.Parse(new List<int> { system.Id });
+                            condition["target_systems"] = JsonHelpers.ParseNodeUnbuffered(new List<int> { system.Id });
                             return true;
                         }
                     }
@@ -582,8 +583,8 @@ namespace StarfallAfterlife.Bridge.Generators
 
         protected bool GenKillShipCondition(QuestContext context, JsonNode condition, QuestConditionInfo info)
         {
-            condition["factions"] = JsonNode.Parse(info.Factions?.Cast<byte>());
-            condition["ship_class"] = JsonNode.Parse(info.ShipClass);
+            condition["factions"] = JsonHelpers.ParseNodeUnbuffered(info.Factions?.Cast<byte>());
+            condition["ship_class"] = JsonHelpers.ParseNodeUnbuffered(info.ShipClass);
             condition["min_target_level"] = info.MinTargetLevel;
             return true;
         }
@@ -633,7 +634,7 @@ namespace StarfallAfterlife.Bridge.Generators
                 .Randomize(context.Quest.ObjectId + context.Quest.LogicId);
 
             var addedMobs = context.Quest.Conditions?
-                .SelectMany(q => q["target_mobs"]?.Deserialize<List<int>>() ?? new())
+                .SelectMany(q => q["target_mobs"]?.DeserializeUnbuffered<List<int>>() ?? new())
                 .ToList();
 
             foreach (var system in systems)
@@ -674,10 +675,10 @@ namespace StarfallAfterlife.Bridge.Generators
 
                         condition["item_to_deliver"] = info.ItemToDeliver;
                         condition["drop_chance"] = info.DropChance;
-                        condition["target_mobs"] = JsonNode.Parse(targetMobs);
-                        condition["target_systems"] = JsonNode.Parse(targetSystems);
+                        condition["target_mobs"] = JsonHelpers.ParseNodeUnbuffered(targetMobs);
+                        condition["target_systems"] = JsonHelpers.ParseNodeUnbuffered(targetSystems);
                         condition["mob_internal_name"] = mob.InternalName;
-                        condition["bindings"] = JsonNode.Parse(new List<DiscoveryQuestBinding> { new()
+                        condition["bindings"] = JsonHelpers.ParseNodeUnbuffered(new List<DiscoveryQuestBinding> { new()
                         {
                             SystemId = context.Quest.ObjectSystem,
                             ObjectId = context.Quest.ObjectId,
@@ -734,7 +735,7 @@ namespace StarfallAfterlife.Bridge.Generators
                         {
                             condition["mob_id"] = mob.FleetId;
                             condition["mob_name"] = mobInfo.InternalName;
-                            condition["star_system_ids"] = JsonNode.Parse(new List<int> { system.Id });
+                            condition["star_system_ids"] = JsonHelpers.ParseNodeUnbuffered(new List<int> { system.Id });
                             condition["drop_entity"] = 0;
                             return true;
                         }
@@ -751,7 +752,7 @@ namespace StarfallAfterlife.Bridge.Generators
                         {
                             condition["mob_id"] = mob.FleetId;
                             condition["mob_name"] = mobInfo.InternalName;
-                            condition["star_system_ids"] = JsonNode.Parse(new List<int> { system.Id });
+                            condition["star_system_ids"] = JsonHelpers.ParseNodeUnbuffered(new List<int> { system.Id });
                             condition["drop_entity"] = 1;
                             return true;
                         }
@@ -800,7 +801,7 @@ namespace StarfallAfterlife.Bridge.Generators
                 condition["target_object_type"] = (int)GalaxyMapObjectType.None;
                 condition["target_faction"] = (int)info.BossFaction;
                 condition["target_faction_group_id"] = group.Key;
-                condition["target_systems"] = JsonNode.Parse(mobs.Select(m => m.SystemId).Distinct().ToList());
+                condition["target_systems"] = JsonHelpers.ParseNodeUnbuffered(mobs.Select(m => m.SystemId).Distinct().ToList());
 
                 return true;
             }

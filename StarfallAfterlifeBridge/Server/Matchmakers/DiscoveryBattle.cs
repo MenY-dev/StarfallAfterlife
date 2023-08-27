@@ -4,7 +4,7 @@ using StarfallAfterlife.Bridge.Mathematics;
 using StarfallAfterlife.Bridge.Networking;
 using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Realms;
-using StarfallAfterlife.Bridge.Serialization.Json;
+using StarfallAfterlife.Bridge.Serialization;
 using StarfallAfterlife.Bridge.Server.Characters;
 using StarfallAfterlife.Bridge.Server.Discovery;
 using StarfallAfterlife.Bridge.Server.Galaxy;
@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -345,20 +346,20 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
                     ships.Add(new JsonObject
                     {
-                        ["id"] = new SValue(ship.Data.Id),
-                        ["data"] = new SValue(JsonNode.Parse(ship.Data).ToJsonString(false)),
-                        ["service_data"] = new SValue(JsonNode.Parse(ship.ServiceData).ToJsonString(false)),
+                        ["id"] = SValue.Create(ship.Data.Id),
+                        ["data"] = SValue.Create(JsonHelpers.ParseNodeUnbuffered(ship.Data).ToJsonString(false)),
+                        ["service_data"] = SValue.Create(JsonHelpers.ParseNodeUnbuffered(ship.ServiceData).ToJsonString(false)),
                     });
                 }
 
                 var doc = new JsonObject
                 {
-                    ["id"] = new SValue(fleetId),
-                    ["level"] = new SValue(mob.Level),
-                    ["faction"] = new SValue((byte)mob.Faction),
-                    ["internal_name"] = new SValue(mob.InternalName),
-                    ["battle_bt"] = new SValue(mob.BehaviorTreeName),
-                    ["tags"] = new JsonArray(mob.Tags?.Select(t => new SValue(t))),
+                    ["id"] = SValue.Create(fleetId),
+                    ["level"] = SValue.Create(mob.Level),
+                    ["faction"] = SValue.Create((byte)mob.Faction),
+                    ["internal_name"] = SValue.Create(mob.InternalName),
+                    ["battle_bt"] = SValue.Create(mob.BehaviorTreeName),
+                    ["tags"] = mob.Tags?.Select(SValue.Create).ToJsonArray(),
                     ["ships"] = ships,
                 };
 
@@ -409,7 +410,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 info.Level = (int?)doc["level"] ?? 0;
                 info.RepEarned = (int?)doc["rep_earned"] ?? 0;
                 info.IsInAttackEvent = (int?)doc["is_in_attack_event"] ?? 0;
-                info.Tags.AddRange(doc["tags"]?.Deserialize<List<string>>() ?? new());
+                info.Tags.AddRange(doc["tags"]?.DeserializeUnbuffered<List<string>>() ?? new());
 
                 character.Events?.Broadcast<IBattleInstanceListener>(l =>
                     l.OnMobDestroyed(fleetId, info));

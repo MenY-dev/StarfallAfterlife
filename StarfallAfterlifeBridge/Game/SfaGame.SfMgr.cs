@@ -1,7 +1,7 @@
 ﻿using StarfallAfterlife.Bridge.Networking;
 using StarfallAfterlife.Bridge.Networking.Channels;
 using StarfallAfterlife.Bridge.Profiles;
-using StarfallAfterlife.Bridge.Serialization.Json;
+using StarfallAfterlife.Bridge.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using System.Xml;
 using static StarfallAfterlife.Bridge.Diagnostics.SfaDebug;
@@ -45,13 +46,13 @@ namespace StarfallAfterlife.Bridge.Game
                     case "authcompletion":
                         response = new JsonObject
                         {
-                            ["address"] = new SValue(SfMgrChannelManager.Address.Host),
-                            ["port"] = new SValue(SfMgrChannelManager.Address.Port.ToString()),
-                            ["temporarypass"] = new SValue(GameProfile.TemporaryPass),
-                            ["auth"] = new SValue(GameProfile.TemporaryPass),
-                            ["tutorial_complete"] = new SValue(true),
-                            ["realmname"] = new SValue("NewRealm"),
-                            ["userbm"] = new SValue(1)
+                            ["address"] = SValue.Create(SfMgrChannelManager.Address.Host),
+                            ["port"] = SValue.Create(SfMgrChannelManager.Address.Port.ToString()),
+                            ["temporarypass"] = SValue.Create(GameProfile.TemporaryPass),
+                            ["auth"] = SValue.Create(GameProfile.TemporaryPass),
+                            ["tutorial_complete"] = SValue.Create(true),
+                            ["realmname"] = SValue.Create("NewRealm"),
+                            ["userbm"] = SValue.Create(1)
                         };
                         //SfaClient?.SyncCharacterSelectAsync(Profile?.CurrentCharacter).Wait();
                         break;
@@ -63,7 +64,7 @@ namespace StarfallAfterlife.Bridge.Game
                     case "allmyproperty":
                         response = new JsonObject
                         {
-                            ["data_result"] = new SValue(GameProfile.CreateAllMyPropertyResponse().ToJsonString())
+                            ["data_result"] = SValue.Create(GameProfile.CreateAllMyPropertyResponse().ToJsonString())
                         };
 
                         break;
@@ -98,16 +99,11 @@ namespace StarfallAfterlife.Bridge.Game
                 }
             });
 
-            if (response is JsonNode mr)
+            if (response is JsonNode sr)
             {
-                mr = new JsonObject { ["doc"] = mr };
-                RealmMgrServer.Send(context, mr.ToJsonString(false));
-                mr.Dispose();
-            }
-            else if (response is System.Text.Json.Nodes.JsonNode sr)
-            {
-                sr = new System.Text.Json.Nodes.JsonObject { ["doc"] = sr };
-                RealmMgrServer.Send(context, Serialization.JsonHelpers.ToJsonStringUnbuffered(sr, false));
+                sr = new JsonObject { ["doc"] = sr };
+                RealmMgrServer.Send(context, JsonHelpers.ToJsonStringUnbuffered(sr, false));
+                sr.AsObject().Clear();
             }
             //Print($"Response ({response?.ToJsonString()})", "sfmgr");
         }

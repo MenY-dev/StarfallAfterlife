@@ -2,7 +2,6 @@
 using StarfallAfterlife.Bridge.Server.Galaxy;
 using StarfallAfterlife.Bridge.IO;
 using StarfallAfterlife.Bridge.Mathematics;
-using StarfallAfterlife.Bridge.Serialization.Json;
 using StarfallAfterlife.Bridge.Server.Discovery;
 using System;
 using System.Collections.Generic;
@@ -13,6 +12,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using StarfallAfterlife.Bridge.Server.Quests;
+using System.Text.Json.Nodes;
+using StarfallAfterlife.Bridge.Serialization;
 
 namespace StarfallAfterlife.Bridge.Server
 {
@@ -80,9 +81,10 @@ namespace StarfallAfterlife.Bridge.Server
                     }
                     else if (obj.Type == DiscoveryObjectType.QuickTravelGate)
                     {
-                        doc["warp_systems"] = new JsonArray(
+                        doc["warp_systems"] =
                             CurrentCharacter?.Progress?.WarpSystems?
-                            .Select(s => new JsonObject { ["starsystem"] = s }) ?? Array.Empty<JsonObject>());
+                            .Select(s => new JsonObject { ["starsystem"] = s })
+                            .ToJsonArray() ?? new();
 
                         locs.Add(new JsonObject
                         {

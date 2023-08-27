@@ -1,9 +1,10 @@
-﻿using StarfallAfterlife.Bridge.Serialization.Json;
+﻿using StarfallAfterlife.Bridge.Serialization;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace StarfallAfterlife.Bridge.Primitives
@@ -27,13 +28,12 @@ namespace StarfallAfterlife.Bridge.Primitives
 
         public string ToJsonString(bool writeIndented = false)
         {
-            return ToJson()?.ToJsonString(writeIndented);
+            return ToJson()?.ToJsonStringUnbuffered(writeIndented);
         }
-
 
         public virtual void LoadFromJsonString(string json)
         {
-            LoadFromJson(JsonNode.Parse(json));
+            LoadFromJson(JsonHelpers.ParseNodeUnbuffered(json));
         }
     }
 }

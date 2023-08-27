@@ -1,6 +1,6 @@
 ﻿using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Profiles;
-using StarfallAfterlife.Bridge.Serialization.Json;
+using StarfallAfterlife.Bridge.Serialization;
 using StarfallAfterlife.Bridge.Server.Discovery;
 using System;
 using System.Collections.Generic;
@@ -8,19 +8,13 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using JNode = System.Text.Json.Nodes.JsonNode;
-using JObject = System.Text.Json.Nodes.JsonObject;
-using JArray = System.Text.Json.Nodes.JsonArray;
-using JValue = System.Text.Json.Nodes.JsonValue;
-using StarfallAfterlife.Bridge.Serialization;
 using StarfallAfterlife.Bridge.Mathematics;
 using StarfallAfterlife.Bridge.Server.Quests;
 using StarfallAfterlife.Bridge.Events;
-using System.Text.Json.Serialization.Metadata;
 using StarfallAfterlife.Bridge.Server.Inventory;
-using System.Security.Cryptography.X509Certificates;
 using StarfallAfterlife.Bridge.Instances;
 using System.Collections;
+using System.Text.Json.Nodes;
 
 namespace StarfallAfterlife.Bridge.Server.Characters
 {
@@ -78,7 +72,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
         public SelectionInfo Selection { get; set; } = null;
 
-        public void LoadFromCharacterData(JNode doc)
+        public void LoadFromCharacterData(JsonNode doc)
         {
             if (doc is null)
                 return;
@@ -97,7 +91,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
             List<ShipConstructionInfo> allShips = new();
 
-            if (doc["ships"]?.AsArraySelf() is JArray ships)
+            if (doc["ships"]?.AsArraySelf() is JsonArray ships)
             {
                 foreach (var ship in ships)
                 {
@@ -116,7 +110,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
             var detachment = doc["detachments"]?.AsArray()?.FirstOrDefault(d => (int?)d["id"] == CurrentDetachment);
 
-            if (detachment["slots"]?.AsObjectSelf() is JObject slotsNode &&
+            if (detachment["slots"]?.AsObjectSelf() is JsonObject slotsNode &&
                 DiscoveryClient?.Server?.Realm?.Database is SfaDatabase database)
             {
                 foreach (var slotData in slotsNode)
@@ -142,11 +136,11 @@ namespace StarfallAfterlife.Bridge.Server.Characters
             Events?.Broadcast<ICharacterListener>(l => l.OnCurrencyUpdated(this));
         }
 
-        public void LoadActiveShips(JNode doc)
+        public void LoadActiveShips(JsonNode doc)
         {
             (Ships ??= new()).Clear();
 
-            if (doc is JArray shipsData)
+            if (doc is JsonArray shipsData)
             {
                 foreach (var item in shipsData)
                 {
@@ -173,11 +167,11 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                 ["access_level"] = AccessLevel,
                 ["level"] = Level,
                 ["house_tag"] = HouseTag ?? "",
-                ["ships_list"] = new JsonArray(Ships.Select(s => new JsonObject
+                ["ships_list"] = Ships.Select(s => new JsonObject
                 {
                     ["id"] = s.Id,
-                    ["data"] = JsonNode.Parse(s, jsonOptions)?.ToJsonString()
-                })),
+                    ["data"] = JsonHelpers.ParseNodeUnbuffered(s, jsonOptions)?.ToJsonString()
+                }).ToJsonArray(),
                 ["ship_groups"] = new JsonArray(),
             };
         }
@@ -306,7 +300,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
         public void UpdateShipStatus(int shipId, string shipData = null, string shipStats = null)
         {
             if (Ships?.FirstOrDefault(s => s.Id == shipId) is ShipConstructionInfo ship &&
-                JsonHelpers.ParseNodeUnbuffered(shipData) is JObject data)
+                JsonHelpers.ParseNodeUnbuffered(shipData) is JsonObject data)
             {
 
                 ship.ArmorDelta = (float?)data["armor"] ?? 0;
@@ -331,12 +325,12 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
                     (ship.Cargo ??= new()).Clear();
 
-                    if (data["cargo_list"] is JArray cargo &&
+                    if (data["cargo_list"] is JsonArray cargo &&
                         DiscoveryClient?.Server?.Realm?.Database is SfaDatabase database)
                     {
                         foreach (var item in cargo)
                         {
-                            if (item is JObject &&
+                            if (item is JsonObject &&
                                 (int?)item["entity"] is int entity &&
                                 (int?)item["count"] is int count &&
                                 database.GetItem(entity) is SfaItem itemImfo)
@@ -429,9 +423,9 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                 .ToList() ?? new();
         }
 
-        public void ProcessSyncCharacterCurrencies(JNode doc)
+        public void ProcessSyncCharacterCurrencies(JsonNode doc)
         {
-            if (doc is not JObject)
+            if (doc is not JsonObject)
                 return;
 
             Xp = (int?)doc["xp"] ?? 0;
@@ -444,9 +438,9 @@ namespace StarfallAfterlife.Bridge.Server.Characters
         }
 
 
-        public void ProcessSyncCharacterNewResearch(JNode doc)
+        public void ProcessSyncCharacterNewResearch(JsonNode doc)
         {
-            if (doc is not JObject)
+            if (doc is not JsonObject)
                 return;
 
             if (doc["new_items"]?.DeserializeUnbuffered<List<int>>() is List<int> newItems)
@@ -463,12 +457,12 @@ namespace StarfallAfterlife.Bridge.Server.Characters
         {
             return DiscoveryClient?.Client?.SendRequest(
                 SfaServerAction.RequestItemResearch, 
-                new JObject { ["entity_id"] = entityId })
+                new JsonObject { ["entity_id"] = entityId })
                 .ContinueWith(t =>
                 {
                     if (t.Result is SfaClientResponse response &&
                         response.IsSuccess == true &&
-                        JsonHelpers.ParseNodeUnbuffered(response.Text) is JObject doc &&
+                        JsonHelpers.ParseNodeUnbuffered(response.Text) is JsonObject doc &&
                         (bool?)doc["explored"] == true)
                         return true;
 

@@ -5,7 +5,9 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Platform;
+using StarfallAfterlife.Bridge.Diagnostics;
 using StarfallAfterlife.Bridge.Generators;
+using System;
 using System.Diagnostics;
 
 namespace StarfallAfterlife.Launcher
@@ -15,6 +17,14 @@ namespace StarfallAfterlife.Launcher
         public MainWindow()
         {
             //DefaultGalaxyMapGenerator.Build();
+
+            //AppDomain.CurrentDomain.FirstChanceException += (s, e) =>
+            //{
+            //    if (e.Exception is not InvalidOperationException)
+            //        return;
+
+            //    SfaDebug.Print(e.Exception, "Exception");
+            //};
 
             ExtendClientAreaToDecorationsHint = true;
             ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome;

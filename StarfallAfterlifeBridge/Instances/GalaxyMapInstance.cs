@@ -2,7 +2,7 @@
 using StarfallAfterlife.Bridge.Environment;
 using StarfallAfterlife.Bridge.Networking;
 using StarfallAfterlife.Bridge.Networking.Channels;
-using StarfallAfterlife.Bridge.Serialization.Json;
+using StarfallAfterlife.Bridge.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,6 +12,7 @@ using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace StarfallAfterlife.Bridge.Instances

@@ -4,7 +4,6 @@ using StarfallAfterlife.Bridge.Networking;
 using StarfallAfterlife.Bridge.Networking.Channels;
 using StarfallAfterlife.Bridge.Networking.MgrHandlers;
 using StarfallAfterlife.Bridge.Profiles;
-using StarfallAfterlife.Bridge.Serialization.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,6 +15,8 @@ using System.Threading.Tasks;
 using static StarfallAfterlife.Bridge.Diagnostics.SfaDebug;
 using StarfallAfterlife.Bridge.Server.Galaxy;
 using System.Runtime;
+using System.Text.Json.Nodes;
+using StarfallAfterlife.Bridge.Serialization;
 
 namespace StarfallAfterlife.Bridge.Game
 {
@@ -59,13 +60,13 @@ namespace StarfallAfterlife.Bridge.Game
                     case "authcompletion":
                         response = new JsonObject
                         {
-                            ["address"] = new SValue(RealmMgrChannelManager.Address.Host),
-                            ["port"] = new SValue(RealmMgrChannelManager.Address.Port.ToString()),
-                            ["temporarypass"] = new SValue(GameProfile.TemporaryPass),
-                            ["auth"] = new SValue(GameProfile.TemporaryPass),
-                            ["tutorial_complete"] = new SValue(true),
-                            ["realmname"] = new SValue("NewRealm"),
-                            ["userbm"] = new SValue(1)
+                            ["address"] = SValue.Create(RealmMgrChannelManager.Address.Host),
+                            ["port"] = SValue.Create(RealmMgrChannelManager.Address.Port.ToString()),
+                            ["temporarypass"] = SValue.Create(GameProfile.TemporaryPass),
+                            ["auth"] = SValue.Create(GameProfile.TemporaryPass),
+                            ["tutorial_complete"] = SValue.Create(true),
+                            ["realmname"] = SValue.Create("NewRealm"),
+                            ["userbm"] = SValue.Create(1)
                         };
                         break;
 
@@ -87,7 +88,7 @@ namespace StarfallAfterlife.Bridge.Game
                         SyncGalaxySessionData();
                         response = new JsonObject
                         {
-                            ["result_data"] = new SValue(GameProfile.CurrentCharacter.CreateDiscoveryCharacterDataResponse())
+                            ["result_data"] = SValue.Create(GameProfile?.CurrentCharacter?.CreateDiscoveryCharacterDataResponse())
                         };
                         break;
 
@@ -189,16 +190,12 @@ namespace StarfallAfterlife.Bridge.Game
                 }
             });
 
-            if (response is JsonNode mr)
+            
+            if (response is JsonNode sr)
             {
-                mr = new JsonObject { ["doc"] = mr };
-                RealmMgrServer.Send(context, mr.ToJsonString(false));
-                mr.Dispose();
-            }
-            else if (response is System.Text.Json.Nodes.JsonNode sr)
-            {
-                sr = new System.Text.Json.Nodes.JsonObject { ["doc"] = sr };
-                RealmMgrServer.Send(context, Serialization.JsonHelpers.ToJsonStringUnbuffered(sr, false));
+                sr = new JsonObject { ["doc"] = sr };
+                RealmMgrServer.Send(context, JsonHelpers.ToJsonStringUnbuffered(sr, false));
+                sr.AsObject().Clear();
             }
         }
 

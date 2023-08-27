@@ -1,7 +1,7 @@
 ﻿using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Server.Galaxy;
 using StarfallAfterlife.Bridge.Primitives;
-using StarfallAfterlife.Bridge.Serialization.Json;
+using StarfallAfterlife.Bridge.Serialization;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using System.Text.Json.Nodes;
 
 namespace StarfallAfterlife.Bridge.Server.Quests
 {
@@ -132,7 +133,7 @@ namespace StarfallAfterlife.Bridge.Server.Quests
             if (doc["quests"]?.AsArray() is JsonArray quests)
             {
                 foreach (var quest in quests)
-                    AddQuest(quest.Deserialize<DiscoveryQuest>());
+                    AddQuest(quest.DeserializeUnbuffered<DiscoveryQuest>());
             }
         }
 
@@ -146,7 +147,7 @@ namespace StarfallAfterlife.Bridge.Server.Quests
             var quests = new JsonArray();
 
             foreach (var quest in Quests.Values)
-                quests.Add(JsonNode.Parse(quest));
+                quests.Add(JsonHelpers.ParseNodeUnbuffered(quest));
 
             doc["hash"] = Hash;
             doc["quests"] = quests;

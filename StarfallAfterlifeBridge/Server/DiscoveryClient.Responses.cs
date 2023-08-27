@@ -2,7 +2,7 @@
 using StarfallAfterlife.Bridge.Diagnostics;
 using StarfallAfterlife.Bridge.Mathematics;
 using StarfallAfterlife.Bridge.Profiles;
-using StarfallAfterlife.Bridge.Serialization.Json;
+using StarfallAfterlife.Bridge.Serialization;
 using StarfallAfterlife.Bridge.Server.Characters;
 using StarfallAfterlife.Bridge.Server.Discovery;
 using StarfallAfterlife.Bridge.Server.Inventory;
@@ -15,6 +15,7 @@ using System.Linq;
 using System.Net;
 using System.Security;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -412,7 +413,7 @@ namespace StarfallAfterlife.Bridge.Server
                 DiscoveryServerGalaxyAction.QuestDataUpdate,
                 writer =>
                 {
-                    var bindings = JsonNode.Parse(questInfo.CreateBindings());
+                    var bindings = JsonHelpers.ParseNodeUnbuffered(questInfo.CreateBindings());
 
                     var doc = new JsonObject()
                     {

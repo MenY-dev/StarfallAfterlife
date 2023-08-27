@@ -2,7 +2,8 @@
 using StarfallAfterlife.Bridge.IO;
 using StarfallAfterlife.Bridge.Mathematics;
 using StarfallAfterlife.Bridge.Profiles;
-using StarfallAfterlife.Bridge.Serialization.Json;
+using StarfallAfterlife.Bridge.Serialization;
+using StarfallAfterlife.Bridge.Server.Characters;
 using StarfallAfterlife.Bridge.Server.Discovery;
 using StarfallAfterlife.Bridge.Server.Galaxy;
 using StarfallAfterlife.Bridge.Tasks;
@@ -11,14 +12,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using JNode = System.Text.Json.Nodes.JsonNode;
-using JObject = System.Text.Json.Nodes.JsonObject;
-using JArray = System.Text.Json.Nodes.JsonArray;
-using JValue = System.Text.Json.Nodes.JsonValue;
-using StarfallAfterlife.Bridge.Serialization;
-using StarfallAfterlife.Bridge.Server.Characters;
 
 namespace StarfallAfterlife.Bridge.Server
 {
@@ -84,7 +80,7 @@ namespace StarfallAfterlife.Bridge.Server
                 {
                     character.InGalaxy = true;
 
-                    Client.SendRequest(SfaServerAction.StartSession, new JObject
+                    Client.SendRequest(SfaServerAction.StartSession, new JsonObject
                     {
                         ["character_id"] = CurrentCharacter.UniqueId
                     }
@@ -143,7 +139,7 @@ namespace StarfallAfterlife.Bridge.Server
             string address, int port, string auth,
             int systemId = 0, int charId = 0)
         {
-            Client.Send(new JObject
+            Client.Send(new JsonObject
             {
                 ["game_mode"] = gameMode,
                 ["address"] = address,
@@ -154,11 +150,11 @@ namespace StarfallAfterlife.Bridge.Server
             }, SfaServerAction.StartBattle);
         }
 
-        public void ProcessGalaxyEntryData(JNode doc)
+        public void ProcessGalaxyEntryData(JsonNode doc)
         {
             if (doc is not null &&
                 CurrentCharacter is ServerCharacter character &&
-                doc["char_data"] is JObject charData)
+                doc["char_data"] is JsonObject charData)
             {
                 if (character.Fleet is UserFleet currentFleet)
                 {
@@ -169,7 +165,7 @@ namespace StarfallAfterlife.Bridge.Server
 
                 character.LoadFromCharacterData(charData);
 
-                if (doc["active_session"]?["ships"] is JArray ships)
+                if (doc["active_session"]?["ships"] is JsonArray ships)
                     character.LoadActiveShips(ships);
 
                 SynckSessionFleetInfo();
@@ -180,7 +176,7 @@ namespace StarfallAfterlife.Bridge.Server
 
             if (State == SfaCharacterState.EnterToGalaxy)
             {
-                if (doc["active_session"] is JObject session &&
+                if (doc["active_session"] is JsonObject session &&
                     (int?)session["system"] is int systemId &&
                     session["location"]?.Deserialize<Vector2>() is Vector2 location &&
                     Galaxy?.Map?.GetSystem(systemId) is not null)
@@ -198,9 +194,9 @@ namespace StarfallAfterlife.Bridge.Server
             }
         }
 
-        private void ProcessGetFullGalaxySesionData(JNode doc, SfaClientRequest request)
+        private void ProcessGetFullGalaxySesionData(JsonNode doc, SfaClientRequest request)
         {
-            var response = new JObject();
+            var response = new JsonObject();
 
             if (
                 CurrentCharacter is ServerCharacter character &&
@@ -219,13 +215,13 @@ namespace StarfallAfterlife.Bridge.Server
         {
             return Client?.SendRequest(
                 SfaServerAction.RequestCharacterShipData,
-                new JObject { ["ship_id"] = shipId },
+                new JsonObject { ["ship_id"] = shipId },
                 5000)
                 .ContinueWith<ShipConstructionInfo>(t =>
                 {
                     if (t.Result is SfaClientResponse response &&
                         response.IsSuccess == true &&
-                        JsonHelpers.ParseNodeUnbuffered(response.Text) is JObject doc &&
+                        JsonHelpers.ParseNodeUnbuffered(response.Text) is JsonObject doc &&
                         doc["data"]?.DeserializeUnbuffered<ShipConstructionInfo>() is ShipConstructionInfo data)
                     {
                         return data;
@@ -235,17 +231,17 @@ namespace StarfallAfterlife.Bridge.Server
                 });
         }
 
-        public Task<JNode> RequestDiscoveryCharacterData()
+        public Task<JsonNode> RequestDiscoveryCharacterData()
         {
             return Client?.SendRequest(
                 SfaServerAction.RequestCharacterDiscoveryData,
-                new JObject {},
+                new JsonObject {},
                 5000)
-                .ContinueWith<JNode>(t =>
+                .ContinueWith<JsonNode>(t =>
                 {
                     if (t.Result is SfaClientResponse response &&
                         response.IsSuccess == true &&
-                        JsonHelpers.ParseNodeUnbuffered(response.Text) is JNode doc)
+                        JsonHelpers.ParseNodeUnbuffered(response.Text) is JsonNode doc)
                     {
                         return doc;
                     }
@@ -272,7 +268,7 @@ namespace StarfallAfterlife.Bridge.Server
 
         public void SynckSessionSystemInfo(int systemId, Vector2 location)
         {
-            Client?.Send(new JObject
+            Client?.Send(new JsonObject
             {
                 ["system"] = systemId,
                 ["location"] = JsonHelpers.ParseNode(location)
@@ -281,7 +277,7 @@ namespace StarfallAfterlife.Bridge.Server
 
         public void SynckSessionFleetInfo()
         {
-            Client?.Send(new JObject
+            Client?.Send(new JsonObject
             {
                 ["ships"] = JsonHelpers.ParseNodeUnbuffered(CurrentCharacter?.Ships ?? new())
             }, SfaServerAction.SyncGalaxySessionData);
@@ -294,7 +290,7 @@ namespace StarfallAfterlife.Bridge.Server
             int? xp = null,
             Dictionary<int, int> shipsXp = null)
         {
-            var doc = new JObject()
+            var doc = new JsonObject()
             {
                 ["char_id"] = charId,
             };

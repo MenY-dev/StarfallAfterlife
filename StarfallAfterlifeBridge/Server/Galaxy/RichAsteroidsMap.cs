@@ -1,9 +1,10 @@
 ﻿using StarfallAfterlife.Bridge.Primitives;
-using StarfallAfterlife.Bridge.Serialization.Json;
+using StarfallAfterlife.Bridge.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace StarfallAfterlife.Bridge.Server.Galaxy
@@ -34,7 +35,7 @@ namespace StarfallAfterlife.Bridge.Server.Galaxy
             {
                 foreach (JsonNode item in asteroids)
                 {
-                    var asteroid = item.Deserialize<RichAsteroid>();
+                    var asteroid = item.DeserializeUnbuffered<RichAsteroid>();
                     Asteroids.Add(asteroid.SystemId, asteroid);
                 }
             }
@@ -48,7 +49,7 @@ namespace StarfallAfterlife.Bridge.Server.Galaxy
             {
                 foreach (var item in system)
                 {
-                    asteroids.Add(JsonNode.Parse(item));
+                    asteroids.Add(JsonHelpers.ParseNodeUnbuffered(item));
                 }
             }
 

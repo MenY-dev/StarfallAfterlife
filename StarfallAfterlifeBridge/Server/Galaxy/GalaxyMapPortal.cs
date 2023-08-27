@@ -1,5 +1,4 @@
 ﻿using StarfallAfterlife.Bridge.Mathematics;
-using StarfallAfterlife.Bridge.Serialization.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;

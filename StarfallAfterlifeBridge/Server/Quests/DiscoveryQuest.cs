@@ -1,11 +1,12 @@
 ﻿using StarfallAfterlife.Bridge.Database;
-using StarfallAfterlife.Bridge.Serialization.Json;
+using StarfallAfterlife.Bridge.Serialization;
 using StarfallAfterlife.Bridge.Server.Galaxy;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
@@ -49,7 +50,7 @@ namespace StarfallAfterlife.Bridge.Server.Quests
         public List<DiscoveryQuestBinding> CreateBindings()
         {
             return Conditions?
-                .Select(c => c["bindings"]?.Deserialize<List<DiscoveryQuestBinding>>())
+                .Select(c => c["bindings"]?.DeserializeUnbuffered<List<DiscoveryQuestBinding>>())
                 .Where(b => b is not null)
                 .SelectMany(b => b)
                 .Where(b => b is not null)

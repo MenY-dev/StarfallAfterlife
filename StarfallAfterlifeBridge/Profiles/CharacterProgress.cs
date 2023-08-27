@@ -1,7 +1,6 @@
 ﻿using StarfallAfterlife.Bridge.Mathematics;
 using StarfallAfterlife.Bridge.Primitives;
 using StarfallAfterlife.Bridge.Serialization;
-using StarfallAfterlife.Bridge.Serialization.Json;
 using StarfallAfterlife.Bridge.Server.Discovery;
 using StarfallAfterlife.Bridge.Server.Galaxy;
 using System;
@@ -10,6 +9,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace StarfallAfterlife.Bridge.Profiles
@@ -81,18 +81,18 @@ namespace StarfallAfterlife.Bridge.Profiles
                 return;
 
             CharacterId = (int?)doc["id"] ?? -1;
-            Planets = doc["planets"]?.Deserialize<HashSet<int>>() ?? new();
-            Portals = doc["portals"]?.Deserialize<HashSet<int>>() ?? new();
-            Motherships = doc["motherships"]?.Deserialize<HashSet<int>>() ?? new();
-            RepairStations = doc["repairStations"]?.Deserialize<HashSet<int>>() ?? new();
-            Fuelstations = doc["fuelstations"]?.Deserialize<HashSet<int>>() ?? new();
-            TradeStations = doc["tradeStations"]?.Deserialize<HashSet<int>>() ?? new();
-            MMS = doc["mms"]?.Deserialize<HashSet<int>>() ?? new();
-            SCS = doc["scs"]?.Deserialize<HashSet<int>>() ?? new();
-            PiratesStations = doc["pirates_stations"]?.Deserialize<HashSet<int>>() ?? new();
-            QuickTravelGates = doc["quick_travel_gates"]?.Deserialize<HashSet<int>>() ?? new();
-            SecretLocs = doc["secret_locs"]?.Deserialize<HashSet<int>>() ?? new();
-            WarpSystems = doc["warp_systems"]?.Deserialize<HashSet<int>>() ?? new();
+            Planets = doc["planets"]?.DeserializeUnbuffered<HashSet<int>>() ?? new();
+            Portals = doc["portals"]?.DeserializeUnbuffered<HashSet<int>>() ?? new();
+            Motherships = doc["motherships"]?.DeserializeUnbuffered<HashSet<int>>() ?? new();
+            RepairStations = doc["repairStations"]?.DeserializeUnbuffered<HashSet<int>>() ?? new();
+            Fuelstations = doc["fuelstations"]?.DeserializeUnbuffered<HashSet<int>>() ?? new();
+            TradeStations = doc["tradeStations"]?.DeserializeUnbuffered<HashSet<int>>() ?? new();
+            MMS = doc["mms"]?.DeserializeUnbuffered<HashSet<int>>() ?? new();
+            SCS = doc["scs"]?.DeserializeUnbuffered<HashSet<int>>() ?? new();
+            PiratesStations = doc["pirates_stations"]?.DeserializeUnbuffered<HashSet<int>>() ?? new();
+            QuickTravelGates = doc["quick_travel_gates"]?.DeserializeUnbuffered<HashSet<int>>() ?? new();
+            SecretLocs = doc["secret_locs"]?.DeserializeUnbuffered<HashSet<int>>() ?? new();
+            WarpSystems = doc["warp_systems"]?.DeserializeUnbuffered<HashSet<int>>() ?? new();
 
             Systems = new();
 
@@ -106,8 +106,8 @@ namespace StarfallAfterlife.Bridge.Profiles
                 }
             }
 
-            CompletedQuests = doc["completed_quests"]?.Deserialize<HashSet<int>>() ?? new();
-            ActiveQuests = doc["active_quests"]?.Deserialize<Dictionary<int, QuestProgress>>() ?? new();
+            CompletedQuests = doc["completed_quests"]?.DeserializeUnbuffered<HashSet<int>>() ?? new();
+            ActiveQuests = doc["active_quests"]?.DeserializeUnbuffered<Dictionary<int, QuestProgress>>() ?? new();
         }
 
         public override JsonNode ToJson()
@@ -115,22 +115,22 @@ namespace StarfallAfterlife.Bridge.Profiles
             var doc = new JsonObject
             {
                 ["id"] = CharacterId,
-                ["planets"] = JsonNode.Parse(Planets),
-                ["portals"] = JsonNode.Parse(Portals),
-                ["motherships"] = JsonNode.Parse(Motherships),
-                ["repairStations"] = JsonNode.Parse(RepairStations),
-                ["fuelstations"] = JsonNode.Parse(Fuelstations),
-                ["tradeStations"] = JsonNode.Parse(TradeStations),
-                ["mms"] = JsonNode.Parse(MMS),
-                ["scs"] = JsonNode.Parse(SCS),
-                ["pirates_stations"] = JsonNode.Parse(PiratesStations),
-                ["quick_travel_gates"] = JsonNode.Parse(QuickTravelGates),
-                ["secret_locs"] = JsonNode.Parse(SecretLocs),
-                ["warp_systems"] = JsonNode.Parse(WarpSystems)
+                ["planets"] = JsonHelpers.ParseNodeUnbuffered(Planets),
+                ["portals"] = JsonHelpers.ParseNodeUnbuffered(Portals),
+                ["motherships"] = JsonHelpers.ParseNodeUnbuffered(Motherships),
+                ["repairStations"] = JsonHelpers.ParseNodeUnbuffered(RepairStations),
+                ["fuelstations"] = JsonHelpers.ParseNodeUnbuffered(Fuelstations),
+                ["tradeStations"] = JsonHelpers.ParseNodeUnbuffered(TradeStations),
+                ["mms"] = JsonHelpers.ParseNodeUnbuffered(MMS),
+                ["scs"] = JsonHelpers.ParseNodeUnbuffered(SCS),
+                ["pirates_stations"] = JsonHelpers.ParseNodeUnbuffered(PiratesStations),
+                ["quick_travel_gates"] = JsonHelpers.ParseNodeUnbuffered(QuickTravelGates),
+                ["secret_locs"] = JsonHelpers.ParseNodeUnbuffered(SecretLocs),
+                ["warp_systems"] = JsonHelpers.ParseNodeUnbuffered(WarpSystems)
             };
 
-            doc["completed_quests"] = JsonNode.Parse(CompletedQuests) ?? new JsonArray();
-            doc["active_quests"] = JsonNode.Parse(ActiveQuests) ?? new JsonArray();
+            doc["completed_quests"] = JsonHelpers.ParseNodeUnbuffered(CompletedQuests) ?? new JsonArray();
+            doc["active_quests"] = JsonHelpers.ParseNodeUnbuffered(ActiveQuests) ?? new JsonArray();
 
             var systems = new JsonArray();
 

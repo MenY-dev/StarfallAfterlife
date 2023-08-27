@@ -88,8 +88,8 @@ namespace StarfallAfterlife.Bridge.Realms
             string mobsMapPath = Path.Combine(directory, "MobsMap.json");
             string questsDatabasePath = Path.Combine(directory, "QuestsDatabase.json");
 
-            static Serialization.Json.JsonNode ReadJson(string path) =>
-                Serialization.Json.JsonNode.Parse(File.ReadAllText(path));
+            static JsonNode ReadJson(string path) =>
+                JsonHelpers.ParseNodeUnbuffered(File.ReadAllText(path));
 
             if (File.Exists(galaxyMapPath) == true)
             {

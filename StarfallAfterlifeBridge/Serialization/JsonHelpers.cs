@@ -56,6 +56,19 @@ namespace StarfallAfterlife.Bridge.Serialization
             catch { return null; }
         }
 
+        public static JsonNode Clone(this JsonNode self)
+        {
+            try
+            {
+                using var buffer = new MemoryStream();
+                using var writer = new Utf8JsonWriter(buffer, new JsonWriterOptions { Indented = false });
+                self.WriteTo(writer);
+                writer.Flush();
+                return JsonNode.Parse(new ReadOnlySpan<byte>(buffer.GetBuffer(), 0, (int)buffer.Position));
+            }
+            catch { return null; }
+        }
+
         public static string ToJsonString(this JsonNode self, bool writeIndented)
         {
             try
@@ -74,16 +87,6 @@ namespace StarfallAfterlife.Bridge.Serialization
                 self.WriteTo(writer);
                 writer.Flush();
                 return Encoding.UTF8.GetString(new ReadOnlySpan<byte>(buffer.GetBuffer(), 0, (int)buffer.Position));
-            }
-            catch { return default; }
-        }
-
-
-        public static Json.JsonNode ToSfaJsonNode(this JsonNode self)
-        {
-            try
-            {
-                return Json.JsonNode.Parse(self?.ToJsonStringUnbuffered(false));
             }
             catch { return default; }
         }
@@ -186,6 +189,20 @@ namespace StarfallAfterlife.Bridge.Serialization
                 return self?.AsValue();
             }
             catch { return null; }
+        }
+
+        public static JsonArray ToJsonArray(this IEnumerable<JsonNode> self)
+        {
+            if (self is JsonArray)
+                return self as JsonArray;
+
+            var result = new JsonArray();
+
+            if (self is not null)
+                foreach (var item in self)
+                    result.Add(item);
+
+            return result;
         }
     }
 }

@@ -3,7 +3,7 @@ using StarfallAfterlife.Bridge.Diagnostics;
 using StarfallAfterlife.Bridge.Instances;
 using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Realms;
-using StarfallAfterlife.Bridge.Serialization.Json;
+using StarfallAfterlife.Bridge.Serialization;
 using StarfallAfterlife.Bridge.Server.Characters;
 using StarfallAfterlife.Bridge.Server.Discovery;
 using StarfallAfterlife.Bridge.Server.Galaxy;
@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace StarfallAfterlife.Bridge.Server.Matchmakers
@@ -104,9 +105,9 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 {
                     ships.Add(new JsonObject
                     {
-                        ["id"] = new SValue(shipId),
-                        ["data"] = new SValue(JsonNode.Parse(item.Data).ToJsonString(false)),
-                        ["service_data"] = new SValue(JsonNode.Parse(item.ServiceData).ToJsonString(false)),
+                        ["id"] = SValue.Create(shipId),
+                        ["data"] = SValue.Create(JsonHelpers.ParseNodeUnbuffered(item.Data).ToJsonString(false)),
+                        ["service_data"] = SValue.Create(JsonHelpers.ParseNodeUnbuffered(item.ServiceData).ToJsonString(false)),
                     });
 
                     shipId++;

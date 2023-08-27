@@ -7,7 +7,6 @@ using StarfallAfterlife.Bridge.Networking;
 using StarfallAfterlife.Bridge.Networking.Channels;
 using StarfallAfterlife.Bridge.Networking.MgrHandlers;
 using StarfallAfterlife.Bridge.Profiles;
-using StarfallAfterlife.Bridge.Serialization.Json;
 using StarfallAfterlife.Bridge.Server;
 using System;
 using System.Collections.Generic;
@@ -23,6 +22,7 @@ using System.Net.Http;
 using StarfallAfterlife.Bridge.Generators;
 using StarfallAfterlife.Bridge.Realms;
 using StarfallAfterlife.Bridge.Diagnostics;
+using System.Text.Json.Nodes;
 
 namespace StarfallAfterlife.Bridge.Game
 {
@@ -42,7 +42,7 @@ namespace StarfallAfterlife.Bridge.Game
 
         protected string LogsLocation => Path.Combine(Location, "Msk", "starfall_game", "Starfall", "Saved", "Logs");
 
-        protected static readonly JsonNode EmptyMgrResponse = new JsonObject { ["ok"] = 1 };
+        protected static JsonNode EmptyMgrResponse => new JsonObject { ["ok"] = 1 };
 
         public SfaClient SfaClient { get; protected set; }
 

@@ -1,8 +1,9 @@
-﻿using StarfallAfterlife.Bridge.Serialization.Json;
+﻿using StarfallAfterlife.Bridge.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace StarfallAfterlife.Bridge.Profiles
@@ -182,7 +183,7 @@ namespace StarfallAfterlife.Bridge.Profiles
         {
             return new JsonObject
             {
-                ["charactername"] = new SValue(character?.CurrentName ?? string.Empty),
+                ["charactername"] = SValue.Create(character?.CurrentName ?? string.Empty),
                 ["realmmgrurl"] = new JsonObject
                 {
                     ["$"] = server.ToString()

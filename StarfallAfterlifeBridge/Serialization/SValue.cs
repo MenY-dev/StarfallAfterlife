@@ -34,6 +34,7 @@ namespace StarfallAfterlife.Bridge.Serialization
         public static JsonObject Create(double value) => new JsonObject() { ["$"] = value };
         public static JsonObject Create(decimal value) => new JsonObject() { ["$"] = value };
         public static JsonObject Create(Guid value) => new JsonObject() { ["$"] = value };
+        public static JsonObject Create(JsonNode value) => new JsonObject() { ["$"] = value };
 
         public class SValueConverter : JsonConverter<object>
         {

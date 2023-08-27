@@ -1,13 +1,14 @@
 ﻿using StarfallAfterlife.Bridge.Diagnostics;
 using StarfallAfterlife.Bridge.Networking;
 using StarfallAfterlife.Bridge.Profiles;
-using StarfallAfterlife.Bridge.Serialization.Json;
+using StarfallAfterlife.Bridge.Serialization;
 using StarfallAfterlife.Bridge.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace StarfallAfterlife.Bridge.Instances
@@ -31,7 +32,7 @@ namespace StarfallAfterlife.Bridge.Instances
                 case "discovery_charactgetdata":
                     response = new JsonObject
                     {
-                        ["result_data"] = new SValue(HandleGetCharacterData(
+                        ["result_data"] = SValue.Create(HandleGetCharacterData(
                             (int?)query["charactid"] ?? -1,
                             (string)query["gamemode"],
                             (int?)query["include_destroyed_ships"] == 1))
@@ -92,7 +93,6 @@ namespace StarfallAfterlife.Bridge.Instances
 
             response = new JsonObject { ["doc"] = response };
             MgrServer.Send(context, response.ToJsonString(false));
-            response.Dispose();
         }
 
         protected virtual string HandleGetCharacterData(int characterId, string gameMode = null, bool includeDestroyedShips = false)

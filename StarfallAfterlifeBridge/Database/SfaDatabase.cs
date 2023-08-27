@@ -1,7 +1,6 @@
 ﻿using StarfallAfterlife.Bridge.Diagnostics;
 using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Serialization;
-using StarfallAfterlife.Bridge.Serialization.Json;
 using StarfallAfterlife.Bridge.Server.Galaxy;
 using System;
 using System.Collections.Generic;
@@ -9,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace StarfallAfterlife.Bridge.Database
@@ -102,7 +102,7 @@ namespace StarfallAfterlife.Bridge.Database
                 foreach (var item in discoveryItems)
                 {
                     var discoveryItem = new DiscoveryItem(
-                        item, JsonNode.Parse((string)item["additionalparams"]));
+                        item, JsonHelpers.ParseNodeUnbuffered((string)item["additionalparams"]));
 
                     dtb.DiscoveryItems.Add(discoveryItem.Id, discoveryItem);
 
@@ -141,7 +141,7 @@ namespace StarfallAfterlife.Bridge.Database
                     {
                         Id = id,
                         Name = (string)item["name"],
-                        IsPrenium = (int?)item["name"] == 1,
+                        IsPrenium = (int?)item["is_premium"] == 1,
                     });
                 }
             }

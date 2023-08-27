@@ -1,8 +1,8 @@
-﻿using StarfallAfterlife.Bridge.Serialization.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace StarfallAfterlife.Bridge.Database
@@ -25,7 +25,7 @@ namespace StarfallAfterlife.Bridge.Database
 
         public int MaxLvl { get; set; } = 0;
 
-        public int GalaxyValue { get; set; } = 0;
+        public double GalaxyValue { get; set; } = 0;
 
         public int ProductionPoints { get; set; } = 0;
 
@@ -78,7 +78,7 @@ namespace StarfallAfterlife.Bridge.Database
             Cargo = (int?)doc["cargo"] ?? 0;
             MinLvl = (int?)doc["min_galaxy_level"] ?? 0;
             MaxLvl = (int?)doc["max_galaxy_level"] ?? 0;
-            GalaxyValue = (int?)doc["galaxy_value"] ?? 0;
+            GalaxyValue = (double?)doc["galaxy_value"] ?? 0;
 
             if (info is null)
                 return;
@@ -129,8 +129,8 @@ namespace StarfallAfterlife.Bridge.Database
                     if ((string)item is string tag)
                         Tags.Add(tag);
 
-            IsImproved = Tags.Contains("Item.Quality.Improved");
-            IsDefective = Tags.Contains("Item.Quality.Broken");
+            IsImproved = Tags.Contains("Item.Quality.Improved", StringComparer.InvariantCultureIgnoreCase);
+            IsDefective = Tags.Contains("Item.Quality.Broken", StringComparer.InvariantCultureIgnoreCase);
         }
     }
 }

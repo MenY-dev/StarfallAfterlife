@@ -1,10 +1,11 @@
 ﻿using StarfallAfterlife.Bridge.Primitives;
-using StarfallAfterlife.Bridge.Serialization.Json;
+using StarfallAfterlife.Bridge.Serialization;
 using StarfallAfterlife.Bridge.Server.Discovery;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace StarfallAfterlife.Bridge.Server.Galaxy
@@ -58,16 +59,22 @@ namespace StarfallAfterlife.Bridge.Server.Galaxy
 
             if (doc["mobs"]?.AsArray() is JsonArray mobs)
                 foreach (var mobDoc in mobs)
-                    if (mobDoc.Deserialize<GalaxyMapMob>() is GalaxyMapMob mob)
+                    if (mobDoc.DeserializeUnbuffered<GalaxyMapMob>() is GalaxyMapMob mob)
                         AddMob(mob);
         }
 
         public override JsonNode ToJson()
         {
+            var mobs = new JsonArray();
+
+            if (Mobs is not null)
+                foreach (var mob in Mobs.Values)
+                    mobs.Add(JsonHelpers.ParseNodeUnbuffered(mob));
+
             return new JsonObject
             {
                 ["hash"] = Hash,
-                ["mobs"] = new JsonArray(Mobs.Values.Select(JsonNode.Parse)),
+                ["mobs"] = mobs,
             };
         }
     }

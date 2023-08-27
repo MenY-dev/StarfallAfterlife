@@ -1,7 +1,6 @@
 ﻿using StarfallAfterlife.Bridge.Mathematics;
 using StarfallAfterlife.Bridge.Networking.Messaging;
 using StarfallAfterlife.Bridge.Serialization;
-using StarfallAfterlife.Bridge.Serialization.Json;
 using StarfallAfterlife.Bridge.Server.Discovery;
 using StarfallAfterlife.Bridge.Tasks;
 using System;
@@ -9,8 +8,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace StarfallAfterlife.Bridge.Instances
 {
@@ -89,7 +88,7 @@ namespace StarfallAfterlife.Bridge.Instances
                 Send("start_instance", new JsonObject
                 {
                     ["sync_key"] = syncKey,
-                    ["info"] = JsonNode.Parse(instance).ToJsonString(false),
+                    ["info"] = JsonHelpers.ParseNodeUnbuffered(instance).ToJsonString(false),
                 });
             }
 
@@ -194,7 +193,7 @@ namespace StarfallAfterlife.Bridge.Instances
                 CharacterDataRequested?.Invoke(this, new(
                     id,
                     (string)doc["game_mode"],
-                    (int?)doc["include_destroyed_ships"] == 1));
+                    (bool?)doc["include_destroyed_ships"] ?? false));
             }
         }
 
@@ -252,7 +251,7 @@ namespace StarfallAfterlife.Bridge.Instances
         {
             if (doc is not null &&
                 (int?)doc["char_id"] is int charId &&
-                doc["ships_xp"]?.Deserialize<Dictionary<int, int>>() is Dictionary<int, int> xps)
+                doc["ships_xp"]?.DeserializeUnbuffered<Dictionary<int, int>>() is Dictionary<int, int> xps)
             {
                 AddCharacterShipsXp?.Invoke(this, new(charId, xps));
             }

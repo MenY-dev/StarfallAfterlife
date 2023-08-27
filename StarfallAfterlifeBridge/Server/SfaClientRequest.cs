@@ -1,5 +1,4 @@
 ﻿using StarfallAfterlife.Bridge.Serialization;
-using StarfallAfterlife.Bridge.Serialization.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,12 +27,6 @@ namespace StarfallAfterlife.Bridge.Server
             Text = text;
             RequestId = requestId;
             Client = client;
-        }
-
-        public void SendResponce(JsonNode responce, SfaServerAction action)
-        {
-            string text = responce?.ToJsonString(false);
-            SendResponce(text, action);
         }
 
         public void SendResponce(JNode responce, SfaServerAction action)

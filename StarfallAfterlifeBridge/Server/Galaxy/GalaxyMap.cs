@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualBasic;
 using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Primitives;
-using StarfallAfterlife.Bridge.Serialization.Json;
+using StarfallAfterlife.Bridge.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,7 +11,6 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using static StarfallAfterlife.Bridge.Server.Discovery.NavigationMap;
 
 namespace StarfallAfterlife.Bridge.Server.Galaxy
 {
@@ -145,79 +144,6 @@ namespace StarfallAfterlife.Bridge.Server.Galaxy
             PlanetsCount = planetsCount;
 
             UpdateStatistics();
-        }
-
-        public JsonNode ToJsonNode(bool onlyVariableMap)
-        {
-            JsonArray exploredSystems = new JsonArray();
-            JsonArray exploredPortals = new JsonArray();
-            JsonArray exploredPlanets = new JsonArray();
-            JsonArray exploredQuickTravelGates = new JsonArray();
-            JsonArray exploredMotherships = new JsonArray();
-
-            foreach (var system in Systems)
-            {
-                exploredSystems.Add(new JsonObject
-                {
-                    ["id"] = new SValue(system.Id),
-                    ["mask"] = new SValue("/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////w==")
-                });
-
-                foreach (var item in system.Planets ?? new())
-                {
-                    exploredPlanets.Add(new SValue(item.Id));
-                }
-
-                foreach (var item in system.Portals ?? new())
-                {
-                    exploredPortals.Add(new SValue(item.Id));
-                }
-
-                foreach (var item in system.QuickTravalGates ?? new())
-                {
-                    exploredQuickTravelGates.Add(new SValue(item.Id));
-                }
-
-                foreach (var item in system.Motherships ?? new())
-                {
-                    exploredMotherships.Add(new SValue(item.Id));
-                }
-            }
-
-            string galaxyMap = onlyVariableMap == false ? JsonNode.Parse(this).ToJsonString() : null;
-
-            var doc = new JsonObject()
-            {
-                ["galaxymap"] = new SValue(galaxyMap),
-
-                ["variablemap"] = new JsonObject
-                {
-                    ["renamedsystems"] = new JsonArray(),
-                    ["renamedplanets"] = new JsonArray(),
-                    ["faction_event"] = new JsonArray(),
-                },
-
-                ["charactmap"] = new JsonObject
-                {
-                    ["exploredneutralplanets"] = exploredPlanets,
-                    ["exploredportals"] = exploredPortals,
-                    ["exploredmotherships"] = exploredMotherships,
-                    ["exploredrepairstations"] = new JsonArray(),
-                    ["exploredfuelstations"] = new JsonArray(),
-                    ["exploredtradestations"] = new JsonArray(),
-                    ["exploredmms"] = new JsonArray(),
-                    ["exploredscs"] = new JsonArray(),
-                    ["exploredpiratesstations"] = new JsonArray(),
-                    ["exploredquicktravelgate"] = exploredQuickTravelGates,
-                    ["exploredsystems"] = exploredSystems,
-                    ["exploredsecretloc"] = new JsonArray(),
-                },
-            };
-
-            if (onlyVariableMap == true)
-                doc["ok"] = 1;
-
-            return doc;
         }
 
         public GalaxyMapStarSystem GetStartingSystem(Faction faction)

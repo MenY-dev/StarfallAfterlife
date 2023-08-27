@@ -1,9 +1,10 @@
 ﻿using StarfallAfterlife.Bridge.Mathematics;
 using StarfallAfterlife.Bridge.Primitives;
-using StarfallAfterlife.Bridge.Serialization.Json;
+using StarfallAfterlife.Bridge.Serialization;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 
 namespace StarfallAfterlife.Bridge.Profiles
@@ -57,23 +58,23 @@ namespace StarfallAfterlife.Bridge.Profiles
             SessionStartPP = (int?)doc["start_pp"] ?? 0;
             SessionStartAccessLevel = (int?)doc["start_lvl"] ?? 0;
             SystemId = (int?)doc["system_id"] ?? 0;
-            Location = doc["location"]?.Deserialize<Vector2>() ?? Vector2.Zero;
+            Location = doc["location"]?.DeserializeUnbuffered<Vector2>() ?? Vector2.Zero;
             SessionStartTime = doc["session_start_time"].GetValue<DateTime>();
             LastUpdate = doc["last_update_time"].GetValue<DateTime>();
-            SessionStartInventory = doc["session_start_inventory"]?.Deserialize<List<InventoryItem>>() ?? new();
-            StartHullXps = doc["start_hull_xps"]?.Deserialize<Dictionary<int, int>>() ?? new();
-            StartShipsXps = doc["start_ships_xps"]?.Deserialize<Dictionary<int, int>>() ?? new();
+            SessionStartInventory = doc["session_start_inventory"]?.DeserializeUnbuffered<List<InventoryItem>>() ?? new();
+            StartHullXps = doc["start_hull_xps"]?.DeserializeUnbuffered<Dictionary<int, int>>() ?? new();
+            StartShipsXps = doc["start_ships_xps"]?.DeserializeUnbuffered<Dictionary<int, int>>() ?? new();
 
             (Ships ??= new()).Clear();
 
             if (doc["ships"]?.AsArray() is JsonArray ships)
-                Ships.AddRange(ships.Deserialize<List<ShipConstructionInfo>>() ?? new());
+                Ships.AddRange(ships.DeserializeUnbuffered<List<ShipConstructionInfo>>() ?? new());
         }
 
         public override JsonNode ToJson()
         {
             var doc = new JsonObject();
-            var ships = JsonNode.Parse(Ships ?? new()) ?? new JsonArray();
+            var ships = JsonHelpers.ParseNodeUnbuffered(Ships ?? new()) ?? new JsonArray();
 
             doc["realm_id"] = RealmId;
             doc["char_id"] = CharacterId;
@@ -83,12 +84,12 @@ namespace StarfallAfterlife.Bridge.Profiles
             doc["start_pp"] = SessionStartPP;
             doc["start_lvl"] = SessionStartAccessLevel;
             doc["system_id"] = SystemId;
-            doc["location"] = JsonNode.Parse(Location);
+            doc["location"] = JsonHelpers.ParseNodeUnbuffered(Location);
             doc["session_start_time"] = SessionStartTime;
             doc["last_update_time"] = LastUpdate;
-            doc["session_start_inventory"] = JsonNode.Parse(SessionStartInventory);
-            doc["start_hull_xps"] = JsonNode.Parse(StartHullXps);
-            doc["start_ships_xps"] = JsonNode.Parse(StartShipsXps);
+            doc["session_start_inventory"] = JsonHelpers.ParseNodeUnbuffered(SessionStartInventory);
+            doc["start_hull_xps"] = JsonHelpers.ParseNodeUnbuffered(StartHullXps);
+            doc["start_ships_xps"] = JsonHelpers.ParseNodeUnbuffered(StartShipsXps);
             doc["ships"] = ships;
 
             return doc;

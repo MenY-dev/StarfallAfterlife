@@ -1,8 +1,9 @@
-﻿using StarfallAfterlife.Bridge.Serialization.Json;
+﻿using StarfallAfterlife.Bridge.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace StarfallAfterlife.Bridge.Profiles
@@ -177,7 +178,7 @@ namespace StarfallAfterlife.Bridge.Profiles
 
             if (flags.HasFlag(UserDataFlag.ActiveShips))
             {
-                doc["active_ships"] = ActiveShips ?? new JsonArray();
+                doc["active_ships"] = ActiveShips?.AsArray() ?? new JsonArray();
             }
 
             if (flags.HasFlag(UserDataFlag.SpecOps))

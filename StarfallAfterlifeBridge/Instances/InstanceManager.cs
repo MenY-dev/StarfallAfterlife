@@ -7,8 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net;
-using StarfallAfterlife.Bridge.Serialization.Json;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using StarfallAfterlife.Bridge.Server;
 using StarfallAfterlife.Bridge.Networking.Messaging;
 

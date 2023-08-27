@@ -1,11 +1,11 @@
-﻿using StarfallAfterlife.Bridge.Serialization.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Security.Principal;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -91,7 +91,7 @@ namespace StarfallAfterlife.Bridge.Database
         public List<int> SuitableEntities;
 
         [JsonInclude, JsonPropertyName("InstanceId")]
-        public int InstanceId;
+        public string InstanceId;
 
         [JsonInclude, JsonPropertyName("CustomInstanceType")]
         public int CustomInstanceType;
@@ -158,7 +158,7 @@ namespace StarfallAfterlife.Bridge.Database
                 if ((int?)item is int entity && entity > 0)
                     SuitableEntities.Add(entity);
 
-            InstanceId = (int?)doc["InstanceId"] ?? 0;
+            InstanceId = (string)doc["InstanceId"];
             CustomInstanceType = (int?)doc["CustomInstanceType"] ?? 0;
             EventId = (string)doc["EventId"] ?? string.Empty;
             SpawnPirateInUserFleetSystem = (int?)doc["spawn_pirate_in_userfleet_system"] ?? 0;

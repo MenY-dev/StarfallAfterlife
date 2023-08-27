@@ -1,9 +1,10 @@
 ﻿using StarfallAfterlife.Bridge.Primitives;
-using StarfallAfterlife.Bridge.Serialization.Json;
+using StarfallAfterlife.Bridge.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace StarfallAfterlife.Bridge.Instances
@@ -34,15 +35,15 @@ namespace StarfallAfterlife.Bridge.Instances
 
             foreach (var ai in AiList)
             {
-                var aiNode = JsonNode.Parse(ai);
+                var aiNode = JsonHelpers.ParseNodeUnbuffered(ai);
 
                 if (aiNode is not null)
                     aiList.Add(aiNode);
             }
 
-            foreach (var ai in Bosses)
+            foreach (var boss in Bosses)
             {
-                var aiNode = JsonNode.Parse(ai);
+                var aiNode = JsonHelpers.ParseNodeUnbuffered(boss);
 
                 if (aiNode is not null)
                     bosses.Add(aiNode);
@@ -90,7 +91,7 @@ namespace StarfallAfterlife.Bridge.Instances
                 {
                     if (item is JsonObject)
                     {
-                        var fleet = item.Deserialize<InstanceAIFleet>();
+                        var fleet = item.DeserializeUnbuffered<InstanceAIFleet>();
 
                         if (fleet is not null)
                             AiList.Add(fleet);
@@ -106,7 +107,7 @@ namespace StarfallAfterlife.Bridge.Instances
                 {
                     if (item is JsonObject)
                     {
-                        var fleet = item.Deserialize<InstanceMob>();
+                        var fleet = item.DeserializeUnbuffered<InstanceMob>();
 
                         if (fleet is not null)
                             Bosses.Add(fleet);

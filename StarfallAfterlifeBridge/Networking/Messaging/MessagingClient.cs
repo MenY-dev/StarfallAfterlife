@@ -1,6 +1,5 @@
 ﻿using StarfallAfterlife.Bridge.Diagnostics;
 using StarfallAfterlife.Bridge.IO;
-using StarfallAfterlife.Bridge.Serialization.Json;
 using StarfallAfterlife.Bridge.Tasks;
 using System;
 using System.Buffers;
@@ -263,27 +262,6 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
                 s.Flush();
                 ArrayPool<byte>.Shared.Return(buffer);
             }, text);
-        }
-
-        public virtual void Send(JsonNode node)
-        {
-            if (node is null)
-                return;
-
-            UseStream((s, node) =>
-            {
-                using var buffer = new PooledStream();
-                using var writer = new Utf8JsonWriter((IBufferWriter<byte>)buffer, new JsonWriterOptions { Indented = false });
-                node.WriteTo(writer);
-                writer.Flush();
-
-                new MessagingHeader
-                {
-                    Method = MessagingMethod.Text,
-                    Length = (int)buffer.Length,
-                }.Write(s);
-                s.Write(buffer.Span);
-            }, node);
         }
 
         public virtual void Send(System.Text.Json.Nodes.JsonNode node)

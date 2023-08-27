@@ -1,9 +1,10 @@
 ﻿using StarfallAfterlife.Bridge.Primitives;
-using StarfallAfterlife.Bridge.Serialization.Json;
+using StarfallAfterlife.Bridge.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace StarfallAfterlife.Bridge.Instances
@@ -45,18 +46,18 @@ namespace StarfallAfterlife.Bridge.Instances
             doc["distance_factor"] = DistanceFactor;
             doc["distance_from_center"] = DistanceFromCenter;
             doc["sector_lock_seconds"] = SectorLockSeconds;
-            doc["env_effects"] = new JsonArray(EnviropmentEffects?.Select(e => new JsonObject { ["type"] = e }));
+            doc["env_effects"] = EnviropmentEffects?.Select(e => new JsonObject { ["type"] = e }).ToJsonArray();
 
             if (RichAsteroidsId != -1)
             {
                 doc["floating_asteroids_count"] = FloatingAsteroidsCount;
                 doc["rich_asteroids_id"] = RichAsteroidsId;
                 doc["rich_asteroids_type"] = RichAsteroidsType;
-                doc["asteroids_content"] = new JsonArray(AsteroidsContent.Select(a => new JsonObject
+                doc["asteroids_content"] = AsteroidsContent.Select(a => new JsonObject
                 {
                     ["entity"] = a.Key,
                     ["count"] = a.Value,
-                }));
+                }).ToJsonArray();
             }
 
             return doc;

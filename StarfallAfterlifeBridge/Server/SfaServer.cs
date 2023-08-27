@@ -1,7 +1,6 @@
 ﻿using StarfallAfterlife.Bridge.Networking.Messaging;
 using StarfallAfterlife.Bridge.Primitives;
 using StarfallAfterlife.Bridge.Tasks;
-using StarfallAfterlife.Bridge.Serialization.Json;
 using StarfallAfterlife.Bridge.Server.Discovery;
 using StarfallAfterlife.Bridge.Server.Matchmakers;
 using System;
@@ -14,6 +13,7 @@ using StarfallAfterlife.Bridge.Instances;
 using System.IO;
 using StarfallAfterlife.Bridge.Realms;
 using StarfallAfterlife.Bridge.Server.Characters;
+using System.Text.Json.Nodes;
 
 namespace StarfallAfterlife.Bridge.Server
 {
@@ -220,7 +220,7 @@ namespace StarfallAfterlife.Bridge.Server
                 Directory.CreateDirectory(directory);
 
             string configPath = Path.Combine(directory, "Config.json");
-            File.WriteAllText(configPath, ToJson()?.ToJsonString(true) ?? "", Encoding.UTF8);
+            File.WriteAllText(configPath, ToJson()?.ToJsonString() ?? "", Encoding.UTF8);
 
             string realmDirectory = Path.Combine(directory, "Realm");
             Realm?.Save(realmDirectory);

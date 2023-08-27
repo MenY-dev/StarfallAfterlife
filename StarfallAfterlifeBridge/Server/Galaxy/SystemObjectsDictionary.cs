@@ -1,5 +1,4 @@
-﻿using StarfallAfterlife.Bridge.Serialization.Json;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;

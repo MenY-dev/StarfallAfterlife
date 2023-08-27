@@ -1,4 +1,4 @@
-﻿using StarfallAfterlife.Bridge.Serialization.Json;
+﻿using System.Text.Json.Nodes;
 
 namespace StarfallAfterlife.Bridge.Primitives
 {
