@@ -171,20 +171,21 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             NavigationMap = NavigationMap.Create(centers, radiuses);
         }
 
-        public void AddFleet(DiscoveryFleet fleet)
+        public void AddFleet(DiscoveryFleet fleet, Vector2? location = null)
         {
             if (fleet is null || fleet.Id < 0)
                 return;
 
             StarSystem oldSystem = fleet.System;
 
-            if (oldSystem != this )
-            {
+            if (oldSystem != this)
                 oldSystem?.RemoveFleet(fleet);
-                Fleets.Add(fleet);
-            }
-            else if (Fleets.Contains(fleet) == false)
+
+            if (Fleets.Contains(fleet) == false)
             {
+                if (location is not null)
+                    fleet.SetLocation(location.Value);
+
                 Fleets.Add(fleet);
             }
 

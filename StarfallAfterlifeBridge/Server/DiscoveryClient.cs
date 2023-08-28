@@ -152,8 +152,10 @@ namespace StarfallAfterlife.Bridge.Server
 
         public void ProcessGalaxyEntryData(JsonNode doc)
         {
-            if (doc is not null &&
-                CurrentCharacter is ServerCharacter character &&
+            if (doc is null)
+                return;
+
+            if (CurrentCharacter is ServerCharacter character &&
                 doc["char_data"] is JsonObject charData)
             {
                 if (character.Fleet is UserFleet currentFleet)
@@ -185,11 +187,10 @@ namespace StarfallAfterlife.Bridge.Server
                 }
                 else
                 {
-                    var system = GetCharactDefaultSystem() ?? new();
+                    var spawnSystem = GetCharactDefaultSystem() ?? new();
+                    var spawnPos = spawnSystem.GetDefaultSpawnPosition(CurrentCharacter?.Faction ?? Faction.None);
 
-                    EnterToStarSystem(
-                        system.Id,
-                        system.GetDefaultSpawnPosition(CurrentCharacter?.Faction ?? Faction.None));
+                    EnterToStarSystem(spawnSystem.Id, spawnPos);
                 }
             }
         }

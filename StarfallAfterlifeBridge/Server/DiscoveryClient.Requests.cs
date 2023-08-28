@@ -73,19 +73,19 @@ namespace StarfallAfterlife.Bridge.Server
                     HandleAbilitySync(); break;
 
                 case DiscoveryClientAction.MoveFleet:
-                    HandleMoveFleet(reader); break;
+                    HandleMoveFleet(reader, systemId); break;
 
                 case DiscoveryClientAction.MoveFleetToTarget:
-                    HandleMoveFleetToTarget(reader); break;
+                    HandleMoveFleetToTarget(reader, systemId); break;
 
                 case DiscoveryClientAction.SetSelection:
                     HandleSelection(reader, systemId); break;
 
                 case DiscoveryClientAction.WarpGatewayFleet:
-                    HandleWarpGatewayFleet(); break;
+                    HandleWarpGatewayFleet(systemId); break;
 
                 case DiscoveryClientAction.WarpToStarSystem:
-                    HandleWarpToStarSystem(reader); break;
+                    HandleWarpToStarSystem(reader, systemId); break;
 
                 case DiscoveryClientAction.DockToObject:
                     HandleDockToObject(reader); break;
@@ -408,18 +408,29 @@ namespace StarfallAfterlife.Bridge.Server
         }
 
 
-        private void HandleMoveFleet(SfReader reader)
+        private void HandleMoveFleet(SfReader reader, int systemId)
         {
             SystemHex hex = reader.ReadHex();
             Vector2 location = SystemHexMap.HexToSystemPoint(hex);
-            Galaxy.BeginPreUpdateAction(g => CurrentCharacter?.Fleet?.MoveTo(location));
+
+            Galaxy.BeginPreUpdateAction(g =>
+            {
+                if (CurrentCharacter?.Fleet is UserFleet fleet &&
+                    fleet.System?.Id == systemId)
+                    fleet.MoveTo(location);
+            });
         }
 
-        protected virtual void HandleMoveFleetToTarget(SfReader reader)
+        protected void HandleMoveFleetToTarget(SfReader reader, int systemId)
         {
             Vector2 location = reader.ReadVector2();
             int val1 = reader.ReadInt32();
-            Galaxy.BeginPreUpdateAction(g => CurrentCharacter?.Fleet?.MoveTo(location));
+            Galaxy.BeginPreUpdateAction(g =>
+            {
+                if (CurrentCharacter?.Fleet is UserFleet fleet &&
+                    fleet.System?.Id == systemId)
+                    fleet.MoveTo(location);
+            });
         }
 
         private void HandleSelection(SfReader reader, int systenId)
@@ -467,7 +478,7 @@ namespace StarfallAfterlife.Bridge.Server
             });
         }
 
-        private void HandleWarpGatewayFleet()
+        private void HandleWarpGatewayFleet(int systemId)
         {
             var fleet = CurrentCharacter?.Fleet;
 
@@ -479,12 +490,12 @@ namespace StarfallAfterlife.Bridge.Server
             Galaxy?.BeginPreUpdateAction(g =>
             {
                 var fleetHex = SystemHexMap.SystemPointToHex(fleet.Location);
-                var system = fleet.System;
+                var currentSystem = fleet.System;
 
-                if (system is null)
+                if (currentSystem is null || currentSystem.Id != systemId)
                     return;
 
-                var portal = system.GetObjectAt(fleet.Hex, DiscoveryObjectType.WarpBeacon) as WarpBeacon;
+                var portal = currentSystem.GetObjectAt(fleet.Hex, DiscoveryObjectType.WarpBeacon) as WarpBeacon;
 
                 if (portal is not null &&
                     g.ActivateStarSystem(portal.Destination) is StarSystem newSystem)
@@ -493,18 +504,17 @@ namespace StarfallAfterlife.Bridge.Server
                     {
                         SendFleetWarpedGateway();
 
-                        Galaxy.BeginPostUpdateAction(g =>
+                        Galaxy.BeginPreUpdateAction(g =>
                         {
                             var newLocation = SystemHexMap.HexToSystemPoint(portal.Hex).GetNegative();
-                            fleet.Route.Update(newLocation);
-                            newSystem.AddFleet(fleet);
+                            newSystem.AddFleet(fleet, newLocation);
                         });
                     });
                 }
             });
         }
 
-        private void HandleWarpToStarSystem(SfReader reader)
+        private void HandleWarpToStarSystem(SfReader reader, int systemId)
         {
             int warpingSourceId = reader.ReadInt32();
             int targetSystem = reader.ReadInt32();
@@ -517,12 +527,12 @@ namespace StarfallAfterlife.Bridge.Server
 
             Galaxy?.BeginPreUpdateAction(g =>
             {
-                var system = g.ActivateStarSystem(targetSystem);
+                var currentSystem = g.ActivateStarSystem(targetSystem);
 
-                if (system is null)
+                if (currentSystem is null || currentSystem.Id != systemId)
                     return;
 
-                var gate = system.QuickTravelGates?.FirstOrDefault();
+                var gate = currentSystem.QuickTravelGates?.FirstOrDefault();
 
                 if (gate is not null)
                 {
@@ -532,8 +542,7 @@ namespace StarfallAfterlife.Bridge.Server
 
                         Galaxy.BeginPostUpdateAction(g =>
                         {
-                            fleet.Route.Update(gate.Location);
-                            system.AddFleet(fleet);
+                            currentSystem.AddFleet(fleet, gate.Location);
                         });
                     });
                 }
