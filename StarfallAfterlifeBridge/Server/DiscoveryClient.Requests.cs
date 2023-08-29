@@ -527,12 +527,15 @@ namespace StarfallAfterlife.Bridge.Server
 
             Galaxy?.BeginPreUpdateAction(g =>
             {
-                var currentSystem = g.ActivateStarSystem(targetSystem);
-
-                if (currentSystem is null || currentSystem.Id != systemId)
+                if (fleet.System?.Id != systemId)
                     return;
 
-                var gate = currentSystem.QuickTravelGates?.FirstOrDefault();
+                var newSystem = g.ActivateStarSystem(targetSystem);
+
+                if (newSystem is null)
+                    return;
+
+                var gate = newSystem.QuickTravelGates?.FirstOrDefault();
 
                 if (gate is not null)
                 {
@@ -542,7 +545,7 @@ namespace StarfallAfterlife.Bridge.Server
 
                         Galaxy.BeginPostUpdateAction(g =>
                         {
-                            currentSystem.AddFleet(fleet, gate.Location);
+                            newSystem.AddFleet(fleet, gate.Location);
                         });
                     });
                 }
