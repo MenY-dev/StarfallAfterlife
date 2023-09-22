@@ -253,8 +253,16 @@ namespace StarfallAfterlife.Bridge.Server
 
         public void EnterToStarSystem(int system, Vector2? location = null)
         {
+            var character = CurrentCharacter;
+
+            if (character is null)
+                return;
+
+            if (character.Fleet is null)
+                character.CreateNewFleet();
+
             State = SfaCharacterState.InGalaxy;
-            Galaxy?.BeginPreUpdateAction(g => g.EnterToStarSystem(system, CurrentCharacter.Fleet, location));
+            Galaxy?.BeginPreUpdateAction(g => g.EnterToStarSystem(system, character.Fleet, location));
         }
 
         public GalaxyMapStarSystem GetCharactDefaultSystem()

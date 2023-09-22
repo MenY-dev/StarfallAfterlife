@@ -13,5 +13,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
         void OnFleetRouteChanged(DiscoveryFleet fleet);
 
         void OnFleetDataChanged(DiscoveryFleet fleet);
+
+        void OnFleetSharedVisionChanged(DiscoveryFleet fleet);
     }
 }

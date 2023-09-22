@@ -133,7 +133,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                             FactionGroup = mob.FactionGroup,
                             Name = mobInfo.InternalName,
                             Level = mobInfo.Level,
-                            Speed = mobInfo.Speed * 10,
+                            BaseSpeed = mobInfo.Speed * 10,
                             MobId = mobInfo.Id,
                             Hull = mobInfo.GetMainShipHull(),
                             Hex = mob.SpawnHex,
@@ -272,9 +272,9 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                 item?.Listeners.Broadcast(action, predicate);
         }
 
-        public virtual IEnumerable<StarSystemObject> GetObjectsAt(SystemHex hex)
+        public virtual IEnumerable<StarSystemObject> GetObjectsAt(SystemHex hex, bool includeFleets = false)
         {
-            foreach (var item in GetAllObjects(false))
+            foreach (var item in GetAllObjects(includeFleets))
             {
                 if (item is null || item.Hex != hex)
                     continue;
@@ -283,14 +283,25 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             }
         }
 
-        public virtual StarSystemObject GetObjectAt(SystemHex hex)
+        public virtual IEnumerable<T> GetObjectsAt<T>(SystemHex hex, bool includeFleets = false) where T : StarSystemObject
         {
-            return GetObjectsAt(hex)?.FirstOrDefault();
+            foreach (var item in GetAllObjects(includeFleets))
+            {
+                if (item is not T || item.Hex != hex)
+                    continue;
+
+                yield return item as T;
+            }
         }
 
-        public virtual StarSystemObject GetObjectAt(SystemHex hex, DiscoveryObjectType objectType)
+        public virtual StarSystemObject GetObjectAt(SystemHex hex, bool includeFleets = false)
         {
-            return GetObjectsAt(hex)?.FirstOrDefault(o => o.Type == objectType);
+            return GetObjectsAt(hex, includeFleets)?.FirstOrDefault();
+        }
+
+        public virtual StarSystemObject GetObjectAt(SystemHex hex, DiscoveryObjectType objectType, bool includeFleets = false)
+        {
+            return GetObjectsAt(hex, includeFleets)?.FirstOrDefault(o => o.Type == objectType);
         }
 
         public virtual IEnumerable<StarSystemObject> GetAllObjects(bool includeFleets = false)

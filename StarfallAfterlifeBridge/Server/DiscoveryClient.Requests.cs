@@ -131,6 +131,9 @@ namespace StarfallAfterlife.Bridge.Server
 
                 case DiscoveryClientAction.StartScan:
                     HandleStartScan(reader, systemId, objectType, objectId); break;
+
+                case DiscoveryClientAction.ActivateAbility:
+                    HandleActivateAbility(reader, systemId, objectType, objectId); break;
             }
         }
 
@@ -872,6 +875,15 @@ namespace StarfallAfterlife.Bridge.Server
         public void HandleBattleGroundCancel()
         {
             Server?.Matchmaker?.MothershipAssaultGameMode?.RemoveFromQueue(CurrentCharacter);
+        }
+
+        private void HandleActivateAbility(SfReader reader, int systemId, DiscoveryObjectType objectType, int objectId)
+        {
+            var actionId = reader.ReadInt32();
+            var hex = reader.ReadHex();
+            var actionSystemId = reader.ReadInt32();
+
+            CurrentCharacter?.UseAbility(actionId, actionSystemId, hex);
         }
     }
 }

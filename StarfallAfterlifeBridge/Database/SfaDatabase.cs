@@ -35,6 +35,8 @@ namespace StarfallAfterlife.Bridge.Database
 
         public Dictionary<int, QuestLineInfo> QuestLines { get; } = new();
 
+        public Dictionary<int, AbilityInfo> Abilities { get; } = new();
+
         public TagNode MobTags { get; } = new();
 
         public Dictionary<int, SfaCircleData> CircleDatabase { get; } = new()
@@ -219,13 +221,66 @@ namespace StarfallAfterlife.Bridge.Database
                 }
             }
 
-
             if (doc["mob_tags"]?.AsArray() is JsonArray mobTags)
             {
                 foreach (var tagNode in mobTags)
                 {
                     if ((string)tagNode is string tag)
                         dtb.MobTags.AddTag(tag);
+                }
+            }
+
+            if (doc["character_abilities"]?["abilities"]?.AsArray() is JsonArray abilities)
+            {
+                foreach (var ability in abilities)
+                {
+                    if ((int?)ability["id"] is int id)
+                    {
+                        var info = new AbilityInfo
+                        {
+                            Id = id,
+                            Logic = (AbilityLogic?)(byte?)ability["logic"] ?? AbilityLogic.Unknown,
+                            TargetType = (AbilityTargetType?)(byte?)ability["target_type"] ?? AbilityTargetType.Passive,
+                        };
+
+                        if (ability["additionalparams"] is JsonObject additionalParams)
+                        {
+                            if (additionalParams["params"] is JsonObject logicParams)
+                            {
+                                info.Cooldown = (float?)logicParams["cooldown"] ?? 0;
+                                info.AgroVision = (float?)logicParams["agrovision"] ?? 0;
+                                info.NebulaVision = (float?)logicParams["nebula_vision"] ?? 0;
+                                info.SensorRadius = (float?)logicParams["radius"] ?? 0;
+                            }
+                            
+                            if (additionalParams["effects"]?.AsArray() is JsonArray effects)
+                            {
+                                var abilityEffects = new List<FleetEffectInfo>();
+
+                                foreach(var effect in effects)
+                                {
+                                    var fleetEffect = new FleetEffectInfo
+                                    {
+                                        Logic = (GameplayEffectType?)(int?)effect["logic"] ?? GameplayEffectType.Unknown,
+                                        Duration = (float?)effect["duration"] ?? 0,
+                                    };
+
+                                    if (effect["params"] is JsonObject effectParams)
+                                    {
+                                        fleetEffect.EngineBoost = (float?)effectParams["boost"] ?? 0;
+                                        fleetEffect.Vision = (int?)(double?)effectParams["vision"] ?? 0;
+                                        fleetEffect.NebulaVision = (int?)(double?)effectParams["nebula_vision"] ?? 0;
+                                    }
+
+                                    abilityEffects.Add(fleetEffect);
+                                }
+
+                                info.Effects = abilityEffects;
+                            }
+                        }
+
+                        dtb.Abilities[id] = info;
+                    }
                 }
             }
 
@@ -254,6 +309,14 @@ namespace StarfallAfterlife.Bridge.Database
                 return ship;
 
             return null;
+        }
+
+        public AbilityInfo? GetAbility(int abilityId)
+        {
+            if (Abilities?.TryGetValue(abilityId, out AbilityInfo ability) == true)
+                return ability;
+
+            return default;
         }
 
         public int CalculateUsedCargoSpace(ICollection<InventoryItem> items)

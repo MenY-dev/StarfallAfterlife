@@ -72,6 +72,12 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
         public SelectionInfo Selection { get; set; } = null;
 
+        public List<int> Abilities { get; } = new();
+
+        protected Dictionary<int, DateTime> AbilitiesCooldown { get; } = new();
+
+        private readonly object _characterLockher = new();
+
         public void LoadFromCharacterData(JsonNode doc)
         {
             if (doc is null)
@@ -90,6 +96,9 @@ namespace StarfallAfterlife.Bridge.Server.Characters
             DetachmentSlots = new();
 
             List<ShipConstructionInfo> allShips = new();
+
+            Ships.Clear();
+            Abilities.Clear();
 
             if (doc["ships"]?.AsArraySelf() is JsonArray ships)
             {
@@ -129,6 +138,15 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                         ship.Detachment = CurrentDetachment;
                         ship.Slot = slotId;
                         Ships.Add(ship);
+                    }
+                }
+
+                if (detachment["abilities"]?.AsArraySelf() is JsonArray abilities)
+                {
+                    foreach (var ability in abilities)
+                    {
+                        if ((int?)ability?.AsObjectSelf()?.FirstOrDefault().Value is int abilityId)
+                            Abilities.Add(abilityId);
                     }
                 }
             }
@@ -286,7 +304,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
         public UserFleet CreateNewFleet()
         {
-            return Fleet = new UserFleet()
+            Fleet = new UserFleet()
             {
                 Id = UniqueId,
                 Name = UniqueName,
@@ -295,6 +313,11 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                 State = FleetState.WaitingGalaxy,
                 Hull = GetMainShipHull()
             };
+
+            foreach (var item in Abilities)
+                Ability.ApplyPassiveEffects(Fleet, item);
+
+            return Fleet;
         }
 
         public void UpdateShipStatus(int shipId, string shipData = null, string shipStats = null)
@@ -480,6 +503,26 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                     .Invoke(s => Events?
                     .Broadcast<ICharacterListener>(l => l
                     .OnNewStatsReceived(this, item.Key, item.Value)));
+        }
+
+        public void UseAbility(int abilityId, int systemId, SystemHex hex)
+        {
+            lock (_characterLockher)
+            {
+                var dtb = SfaDatabase.Instance;
+                AbilitiesCooldown[abilityId] = DateTime.Now.AddSeconds(dtb.GetAbility(abilityId)?.Cooldown ?? 0);
+                Ability.Use(this, abilityId, systemId, hex);
+                DiscoveryClient?.SyncAbilities(Fleet);
+            }
+        }
+
+        public KeyValuePair<int, float>[] GetAbilitiesCooldown()
+        {
+            var now = DateTime.Now;
+
+            lock (_characterLockher)
+                return AbilitiesCooldown.Select(a => KeyValuePair.Create(
+                    a.Key, Math.Max(0, (float)(a.Value - now).TotalSeconds))).ToArray();
         }
     }
 }

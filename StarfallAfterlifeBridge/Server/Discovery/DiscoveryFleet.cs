@@ -17,13 +17,27 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
         public string Name { get; set; }
 
-        public float Speed { get; set; } = 8;
-
         public int Level { get; set; } = 0;
 
-        public int Vision { get; set; } = 5;
+        public float Speed { get; protected set; } = 5;
 
-        public int NebulaVision { get; set; } = 3;
+        public float BaseSpeed { get; set; } = 5;
+
+        public int BaseVision { get; set; } = 5;
+
+        public int Vision { get; protected set; } = 5;
+
+        public StarSystemObject SharedVisionTarget { get; set; } = null;
+
+        public int AgroVision { get; set; } = 0;
+
+        public int BaseNebulaVision { get; set; } = 0;
+
+        public int NebulaVision { get; protected set; } = 0;
+
+        public bool EngineEnabled { get; protected set; } = true;
+
+        public bool Stealth { get; protected set; } = false;
 
         public FleetState State { get; set; } = FleetState.WaitingGalaxy;
 
@@ -116,6 +130,14 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             AttackTarget = target;
         }
 
+        protected virtual void SetEngineEnabled(bool state)
+        {
+            EngineEnabled = state;
+
+            if (state == false)
+                Stop();
+        }
+
         protected virtual IEnumerable<Vector2> CreateRoute(Vector2 target)
         {
             var map = System?.NavigationMap;
@@ -139,6 +161,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
             if (State == FleetState.InGalaxy)
             {
+                UpdateEffects();
                 UpdateRouteToAttackTarget();
                 TickActions();
                 UpdateLocation();
@@ -148,12 +171,11 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
         protected virtual void UpdateLocation()
         {
-            var translation = Speed * DeltaTime;
+            var translation = EngineEnabled == true ? Speed * DeltaTime : 0;
             var moveResult = Route.Move(translation);
 
             if (moveResult != RouteMoveResult.None)
             {
-
                 if (moveResult == RouteMoveResult.TargetLocationReached)
                     OnTargetLocationReached();
 
@@ -274,6 +296,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
         protected override void OnSystemChanged(StarSystem system)
         {
             LastUpdateTime = DateTime.Now;
+            ApplyEffects();
             base.OnSystemChanged(system);
         }
     }

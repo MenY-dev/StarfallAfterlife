@@ -67,6 +67,8 @@ namespace StarfallAfterlife.Bridge.Server
 
         void IFleetListener.OnFleetDataChanged(DiscoveryFleet fleet) => Invoke(() => SyncFleetData(fleet));
 
+        void IFleetListener.OnFleetSharedVisionChanged(DiscoveryFleet fleet) => Invoke(() => SyncSharedVision(fleet));
+
         void IObjectStorageListener.OnObjectStorageAdded(DiscoveryObject obj, ObjectStorage storage) => Invoke(() =>
         {
 

@@ -373,9 +373,15 @@ namespace StarfallAfterlife.Bridge.Server
                     writer.WriteInt32(fleet.Vision); // Vision
                     writer.WriteInt32(fleet.NebulaVision); // NebulaVision
 
-                    writer.WriteUInt16(0); // EffectsCount
-                                           //writer.WriteInt32(0); // EffectLogic
-                                           //writer.WriteInt32(0); // EffectCurrentActiveTime
+                    var effects = fleet.GetEffects();
+
+                    writer.WriteUInt16((ushort)effects.Length); // EffectsCount
+
+                    foreach (var effect in effects)
+                    {
+                        writer.WriteInt32((int)effect.Logic); // EffectLogic
+                        writer.WriteSingle(effect.Duration); // EffectCurrentActiveTime
+                    }
 
                     writer.WriteByte((byte)fleet.DockObjectType); // DockObjectType
                     writer.WriteInt32(fleet.DockObjectId); // DockObjectId
@@ -413,16 +419,38 @@ namespace StarfallAfterlife.Bridge.Server
                 });
         }
 
+        public virtual void SyncSharedVision(DiscoveryFleet fleet)
+        {
+            SendDiscoveryMessage(
+                fleet,
+                DiscoveryServerAction.SharedFleetVision,
+                writer =>
+                {
+                    var vision = fleet.GetSharedVision();
+
+                    writer.WriteUInt16((ushort)vision.Length); // Size
+
+                    foreach (var item in vision)
+                        writer.WriteInt32(item?.Id ?? 0); // FleetId
+                });
+        }
+
         public virtual void SyncAbilities(DiscoveryFleet fleet)
         {
+            var abilities = CurrentCharacter?.GetAbilitiesCooldown() ?? Array.Empty<KeyValuePair<int, float>>();
+
             SendDiscoveryMessage(
                 fleet,
                 DiscoveryServerAction.SyncAbility,
                 writer =>
                 {
-                    writer.WriteUInt16(0); // Size
-                    //writer.WriteInt32(0); // ID
-                    //writer.WriteSingle(0); // Cooldown
+                    writer.WriteUInt16((ushort)abilities.Length); // Size
+
+                    foreach(var item in abilities)
+                    {
+                        writer.WriteInt32(item.Key); // ID
+                        writer.WriteSingle(item.Value); // Cooldown
+                    }
                 });
         }
 

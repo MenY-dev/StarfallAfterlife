@@ -50,7 +50,9 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
         {
             base.Update();
 
-            if (IsConnected == false || Fleet.State != FleetState.InGalaxy)
+            if (IsConnected == false ||
+                Fleet.EngineEnabled == false ||
+                Fleet.State != FleetState.InGalaxy)
                 return;
 
             if (IsInWaiting == true && (DateTime.Now - WaitingStartTime).TotalSeconds > WaitingTime)
