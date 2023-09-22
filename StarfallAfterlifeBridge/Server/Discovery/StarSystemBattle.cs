@@ -1,4 +1,5 @@
-﻿using StarfallAfterlife.Bridge.Mathematics;
+﻿using StarfallAfterlife.Bridge.Database;
+using StarfallAfterlife.Bridge.Mathematics;
 using StarfallAfterlife.Bridge.Primitives;
 using System;
 using System.Collections.Generic;
@@ -127,32 +128,37 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             }
         }
 
-        public virtual void Leave(DiscoveryFleet fleet, SystemHex spawnHex) =>
-            Leave(Members.FirstOrDefault(m => m.Fleet == fleet), spawnHex);
+        public virtual void Leave(DiscoveryFleet fleet, SystemHex spawnHex, bool destroyed = false) =>
+            Leave(Members.FirstOrDefault(m => m.Fleet == fleet), spawnHex, destroyed);
 
-        public virtual void Leave(BattleMember member, SystemHex spawnHex)
+        public virtual void Leave(BattleMember member, SystemHex spawnHex, bool destroyed = false)
         {
-            if (member is not null && Members.Remove(member) == true)
+            if (member is not null && Members.Remove(member) == true && member.Fleet is DiscoveryFleet fleet)
             {
-                if (member.Fleet is DiscoveryFleet fleet &&
-                    fleet.System is StarSystem system)
+                if (fleet.System is StarSystem system)
                 {
                     var safeHex = system.GetNearestSafeHex(fleet, spawnHex);
-                    fleet.Route?.Update(SystemHexMap.HexToSystemPoint(safeHex));
-                }
-
-                if (member.Fleet is UserFleet userFleet)
-                {
-                    if (userFleet.State == FleetState.InBattle)
-                        userFleet.SetFleetState(FleetState.WaitingGalaxy);
-                }
-                else if (member.Fleet is DiscoveryAiFleet)
-                {
-                    member.Fleet.SetFleetState(FleetState.InGalaxy);
+                    fleet.SetLocation(SystemHexMap.HexToSystemPoint(safeHex));
                 }
 
                 Galaxy?.Listeners.Broadcast<IBattleListener>(l => l.OnBattleFleetLeaving(this, member));
-                Galaxy?.Listeners.Broadcast<IStarSystemObjectListener>(l => l.OnObjectSpawned(member.Fleet));
+
+                if (destroyed == true)
+                {
+                    fleet.SetFleetState(FleetState.Destroyed);
+                    fleet.System?.Broadcast<IStarSystemObjectListener>(l => l.OnObjectSpawned(member.Fleet));
+                }
+                else
+                {
+                    fleet.SetFleetState(fleet switch
+                    {
+                        UserFleet { State: FleetState.InBattle } => FleetState.WaitingGalaxy,
+                        _ => FleetState.InGalaxy,
+                    });
+
+                    fleet.System?.Broadcast<IStarSystemObjectListener>(l => l.OnObjectSpawned(member.Fleet));
+                    fleet.AddEffect(new() { Logic = GameplayEffectType.Immortal, Duration = 10 });
+                }
             }
         }
 

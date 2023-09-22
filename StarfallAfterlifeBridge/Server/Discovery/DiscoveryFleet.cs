@@ -109,6 +109,8 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
             if (state != FleetState.InGalaxy)
                 Stop();
+
+            OnFleetStateChanged(State, state);
         }
 
         protected virtual void SetTargetLocation(Vector2 location)
@@ -298,6 +300,11 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             LastUpdateTime = DateTime.Now;
             ApplyEffects();
             base.OnSystemChanged(system);
+        }
+
+        protected virtual void OnFleetStateChanged(FleetState oldState, FleetState newState)
+        {
+
         }
     }
 }

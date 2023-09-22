@@ -11,6 +11,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
         WaitingGalaxy = 0,
         InGalaxy = 1,
         WaitingBattle = 2,
-        InBattle = 3
+        InBattle = 3,
+        Destroyed = 4
     }
 }

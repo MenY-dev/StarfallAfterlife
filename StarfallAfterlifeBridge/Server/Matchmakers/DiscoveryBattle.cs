@@ -393,27 +393,29 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 (int?)doc["mob_id"] is int mobFleetId &&
                 Server.GetCharacter(fleetId) is ServerCharacter character)
             {
-                var mob =
-                    Mobs?.FirstOrDefault(m => m?.FleetId == mobFleetId)?.Mob ??
-                    Bosses?.FirstOrDefault(b => b?.FleetId == mobFleetId)?.Mob;
+                var battleMob = Mobs?.FirstOrDefault(m => m?.FleetId == mobFleetId);
 
-                var info = new MobKillInfo();
+                if (battleMob is not null)
+                    SystemBattle.Leave(battleMob.Member, Location, true);
 
-                info.SystemId = SystemId;
-                info.MobId = mob?.Id ?? -1;
-                info.FleetId = mobFleetId;
-                info.ObjectId = (int?)doc["obj_id"] ?? -1;
-                info.ObjectType = (DiscoveryObjectType?)(byte?)doc["type"] ?? DiscoveryObjectType.None;
-                info.Faction = (Faction?)(byte?)doc["faction"] ?? Faction.None;
-                info.FactionGroup = (int?)doc["faction_group"] ?? -1;
-                info.ShipClass = (int?)doc["ship_class"] ?? 0;
-                info.Level = (int?)doc["level"] ?? 0;
-                info.RepEarned = (int?)doc["rep_earned"] ?? 0;
-                info.IsInAttackEvent = (int?)doc["is_in_attack_event"] ?? 0;
-                info.Tags.AddRange(doc["tags"]?.DeserializeUnbuffered<List<string>>() ?? new());
+                var mobInfo = battleMob?.Mob ?? Bosses?.FirstOrDefault(b => b?.FleetId == mobFleetId)?.Mob;
+                var killInfo = new MobKillInfo();
+
+                killInfo.SystemId = SystemId;
+                killInfo.MobId = mobInfo?.Id ?? -1;
+                killInfo.FleetId = mobFleetId;
+                killInfo.ObjectId = (int?)doc["obj_id"] ?? -1;
+                killInfo.ObjectType = (DiscoveryObjectType?)(byte?)doc["type"] ?? DiscoveryObjectType.None;
+                killInfo.Faction = (Faction?)(byte?)doc["faction"] ?? Faction.None;
+                killInfo.FactionGroup = (int?)doc["faction_group"] ?? -1;
+                killInfo.ShipClass = (int?)doc["ship_class"] ?? 0;
+                killInfo.Level = (int?)doc["level"] ?? 0;
+                killInfo.RepEarned = (int?)doc["rep_earned"] ?? 0;
+                killInfo.IsInAttackEvent = (int?)doc["is_in_attack_event"] ?? 0;
+                killInfo.Tags.AddRange(doc["tags"]?.DeserializeUnbuffered<List<string>>() ?? new());
 
                 character.Events?.Broadcast<IBattleInstanceListener>(l =>
-                    l.OnMobDestroyed(fleetId, info));
+                    l.OnMobDestroyed(fleetId, killInfo));
             }
         }
 

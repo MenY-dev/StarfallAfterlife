@@ -252,6 +252,9 @@ namespace StarfallAfterlife.Bridge.Server
                     {
                         foreach (var item in system.Fleets)
                         {
+                            if (item is null || item.State == FleetState.Destroyed)
+                                continue;
+
                             if (item != fleet)
                                 RequestDiscoveryObjectSync(item);
 
