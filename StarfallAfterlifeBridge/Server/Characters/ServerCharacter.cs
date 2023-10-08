@@ -310,8 +310,10 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                 Name = UniqueName,
                 Faction = Faction,
                 Level = Level,
+                BaseVision = 5,
+                BaseSpeed = 5,
                 State = FleetState.WaitingGalaxy,
-                Hull = GetMainShipHull()
+                Hull = GetMainShipHull(),
             };
 
             foreach (var item in Abilities)
@@ -319,7 +321,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
             return Fleet;
         }
-
+        
         public void UpdateShipStatus(int shipId, string shipData = null, string shipStats = null)
         {
             if (Ships?.FirstOrDefault(s => s.Id == shipId) is ShipConstructionInfo ship &&

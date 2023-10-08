@@ -62,6 +62,12 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             }
             else Stealth = false;
 
+            if (GetAllEffects(GameplayEffectType.Immortal).Any() == true)
+            {
+                Immortal = true;
+            }
+            else Immortal = false;
+
             foreach (var sharedVisionEffect in GetAllEffects(GameplayEffectType.SharedVision, true)
                                               .Cast<FleetEffectInfo>())
             {

@@ -21,23 +21,25 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
         public float Speed { get; protected set; } = 5;
 
-        public float BaseSpeed { get; set; } = 5;
+        public float BaseSpeed { get; set; } = 4;
 
-        public int BaseVision { get; set; } = 5;
+        public int BaseVision { get; set; } = 3;
 
-        public int Vision { get; protected set; } = 5;
+        public int Vision { get; protected set; } = 3;
 
         public StarSystemObject SharedVisionTarget { get; set; } = null;
 
         public int AgroVision { get; set; } = 0;
 
-        public int BaseNebulaVision { get; set; } = 0;
+        public int BaseNebulaVision { get; set; } = 1;
 
-        public int NebulaVision { get; protected set; } = 0;
+        public int NebulaVision { get; protected set; } = 1;
 
         public bool EngineEnabled { get; protected set; } = true;
 
         public bool Stealth { get; protected set; } = false;
+
+        public bool Immortal { get; private set; }
 
         public FleetState State { get; set; } = FleetState.WaitingGalaxy;
 
@@ -52,6 +54,8 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
         public Route Route { get; } = new();
 
         public Vector2 TargetLocation => Route.TargetLocation;
+
+        public bool IsTargetLocationReached => Location == Route.TargetLocation;
 
         public StarSystemObject AttackTarget { get; protected set; }
 
@@ -93,13 +97,17 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             SetTargetLocation(location);
         }
 
-        public void SetLocation(Vector2 location)
+        public void SetLocation(Vector2 location, bool silent = false)
         {
             AttackTarget = null;
             Route.Update(location);
             Location = location;
-            Broadcast<IFleetListener>(l => l.OnFleetMoved(this));
-            Broadcast<IFleetListener>(l => l.OnFleetRouteChanged(this));
+
+            if (silent == false)
+            {
+                Broadcast<IFleetListener>(l => l.OnFleetMoved(this));
+                Broadcast<IFleetListener>(l => l.OnFleetRouteChanged(this));
+            }
         }
 
         public void SetFleetState(FleetState state)
@@ -288,6 +296,47 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                 offset = offset.Normalize();
 
             return offset.GetNegative();
+        }
+
+        public virtual bool IsInNebula()
+        {
+            return System?.NebulaMap[Hex] == true;
+        }
+
+        public virtual int GetCurrentVision()
+        {
+            return IsInNebula() ? NebulaVision : Vision;
+        }
+
+        public virtual bool IsVisible(DiscoveryFleet target)
+        {
+            if (target is null ||
+                target == this ||
+                target.System != System ||
+                target.Stealth == true)
+                return false;
+
+            if (target.IsInNebula() == true &&
+                IsInNebula() == false)
+                return false;
+
+            var vision = (GetCurrentVision() + target.AgroVision);
+            var distance = Hex.GetDistanceTo(target.Hex);
+
+            return distance <= vision;
+        }
+
+        public virtual bool CanAttack(DiscoveryFleet target)
+        {
+            if (target is null ||
+                target.DockObjectId > 0 ||
+                target.System is null ||
+                target.System != System ||
+                target.Stealth == true ||
+                target.Immortal == true)
+                return false;
+
+            return true;
         }
 
         protected virtual void OnTargetLocationReached()

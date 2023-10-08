@@ -156,6 +156,9 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                         _ => FleetState.InGalaxy,
                     });
 
+                    if (fleet is UserFleet)
+                        fleet.AddEffect(new(){Duration = 10, Logic = GameplayEffectType.Immortal});
+
                     fleet.System?.Broadcast<IStarSystemObjectListener>(l => l.OnObjectSpawned(member.Fleet));
                     fleet.AddEffect(new() { Logic = GameplayEffectType.Immortal, Duration = 10 });
                 }

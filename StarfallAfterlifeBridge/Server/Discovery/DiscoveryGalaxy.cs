@@ -66,7 +66,9 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                 var system = ActivateStarSystem(systemId);
 
                 if (location is Vector2 loc)
-                    fleet.Route.Update(loc);
+                {
+                    fleet.SetLocation(loc, true);
+                }
 
                 if (system is not null)
                 {

@@ -133,13 +133,13 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                             FactionGroup = mob.FactionGroup,
                             Name = mobInfo.InternalName,
                             Level = mobInfo.Level,
-                            BaseSpeed = mobInfo.Speed * 10,
+                            BaseSpeed = 4,
                             MobId = mobInfo.Id,
                             Hull = mobInfo.GetMainShipHull(),
                             Hex = mob.SpawnHex,
                         };
 
-                        fleet.SetAI(new PatrollingAI());
+                        fleet.SetAI(new MobAI());
                         AddFleet(fleet);
                     }
                 }
