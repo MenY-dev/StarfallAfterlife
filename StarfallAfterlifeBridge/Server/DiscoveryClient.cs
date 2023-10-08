@@ -123,8 +123,6 @@ namespace StarfallAfterlife.Bridge.Server
 
             if (CurrentCharacter is ServerCharacter character)
             {
-                character.InGalaxy = false;
-
                 if (character.Fleet is UserFleet fleet)
                 {
                     fleet.Listeners?.Clear();
@@ -199,14 +197,14 @@ namespace StarfallAfterlife.Bridge.Server
         {
             var response = new JsonObject();
 
-            if (
-                CurrentCharacter is ServerCharacter character &&
-                character.InGalaxy == true &&
-                character.Fleet?.System is not null)
+            if (CurrentCharacter is ServerCharacter character &&
+                character.Fleet is DiscoveryFleet fleet &&
+                fleet.System is not null &&
+                fleet.State is not FleetState.Destroyed)
             {
                 response["system"] = character.Fleet?.System?.Id ?? 0;
-                response["location"] = JsonHelpers.ParseNode(character.Fleet?.Location ?? Vector2.Zero);
-                response["active_ships"] = JsonHelpers.ParseNodeUnbuffered(CurrentCharacter?.Ships ?? new());
+                response["location"] = JsonHelpers.ParseNode(fleet.Location);
+                response["active_ships"] = JsonHelpers.ParseNodeUnbuffered(character.Ships ?? new());
             }
 
             request.SendResponce(response, SfaServerAction.GetFullGalaxySessionData);

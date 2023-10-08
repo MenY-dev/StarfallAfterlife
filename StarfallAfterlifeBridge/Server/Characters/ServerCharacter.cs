@@ -24,8 +24,6 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
         public SfaDatabase Database => DiscoveryClient?.Server?.Realm?.Database;
 
-        public bool InGalaxy { get; set; } = false;
-
         public int Id { get; set; } = -1;
 
         public string Name { get; set; }
