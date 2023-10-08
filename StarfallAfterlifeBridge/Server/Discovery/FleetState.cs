@@ -8,9 +8,8 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 {
     public enum FleetState : byte
     {
-        WaitingGalaxy = 0,
+        None = 0,
         InGalaxy = 1,
-        WaitingBattle = 2,
         InBattle = 3,
         Destroyed = 4
     }

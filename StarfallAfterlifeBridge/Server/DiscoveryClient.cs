@@ -73,13 +73,17 @@ namespace StarfallAfterlife.Bridge.Server
 
             if (CurrentCharacter is ServerCharacter character)
             {
-                if (character.Fleet is UserFleet fleet)
-                    Galaxy?.BeginPreUpdateAction(g => fleet.State = FleetState.WaitingGalaxy);
-
-                if (character.InGalaxy == false)
+                if (character.Fleet is UserFleet fleet &&
+                    fleet.State is FleetState.None or FleetState.InBattle)
                 {
-                    character.InGalaxy = true;
-
+                    Galaxy?.BeginPreUpdateAction(g =>
+                    {
+                        fleet.State = FleetState.InGalaxy;
+                        Invoke(() => EnterToStarSystem(character.Fleet?.System?.Id ?? GetCharactDefaultSystem()?.Id ?? 0));
+                    });
+                }
+                else
+                {
                     Client.SendRequest(SfaServerAction.StartSession, new JsonObject
                     {
                         ["character_id"] = CurrentCharacter.UniqueId
@@ -93,10 +97,6 @@ namespace StarfallAfterlife.Bridge.Server
                             ProcessGalaxyEntryData(JsonHelpers.ParseNodeUnbuffered(response.Text));
                         }
                     });
-                }
-                else
-                {
-                    EnterToStarSystem(character.Fleet?.System?.Id ?? GetCharactDefaultSystem()?.Id ?? 0);
                 }
             }
         }

@@ -41,7 +41,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
         public bool Immortal { get; private set; }
 
-        public FleetState State { get; set; } = FleetState.WaitingGalaxy;
+        public FleetState State { get; set; } = FleetState.None;
 
         //public bool InBattle { get; set; } = false;
 

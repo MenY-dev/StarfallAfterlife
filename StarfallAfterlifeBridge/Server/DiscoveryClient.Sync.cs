@@ -368,7 +368,7 @@ namespace StarfallAfterlife.Bridge.Server
                     writer.WriteVector2(fleet.Location);
                     writer.WriteVector2(fleet.TargetLocation);
                     writer.WriteSingle(fleet.Speed * 0.5f);
-                    writer.WriteInt32(fleet.State is FleetState.WaitingBattle or FleetState.InBattle ? 1 : 0); // FleetBattleState
+                    writer.WriteInt32(fleet.State is FleetState.InBattle ? 1 : 0); // FleetBattleState
                     writer.WriteInt32(fleet.Level); // Level
                     writer.WriteInt32(fleet.Vision); // Vision
                     writer.WriteInt32(fleet.NebulaVision); // NebulaVision

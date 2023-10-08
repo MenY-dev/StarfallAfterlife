@@ -312,7 +312,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                 Level = Level,
                 BaseVision = 5,
                 BaseSpeed = 5,
-                State = FleetState.WaitingGalaxy,
+                State = FleetState.None,
                 Hull = GetMainShipHull(),
             };
 
