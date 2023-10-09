@@ -49,13 +49,35 @@ namespace StarfallAfterlife.Bridge.Mathematics
 
         public SystemHexMap()
         {
-            Map = new BitArray(817);
+            Map = new BitArray(HexesCount);
         }
 
 
         public SystemHexMap(bool defaultValue)
         {
-            Map = new BitArray(817, defaultValue);
+            Map = new BitArray(HexesCount, defaultValue);
+        }
+
+        public SystemHexMap(Func<SystemHex, bool> predicate)
+        {
+            Map = new BitArray(HexesCount);
+
+            if (predicate is null)
+                return;
+
+            for (int i = 0; i < HexesCount; i++)
+                SetHex(i, predicate.Invoke(ArrayIndexToHex(i)));
+        }
+
+        public SystemHexMap(Func<int, bool> predicate)
+        {
+            Map = new BitArray(HexesCount);
+
+            if (predicate is null)
+                return;
+
+            for (int i = 0; i < HexesCount; i++)
+                SetHex(i, predicate.Invoke(i));
         }
 
         public SystemHexMap(byte[] data)
@@ -78,7 +100,7 @@ namespace StarfallAfterlife.Bridge.Mathematics
             }
             catch
             {
-                Map = new BitArray(817);
+                Map = new BitArray(HexesCount);
             }
 
             foreach (var item in Map)
@@ -111,7 +133,7 @@ namespace StarfallAfterlife.Bridge.Mathematics
         {
             hex = new SystemHex();
 
-            if (index < 0 || index > 816)
+            if (index < 0 || index >= HexesCount)
                 return false;
 
             int searchResult = Array.BinarySearch(LengthMap, index);

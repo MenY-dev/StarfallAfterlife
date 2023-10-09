@@ -46,6 +46,8 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
         public SystemHexMap NebulaMap { get; protected set; } = new();
 
+        public SystemHexMap ObstacleMap { get; protected set; } = new();
+
         public List<StarSystemBattle> ActiveBattles { get; } = new();
 
         public SfaDatabase Database { get; set; }
@@ -159,17 +161,43 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
         protected virtual void UpdateNavigationMap()
         {
+            var starSize = Info?.Size / 150f ?? 1;
             List<Vector2> centers = new();
             List<float> radiuses = new();
+            var objects = Enumerable.Empty<StarSystemObject>()
+                .Concat(Planets)
+                .Concat(PiratesOutposts)
+                .Concat(PiratesStations)
+                .Concat(ScienceStations)
+                .Concat(RepairStations)
+                .Concat(FuelStation)
+                .Concat(TradeStations)
+                .Concat(Motherships)
+                .Concat(QuickTravelGates)
+                .Concat(RichAsteroids);
 
-            foreach (var planet in Planets)
+            centers.Add(Vector2.Zero);
+            radiuses.Add(starSize);
+
+            ObstacleMap = new SystemHexMap(h => SystemHexMap.HexToSystemPoint(h).GetSize() < starSize);
+
+            foreach (var obj in objects)
             {
-                centers.Add(SystemHexMap.HexToSystemPoint(planet.Hex));
-                radiuses.Add(planet.Size / 400);
+                centers.Add(obj.Location);
+                radiuses.Add(GetObjectRadius(obj));
             }
 
             NavigationMap = NavigationMap.Create(centers, radiuses);
         }
+
+        public float GetObjectRadius(StarSystemObject systemObject) => systemObject switch
+        {
+            null => 0,
+            Planet planet => planet.Size / 400,
+            DiscoveryMothership or PiratesStation => 2.5f,
+            PiratesOutpost or ScienceStation or RepairStation or TradeStation => 1.75f,
+            _ => 1f
+        };
 
         public void AddFleet(DiscoveryFleet fleet, Vector2? location = null)
         {
@@ -221,7 +249,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
             foreach (var hex in targetHex.GetSpiralEnumerator(33))
             {
-                if (hex.GetSize() > 16)
+                if (hex.GetSize() > 16 || ObstacleMap[hex] == true)
                     continue;
 
                 if (closedHexes.Contains(hex) == false)

@@ -20,9 +20,6 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
         public List<int> SecretLocations { get; set; } = new List<int>() { 0 };
 
-        [JsonIgnore]
-        public override Vector2 Location { get; set; }
-
         public DiscoveryMothership(GalaxyMapMothership info, StarSystem system)
         {
             Database = system?.Galaxy.Database;

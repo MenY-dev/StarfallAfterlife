@@ -422,7 +422,9 @@ namespace StarfallAfterlife.Bridge.Server
             Galaxy.BeginPreUpdateAction(g =>
             {
                 if (CurrentCharacter?.Fleet is UserFleet fleet &&
-                    fleet.System?.Id == systemId)
+                    fleet.System is StarSystem system &&
+                    system.Id == systemId &&
+                    system.ObstacleMap?[hex] == false)
                     fleet.MoveTo(location);
             });
         }
@@ -431,10 +433,14 @@ namespace StarfallAfterlife.Bridge.Server
         {
             Vector2 location = reader.ReadVector2();
             int val1 = reader.ReadInt32();
+            SystemHex hex = SystemHexMap.SystemPointToHex(location);
+
             Galaxy.BeginPreUpdateAction(g =>
             {
                 if (CurrentCharacter?.Fleet is UserFleet fleet &&
-                    fleet.System?.Id == systemId)
+                    fleet.System is StarSystem system &&
+                    system.Id == systemId &&
+                    system.ObstacleMap?[hex] == false)
                     fleet.MoveTo(location);
             });
         }
