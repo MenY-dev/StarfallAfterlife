@@ -123,8 +123,11 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
         protected Vector2 CreateRandowWaypoint()
         {
-            return SystemHexMap.ArrayIndexToSystemPoint(
+            var waypoint = SystemHexMap.ArrayIndexToHex(
                 _rnd.Next(0, SystemHexMap.HexesCount));
+
+            waypoint = System?.GetNearestSafeHex(Fleet, waypoint, false) ?? waypoint;
+            return SystemHexMap.HexToSystemPoint(waypoint);
         }
     }
 }
