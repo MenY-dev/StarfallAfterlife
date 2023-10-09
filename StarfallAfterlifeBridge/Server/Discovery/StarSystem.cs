@@ -235,19 +235,23 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             Broadcast<IStarSystemObjectListener>(l => l.OnObjectDestroed(fleet));
         }
 
-        public virtual SystemHex GetNearestSafeHex(DiscoveryFleet fleet, SystemHex targetHex)
+        public virtual SystemHex GetNearestSafeHex(DiscoveryFleet fleet, SystemHex targetHex, bool ignoreTargetHex = true)
         {
             if (fleet is null)
                 return targetHex;
 
             var closedHexes = new List<SystemHex>();
             var myFaction = fleet.Faction;
+            var hexes = targetHex.GetSpiralEnumerator(33);
+
+            if (ignoreTargetHex == false)
+                hexes = Enumerable.Repeat(targetHex, 1).Concat(hexes);
 
             closedHexes.AddRange(ActiveBattles.Select(s => s.Hex));
             closedHexes.AddRange(GetAllObjects(false).Select(s => s.Hex));
             closedHexes.AddRange(Fleets.Where(f => f.Faction.IsEnemy(myFaction)).Select(s => s.Hex));
 
-            foreach (var hex in targetHex.GetSpiralEnumerator(33))
+            foreach (var hex in hexes)
             {
                 if (hex.GetSize() > 16 || ObstacleMap[hex] == true)
                     continue;
