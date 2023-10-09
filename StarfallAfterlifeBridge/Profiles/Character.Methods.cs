@@ -25,12 +25,12 @@ namespace StarfallAfterlife.Bridge.Profiles
             }
         }
 
-        public InventoryItem AddInventoryItem(SfaItem item, int count)
+        public InventoryItem AddInventoryItem(SfaItem item, int count, string uniqueData = null)
         {
             if (Inventory is null)
                 Inventory = new();
 
-            return Inventory.Add(item, count);
+            return Inventory.Add(item, count, uniqueData);
         }
 
         public InventoryItem AddInventoryItem(InventoryItem item, int count)
@@ -41,20 +41,28 @@ namespace StarfallAfterlife.Bridge.Profiles
             return Inventory.Add(item, count);
         }
 
-        public int DeleteInventoryItem(SfaItem item, int count = 1)
+        public int DeleteInventoryItem(SfaItem item, int count = 1, string uniqueData = null)
         {
             if (Inventory is null)
                 Inventory = new();
 
-            return Inventory.Remove(item, count);
+            return Inventory.Remove(item, count, uniqueData);
         }
 
-        public InventoryItem GetInventoryItem(SfaItem item)
+        public InventoryItem GetInventoryItem(SfaItem item, string uniqueData = null)
         {
             if (Inventory is null)
                 Inventory = new();
 
-            return Inventory[item];
+            return Inventory[item, uniqueData];
+        }
+        
+        public InventoryItem[] GetInventoryItemVariants(SfaItem item)
+        {
+            if (Inventory is null)
+                Inventory = new();
+
+            return Inventory.GetAll(item);
         }
 
         public FleetShipInfo AddShip(int hull)

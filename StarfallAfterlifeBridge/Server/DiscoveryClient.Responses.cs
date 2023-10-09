@@ -110,7 +110,7 @@ namespace StarfallAfterlife.Bridge.Server
                         writer.WriteInt32(item.Count); // Count
                         writer.WriteInt32(item.IGCPrice); // IGCPrice
                         writer.WriteInt32(item.BGCPrice); // BGCPrice
-                        writer.WriteShortString("", -1, true, Encoding.UTF8); // UniqueData
+                        writer.WriteShortString(item.UniqueData ?? "", -1, true, Encoding.UTF8); // UniqueData
                     }
 
                     writer.WriteShortString(name, -1, true, Encoding.UTF8); // Stock

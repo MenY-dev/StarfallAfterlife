@@ -652,9 +652,8 @@ namespace StarfallAfterlife.Bridge.Server
                     Count = reader.ReadInt32(),
                     IGCPrice = reader.ReadInt32(),
                     BGCPrice = reader.ReadInt32(),
+                    UniqueData = reader.ReadShortString(Encoding.UTF8) is string data && data.Length > 0 ? data : null,
                 });
-
-                reader.ReadShortString(Encoding.UTF8);
             }
 
             int srcObjectId = reader.ReadInt32();
@@ -680,7 +679,7 @@ namespace StarfallAfterlife.Bridge.Server
 
                             foreach (var item in items)
                             {
-                                var result = src.SendItemTo(dst, item.Id, item.Count);
+                                var result = src.SendItemTo(dst, item.Id, item.Count, item.UniqueData);
                             }
 
                             character.RaseStockUpdated();
@@ -694,7 +693,7 @@ namespace StarfallAfterlife.Bridge.Server
 
                             foreach (var item in items)
                             {
-                                var result = src.SendItemTo(dst, item.Id, item.Count);
+                                var result = src.SendItemTo(dst, item.Id, item.Count, item.UniqueData);
                             }
 
                             character.RaseStockUpdated();
@@ -713,7 +712,7 @@ namespace StarfallAfterlife.Bridge.Server
 
                         foreach (var item in items)
                         {
-                            var result = src.SendItemTo(dst, item.Id, item.Count);
+                            var result = src.SendItemTo(dst, item.Id, item.Count, item.UniqueData);
                         }
 
                         character.RaseStockUpdated();

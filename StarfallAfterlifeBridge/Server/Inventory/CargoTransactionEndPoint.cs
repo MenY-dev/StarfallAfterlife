@@ -77,7 +77,7 @@ namespace StarfallAfterlife.Bridge.Server.Inventory
             };
         }
 
-        public int SendItemTo(CargoTransactionEndPoint target, int itemId, int count)
+        public int SendItemTo(CargoTransactionEndPoint target, int itemId, int count, string uniqueData = null)
         {
             if (target is null || count < 1)
                 return 0;
@@ -87,7 +87,7 @@ namespace StarfallAfterlife.Bridge.Server.Inventory
 
             if (_type == EndPointType.Shop)
             {
-                item = _shop?.Items?.FirstOrDefault(i => i.Id == itemId)?.Clone();
+                item = _shop?.Items?.FirstOrDefault(i => i.Id == itemId && i.UniqueData == uniqueData)?.Clone();
 
                 if (item is null || item.Count < 1)
                     return 0;
@@ -105,25 +105,24 @@ namespace StarfallAfterlife.Bridge.Server.Inventory
                 if (_character is not null &&
                     _character.GetShipByStockName(StockName)?.Cargo is InventoryStorage cargo)
                 {
-
                     storage = cargo;
                 }
             }
 
-            item = storage?[itemId]?.Clone();
+            item = storage?[itemId, uniqueData]?.Clone();
 
             if (item is null || item.Count < 1)
                 return 0;
 
             item.Count = Math.Min(item.Count, count);
             var totalCount = target.Receive(item);
-            storage.Remove(itemId, totalCount);
+            storage.Remove(itemId, totalCount, uniqueData);
 
             return totalCount;
         }
 
-        public int Receive(SfaItem item, int count) =>
-            item is null ? 0 : Receive(InventoryItem.Create(item, count));
+        public int Receive(SfaItem item, int count, string uniqueData = null) =>
+            item is null ? 0 : Receive(InventoryItem.Create(item, count, uniqueData));
 
         protected int Receive(InventoryItem item)
         {
@@ -201,8 +200,8 @@ namespace StarfallAfterlife.Bridge.Server.Inventory
                             else
                             {
                                 storage.Add(itemInfo, cargoCount);
-                                cargoCount = 0;
                                 totalReceivedCargo = cargoCount;
+                                cargoCount = 0;
                             }
 
                             if (cargoCount < 1)

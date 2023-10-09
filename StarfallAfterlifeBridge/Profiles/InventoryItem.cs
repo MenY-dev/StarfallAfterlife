@@ -25,13 +25,17 @@ namespace StarfallAfterlife.Bridge.Profiles
         [JsonIgnore]
         public int BGCPrice { get; set; } = -1;
 
-        public static InventoryItem Create(SfaItem item, int count = 1) => new()
+        [JsonPropertyName("unique_data"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string UniqueData { get; set; } = null;
+
+        public static InventoryItem Create(SfaItem item, int count = 1, string uniqueData = null) => new()
         {
             Id = item.Id,
             Type = item.ItemType,
             Count = count,
             IGCPrice = item.IGC,
             BGCPrice = item.BGC,
+            UniqueData = uniqueData
         };
 
         object ICloneable.Clone() => Clone();

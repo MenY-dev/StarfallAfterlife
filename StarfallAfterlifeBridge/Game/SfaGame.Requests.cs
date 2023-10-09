@@ -261,17 +261,32 @@ namespace StarfallAfterlife.Bridge.Game
                     p.GameProfile.CurrentCharacter is Character character &&
                     p.Database is SfaDatabase database)
                 {
-                    foreach (var item in eqList)
+                    foreach (var eq in eqList)
                     {
-                        if (item is not null &&
-                            (int?)item["entity"] is int entity &&
-                            (int?)item["count"] is int count &&
+                        if (eq is not null &&
+                            (int?)eq["entity"] is int entity &&
+                            (int?)eq["count"] is int count &&
                             database.GetItem(entity) is SfaItem info &&
-                            character.GetInventoryItem(info) is InventoryItem inventory)
+                            character.GetInventoryItemVariants(info)?
+                            .OrderBy(i => string.IsNullOrWhiteSpace(i.UniqueData) ? -1 : 0)
+                            .ToArray() is InventoryItem[] inventory)
                         {
-                            int seilCount = Math.Min(character.GetInventoryItem(info).Count, count);
-                            character.DeleteInventoryItem(info, seilCount);
-                            character.IGC += Math.Max(0, (int)(info.IGC * 0.9f) * seilCount);
+                            int requiredCount = Math.Max(0, count);
+                            int totalCount = 0;
+
+                            foreach (var item in inventory)
+                            {
+                                var toRemove = Math.Min(requiredCount, item.Count);
+                                character.DeleteInventoryItem(info, toRemove, item.UniqueData);
+                                requiredCount -= toRemove;
+                                totalCount += toRemove;
+
+                                if (requiredCount < 1)
+                                    break;
+                            }
+
+
+                            character.IGC += Math.Max(0, (int)(info.IGC * 0.9f) * totalCount);
                         }
                     }
 

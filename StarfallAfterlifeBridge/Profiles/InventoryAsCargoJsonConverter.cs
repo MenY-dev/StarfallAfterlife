@@ -33,7 +33,7 @@ namespace StarfallAfterlife.Bridge.Profiles
             writer.WriteStartObject();
             writer.WriteNumber("entity", value.Id);
             writer.WriteNumber("count", value.Count);
-            writer.WriteString("unique_data", string.Empty);
+            writer.WriteString("unique_data", value.UniqueData);
             writer.WriteEndObject();
         }
     }

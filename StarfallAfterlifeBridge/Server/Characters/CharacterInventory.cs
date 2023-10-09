@@ -18,20 +18,21 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
         private SfaServerClient Client => _character.DiscoveryClient?.Client;
 
-        InventoryItem ICharInventoryStorage.this[int itemId] => GetItem(itemId).Result;
+        InventoryItem ICharInventoryStorage.this[int itemId, string uniqueData] => GetItem(itemId, uniqueData).Result;
 
         public CharacterInventory(ServerCharacter character)
         {
             _character = character;
         }
 
-        public Task<InventoryItem> GetItem(int id)
+        public Task<InventoryItem> GetItem(int id, string uniqueData = null)
         {
             return Client?
                 .SendRequest(SfaServerAction.CharacterInventory, new JsonObject
                 {
                     ["action"] = "get",
                     ["id"] = id,
+                    ["unique_data"] = uniqueData,
                 }.ToJsonStringUnbuffered(false), ResponseTimeout)
                 .ContinueWith(t =>
                 {
@@ -60,6 +61,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                     ["id"] = item.Id,
                     ["type"] = (byte)item.Type,
                     ["count"] = item.Count,
+                    ["unique_data"] = item.UniqueData,
                 }.ToJsonStringUnbuffered(false), ResponseTimeout)
                 .ContinueWith(t =>
                 {
@@ -76,7 +78,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                 }) ?? Task.FromResult(0);
         }
 
-        public Task<int> RemoveItem(int id, int count)
+        public Task<int> RemoveItem(int id, int count, string uniqueData = null)
         {
             if (count < 1)
                 Task.FromResult(0);
@@ -87,6 +89,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                     ["action"] = "remove",
                     ["id"] = id,
                     ["count"] = count,
+                    ["unique_data"] = uniqueData,
                 }.ToJsonStringUnbuffered(false), ResponseTimeout)
                 .ContinueWith(t =>
                 {
@@ -115,12 +118,12 @@ namespace StarfallAfterlife.Bridge.Server.Characters
             return item;
         }
 
-        int ICharInventoryStorage.Remove(int itemId, int count)
+        int ICharInventoryStorage.Remove(int itemId, int count, string uniqueData)
         {
             if (count < 0)
                 return 0;
 
-            return RemoveItem(itemId, count).Result;
+            return RemoveItem(itemId, count, uniqueData).Result;
         }
     }
 }

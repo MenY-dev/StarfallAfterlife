@@ -217,6 +217,11 @@ namespace StarfallAfterlife.Bridge.Generators
                     condition["dest_sys_id"] = system.Id;
                     condition["dest_obj_type"] = (int)obj.ObjectType;
                     condition["item_to_deliver"] = info.ItemToDeliver;
+                    condition["item_to_deliver_unique_data"] = new JsonObject
+                    {
+                        ["type"] = 1,
+                        ["quest_id"] = context.Quest.Id
+                    }.ToJsonStringUnbuffered(false);
                     return true;
                 }
             }
@@ -674,6 +679,11 @@ namespace StarfallAfterlife.Bridge.Generators
                             continue;
 
                         condition["item_to_deliver"] = info.ItemToDeliver;
+                        condition["item_to_deliver_unique_data"] = new JsonObject
+                        {
+                            ["type"] = 1,
+                            ["quest_id"] = context.Quest.Id
+                        }.ToJsonStringUnbuffered(false);
                         condition["drop_chance"] = info.DropChance;
                         condition["target_mobs"] = JsonHelpers.ParseNodeUnbuffered(targetMobs);
                         condition["target_systems"] = JsonHelpers.ParseNodeUnbuffered(targetSystems);

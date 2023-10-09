@@ -419,7 +419,7 @@ namespace StarfallAfterlife.Bridge.Server
 
         private void ProcessCharacterInventory(JNode doc, SfaClientRequest request)
         {
-            var respomce = new JObject();
+            var responce = new JObject();
             var inventoryUpdated = false;
 
             Game?.Profile?.Use(p =>
@@ -427,32 +427,36 @@ namespace StarfallAfterlife.Bridge.Server
                 if (p.GameProfile?.CurrentCharacter is Character character &&
                     character.Inventory is InventoryStorage inventory)
                 {
-                    switch ((string)doc?["action"])
+                    if (doc is null)
+                        return;
+
+                    switch ((string)doc["action"])
                     {
                         case "get":
                             {
-                                if ((int?)doc?["id"] is int id &&
-                                    inventory[id] is InventoryItem item)
-                                    respomce["item"] = JsonHelpers.ParseNode(item);
+                                if ((int?)doc["id"] is int id &&
+                                    inventory[id, (string)doc["unique_data"]] is InventoryItem item)
+                                    responce["item"] = JsonHelpers.ParseNode(item);
                             }
                             break;
 
                         case "add":
                             {
-                                if ((int?)doc?["id"] is int id &&
-                                    (InventoryItemType?)(byte?)doc?["type"] is InventoryItemType type &&
-                                    (int?)doc?["count"] is int count)
+                                if ((int?)doc["id"] is int id &&
+                                    (InventoryItemType?)(byte?)doc["type"] is InventoryItemType type &&
+                                    (int?)doc["count"] is int count)
                                 {
                                     var item = new InventoryItem
                                     {
                                         Id = id,
                                         Type = type,
-                                        Count = count
+                                        Count = count,
+                                        UniqueData = (string)doc["unique_data"]
                                     };
 
                                     if (inventory.Add(item) is InventoryItem newItem)
                                     {
-                                        respomce["result"] = Math.Max(0, newItem.Count);
+                                        responce["result"] = Math.Max(0, newItem.Count);
                                         inventoryUpdated = true;
                                     }
                                 }
@@ -462,10 +466,10 @@ namespace StarfallAfterlife.Bridge.Server
 
                         case "remove":
                             {
-                                if ((int?)doc?["id"] is int id &&
-                                    (int?)doc?["count"] is int count)
+                                if ((int?)doc["id"] is int id &&
+                                    (int?)doc["count"] is int count)
                                 {
-                                    respomce["result"] = inventory.Remove(id, count);
+                                    responce["result"] = inventory.Remove(id, count, (string)doc["unique_data"]);
                                     inventoryUpdated = true;
                                 }
                             }
@@ -486,7 +490,7 @@ namespace StarfallAfterlife.Bridge.Server
             if (inventoryUpdated == true)
                 Game?.DiscoveryChannel?.SendInventory();
 
-            request?.SendResponce(respomce, SfaServerAction.CharacterInventory);
+            request?.SendResponce(responce, SfaServerAction.CharacterInventory);
         }
 
 

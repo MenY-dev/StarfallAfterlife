@@ -405,7 +405,7 @@ namespace StarfallAfterlife.Bridge.Profiles
                 ["itemtype"] = (byte)item.Type,
                 ["id"] = item.Id,
                 ["count"] = item.Count,
-                ["unique_data"] = ""
+                ["unique_data"] = item.UniqueData ?? ""
             };
 
             return doc;

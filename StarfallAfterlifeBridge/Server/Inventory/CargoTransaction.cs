@@ -10,7 +10,7 @@ namespace StarfallAfterlife.Bridge.Server.Inventory
 {
     public class CargoTransaction
     {
-        public static int RemoveItemFromFleet(ServerCharacter character, int itemId, int count)
+        public static int RemoveItemFromFleet(ServerCharacter character, int itemId, int count, string uniqueData = null)
         {
             var removedItems = 0;
 
@@ -25,7 +25,7 @@ namespace StarfallAfterlife.Bridge.Server.Inventory
                     if (cargo[itemId]?.Count is int availableItems &&
                         availableItems > 0)
                     {
-                        removedItems += cargo.Remove(itemId, count - removedItems);
+                        removedItems += cargo.Remove(itemId, count - removedItems, uniqueData);
 
                         if (removedItems >= count)
                             return removedItems;

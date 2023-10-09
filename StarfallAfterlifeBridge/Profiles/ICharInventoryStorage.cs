@@ -8,10 +8,10 @@ namespace StarfallAfterlife.Bridge.Profiles
 {
     public interface ICharInventoryStorage
     {
-        InventoryItem this[int itemId] { get; }
+        InventoryItem this[int itemId, string uniqueData = null] { get; }
 
         InventoryItem Add(InventoryItem item, int count = 1);
 
-        int Remove(int itemId, int count = 1);
+        int Remove(int itemId, int count = 1, string uniqueData = null);
     }
 }
