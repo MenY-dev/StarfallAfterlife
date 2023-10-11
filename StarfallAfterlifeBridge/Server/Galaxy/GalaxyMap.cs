@@ -5,6 +5,7 @@ using StarfallAfterlife.Bridge.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -153,6 +154,19 @@ namespace StarfallAfterlife.Bridge.Server.Galaxy
                 return system;
 
             return Systems?.FirstOrDefault();
+        }
+
+        public static GalaxyMap LoadMap(string path)
+        {
+            var text = File.ReadAllText(path);
+            var map = JsonHelpers.DeserializeUnbuffered<GalaxyMap>(text);
+            map.Init();
+            return map;
+        }
+
+        public static GalaxyMap LoadDefaultMap()
+        {
+            return LoadMap(Path.Combine(".", "Database", "DefaultMap.json"));
         }
     }
 }

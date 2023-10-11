@@ -197,13 +197,14 @@ namespace StarfallAfterlife.Launcher.ViewModels
                         Dispatcher.UIThread.Invoke(waitingPopup.ShowDialog);
 
                         realmInfo = Launcher?.CreateNewRealm(realmName);
-                        realmInfo.Realm.Database = Launcher?.Database;
-                        realmInfo.Realm.MobsDatabase = MobsDatabase.Instance;
-                        realmInfo.Realm.GalaxyMap = new TestGalaxyMapBuilder().Create();
-                        realmInfo.Realm.GalaxyMapHash = realmInfo.Realm.GalaxyMap.Hash;
-                        realmInfo.Realm.MobsMap = new MobsMapGenerator(realmInfo.Realm).Build();
-                        realmInfo.Realm.ShopsMap = new ShopsGenerator(realmInfo.Realm).Build();
-                        realmInfo.Realm.QuestsDatabase = new QuestsGenerator(realmInfo.Realm).Build();
+                        //realmInfo.Realm.Database = Launcher?.Database;
+                        //realmInfo.Realm.MobsDatabase = MobsDatabase.Instance;
+                        //realmInfo.Realm.GalaxyMap = new TestGalaxyMapBuilder().Create();
+                        //realmInfo.Realm.GalaxyMapHash = realmInfo.Realm.GalaxyMap.Hash;
+                        //realmInfo.Realm.MobsMap = new MobsMapGenerator(realmInfo.Realm).Build();
+                        //realmInfo.Realm.ShopsMap = new ShopsGenerator(realmInfo.Realm).Build();
+                        //realmInfo.Realm.QuestsDatabase = new QuestsGenerator(realmInfo.Realm).Build();
+                        new VanillaRealmGenerator(realmInfo.Realm, Launcher?.Database).Run().Wait();
                         realmInfo.Save();
                     }
                     catch

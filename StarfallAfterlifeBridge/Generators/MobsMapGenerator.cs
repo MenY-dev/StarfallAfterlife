@@ -12,7 +12,7 @@ using static System.Collections.Specialized.BitVector32;
 
 namespace StarfallAfterlife.Bridge.Generators
 {
-    public class MobsMapGenerator
+    public class MobsMapGenerator : GenerationTask
     {
         public SfaRealm Realm { get; set; }
 
@@ -28,6 +28,12 @@ namespace StarfallAfterlife.Bridge.Generators
 
             Realm = realm;
             ExtraMap = new GalaxyExtraMap(Realm.GalaxyMap);
+        }
+
+        protected override bool Generate()
+        {
+            Realm.MobsMap = Build();
+            return true;
         }
 
         public virtual MobsMap Build()

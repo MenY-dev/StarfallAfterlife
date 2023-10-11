@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace StarfallAfterlife.Bridge.Generators
 {
-    public class ShopsGenerator
+    public class ShopsGenerator : GenerationTask
     {
         public SfaRealm Realm { get; set; }
 
@@ -24,6 +24,11 @@ namespace StarfallAfterlife.Bridge.Generators
             Realm = realm;
         }
 
+        protected override bool Generate()
+        {
+            Realm.ShopsMap = Build();
+            return true;
+        }
 
         public virtual ShopsMap Build()
         {

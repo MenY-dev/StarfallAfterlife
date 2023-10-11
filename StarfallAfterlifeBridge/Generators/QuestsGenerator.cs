@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace StarfallAfterlife.Bridge.Generators
 {
-    public partial class QuestsGenerator
+    public partial class QuestsGenerator : GenerationTask
     {
         public SfaRealm Realm { get; set; }
 
@@ -30,6 +30,12 @@ namespace StarfallAfterlife.Bridge.Generators
 
             Realm = realm;
             ExtraMap = new GalaxyExtraMap(Realm.GalaxyMap);
+        }
+
+        protected override bool Generate()
+        {
+            Realm.QuestsDatabase = Build();
+            return true;
         }
 
         public virtual DiscoveryQuestsDatabase Build()
