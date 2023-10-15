@@ -4,6 +4,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using StarfallAfterlife.Bridge.Database;
+using StarfallAfterlife.Bridge.Diagnostics;
 using StarfallAfterlife.Bridge.Generators;
 using StarfallAfterlife.Bridge.Launcher;
 using StarfallAfterlife.Bridge.Profiles;
@@ -197,14 +198,9 @@ namespace StarfallAfterlife.Launcher.ViewModels
                         Dispatcher.UIThread.Invoke(waitingPopup.ShowDialog);
 
                         realmInfo = Launcher?.CreateNewRealm(realmName);
-                        //realmInfo.Realm.Database = Launcher?.Database;
-                        //realmInfo.Realm.MobsDatabase = MobsDatabase.Instance;
-                        //realmInfo.Realm.GalaxyMap = new TestGalaxyMapBuilder().Create();
-                        //realmInfo.Realm.GalaxyMapHash = realmInfo.Realm.GalaxyMap.Hash;
-                        //realmInfo.Realm.MobsMap = new MobsMapGenerator(realmInfo.Realm).Build();
-                        //realmInfo.Realm.ShopsMap = new ShopsGenerator(realmInfo.Realm).Build();
-                        //realmInfo.Realm.QuestsDatabase = new QuestsGenerator(realmInfo.Realm).Build();
-                        new VanillaRealmGenerator(realmInfo.Realm, Launcher?.Database).Run().Wait();
+                        var generator = new VanillaRealmGenerator(realmInfo.Realm, Launcher?.Database);
+                        generator.ProgressUpdated += (o, e) => SfaDebug.Print(e.Status, e.Task?.GetType().Name);
+                        generator.Run().Wait();
                         realmInfo.Save();
                     }
                     catch
