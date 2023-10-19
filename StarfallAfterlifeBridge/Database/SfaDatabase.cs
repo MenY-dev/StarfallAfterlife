@@ -198,7 +198,32 @@ namespace StarfallAfterlife.Bridge.Database
                         Id = (int?)line["id"] ?? -1,
                         Name = (string)line["name"],
                         Logics = new(),
+
                     };
+
+                    if (info.Name is string name)
+                    {
+                        var tags = name.Split('_');
+
+                        info.Faction = Enum.TryParse(
+                            tags.ElementAtOrDefault(0),true, out Faction faction) ?
+                            faction : Faction.None;
+
+                        info.Type = tags.ElementAtOrDefault(0) switch
+                        {
+                            null => QuestType.Task,
+                            var type when type.Equals("main", StringComparison.InvariantCultureIgnoreCase) => QuestType.MainQuestLine,
+                            var type when type.Equals("yoba", StringComparison.InvariantCultureIgnoreCase) => QuestType.UniqueQuestLine,
+                            _ => QuestType.Task
+                        };
+
+                        if (info.Type == QuestType.UniqueQuestLine)
+                        {
+                            info.TargetFaction = Enum.TryParse(
+                                tags.ElementAtOrDefault(3), true, out Faction targetFaction) ?
+                                targetFaction : Faction.None;
+                        }
+                    }
 
                     foreach (var logic in line["logics"]?.AsArray() ?? new())
                     {

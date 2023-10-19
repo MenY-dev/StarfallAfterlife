@@ -12,6 +12,12 @@ namespace StarfallAfterlife.Bridge.Database
 
         public string Name { get; set; }
 
+        public QuestType Type { get; set; }
+
+        public Faction Faction { get; set; }
+
+        public Faction TargetFaction { get; set; }
+
         public List<QuestLineLogicInfo> Logics { get; set; } = new();
     }
 }

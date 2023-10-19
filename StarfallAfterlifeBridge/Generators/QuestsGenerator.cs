@@ -21,7 +21,7 @@ namespace StarfallAfterlife.Bridge.Generators
 
         public GalaxyExtraMap ExtraMap { get; protected set; }
 
-        protected int QurrentQuestId { get; set; } = 0;
+        protected Random Rnd { get; set; }
 
         public QuestsGenerator(SfaRealm realm)
         {
@@ -42,9 +42,9 @@ namespace StarfallAfterlife.Bridge.Generators
         {
             var qd = new DiscoveryQuestsDatabase();
             ExtraMap.Build();
-            QurrentQuestId = 1;
+            Rnd = new(0);
             GenerateQuestLines(qd);
-            //GenerateTaskBoardQuests(qd);
+            GenerateTaskBoardQuests(qd);
             ExtraMap = null;
             return qd;
         }
@@ -65,23 +65,36 @@ namespace StarfallAfterlife.Bridge.Generators
             if (qd is null || info is null)
                 return;
 
+            var idInfo = new QuestIdInfo
+            {
+                Type = info.Type,
+                Faction = info.Faction,
+                TargetFaction = info.TargetFaction,
+                IsLevelingQuest = false,
+                LocalId = 0
+            };
+
             var questLine = new DiscoveryQuestLine()
             {
                 Stages = new(),
             };
 
-            foreach (var logicInfo in info.Logics)
+            foreach (var logicInfo in info.Logics
+                .OrderBy(i => i.Position)
+                .ThenBy(i => i.LogicId))
             {
+
+                idInfo.LocalId++;
+
                 if (logicInfo.Position != 1090)
                     continue;
 
-                var quest = GenerateQuestLinesQuest(qd, info, logicInfo, QurrentQuestId);
+                var quest = GenerateQuestLinesQuest(qd, info, logicInfo, idInfo.ToId());
 
                 if (quest is null)
                     continue;
 
                 qd.AddQuest(quest);
-                QurrentQuestId++;
 
                 var stageEntry = new DiscoveryQuestLineEntry()
                 {
@@ -172,6 +185,8 @@ namespace StarfallAfterlife.Bridge.Generators
         protected virtual void GenerateTaskBoardQuests(DiscoveryQuestsDatabase qd)
         {
             var logics = Realm.Database.QuestsLogics;
+            var idInfo = new QuestIdInfo { Type = QuestType.Task, LocalId = 0 };
+
 
             if (logics is not null)
             {
@@ -182,12 +197,17 @@ namespace StarfallAfterlife.Bridge.Generators
 
                     foreach (var item in GetObjectsForQuestLogic(logic))
                     {
-                        var quest = GenerateQuestForTaskBoard(logic, item, QurrentQuestId);
+                        var chance = item.Type is GalaxyMapObjectType.Planet ? 15 : 10;
+                        idInfo.LocalId++;
+
+                        if ((Rnd.Next() % chance) != 0)
+                            continue;
+
+                        var quest = GenerateQuestForTaskBoard(logic, item, idInfo.ToId());
 
                         if (quest is not null)
                         {
                             qd.AddQuest(quest);
-                            QurrentQuestId++;
                         }
                     }
                 }
@@ -364,18 +384,69 @@ namespace StarfallAfterlife.Bridge.Generators
                     case "core_populous_system":
                         foreach (var item in
                             from system in Realm.GalaxyMap.Systems
-                            where (Faction)system.Faction is Faction.Vanguard
                             where system.Level == info.TargetLevel &&
                                   system.Planets != null
                             from planet in system.Planets
-                            where planet.Faction != Faction.None
+                            where planet.Faction is not Faction.None or Faction.Other
                             select new StarSystemObjectInfo
                             {
                                 SystemId = system.Id,
                                 Type = planet.ObjectType,
                                 Id = planet.Id,
                                 Level = system.Level,
-                                Faction = (Faction)system.Faction,
+                                Faction = planet.Faction
+                            })
+                            yield return item;
+                        yield break;
+
+                    case "core_trade_station":
+                    case "addon_trade_station":
+                        foreach (var item in
+                            from system in Realm.GalaxyMap.Systems
+                            where system.Level == info.TargetLevel &&
+                                  system.TradeStations != null
+                            from station in system.TradeStations
+                            select new StarSystemObjectInfo
+                            {
+                                SystemId = system.Id,
+                                Type = station.ObjectType,
+                                Id = station.Id,
+                                Level = system.Level,
+                                Faction = Faction.FreeTraders,
+                            })
+                            yield return item;
+                        yield break;
+
+                    case "core_science_station":
+                        foreach (var item in
+                            from system in Realm.GalaxyMap.Systems
+                            where system.Level == info.TargetLevel &&
+                                  system.ScienceStations != null
+                            from station in system.ScienceStations
+                            select new StarSystemObjectInfo
+                            {
+                                SystemId = system.Id,
+                                Type = station.ObjectType,
+                                Id = station.Id,
+                                Level = system.Level,
+                                Faction = Faction.Scientists,
+                            })
+                            yield return item;
+                        yield break;
+
+                    case "core_miner_station":
+                        foreach (var item in
+                            from system in Realm.GalaxyMap.Systems
+                            where system.Level == info.TargetLevel &&
+                                  system.MinerMotherships != null
+                            from station in system.MinerMotherships
+                            select new StarSystemObjectInfo
+                            {
+                                SystemId = system.Id,
+                                Type = station.ObjectType,
+                                Id = station.Id,
+                                Level = system.Level,
+                                Faction = Faction.MineworkerUnion,
                             })
                             yield return item;
                         yield break;
@@ -398,22 +469,22 @@ namespace StarfallAfterlife.Bridge.Generators
                     case "vanguard":
                         yield break;
 
-
                     default:
                         foreach (var item in
                             from system in Realm.GalaxyMap.Systems
-                            where (Faction)system.Faction is Faction.Vanguard
                             where info.TargetLevel < 0 ? true : system.Level == info.TargetLevel
                             let objects = system.GetObjectsWithTaskBoard()
                             where objects != null
                             from obj in objects
+                            where obj.ObjectType != GalaxyMapObjectType.Planet ||
+                                  obj is GalaxyMapPlanet { Faction: not (Faction.None or Faction.Other) }
                             select new StarSystemObjectInfo
                             {
                                 SystemId = system.Id,
                                 Type = obj.ObjectType,
                                 Id = obj.Id,
                                 Level = system.Level,
-                                Faction = (Faction)system.Faction
+                                Faction = system.Faction
                             })
                             yield return item;
                         yield break;
