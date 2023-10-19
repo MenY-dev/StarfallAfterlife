@@ -200,7 +200,8 @@ namespace StarfallAfterlife.Bridge.Generators
                         var chance = item.Type is GalaxyMapObjectType.Planet ? 15 : 10;
                         idInfo.LocalId++;
 
-                        if ((Rnd.Next() % chance) != 0)
+                        if ((Rnd.Next() % chance) != 0 ||
+                            qd.GetQuests(QuestType.Task, (byte)item.Type, item.Id).Count() >= 6)
                             continue;
 
                         var quest = GenerateQuestForTaskBoard(logic, item, idInfo.ToId());
