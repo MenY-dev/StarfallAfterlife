@@ -56,6 +56,11 @@ namespace StarfallAfterlife.Bridge.Profiles
             Systems[systemId] = progress ?? new();
         }
 
+        public bool IsExplored(DiscoveryObjectType type, int id) =>
+            GetObjects(type)?.Contains(id) == true;
+
+        public IReadOnlyCollection<int> GetObjects(DiscoveryObjectType type) => GetCollectionFromType(type);
+
         protected virtual HashSet<int> GetCollectionFromType(DiscoveryObjectType type)
         {
             switch (type)

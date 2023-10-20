@@ -12,5 +12,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
         void OnObjectScanned(StarSystemObject systemObject);
 
         void OnSystemExplored(int systemId);
+
+        void OnObjectExplored(int systemId, DiscoveryObjectType objectType, int objectId);
     }
 }

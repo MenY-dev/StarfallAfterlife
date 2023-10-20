@@ -43,5 +43,10 @@ namespace StarfallAfterlife.Bridge.Server.Quests.Conditions
         {
 
         }
+
+        public void OnObjectExplored(int systemId, DiscoveryObjectType objectType, int objectId)
+        {
+
+        }
     }
 }

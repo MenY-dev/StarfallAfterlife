@@ -7,6 +7,7 @@ using StarfallAfterlife.Bridge.Server.Quests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
@@ -822,6 +823,27 @@ namespace StarfallAfterlife.Bridge.Generators
         protected bool GenDeliverItemsCondition(QuestContext context, JsonNode condition, QuestConditionInfo info)
         {
             condition["item_to_deliver"] = info.ItemToDeliver;
+            return true;
+        }
+
+        protected bool GenExploreSystemObjectCondition(QuestContext context, JsonNode condition, QuestConditionInfo info)
+        {
+            condition["ObjectType"] = info.ObjectType;
+            condition["SystemLevel"] = info.SystemLevel;
+
+            if (info.PossibleSystemsCount > 0)
+            {
+                var systems = Realm.GalaxyMap
+                    .GetSystemsArround(context.TargetSystemId, 30, true)
+                    .Where(s => s.Key.GetAllObjects().Any(o => (int)o.ObjectType == info.ObjectType))
+                    .Select(s => s.Key.Id)
+                    .Take(info.PossibleSystemsCount)
+                    .ToArray();
+
+                if (systems.Length > 0)
+                    condition["PossibleStarSystems"] = JsonHelpers.ParseNodeUnbuffered(systems);
+            }
+
             return true;
         }
     }

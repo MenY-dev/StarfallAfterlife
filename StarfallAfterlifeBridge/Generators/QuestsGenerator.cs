@@ -378,7 +378,7 @@ namespace StarfallAfterlife.Bridge.Generators
                     //Tutorial
                     break;
                 case QuestConditionType.ExploreObject:
-                    //Level Quests
+                    GenExploreSystemObjectCondition(context, condition, info);
                     break;
                 case QuestConditionType.StatTracking:
                     result = GenStatTrackingCondition(context, condition, info);

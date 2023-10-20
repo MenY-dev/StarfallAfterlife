@@ -133,6 +133,9 @@ namespace StarfallAfterlife.Bridge.Server.Quests
                     case QuestConditionType.StatTracking:
                         return new StatTrackingConditionListener(quest, info);
 
+                    case QuestConditionType.ExploreObject:
+                        return new ExploreSystemObjectConditionListener(quest, info);
+
                     default:
                         return new QuestConditionListener(quest, info);
                 }

@@ -47,6 +47,9 @@ namespace StarfallAfterlife.Bridge.Server.Galaxy
         [JsonIgnore]
         public Dictionary<Faction, int> StartSystems { get; } = new();
 
+        [JsonIgnore]
+        public Dictionary<GalaxyMapObjectType, Dictionary<int, int>> ObjectToSystemBinding { get; } = new();
+
         public void UpdateStatistics()
         {
             Statistics.Build(this);
@@ -56,6 +59,15 @@ namespace StarfallAfterlife.Bridge.Server.Galaxy
         {
             if (systemId > -1 && systemId < Systems.Count)
                 return Systems[systemId];
+
+            return null;
+        }
+
+        public GalaxyMapStarSystem GetSystem(GalaxyMapObjectType objectType, int objectId)
+        {
+            if (ObjectToSystemBinding.TryGetValue(objectType, out var chunk) == true &&
+                chunk?.TryGetValue(objectId, out var systemId) == true)
+                return GetSystem(systemId);
 
             return null;
         }
@@ -135,6 +147,9 @@ namespace StarfallAfterlife.Bridge.Server.Galaxy
 
                 if ((system.Motherships?.Count ?? 0) > 0)
                     StartSystems[(Faction)system.Faction] = system.Id;
+
+                foreach (var obj in system.GetAllObjects())
+                    AddToBindings(system, obj);
             }
 
             StarSystemsCount = systemsCount;
@@ -145,6 +160,20 @@ namespace StarfallAfterlife.Bridge.Server.Galaxy
             PlanetsCount = planetsCount;
 
             UpdateStatistics();
+        }
+
+        protected void AddToBindings(GalaxyMapStarSystem system, IGalaxyMapObject obj)
+        {
+            if (system is null || obj is null)
+                return;
+
+            Dictionary<int, int> chunk;
+
+            if (ObjectToSystemBinding.TryGetValue(obj.ObjectType, out chunk) == false ||
+                chunk is null)
+                ObjectToSystemBinding[obj.ObjectType] = chunk = new();
+
+            chunk[obj.Id] = system.Id;
         }
 
         public GalaxyMapStarSystem GetStartingSystem(Faction faction)

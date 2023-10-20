@@ -144,7 +144,11 @@ namespace StarfallAfterlife.Bridge.Server
                             continue;
 
                         if (progress.AddObject(item.Type, item.Id, systemId) == true)
+                        {
                             newObjects.Add(item);
+                            CurrentCharacter?.Events?.Broadcast<IExplorationListener>(l =>
+                                l.OnObjectExplored(systemId, item.Type, item.Id));
+                        }
                     }
 
                     needSync |= newObjects.Count > 0;
