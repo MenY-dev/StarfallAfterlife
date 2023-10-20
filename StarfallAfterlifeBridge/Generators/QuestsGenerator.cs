@@ -45,6 +45,7 @@ namespace StarfallAfterlife.Bridge.Generators
             Rnd = new(0);
             GenerateQuestLines(qd);
             GenerateTaskBoardQuests(qd);
+            GenerateLevelingQuests(qd);
             ExtraMap = null;
             return qd;
         }
@@ -180,6 +181,78 @@ namespace StarfallAfterlife.Bridge.Generators
             quest.Reward = info.Rewards.FirstOrDefault();
 
             return quest;
+        }
+
+        protected virtual void GenerateLevelingQuests(DiscoveryQuestsDatabase qd)
+        {
+            var groups = Realm.Database.LevelQuests
+                .GroupBy(x => x.Faction);
+
+            foreach (var group in groups)
+            {
+                var faction = group.Key;
+                var idInfo = new QuestIdInfo
+                {
+                    Type = QuestType.MainQuestLine,
+                    Faction = faction,
+                    IsLevelingQuest = true,
+                    LocalId = 0
+                };
+
+                foreach (var levelInfo in group.OrderBy(q => q.Level))
+                {
+                    foreach (var logicId in levelInfo.Logics)
+                    {
+                        idInfo.LocalId++;
+
+                        var logic = Realm.Database.GetQuestLogic(logicId);
+                        var accessLevel = SfaDatabase.LevelToAccessLevel(levelInfo.Level);
+                        var startingSystem = Realm.GalaxyMap.GetStartingSystem(faction);
+                        var targetSystem = ExtraMap.GetCircle(accessLevel).GetStartSystem(faction);
+                        var obj = startingSystem.Motherships?.FirstOrDefault() ??
+                                  startingSystem.GetObjectsWithTaskBoard()?.FirstOrDefault();
+
+                        var quest = new DiscoveryQuest()
+                        {
+                            Id = idInfo.ToId(),
+                            LogicId = logic.Id,
+                            LogicName = logic.UniqueLogicIdentifier,
+                            Type = logic.Type,
+                            Level = levelInfo.Level,
+                            Reward = new(),
+                            ObjectSystem = startingSystem.Id,
+                            ObjectType = obj.ObjectType,
+                            ObjectId = obj.Id,
+                            ObjectFaction = faction,
+                            Conditions = new JsonArray(),
+                        };
+
+                        var context = new QuestContext
+                        {
+                            Quest = quest,
+                            MobsDatabase = Realm.MobsDatabase,
+                            MobsMap = Realm.MobsMap,
+                            TargetLevel = accessLevel,
+                            TargetSystemId = targetSystem.Id,
+                            TargetFaction = faction,
+                        };
+
+                        foreach (var item in logic.Conditions)
+                        {
+                            if (GenerateQuestCondition(item, context) is JsonObject condition)
+                                quest.Conditions.Add(condition);
+                            else
+                                break;
+                        }
+
+                        if (logic.Conditions.Count > quest.Conditions.Count)
+                            continue;
+
+                        quest.Reward = logic.Rewards.FirstOrDefault();
+                        qd.AddQuest(quest);
+                    }
+                }
+            }
         }
 
         protected virtual void GenerateTaskBoardQuests(DiscoveryQuestsDatabase qd)

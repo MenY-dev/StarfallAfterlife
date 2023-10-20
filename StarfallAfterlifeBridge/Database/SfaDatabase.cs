@@ -35,6 +35,8 @@ namespace StarfallAfterlife.Bridge.Database
 
         public Dictionary<int, QuestLineInfo> QuestLines { get; } = new();
 
+        public List<LevelQuestInfo> LevelQuests { get; } = new();
+
         public Dictionary<int, AbilityInfo> Abilities { get; } = new();
 
         public TagNode MobTags { get; } = new();
@@ -243,6 +245,18 @@ namespace StarfallAfterlife.Bridge.Database
 
                     if (info.Logics.Count > 0)
                         dtb.QuestLines.Add(info.Id, info);
+                }
+            }
+
+            if (doc["charact_level_quests"]?.AsArray() is JsonArray levelQuests)
+            {
+                foreach (var quest in levelQuests)
+                {
+                    if ((int?)quest["level"] is int level &&
+                        (Faction?)(byte?)quest["faction"] is Faction faction &&
+                        quest["logics"]?.DeserializeUnbuffered<List<int>>() is List<int> logics)
+                        dtb.LevelQuests.Add(new() { Level = level, Faction = faction, Logics = logics });
+
                 }
             }
 
