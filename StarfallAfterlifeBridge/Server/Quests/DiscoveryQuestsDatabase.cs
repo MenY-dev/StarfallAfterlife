@@ -78,6 +78,7 @@ namespace StarfallAfterlife.Bridge.Server.Quests
                     Bindings.Add(hash, new() { quest });
             }
         }
+
         public bool RemoveQuest(DiscoveryQuest quest)
         {
             if (quest?.Id is int questId &&
@@ -92,6 +93,17 @@ namespace StarfallAfterlife.Bridge.Server.Quests
             }
 
             return false;
+        }
+
+
+        public void AddQuestLine(DiscoveryQuestLine questLine)
+        {
+            if (questLine is null ||
+                QuestLines.Contains(questLine) ||
+                QuestLines.Any(q => q.Id == questLine.Id))
+                return;
+            
+            QuestLines.Add(questLine);
         }
 
         protected void RemoveFromBindings(DiscoveryQuest quest)

@@ -57,14 +57,15 @@ namespace StarfallAfterlife.Bridge.Generators
             if (lines is not null)
             {
                 foreach (var info in lines.Values)
-                    GenerateQuestsLine(qd, info);
+                    if (GenerateQuestsLine(qd, info) is DiscoveryQuestLine questLine)
+                        qd.AddQuestLine(questLine);
             }
         }
 
-        protected virtual void GenerateQuestsLine(DiscoveryQuestsDatabase qd, QuestLineInfo info)
+        protected virtual DiscoveryQuestLine GenerateQuestsLine(DiscoveryQuestsDatabase qd, QuestLineInfo info)
         {
             if (qd is null || info is null)
-                return;
+                return null;
 
             var idInfo = new QuestIdInfo
             {
@@ -77,6 +78,8 @@ namespace StarfallAfterlife.Bridge.Generators
 
             var questLine = new DiscoveryQuestLine()
             {
+                Id = info.Id,
+                Name = info.Name,
                 Stages = new(),
             };
 
@@ -119,6 +122,11 @@ namespace StarfallAfterlife.Bridge.Generators
                     questLine.Stages.Add(stage.Position, stage);
                 }
             }
+
+            if (questLine.Stages.Count == 0)
+                return null;
+
+            return questLine;
         }
 
         protected virtual DiscoveryQuest GenerateQuestLinesQuest(DiscoveryQuestsDatabase qd, QuestLineInfo questLine, QuestLineLogicInfo logic, int id)

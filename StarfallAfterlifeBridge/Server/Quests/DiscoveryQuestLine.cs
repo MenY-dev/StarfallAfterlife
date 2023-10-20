@@ -10,6 +10,10 @@ namespace StarfallAfterlife.Bridge.Server.Quests
 {
     public class DiscoveryQuestLine
     {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+
         public SortedList<int, DiscoveryQuestLineStage> Stages { get; set; } = new();
 
         public DiscoveryQuestLineStage GetCurrentStage(ServerCharacter character)
