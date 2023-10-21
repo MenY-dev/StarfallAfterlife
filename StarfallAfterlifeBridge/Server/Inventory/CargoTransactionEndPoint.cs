@@ -124,6 +124,16 @@ namespace StarfallAfterlife.Bridge.Server.Inventory
         public int Receive(SfaItem item, int count, string uniqueData = null) =>
             item is null ? 0 : Receive(InventoryItem.Create(item, count, uniqueData));
 
+        public int Receive(InventoryItem item, int count)
+        {
+            if (item is null || count < 1)
+                return 0;
+
+            var newItem = item.Clone();
+            newItem.Count = count;
+            return Receive(newItem);
+        }
+
         protected int Receive(InventoryItem item)
         {
             if (item is null)

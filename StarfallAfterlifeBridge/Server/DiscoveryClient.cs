@@ -303,7 +303,7 @@ namespace StarfallAfterlife.Bridge.Server
             };
 
             if (igc is not null)
-                doc["igs"] = igc;
+                doc["igc"] = igc;
 
             if (bgc is not null)
                 doc["bgc"] = bgc;

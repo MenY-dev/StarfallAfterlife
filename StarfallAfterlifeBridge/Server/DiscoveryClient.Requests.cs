@@ -680,14 +680,23 @@ namespace StarfallAfterlife.Bridge.Server
                             Server?.Realm?.ShopsMap?.GetObjectShops(obj.Id, obj.Type) is ObjectShops shopsInfo &&
                             shopsInfo?.Shops?.FirstOrDefault(s => s.StocName == srcStockName) is ShopInfo shop)
                         {
-                            var src = CargoTransactionEndPoint.CreateForShop(shop);
                             var dst = CargoTransactionEndPoint.CreateForCharacterFleet(character, stockName);
+                            var currentIGC = character.IGC;
+                            var totalPrice = 0;
 
                             foreach (var item in items)
                             {
-                                var result = src.SendItemTo(dst, item.Id, item.Count, item.UniqueData);
+                                if (currentIGC < item.IGCPrice)
+                                    continue;
+
+                                var possibleToBuy = currentIGC / item.IGCPrice;
+                                var result = dst.Receive(item, Math.Min(item.Count, possibleToBuy));
+                                var operationPrice = item.IGCPrice * result;
+                                totalPrice += operationPrice;
+                                currentIGC -= operationPrice;
                             }
 
+                            character.AddCharacterCurrencies(igc: -totalPrice);
                             character.RaseStockUpdated();
                             SendFleetCargo();
                             SendObjectStock(obj, shop.Items, srcStockName);
@@ -715,12 +724,15 @@ namespace StarfallAfterlife.Bridge.Server
                     {
                         var src = CargoTransactionEndPoint.CreateForCharacterStoc(character, srcStockName);
                         var dst = CargoTransactionEndPoint.CreateForShop(shop);
+                        var totalPrice = 0;
 
                         foreach (var item in items)
                         {
                             var result = src.SendItemTo(dst, item.Id, item.Count, item.UniqueData);
+                            totalPrice += Math.Max(0, item.IGCPrice * result);
                         }
 
+                        character.AddCharacterCurrencies(igc: totalPrice);
                         character.RaseStockUpdated();
                         SendFleetCargo();
                         SendObjectStock(obj, shop.Items, srcStockName);
