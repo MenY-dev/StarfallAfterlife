@@ -1,4 +1,5 @@
 ﻿using StarfallAfterlife.Bridge.Server.Characters;
+using StarfallAfterlife.Bridge.Server.Discovery;
 using StarfallAfterlife.Bridge.Server.Inventory;
 using System;
 using System.Collections.Generic;
@@ -50,6 +51,20 @@ namespace StarfallAfterlife.Bridge.Server.Quests.Conditions
         void IStockListener.OnStockUpdated()
         {
             Update();
+        }
+
+        public override List<DiscoveryQuestBinding> CreateBindings()
+        {
+            return Quest?.Info is DiscoveryQuest quest ? new()
+            {
+                new()
+                {
+                    ObjectId = quest.ObjectId,
+                    ObjectType = (DiscoveryObjectType)quest.ObjectType,
+                    SystemId = quest.ObjectSystem,
+                    CanBeFinished = true,
+                }
+            } : null;
         }
     }
 }
