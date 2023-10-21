@@ -215,14 +215,14 @@ namespace StarfallAfterlife.Bridge.Server
                     foreach (var ship in ships)
                         shipsForXp[ship.Id] = shipsXp;
 
-                    character.AddCharacterShipsXp(shipsForXp);
+                    character.AddCharacterCurrencies(shipsXp: shipsForXp);
                 }
             }
             else if (text.StartsWith("\\add xp ") &&
                 text.Length > 8 &&
                 int.TryParse(text[8..].Trim(), out int charXp))
             {
-                CurrentCharacter?.AddCharacterXp(charXp);
+                CurrentCharacter?.AddCharacterCurrencies(xp: charXp);
             }
             else if (text.StartsWith("\\jmp ") &&
                 text.Length > 5 &&

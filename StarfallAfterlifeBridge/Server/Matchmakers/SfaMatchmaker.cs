@@ -163,8 +163,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
         {
             if (Server?.GetCharacter(e.CharacterId) is ServerCharacter character)
             {
-                character.AddCharacterXp(e.Ships.Sum(s => s.Value));
-                character.AddCharacterShipsXp(e.Ships);
+                character.AddCharacterCurrencies(xp: e.Ships.Sum(s => s.Value), shipsXp: e.Ships);
             }
         }
 

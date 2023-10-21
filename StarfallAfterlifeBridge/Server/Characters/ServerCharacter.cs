@@ -424,17 +424,36 @@ namespace StarfallAfterlife.Bridge.Server.Characters
             LoadQuestsFromProgress();
         }
 
-        public void AddCharacterShipsXp(Dictionary<int, int> ships)
+        public void AddCharacterCurrencies(
+            int? igc = null,
+            int? bgc = null,
+            int? xp = null,
+            Dictionary<int, int> shipsXp = null)
         {
-            DiscoveryClient?.SendAddCharacterCurrencies(UniqueId, shipsXp: ships);
-        }
+            if (igc is not null)
+                IGC += (int)igc;
 
-        public void AddCharacterXp(int xp)
-        {
-            Xp += xp;
-            DiscoveryClient?.SendAddCharacterCurrencies(UniqueId, xp: xp);
+            if (bgc is not null)
+                BGC += (int)bgc;
+
+            if (xp is not null)
+                Xp += (int)xp;
+
+            if (shipsXp is not null)
+            {
+                foreach (var item in shipsXp)
+                {
+                    var ship = Ships.FirstOrDefault(s => s?.Id == item.Key);
+
+                    if (ship is not null)
+                        ship.Xp += item.Value;
+                }
+            }
+
+            DiscoveryClient?.SendAddCharacterCurrencies(UniqueId, igc, bgc, xp, shipsXp);
             Events?.Broadcast<ICharacterListener>(l => l.OnCurrencyUpdated(this));
         }
+
 
         public List<DiscoveryDropRule> CreateDropRules()
         {
