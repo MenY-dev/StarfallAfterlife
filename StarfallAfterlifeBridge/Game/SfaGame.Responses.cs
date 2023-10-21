@@ -518,10 +518,17 @@ namespace StarfallAfterlife.Bridge.Game
                 return new JsonObject();
 
             JsonArray exploredSystems = null;
-            JsonArray exploredPortals = null;
             JsonArray exploredPlanets = null;
-            JsonArray exploredQuickTravelGates = null;
+            JsonArray exploredPortals = null;
             JsonArray exploredMotherships = null;
+            JsonArray exploredRepairStations = null;
+            JsonArray exploredFuelStations = null;
+            JsonArray exploredTradeStations = null;
+            JsonArray exploredMMS = null;
+            JsonArray exploredSCS = null;
+            JsonArray exploredPiratesStations = null;
+            JsonArray exploredQuickTravelGates = null;
+            JsonArray exploredSecretLocs = null;
 
             if (Profile?.CurrentProgress is CharacterProgress progress)
             {
@@ -538,41 +545,19 @@ namespace StarfallAfterlife.Bridge.Game
                         });
                     }
 
-                    exploredPortals = new JsonArray(progress.Portals.Select(SValue.Create).ToArray());
                     exploredPlanets = new JsonArray(progress.Planets.Select(SValue.Create).ToArray());
-                    exploredQuickTravelGates = new JsonArray(progress.QuickTravelGates.Select(SValue.Create).ToArray());
+                    exploredPortals = new JsonArray(progress.Portals.Select(SValue.Create).ToArray());
                     exploredMotherships = new JsonArray(progress.Motherships.Select(SValue.Create).ToArray());
+                    exploredRepairStations = new JsonArray(progress.RepairStations.Select(SValue.Create).ToArray());
+                    exploredFuelStations = new JsonArray(progress.Fuelstations.Select(SValue.Create).ToArray());
+                    exploredTradeStations = new JsonArray(progress.TradeStations.Select(SValue.Create).ToArray());
+                    exploredMMS = new JsonArray(progress.MMS.Select(SValue.Create).ToArray());
+                    exploredSCS = new JsonArray(progress.SCS.Select(SValue.Create).ToArray());
+                    exploredPiratesStations = new JsonArray(progress.PiratesStations.Select(SValue.Create).ToArray());
+                    exploredQuickTravelGates = new JsonArray(progress.QuickTravelGates.Select(SValue.Create).ToArray());
+                    exploredSecretLocs = new JsonArray(progress.SecretLocs.Select(SValue.Create).ToArray());
                 }
             }
-
-            //foreach (var system in GalaxyMap.Systems)
-            //{
-            //    exploredSystems.Add(new JsonObject
-            //    {
-            //        ["id"] = SValue.Create(system.Id),
-            //        ["mask"] = SValue.Create("/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////w==")
-            //    });
-
-            //    foreach (var item in system.Planets ?? new())
-            //    {
-            //        exploredPlanets.Add(SValue.Create(item.Id));
-            //    }
-
-            //    foreach (var item in system.Portals ?? new())
-            //    {
-            //        exploredPortals.Add(SValue.Create(item.Id));
-            //    }
-
-            //    foreach (var item in system.QuickTravalGates ?? new())
-            //    {
-            //        exploredQuickTravelGates.Add(SValue.Create(item.Id));
-            //    }
-
-            //    foreach (var item in system.Motherships ?? new())
-            //    {
-            //        exploredMotherships.Add(SValue.Create(item.Id));
-            //    }
-            //}
 
             string galaxyMap = null;
 
@@ -592,18 +577,18 @@ namespace StarfallAfterlife.Bridge.Game
 
                 ["charactmap"] = new JsonObject
                 {
+                    ["exploredsystems"] = exploredSystems ?? new(),
                     ["exploredneutralplanets"] = exploredPlanets ?? new(),
                     ["exploredportals"] = exploredPortals ?? new(),
                     ["exploredmotherships"] = exploredMotherships ?? new(),
-                    ["exploredrepairstations"] = new JsonArray(),
-                    ["exploredfuelstations"] = new JsonArray(),
-                    ["exploredtradestations"] = new JsonArray(),
-                    ["exploredmms"] = new JsonArray(),
-                    ["exploredscs"] = new JsonArray(),
-                    ["exploredpiratesstations"] = new JsonArray(),
+                    ["exploredrepairstations"] = exploredRepairStations ?? new(),
+                    ["exploredfuelstations"] = exploredFuelStations ?? new(),
+                    ["exploredtradestations"] = exploredTradeStations ?? new(),
+                    ["exploredmms"] = exploredMMS ?? new(),
+                    ["exploredscs"] = exploredSCS ?? new(),
+                    ["exploredpiratesstations"] = exploredPiratesStations ?? new(),
                     ["exploredquicktravelgate"] = exploredQuickTravelGates ?? new(),
-                    ["exploredsystems"] = exploredSystems ?? new(),
-                    ["exploredsecretloc"] = new JsonArray(),
+                    ["exploredsecretloc"] = exploredSecretLocs ?? new(),
                 },
             };
 
