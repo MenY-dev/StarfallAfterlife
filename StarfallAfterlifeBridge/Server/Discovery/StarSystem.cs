@@ -30,6 +30,8 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
         public List<PiratesOutpost> PiratesOutposts { get; } = new();
 
+        public List<MinerMothership> MinerMotherships { get; } = new();
+
         public List<ScienceStation> ScienceStations { get; } = new();
 
         public List<RepairStation> RepairStations { get; } = new();
@@ -97,6 +99,9 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
             foreach (var item in Info.PiratesOutposts ?? Enumerable.Empty<GalaxyMapPiratesOutpost>())
                 PiratesOutposts.Add(new PiratesOutpost(item, this));
+
+            foreach (var item in Info.MinerMotherships ?? Enumerable.Empty<GalaxyMapMinerMotherships>())
+                MinerMotherships.Add(new MinerMothership(item, this));
 
             foreach (var item in Info.ScienceStations ?? Enumerable.Empty<GalaxyMapScienceStation>())
                 ScienceStations.Add(new ScienceStation(item, this));
@@ -168,6 +173,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                 .Concat(Planets)
                 .Concat(PiratesOutposts)
                 .Concat(PiratesStations)
+                .Concat(MinerMotherships)
                 .Concat(ScienceStations)
                 .Concat(RepairStations)
                 .Concat(FuelStation)
@@ -343,6 +349,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                 .Concat(WarpBeacons)
                 .Concat(PiratesOutposts)
                 .Concat(PiratesStations)
+                .Concat(MinerMotherships)
                 .Concat(ScienceStations)
                 .Concat(RepairStations)
                 .Concat(FuelStation)

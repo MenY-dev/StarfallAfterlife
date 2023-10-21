@@ -288,6 +288,16 @@ namespace StarfallAfterlife.Bridge.Server
                             }
                         }
 
+
+                        if (system.MinerMotherships is List<MinerMothership> minerMotherships)
+                        {
+                            foreach (var item in minerMotherships)
+                            {
+                                RequestDiscoveryObjectSync(systemId, DiscoveryObjectType.MinerMothership, item.Id);
+                                SyncMinerMothership(systemId, item.Id);
+                            }
+                        }
+
                         if (system.ScienceStations is List<ScienceStation> scienceStations)
                         {
                             foreach (var item in scienceStations)

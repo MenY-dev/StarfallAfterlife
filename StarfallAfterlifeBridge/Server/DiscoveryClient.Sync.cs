@@ -318,6 +318,22 @@ namespace StarfallAfterlife.Bridge.Server
             }
         }
 
+        public virtual void SyncMinerMothership(int systemId, int mothershipId)
+        {
+            if (Galaxy
+                .GetActiveSystem(systemId, true)
+                .GetObject(mothershipId, DiscoveryObjectType.MinerMothership) is MinerMothership mothership)
+            {
+                SendSyncMessage(
+                    mothership,
+                    writer =>
+                    {
+                        writer.WriteInt32(mothership.Id); // Id
+                        writer.WriteHex(mothership.Hex); // Position
+                        writer.WriteInt32(mothership.Level); // Level
+                    });
+            }
+        }
         public virtual void SyncRichAsteroid(int systemId, int asteroidId)
         {
             if (Galaxy
