@@ -211,7 +211,7 @@ namespace StarfallAfterlife.Bridge.Database
                             tags.ElementAtOrDefault(0),true, out Faction faction) ?
                             faction : Faction.None;
 
-                        info.Type = tags.ElementAtOrDefault(0) switch
+                        info.Type = tags.ElementAtOrDefault(1) switch
                         {
                             null => QuestType.Task,
                             var type when type.Equals("main", StringComparison.InvariantCultureIgnoreCase) => QuestType.MainQuestLine,
@@ -222,7 +222,7 @@ namespace StarfallAfterlife.Bridge.Database
                         if (info.Type == QuestType.UniqueQuestLine)
                         {
                             info.TargetFaction = Enum.TryParse(
-                                tags.ElementAtOrDefault(3), true, out Faction targetFaction) ?
+                                tags.ElementAtOrDefault(2), true, out Faction targetFaction) ?
                                 targetFaction : Faction.None;
                         }
                     }
