@@ -387,6 +387,14 @@ namespace StarfallAfterlife.Bridge.Database
             return null;
         }
 
+        public QuestLineInfo GetQuestLine(int id)
+        {
+            if (QuestLines?.TryGetValue(id, out QuestLineInfo line) == true)
+                return line;
+
+            return null;
+        }
+
         public static int LevelToAccessLevel(int level) => level switch
         {
             >= 85 => 7,

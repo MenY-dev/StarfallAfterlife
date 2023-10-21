@@ -147,6 +147,15 @@ namespace StarfallAfterlife.Bridge.Server.Quests
                 foreach (var quest in quests)
                     AddQuest(quest.DeserializeUnbuffered<DiscoveryQuest>());
             }
+
+            foreach (var item in doc["quest_lines"]?.AsArraySelf() ?? new())
+            {
+                if (item is null)
+                    continue;
+                var questLine = new DiscoveryQuestLine();
+                questLine.LoadFromJson(item);
+                QuestLines.Add(questLine);
+            }
         }
 
         public override JsonNode ToJson()
@@ -163,6 +172,7 @@ namespace StarfallAfterlife.Bridge.Server.Quests
 
             doc["hash"] = Hash;
             doc["quests"] = quests;
+            doc["quest_lines"] = new JsonArray(QuestLines.Select(l => l.ToJson()).ToArray());
 
             return doc;
         }

@@ -57,6 +57,7 @@ namespace StarfallAfterlife.Bridge.Server
                     var progress = new CharacterProgress();
                     progress.LoadFromJson(authData["progress"]);
                     character.LoadProgress(progress);
+                    character.UpdateQuestLines();
                 }
             }
 

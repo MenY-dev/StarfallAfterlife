@@ -1,14 +1,17 @@
-﻿using StarfallAfterlife.Bridge.Profiles;
+﻿using StarfallAfterlife.Bridge.Primitives;
+using StarfallAfterlife.Bridge.Profiles;
+using StarfallAfterlife.Bridge.Serialization;
 using StarfallAfterlife.Bridge.Server.Characters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace StarfallAfterlife.Bridge.Server.Quests
 {
-    public class DiscoveryQuestLine
+    public class DiscoveryQuestLine : SfaObject
     {
         public int Id { get; set; }
 
@@ -62,6 +65,41 @@ namespace StarfallAfterlife.Bridge.Server.Quests
             }
 
             return quests;
+        }
+
+
+        public override void LoadFromJson(JsonNode doc)
+        {
+            base.LoadFromJson(doc);
+
+            if (doc is null)
+                return;
+
+            Id = (int?)doc["id"] ?? -1;
+            Name = (string)doc["name"] ?? "";
+
+            foreach (var item in doc["stages"]?.AsArraySelf() ?? new())
+            {
+                var stage = item?.DeserializeUnbuffered<DiscoveryQuestLineStage>();
+
+                if (stage is not null)
+                    Stages.Add(stage.Position, stage);
+            }
+        }
+
+        public override JsonNode ToJson()
+        {
+            var doc = base.ToJson();
+
+            if (doc is not JsonObject)
+                doc = new JsonObject();
+
+            doc["id"] = Id;
+            doc["name"] = Name;
+            doc["stages"] = new JsonArray(Stages.Values.Select(
+                s => JsonHelpers.ParseNodeUnbuffered(s)).ToArray());
+
+            return doc;
         }
     }
 }

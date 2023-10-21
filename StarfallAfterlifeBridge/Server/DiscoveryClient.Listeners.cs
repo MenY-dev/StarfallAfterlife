@@ -25,7 +25,8 @@ namespace StarfallAfterlife.Bridge.Server
         {
             if (obj is DiscoveryFleet fleet)
             {
-                if (fleet == CurrentCharacter.Fleet)
+                if (CurrentCharacter is ServerCharacter character &&
+                    fleet == character.Fleet)
                 {
                     var system = fleet.System?.Id ?? 0;
 
@@ -34,6 +35,8 @@ namespace StarfallAfterlife.Bridge.Server
                     SendEnterToStarSystem(system, fleet.Location);
                     SyncMove(fleet);
                     SyncRoute(fleet);
+
+                    character.UpdateQuestLines();
 
                     foreach (var item in CurrentCharacter?.ActiveQuests ?? new())
                         item?.Update();

@@ -87,11 +87,7 @@ namespace StarfallAfterlife.Bridge.Generators
                 .OrderBy(i => i.Position)
                 .ThenBy(i => i.LogicId))
             {
-
                 idInfo.LocalId++;
-
-                if (logicInfo.Position != 1090)
-                    continue;
 
                 var quest = GenerateQuestLinesQuest(qd, info, logicInfo, idInfo.ToId());
 

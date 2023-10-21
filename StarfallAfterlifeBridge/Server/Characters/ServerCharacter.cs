@@ -15,14 +15,17 @@ using StarfallAfterlife.Bridge.Server.Inventory;
 using StarfallAfterlife.Bridge.Instances;
 using System.Collections;
 using System.Text.Json.Nodes;
+using StarfallAfterlife.Bridge.Realms;
 
 namespace StarfallAfterlife.Bridge.Server.Characters
 {
-    public class ServerCharacter
+    public partial class ServerCharacter
     {
         public DiscoveryClient DiscoveryClient { get; set; }
 
-        public SfaDatabase Database => DiscoveryClient?.Server?.Realm?.Database;
+        public SfaRealm Realm => DiscoveryClient?.Server?.Realm;
+
+        public SfaDatabase Database => Realm?.Database;
 
         public int Id { get; set; } = -1;
 

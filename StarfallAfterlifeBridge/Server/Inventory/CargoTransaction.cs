@@ -22,7 +22,7 @@ namespace StarfallAfterlife.Bridge.Server.Inventory
                     where ship != null && ship.Cargo != null
                     select ship.Cargo)
                 {
-                    if (cargo[itemId]?.Count is int availableItems &&
+                    if (cargo[itemId, uniqueData]?.Count is int availableItems &&
                         availableItems > 0)
                     {
                         removedItems += cargo.Remove(itemId, count - removedItems, uniqueData);

@@ -34,7 +34,11 @@ namespace StarfallAfterlife.Bridge.Server
 
                     };
 
+                    var character = CurrentCharacter;
                     var locs = new JsonArray();
+
+                    if (character is null)
+                        return;
 
                     //"pmc", // Mining complex
                     //"msf", // Faction shop
@@ -82,7 +86,7 @@ namespace StarfallAfterlife.Bridge.Server
                     else if (obj.Type == DiscoveryObjectType.QuickTravelGate)
                     {
                         doc["warp_systems"] =
-                            CurrentCharacter?.Progress?.WarpSystems?
+                            character.Progress?.WarpSystems?
                             .Select(s => new JsonObject { ["starsystem"] = s })
                             .ToJsonArray() ?? new();
 
@@ -150,14 +154,19 @@ namespace StarfallAfterlife.Bridge.Server
                     }
 
                     if (Server?.Realm?.QuestsDatabase
-                        .GetTaskBoardQuests((byte)obj.Type, obj.Id)
+                        .GetTaskBoardQuests((byte)obj.Type, obj.Id)?
                         .ToList()
-                        .ExceptBy(CurrentCharacter?.Progress?.CompletedQuests ?? new(), q => q.Id)?
+                        .ExceptBy(character.Progress?.CompletedQuests ?? new(), q => q.Id)
                         .ToList() is List<DiscoveryQuest> questsInfo)
                     {
+                        var activeQuests = character.ActiveQuests ?? new();
                         var quests = new JsonArray();
 
-                        foreach (var item in CurrentCharacter?.ActiveQuests ?? new())
+
+                        if (obj is DiscoveryMothership mothership)
+                            questsInfo = questsInfo.Where(i => activeQuests.Any(q => q?.Id == i.Id)).ToList();
+
+                        foreach (var item in activeQuests)
                         {
                             if (item is null ||
                                 questsInfo.Any(i => i.Id == item.Id))
@@ -187,10 +196,9 @@ namespace StarfallAfterlife.Bridge.Server
                                 ["level"] = info.Level,
                                 ["reward"] = new JsonObject
                                 {
-                                    //["igc"] = info.Reward.IGC,
-                                    //["xp"] = info.Reward.Xp,
-                                    //["house_currency"] = info.Reward.HouseCurrency,
-                                    ["house_currency"] = info.LogicId,
+                                    ["igc"] = info.Reward.IGC,
+                                    ["xp"] = info.Reward.Xp,
+                                    ["house_currency"] = info.Reward.HouseCurrency,
                                     ["items"] = revardItems
                                 },
                             });

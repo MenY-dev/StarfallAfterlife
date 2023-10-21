@@ -776,6 +776,7 @@ namespace StarfallAfterlife.Bridge.Server
             {
                 character.AcceptQuest(entityId);
                 SendQuestDataUpdate();
+                character.UpdateQuestLines();
             }
         }
 
@@ -821,6 +822,7 @@ namespace StarfallAfterlife.Bridge.Server
                 Invoke(() =>
                 {
                     character.FinishQuest(entityId);
+                    character.UpdateQuestLines();
                 });
             }
         }
