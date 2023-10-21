@@ -22,6 +22,7 @@ namespace StarfallAfterlife.Bridge.Profiles
             {
                 Id = (int?)doc["entity"] ?? -1,
                 Count = (int?)doc["count"] ?? 0,
+                UniqueData = (string)doc["unique_data"],
             };
         }
 
@@ -33,7 +34,7 @@ namespace StarfallAfterlife.Bridge.Profiles
             writer.WriteStartObject();
             writer.WriteNumber("entity", value.Id);
             writer.WriteNumber("count", value.Count);
-            writer.WriteString("unique_data", value.UniqueData);
+            writer.WriteString("unique_data", value.UniqueData ?? "");
             writer.WriteEndObject();
         }
     }

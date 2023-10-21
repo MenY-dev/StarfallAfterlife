@@ -254,6 +254,11 @@ namespace StarfallAfterlife.Bridge.Generators
                         condition["storage_obj_id"] = obj.Id;
                         condition["storage_obj_type"] = (byte)obj.ObjectType;
                         condition["item_to_deliver"] = info.ItemToDeliver;
+                        condition["item_to_deliver_unique_data"] = new JsonObject
+                        {
+                            ["type"] = 1,
+                            ["quest_id"] = context.Quest.Id
+                        }.ToJsonStringUnbuffered(false);
                         return true;
                     }
                 }

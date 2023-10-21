@@ -64,11 +64,25 @@ namespace StarfallAfterlife.Bridge.Server.Quests.Conditions
 
         public override void RaiseAction(string data)
         {
-            if (Quest?.Character?.AddItemToStocks(ItemToDeliver, ProgressRequire, true) == ProgressRequire)
+            if (Quest?.Character?.AddItemToStocks(ItemToDeliver, ProgressRequire, ItemUniqueData, true) == ProgressRequire)
             {
                 ItemTaken = true;
                 RaiseProgressChanged();
             }
+        }
+
+        public override List<DiscoveryQuestBinding> CreateBindings()
+        {
+            return Quest?.Info is DiscoveryQuest quest ? new()
+            {
+                new()
+                {
+                    ObjectId = quest.ObjectId,
+                    ObjectType = (DiscoveryObjectType)quest.ObjectType,
+                    SystemId = quest.ObjectSystem,
+                    CanBeFinished = true,
+                }
+            } : null;
         }
     }
 }

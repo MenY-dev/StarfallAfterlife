@@ -34,7 +34,7 @@ namespace StarfallAfterlife.Bridge.Profiles
             }
         }
 
-        public int Count => Bindings.Count;
+        public int Count { get; protected set; }
 
         public bool IsReadOnly => false;
 
@@ -70,6 +70,8 @@ namespace StarfallAfterlife.Bridge.Profiles
             if (Bindings.TryGetValue(itemId, out variants) == false)
                 Bindings[itemId] = variants = new();
 
+            if (string.IsNullOrWhiteSpace(uniqueData))
+                uniqueData = null;
 
             if ((item = variants.FirstOrDefault(i => i.UniqueData == uniqueData)) is not null)
             {
@@ -94,6 +96,7 @@ namespace StarfallAfterlife.Bridge.Profiles
                 };
 
                 variants.Add(item);
+                UpdateCount();
             }
 
             return item;
@@ -103,8 +106,9 @@ namespace StarfallAfterlife.Bridge.Profiles
         {
             if (item is null)
                 return false;
-
-            return Bindings.Remove(item.Id);
+            var result = Bindings.Remove(item.Id);
+            UpdateCount();
+            return result;
         }
 
         public int Remove(InventoryItem item, int count = 1) =>
@@ -124,11 +128,15 @@ namespace StarfallAfterlife.Bridge.Profiles
                 item.Count -= toRemove;
 
                 if (item.Count < 1)
+                {
                     items.Remove(item);
+                    Count--;
+                }
 
                 if (items.Count < 1)
                     Bindings.Remove(itemId);
 
+                UpdateCount();
                 return toRemove;
             }
 
@@ -138,6 +146,7 @@ namespace StarfallAfterlife.Bridge.Profiles
         public void Clear()
         {
             Bindings.Clear();
+            UpdateCount();
         }
 
         public bool Contains(InventoryItem item)
@@ -180,5 +189,7 @@ namespace StarfallAfterlife.Bridge.Profiles
 
             return clone;
         }
+
+        protected void UpdateCount() => Count = Items.Count();
     }
 }

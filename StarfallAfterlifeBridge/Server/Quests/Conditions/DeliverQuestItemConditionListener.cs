@@ -46,7 +46,7 @@ namespace StarfallAfterlife.Bridge.Server.Quests.Conditions
         public override void RaiseInitialActions()
         {
             base.RaiseInitialActions();
-            Quest?.Character?.AddItemToStocks(ItemToDeliver, ProgressRequire, true);
+            Quest?.Character?.AddItemToStocks(ItemToDeliver, ProgressRequire, ItemUniqueData, true);
         }
     }
 }

@@ -429,7 +429,7 @@ namespace StarfallAfterlife.Bridge.Game
                             ["itemtype"] = SValue.Create((byte)item.Type),
                             ["id"] = SValue.Create(item.Id),
                             ["count"] = SValue.Create(item.Count),
-                            ["unique_data"] = SValue.Create(""),
+                            ["unique_data"] = SValue.Create(item.UniqueData ?? ""),
                         });
                     }
                 }

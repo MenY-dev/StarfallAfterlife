@@ -260,7 +260,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
             return Ships?.FirstOrDefault(s => s.Id == shipId);
         }
 
-        public int AddItemToStocks(int id, int count = 0, bool includeInventory = false)
+        public int AddItemToStocks(int id, int count = 0, string uniqueData = null, bool includeInventory = false)
         {
             if (count < 1)
                 return 0;
@@ -268,9 +268,9 @@ namespace StarfallAfterlife.Bridge.Server.Characters
             if (Database?.GetItem(id) is SfaItem item)
             {
                 var fleet = CargoTransactionEndPoint.CreateForCharacterFleet(this);
-                var result = fleet.Receive(item, count);
+                var result = fleet.Receive(item, count, uniqueData);
 
-                if (result < count)
+                if (includeInventory == true && result < count)
                 {
                     var inv = CargoTransactionEndPoint.CreateForCharacterInventory(this);
                     result += inv.Receive(item, count);
@@ -357,7 +357,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                                 (int?)item["entity"] is int entity &&
                                 (int?)item["count"] is int count &&
                                 database.GetItem(entity) is SfaItem itemImfo)
-                                ship.Cargo.Add(itemImfo, count);
+                                ship.Cargo.Add(itemImfo, count, (string)item["unique_data"]);
                             continue;
                         }
                     }

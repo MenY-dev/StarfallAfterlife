@@ -115,6 +115,7 @@ namespace StarfallAfterlife.Bridge.Server.Quests
         public DiscoveryQuestBinding[] GetBindings()
         {
             var bindings = new List<DiscoveryQuestBinding>();
+            var cBindings = Conditions.SelectMany(c => c.CreateBindings() ?? new()).ToList();
 
             foreach (var item in Conditions.SelectMany(c => c.CreateBindings() ?? new()))
                 if (item is not null)
