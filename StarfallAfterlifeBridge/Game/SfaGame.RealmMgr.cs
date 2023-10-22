@@ -130,7 +130,7 @@ namespace StarfallAfterlife.Bridge.Game
                         break;
 
                     case "ship.save":
-                        response = RealmMgrHandler.ReceiveSaveShip(query);
+                        response = HandleSaveShip(query);
                         p.SaveGameProfile();
                         SfaClient?.SyncCharacterCurrencies(Profile?.GameProfile?.CurrentCharacter);
                         break;

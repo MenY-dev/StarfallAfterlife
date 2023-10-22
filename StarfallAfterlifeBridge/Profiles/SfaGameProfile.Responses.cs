@@ -16,15 +16,15 @@ namespace StarfallAfterlife.Bridge.Profiles
         {
             JsonNode doc = new JsonObject
             {
-                ["u_bm"] = 1,
-                ["u_sfc"] = 999999999,
-                ["u_ban"] = 0,
-                ["u_charactslotlimit"] = 5,
-                ["drop_ship_progression_param_sfc"] = 12,
-                ["drop_ship_progression_param_igc"] = 23,
-                ["production_points_cost_60_sfc"] = 34,
-                ["production_points_cost_60_igc"] = 45,
-                ["rush_open_weekly_reward"] = 56
+                ["u_bm"] = BM,
+                ["u_sfc"] = SFC,
+                ["u_ban"] = Ban,
+                ["u_charactslotlimit"] = CharacterSlotlimit,
+                ["drop_ship_progression_param_sfc"] = DropShipProgressionSFC,
+                ["drop_ship_progression_param_igc"] = DropShipProgressionIGC,
+                ["production_points_cost_60_sfc"] = ProductionPointsCost60SFC,
+                ["production_points_cost_60_igc"] = ProductionPointsCost60IGC,
+                ["rush_open_weekly_reward"] = RushOpenWeeklyReward
             };
 
             JsonArray shopItems = new();

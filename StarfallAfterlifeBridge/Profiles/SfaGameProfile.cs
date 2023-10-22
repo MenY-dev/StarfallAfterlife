@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
@@ -26,6 +27,33 @@ namespace StarfallAfterlife.Bridge.Profiles
         public DiscoveryProfile DiscoveryModeProfile { get; set; } = new DiscoveryProfile();
 
         public event EventHandler<EventArgs> Edited;
+
+        [JsonIgnore]
+        public int BM { get; set; } = 1;
+
+        [JsonIgnore]
+        public int SFC { get; set; } = 10;
+
+        [JsonIgnore]
+        public int Ban { get; set; } = 0;
+
+        [JsonIgnore]
+        public int CharacterSlotlimit { get; set; } = 5;
+
+        [JsonIgnore]
+        public int DropShipProgressionSFC { get; set; } = 200;
+
+        [JsonIgnore]
+        public int DropShipProgressionIGC { get; set; } = 20000;
+
+        [JsonIgnore]
+        public int ProductionPointsCost60SFC { get; set; } = 100;
+
+        [JsonIgnore]
+        public int ProductionPointsCost60IGC { get; set; } = 2500;
+
+        [JsonIgnore]
+        public int RushOpenWeeklyReward { get; set; } = 100;
 
         [JsonIgnore]
         public Character CurrentCharacter { get; set; } = null;

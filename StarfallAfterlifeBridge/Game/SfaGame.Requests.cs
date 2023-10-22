@@ -1,10 +1,12 @@
 ﻿using StarfallAfterlife.Bridge.Database;
+using StarfallAfterlife.Bridge.Diagnostics;
 using StarfallAfterlife.Bridge.Networking;
 using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Serialization;
 using StarfallAfterlife.Bridge.Server;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.Json.Nodes;
 
@@ -502,6 +504,82 @@ namespace StarfallAfterlife.Bridge.Game
                     character.LastSession = null;
 
                     Profile.SaveGameProfile();
+                    SfaClient?.SyncCharacterCurrencies(character);
+                }
+            });
+
+            return doc;
+        }
+
+        public JsonNode HandleSaveShip(SfaHttpQuery query)
+        {
+            var doc = new JsonObject{ };
+            JsonNode request = JsonHelpers.ParseNodeUnbuffered((string)query["data"]);
+
+            Profile.Use(p =>
+            {
+                if (JsonHelpers.ParseNodeUnbuffered((string)query["data"]) is JsonObject request &&
+                    p.GameProfile.CurrentCharacter is Character character &&
+                    (int?)request["elid"] is int shipId &&
+                    shipId >= character.IndexSpace &&
+                    character.GetShip(shipId - character.IndexSpace) is FleetShipInfo shipInfo)
+                {
+                    var newShip = shipInfo.Data ??= new();
+                    var oldShip = newShip.Clone();
+
+                    newShip.ShipSkin = (int?)request["ship_skin"] ?? 0;
+                    newShip.SkinColor1 = (int?)request["skin_color_1"] ?? 0;
+                    newShip.SkinColor2 = (int?)request["skin_color_2"] ?? 0;
+                    newShip.SkinColor3 = (int?)request["skin_color_3"] ?? 0;
+                    newShip.ShipDecal = (int?)request["shipdecal"] ?? 0;
+
+                    if (request["hplist"]?.AsArraySelf() is JsonArray newHardpoints)
+                    {
+                        var shipHardpoints = newShip.HardpointList ??= new();
+                        shipHardpoints.Clear();
+
+                        shipHardpoints.AddRange(newHardpoints.Select(hardpoint => new ShipHardpoint
+                        {
+                            Hardpoint = (string)hardpoint["hp"],
+                            EquipmentList = hardpoint["eqlist"]?.AsArraySelf()?.Select(equipment => new ShipHardpointEquipment()
+                            {
+                                Equipment = (int?)equipment["eq"] ?? -1,
+                                X = (int?)equipment["x"] ?? 0,
+                                Y = (int?)equipment["y"] ?? 0,
+                            }).ToList(),
+                        }).Where(h => h.Hardpoint is not null && h.EquipmentList is not null));
+                    }
+
+                    if (request["progression"]?.AsArraySelf() is JsonArray newProgress)
+                    {
+                        var shipProgress = newShip.Progression ??= new();
+                        shipProgress.Clear();
+
+                        shipProgress.AddRange(newProgress.Select(item => new ShipProgression
+                        {
+                            Id = (int?)item["id"] ?? -1,
+                            Points = (int?)item["points"] ?? 0,
+                        }));
+                    }
+
+                    var igcCost = 0;
+                    var sfcCost = 0;
+
+                    if ((int?)query["drop_progression"] == 1)
+                    {
+                        oldShip.Progression?.Clear();
+
+                        switch ((CurrencyType?)(int?)query["drop_type"])
+                        {
+                            case CurrencyType.IGC: igcCost += p.GameProfile.DropShipProgressionIGC; break;
+                            case CurrencyType.SFC: sfcCost += p.GameProfile.DropShipProgressionSFC; break;
+                        }
+                    }
+                        
+                    igcCost += ShipConstructionInfo.CalculateCost(oldShip, newShip);
+                    character.IGC = Math.Max(0, character.IGC - igcCost);
+
+                    p.SaveCharacterProgress();
                     SfaClient?.SyncCharacterCurrencies(character);
                 }
             });
