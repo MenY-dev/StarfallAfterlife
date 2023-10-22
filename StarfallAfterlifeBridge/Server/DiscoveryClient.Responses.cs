@@ -414,6 +414,7 @@ namespace StarfallAfterlife.Bridge.Server
                 writer =>
                 {
                     var bindings = JsonHelpers.ParseNodeUnbuffered(questInfo.CreateBindings());
+                    var reward = questInfo.Reward;
 
                     var doc = new JsonObject()
                     {
@@ -429,15 +430,19 @@ namespace StarfallAfterlife.Bridge.Server
                             ["quest_params"] = new JsonObject
                             {
                                 ["condition_params"] = questInfo.Conditions.Clone() ?? new JsonArray(),
+                                ["reward"] = new JsonObject
+                                {
+                                    ["igc"] = reward.IGC,
+                                    ["house_currency"] = reward.HouseCurrency,
+                                    ["xp"] = reward.Xp,
+                                    ["items"] = new JsonArray(reward.Items?.Select(i => new JsonObject
+                                    {
+                                        ["item"] = i.Id,
+                                        ["count"] = i.Count
+                                    })?.ToArray() ?? Array.Empty<JsonNode>())
+                                },
                             },
                             ["bindings"] = bindings,
-                        },
-                        ["reward"] = new JsonObject
-                        {
-                            ["igc"] = (int)questInfo.Type,
-                            ["house_currency"] = questInfo.Id,
-                            ["xp"] = questInfo.LogicId,
-                            ["items"] = new JsonArray()
                         },
                     };
 
@@ -460,6 +465,7 @@ namespace StarfallAfterlife.Bridge.Server
                         foreach (var listener in character.ActiveQuests)
                         {
                             var conditions = listener.Info.Conditions?.Clone();
+                            var reward = listener.Info.Reward;
                             var progress = new JsonArray();
                             var bindings = new JsonArray();
 
@@ -500,13 +506,17 @@ namespace StarfallAfterlife.Bridge.Server
                                 ["quest_params"] = new JsonObject
                                 {
                                     ["condition_params"] = conditions,
-                                },
-                                ["reward"] = new JsonObject
-                                {
-                                    ["igc"] = (int)listener.Info.Type,
-                                    ["house_currency"] = listener.Info.Id,
-                                    ["xp"] = listener.Info.LogicId,
-                                    ["items"] = new JsonArray()
+                                    ["reward"] = new JsonObject
+                                    {
+                                        ["igc"] = reward.IGC,
+                                        ["house_currency"] = reward.HouseCurrency,
+                                        ["xp"] = reward.Xp,
+                                        ["items"] = new JsonArray(reward.Items?.Select(i => new JsonObject
+                                        {
+                                            ["item"] = i.Id,
+                                            ["count"] = i.Count
+                                        })?.ToArray() ?? Array.Empty<JsonNode>())
+                                    },
                                 },
                                 ["bindings"] = bindings,
                             });
