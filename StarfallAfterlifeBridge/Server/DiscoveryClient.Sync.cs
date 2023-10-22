@@ -385,8 +385,13 @@ namespace StarfallAfterlife.Bridge.Server
                     writer.WriteInt32(fleet.MobId); // MobId
                     writer.WriteInt32(fleet.Hull); // SyncHullId
 
-                    writer.WriteUInt16(0); // SynkSkinParams
-                                           //writer.Write(new byte[1]);
+                    writer.WriteUInt16(6); // SkinParamsCount
+                    writer.WriteInt32(fleet.Skin);
+                    writer.WriteInt32(fleet.SkinColor1);
+                    writer.WriteInt32(fleet.SkinColor2);
+                    writer.WriteInt32(fleet.SkinColor3);
+                    writer.WriteInt32(fleet.Decal);
+                    writer.WriteInt32(fleet.DecalColor);
 
                     writer.WriteShortString(fleet.Name ?? string.Empty, -1, true, Encoding.ASCII); // FleetName
                     writer.WriteVector2(fleet.Location);

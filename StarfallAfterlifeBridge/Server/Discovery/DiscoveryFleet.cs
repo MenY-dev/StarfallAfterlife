@@ -11,9 +11,21 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 {
     public abstract partial class DiscoveryFleet : DockableObject
     {
+        public int MobId { get; internal set; } = -1;
+
         public int Hull { get; set; } = -1;
 
-        public int MobId { get; internal set; } = -1;
+        public int Skin { get; set; } = -1;
+
+        public int SkinColor1 { get; set; } = -1;
+
+        public int SkinColor2 { get; set; } = -1;
+
+        public int SkinColor3 { get; set; } = -1;
+
+        public int DecalColor { get; set; } = -1;
+
+        public int Decal { get; set; } = -1;
 
         public string Name { get; set; }
 

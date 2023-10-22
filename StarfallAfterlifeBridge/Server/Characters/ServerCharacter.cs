@@ -298,13 +298,15 @@ namespace StarfallAfterlife.Bridge.Server.Characters
             Events?.Broadcast<IStockListener>(l => l.OnStockUpdated());
         }
 
-        public int GetMainShipHull()
+        public ShipConstructionInfo GetMainShip()
         {
-            return Ships?.LastOrDefault()?.Hull ?? 0;
+            return Ships?.LastOrDefault();
         }
 
         public UserFleet CreateNewFleet()
         {
+            var mainShip = GetMainShip() ?? new();
+
             Fleet = new UserFleet()
             {
                 Id = UniqueId,
@@ -314,7 +316,12 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                 BaseVision = 5,
                 BaseSpeed = 5,
                 State = FleetState.None,
-                Hull = GetMainShipHull(),
+                Hull = mainShip.Hull,
+                Skin = mainShip.ShipSkin,
+                SkinColor1 = mainShip.SkinColor1,
+                SkinColor2 = mainShip.SkinColor2,
+                SkinColor3 = mainShip.SkinColor3,
+                Decal = mainShip.ShipDecal,
             };
 
             foreach (var item in Abilities)
