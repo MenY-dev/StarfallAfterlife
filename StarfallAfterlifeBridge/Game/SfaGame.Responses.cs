@@ -32,6 +32,21 @@ namespace StarfallAfterlife.Bridge.Game
                 ["session_start_inventory"] = new JsonObject
                 {
                     ["inventory"] = CreateCharacterSessionStartInventoryResponse(),
+                },
+                ["shop_data"] = new JsonObject()
+                {
+                    ["listdata"] = new JsonObject()
+                    {
+                        ["items"] = new JsonArray()
+                        {
+                            new JsonObject() { ["id"] = SValue.Create(232046526) },
+                            new JsonObject() { ["id"] = SValue.Create(251198060) },
+                            new JsonObject() { ["id"] = SValue.Create(308815052) },
+                            new JsonObject() { ["id"] = SValue.Create(1239432978) },
+                            new JsonObject() { ["id"] = SValue.Create(232644897) },
+                            new JsonObject() { ["id"] = SValue.Create(1688154619) },
+                        }
+                    }
                 }
             };
         }
@@ -228,7 +243,7 @@ namespace StarfallAfterlife.Bridge.Game
 
             if (flags.HasFlag(UserDataFlag.FactionShop))
             {
-
+                
             }
 
             if (flags.HasFlag(UserDataFlag.ActiveShips))
