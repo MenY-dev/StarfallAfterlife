@@ -576,7 +576,22 @@ namespace StarfallAfterlife.Bridge.Game
                             case CurrencyType.SFC: sfcCost += p.GameProfile.DropShipProgressionSFC; break;
                         }
                     }
-                        
+
+                    if ((string)query["eqforbuy"] is string eqForBuy &&
+                        JsonHelpers.ParseNodeUnbuffered(eqForBuy)?["eqlist"] is JsonArray eqList)
+                    {
+                        foreach (var eq in eqList)
+                        {
+                            if ((int?)eq["entity"] is int entity &&
+                                (int?)eq["count"] is int count &&
+                                SfaDatabase.Instance.GetItem(entity) is SfaItem item)
+                            {
+                                character.AddInventoryItem(item, count);
+                                igcCost += item.IGC * count;
+                            }
+                        }
+                    }
+
                     igcCost += ShipConstructionInfo.CalculateCost(oldShip, newShip);
                     character.IGC = Math.Max(0, character.IGC - igcCost);
 
