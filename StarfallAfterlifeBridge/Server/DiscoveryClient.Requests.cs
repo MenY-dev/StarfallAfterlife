@@ -17,6 +17,7 @@ using StarfallAfterlife.Bridge.Realms;
 using StarfallAfterlife.Bridge.Server.Inventory;
 using StarfallAfterlife.Bridge.Server.Characters;
 using System.Collections;
+using System.Text.Json.Nodes;
 
 namespace StarfallAfterlife.Bridge.Server
 {
@@ -28,6 +29,9 @@ namespace StarfallAfterlife.Bridge.Server
             {
                 case SfaServerAction.GlobalChat:
                     InputFromChatChannel(text ?? string.Empty);
+                    break;
+                case SfaServerAction.RegisterChannel:
+                    ProcessRegisterChannel(JsonHelpers.ParseNodeUnbuffered(text));
                     break;
                 default:
                     break;
@@ -135,6 +139,14 @@ namespace StarfallAfterlife.Bridge.Server
                 case DiscoveryClientAction.ActivateAbility:
                     HandleActivateAbility(reader, systemId, objectType, objectId); break;
             }
+        }
+
+        private void ProcessRegisterChannel(JsonNode doc)
+        {
+            var channelName = (string)doc?["name"];
+
+            if ("Galactic".Equals(channelName, StringComparison.InvariantCultureIgnoreCase) == true)
+                SendQuestDataUpdate();
         }
 
         public void InputFromBattleGroundChannel(SfReader reader)

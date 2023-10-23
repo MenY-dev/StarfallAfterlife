@@ -227,7 +227,9 @@ namespace StarfallAfterlife.Bridge.Server
                         {
                             DiscoveryClient = DiscoveryClient,
                             Id = (int?)item["id"] ?? -1,
-                            Name = (string)item["name"] ?? "RenamedCharacter"
+                            Name = (string)item["name"] ?? "RenamedCharacter",
+                            Faction = (Faction?)(byte?)item["faction"] ?? Faction.None
+
                         };
 
                         DiscoveryClient.Characters.Add(character);

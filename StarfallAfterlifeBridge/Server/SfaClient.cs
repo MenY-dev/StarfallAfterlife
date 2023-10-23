@@ -178,6 +178,15 @@ namespace StarfallAfterlife.Bridge.Server
             });
         }
 
+
+        public void SendChannelRegister(string channelName)
+        {
+            Send(new JObject()
+            {
+                ["name"] = channelName,
+            }, SfaServerAction.RegisterChannel);
+        }
+
         public Task<bool> SyncPlayerData()
         {
             return SendRequest(

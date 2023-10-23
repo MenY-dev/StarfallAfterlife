@@ -26,6 +26,7 @@ namespace StarfallAfterlife.Bridge.Networking.Channels
         {
             Client = client;
             base.Register(client);
+            Game?.SfaClient?.SendChannelRegister(Name);
         }
 
         public virtual void Send(string text, int ErrorCode = 0, Encoding encoding = null)

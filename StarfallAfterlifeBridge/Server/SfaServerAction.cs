@@ -42,6 +42,7 @@ namespace StarfallAfterlife.Bridge.Server
         RequestItemResearch = 182,
         SyncCharacterNewResearch = 183,
 
+        RegisterChannel = 190,
         DiscoveryChannel = 192,
         GalacticChannel = 193,
         BattleGroundChannel = 194,

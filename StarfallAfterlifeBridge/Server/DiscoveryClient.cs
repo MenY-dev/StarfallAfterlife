@@ -209,6 +209,7 @@ namespace StarfallAfterlife.Bridge.Server
             }
 
             request.SendResponce(response, SfaServerAction.GetFullGalaxySessionData);
+            SendQuestDataUpdate();
         }
 
         public Task<ShipConstructionInfo> RequestShipData(int shipId)

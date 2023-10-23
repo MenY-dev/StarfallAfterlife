@@ -19,6 +19,7 @@ namespace StarfallAfterlife.Bridge.Profiles
                 {
                     ["id"] = item.Id,
                     ["name"] = item.Name,
+                    ["faction"] = (int)item.Faction,
                 });
 
             response["chars"] = chars;

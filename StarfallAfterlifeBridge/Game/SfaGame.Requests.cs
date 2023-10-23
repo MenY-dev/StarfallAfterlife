@@ -34,6 +34,7 @@ namespace StarfallAfterlife.Bridge.Game
                             {
                                 ["id"] = character.Id,
                                 ["name"] = character.Name,
+                                ["faction"] = character.Faction,
                             }
                         }
                     }.ToJsonStringUnbuffered(false)
