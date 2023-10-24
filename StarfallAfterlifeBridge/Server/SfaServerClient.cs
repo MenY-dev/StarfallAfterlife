@@ -27,6 +27,8 @@ namespace StarfallAfterlife.Bridge.Server
     {
         public string Name { get; protected set; }
 
+        public string Auth { get; protected set; }
+
         public int PlayerId { get; set; } = -1;
 
         public int IndexSpace => PlayerId < 0 ? 0 : PlayerId * 2000;
@@ -128,6 +130,7 @@ namespace StarfallAfterlife.Bridge.Server
             request.SendResponce(new JObject
             {
                 ["auth_success"] = true,
+                ["auth"] = Auth ??= Guid.NewGuid().ToString("N"),
                 ["realm_id"] = Server.Realm.Id,
                 ["galaxy_hash"] = Server.Realm.GalaxyMapHash,
                 ["mobs_map_hash"] = Server.Realm.MobsMap?.Hash,

@@ -41,6 +41,7 @@ namespace StarfallAfterlife.Bridge.Launcher
                 {
                     ProfileDirectory = dir.FullName,
                     Database = Database,
+                    MapsCache = MapsCache,
                     GameProfile = new SfaGameProfile
                     {
                         Nickname = profileName,
@@ -72,7 +73,8 @@ namespace StarfallAfterlife.Bridge.Launcher
                     var profile = new SfaProfile()
                     {
                         ProfileDirectory = dir.FullName,
-                        Database = Database
+                        Database = Database,
+                        MapsCache = MapsCache,
                     };
 
                     if (profile.Load() == true)

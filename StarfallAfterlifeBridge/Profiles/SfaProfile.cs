@@ -28,6 +28,29 @@ namespace StarfallAfterlife.Bridge.Profiles
 
         public SfaDatabase Database { get; set; }
 
+        public GalaxyMapCache MapsCache
+        {
+            get
+            {
+                lock (Locker)
+                {
+                    if (_mapsCache is null)
+                    {
+                        _mapsCache = new GalaxyMapCache();
+                        _mapsCache.Location = Path.Combine(ProfileDirectory, "Maps");
+                        _mapsCache.Init();
+                    }
+
+                    return _mapsCache;
+                }
+            }
+            set
+            {
+                lock (Locker)
+                    _mapsCache = value;
+            }
+        }
+
         public string ProfileDirectory { get; set; }
 
         public string GameProfileLocation => Path.Combine(ProfileDirectory, "Profile.json");
@@ -37,6 +60,8 @@ namespace StarfallAfterlife.Bridge.Profiles
         public string SessionsDirectory => Path.Combine(ProfileDirectory, "Sessions");
 
         protected object Locker { get; } = new object();
+
+        private GalaxyMapCache _mapsCache;
 
         public bool Load()
         {

@@ -30,6 +30,16 @@ namespace StarfallAfterlife.Bridge.Server
 {
     public class SfaClient : SfaClientBase
     {
+        public string ServerAuth { get; protected set; }
+
+        public string RealmId { get; protected set; }
+
+        public string GalaxyHash { get; protected set; }
+
+        public string MobsMapHash { get; protected set; }
+
+        public string AsteroidsMapHash { get; protected set; }
+
         protected SfaGame Game { get; set; }
 
         protected SfaGameProfile Profile => Game?.GameProfile;
@@ -146,27 +156,32 @@ namespace StarfallAfterlife.Bridge.Server
                     JsonHelpers.ParseNodeUnbuffered(response.Text) is JObject doc &&
                     (bool?)doc["auth_success"] == true)
                 {
-                    var realmId = (string)doc["realm_id"];
+                    ServerAuth = (string)doc["auth"];
+                    var realmId = RealmId = (string)doc["realm_id"];
 
                     if (realmId is null)
                         return false;
 
                     Game.Profile.Use(p =>
                     {
-                        var realm = p.GetProfileRealm(realmId);
+                        var realmInfo = p.GetProfileRealm(realmId);
 
-                        if (realm is null)
+                        if (realmInfo is null)
                         {
-                            realm = p.AddNewRealm(new SfaRealm
+                            realmInfo = p.AddNewRealm(new SfaRealm
                             {
                                 Id = realmId,
-                                Database = p.Database,
+                                Database = p.Database
                             });
 
-                            realm.Save();
+                            realmInfo.Save();
                         }
 
-                        p.SelectRealm(realm);
+                        GalaxyHash = (string)doc["galaxy_hash"];
+                        MobsMapHash = (string)doc["mobs_map_hash"];
+                        AsteroidsMapHash = (string)doc["asteroids_map_hash"];
+
+                        p.SelectRealm(realmInfo);
                         p.CurrentRealm.LoadDatabase();
                         p.CurrentRealm.LoadProgress();
                     });
@@ -227,28 +242,48 @@ namespace StarfallAfterlife.Bridge.Server
 
         public Task<bool> LoadGalaxyMap()
         {
-            return SendRequest(SfaServerAction.LoadGalaxyMap).ContinueWith((t, game)=>
+            return SendRequest(SfaServerAction.LoadGalaxyMap).ContinueWith(t =>
             {
-                var doc = JsonHelpers.ParseNodeUnbuffered(t.Result.Text);
                 if (t.Result is SfaClientResponse response &&
                     response.IsSuccess == true &&
                     response.Action == SfaServerAction.LoadGalaxyMap &&
-                    doc is JObject)
+                    JsonHelpers.ParseNodeUnbuffered(t.Result.Text ?? "") is JObject doc &&
+                    Game?.Profile is SfaProfile profile)
                 {
-                    (game as SfaGame).Profile.Use((p, doc) =>
+                    var result = true;
+
+                    profile.Use((p, doc) =>
                     {
-                        var cache = (string)doc["map"] ?? string.Empty;
+                        var realmInfo = p.CurrentRealm;
+
+                        if (realmInfo is null)
+                        {
+                            result = false;
+                            return;
+                        }
+
+                        var cache = (string)doc["map"];
+                        var hash = (string)doc["hash"];
+
+                        if (cache is null || hash is null)
+                        {
+                            result = false;
+                            return;
+                        }
+
                         p.CurrentRealm.Realm.GalaxyMapCache = cache;
-                        p.CurrentRealm.Realm.GalaxyMapHash = (string)doc["hash"] ?? string.Empty;
-                        p.CurrentRealm?.Save();
-                        GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
-                        GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+                        p.CurrentRealm.Realm.GalaxyMapHash = hash;
+                        p.MapsCache.Save(hash, cache);
                     }, doc);
-                    return true;
+
+                    GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
+                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+
+                    return result;
                 }
 
                 return false;
-            }, Game);
+            });
         }
 
         public void ProcessStartSession(JNode entryData, SfaClientRequest request)

@@ -20,9 +20,16 @@ namespace StarfallAfterlife.Bridge.Launcher
 
         public SfaDatabase Database { get; set; }
 
+        public string MapsCacheDirectory => Path.Combine(WorkingDirectory, "Cache", "Maps");
+
+        public GalaxyMapCache MapsCache { get; set; }
+
         public void Load()
         {
             LoadSettings();
+
+            MapsCache ??= new() { Location = MapsCacheDirectory };
+            MapsCache.Init();
 
             Profiles.Clear();
             Profiles.AddRange(LoadProfiles());

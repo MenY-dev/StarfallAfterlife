@@ -114,10 +114,14 @@ namespace StarfallAfterlife.Bridge.Game
                     return false;
                 }
 
-                if (Realm.GalaxyMapCache is null &&
-                    SfaClient.LoadGalaxyMap().Result == false)
+                if (SfaClient.GalaxyHash is string galaxyHash &&
+                    Profile.MapsCache.LoadText(galaxyHash) is string galaxyCache)
                 {
-
+                    Realm.GalaxyMapHash = galaxyHash;
+                    Realm.GalaxyMapCache = galaxyCache;
+                }
+                else if (SfaClient.LoadGalaxyMap().Result == false)
+                {
                     SfaDebug.Print("LoadGalaxyMap Error", GetType().Name);
                     return false;
                 }
