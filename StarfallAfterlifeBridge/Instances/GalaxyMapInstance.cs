@@ -23,7 +23,7 @@ namespace StarfallAfterlife.Bridge.Instances
 
         public string OutputDirectory { get; set; }
 
-        public Process Process { get; set; }
+        public SfaProcess Process { get; set; }
 
         protected MgrServer GalaxyMgrServer { get; set; }
 
@@ -51,7 +51,7 @@ namespace StarfallAfterlife.Bridge.Instances
                 Windowed = true,
                 DisableSplashScreen = true,
                 DisableLoadingScreen = true,
-            }.Start().InnerProcess;
+            }.Start();
         }
 
         protected void Init()

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32.SafeHandles;
+using StarfallAfterlife.Bridge.Diagnostics;
 using StarfallAfterlife.Bridge.Native.Windows;
 using StarfallAfterlife.Bridge.Networking;
 using System;
@@ -45,7 +46,7 @@ namespace StarfallAfterlife.Bridge.Environment
 
         public List<string> ConsoleCommands { get; } = new List<string>();
 
-        public Process InnerProcess { get; private set; }
+        public WindowsProcess WinProcess { get; private set; }
 
         public event EventHandler<SfaProcessOutputEventArgs> OutputUpdated;
 
@@ -58,9 +59,8 @@ namespace StarfallAfterlife.Bridge.Environment
             if (Win32.IsAvailable == true)
                 StartWin32Process();
 
-            if (InnerProcess is Process process)
+            if  (WinProcess is WindowsProcess process)
             {
-                process.EnableRaisingEvents = true;
                 process.Exited -= OnProcessExited;
                 process.Exited += OnProcessExited;
             }
@@ -70,16 +70,7 @@ namespace StarfallAfterlife.Bridge.Environment
 
         public void Close()
         {
-            try
-            {
-                InnerProcess?.CloseMainWindow();
-                InnerProcess?.Close();
-                InnerProcess?.Kill();
-            }
-            catch (Exception e)
-            {
-                Trace.WriteLine(e);
-            }
+            WinProcess?.Kill();
         }
 
         protected virtual void BeginReadingOutput(StreamReader output)
@@ -88,7 +79,7 @@ namespace StarfallAfterlife.Bridge.Environment
             {
                 try
                 {
-                    while (InnerProcess.HasExited == false)
+                    while (WinProcess.HasExited == false)
                     {
                         string line = output.ReadLine();
                         OutputUpdated?.Invoke(this, new(line));
@@ -100,7 +91,7 @@ namespace StarfallAfterlife.Bridge.Environment
 
         private void OnProcessExited(object sender, EventArgs e)
         {
-            Debug.WriteLine($"Process Exited ({(sender as Process)?.Id})");
+            SfaDebug.Print($"Process Exited ({(sender as Process)?.Id})", GetType().Name);
             Exited?.Invoke(this, EventArgs.Empty);
         }
 
@@ -173,7 +164,7 @@ namespace StarfallAfterlife.Bridge.Environment
             if (ConsoleCommands is not null && ConsoleCommands.Count > 0)
                 sb.Append($" -ExecCmds=\"{string.Join("; ", ConsoleCommands)}\"");
 
-            if (EnableLog == true)
+            if (EnableLog == true && Listen == false)
                 sb.Append(" -log");
 
             //sb.Append(" -NOWRITE");
@@ -193,6 +184,10 @@ namespace StarfallAfterlife.Bridge.Environment
             if (Listen == true)
             {
                 sb.Append(" -nosound");
+                sb.Append(" -ResX=2");
+                sb.Append(" -ResY=2");
+                sb.Append(" -ForceRes");
+                sb.Append(" -fps=1");
             }
 
             if (Sandbox is SfaProcessSandbox sandbox)
@@ -225,7 +220,7 @@ namespace StarfallAfterlife.Bridge.Environment
 
         public virtual int GetServerListeningPort()
         {
-            int processId = InnerProcess.Id;
+            int processId = WinProcess.Id;
             return NetUtils.GetUdpListenersInfo()
                            .FirstOrDefault(i => i.ProcessId == processId)
                            .LocalEndPoint?.Port ?? -1;

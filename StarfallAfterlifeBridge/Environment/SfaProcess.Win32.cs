@@ -5,7 +5,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using static StarfallAfterlife.Bridge.Native.Windows.Win32;
 
 namespace StarfallAfterlife.Bridge.Environment
 {
@@ -13,23 +15,24 @@ namespace StarfallAfterlife.Bridge.Environment
     {
         public void StartWin32Process()
         {
-            var process = new WindowsProcess();
-            var startupInfo = new Win32.StartupInfo();
+            WinProcess = new WindowsProcess() { AttachToMainProcess = true };
+            var startupInfo = new StartupInfo();
 
-            //if (Listen == true)
-            //{
-            //    startupInfo.dwFlags |= Win32.STARTF.USESTDHANDLES;
-            //    startupInfo.dwFlags |= Win32.STARTF.USESHOWWINDOW;
-            //    startupInfo.wShowWindow |= Win32.ShowWindowType.SHOWMINNOACTIVE;
-            //};
-
-            process.Start(null, $"{Executable} {BuildArguments()}", startupInfo);
-            InnerProcess = process.SharpProcess;
-
-            if (Listen == true && process.StandartOutput is StreamReader output)
+            if (Listen == true)
             {
-                BeginReadingOutput(output);
-                //HideWin32Window();
+                startupInfo.dwFlags |= STARTF.USESTDHANDLES;
+                startupInfo.dwFlags |= STARTF.USESHOWWINDOW;
+                startupInfo.wShowWindow |= ShowWindowType.SHOWMINNOACTIVE;
+            };
+
+            WinProcess.Start(null, $"{Executable} {BuildArguments()}", startupInfo);
+
+            if (Listen == true)
+            {
+                if (WinProcess.StandartOutput is StreamReader output)
+                    BeginReadingOutput(output);
+
+                HideWin32Window();
             }
         }
 
@@ -39,23 +42,25 @@ namespace StarfallAfterlife.Bridge.Environment
             {
                 try
                 {
-                    if (InnerProcess.WaitForInputIdle(TimeSpan.FromMinutes(1)) == false)
-                        return;
+                    nint handle = nint.Zero;
 
-                    nint handle = InnerProcess.MainWindowHandle;
+                    while ((handle = WinProcess.MainWindowHandle) == nint.Zero)
+                    {
+                        if (WinProcess is null or { HasExited: true })
+                            return;
 
-                    if (handle == 0 || InnerProcess.HasExited == true)
-                        return;
+                        Thread.Sleep(100);
+                    }
 
-                    Win32.SetWindowLong(
+                    SetWindowLong(
                         handle,
-                        Win32.WindowLongParam.GWL_STYLE,
-                        (uint)(Win32.WindowStyles.POPUPWINDOW | Win32.WindowStyles.MINIMIZE));
+                        WindowLongParam.GWL_STYLE,
+                        (uint)(WindowStyles.POPUPWINDOW | WindowStyles.MINIMIZE));
 
-                    Win32.SetWindowLong(
+                    SetWindowLong(
                         handle,
-                        Win32.WindowLongParam.GWL_EXSTYLE,
-                        (uint)(Win32.WindowStylesEx.TOOLWINDOW | Win32.WindowStylesEx.NOACTIVATE));
+                        WindowLongParam.GWL_EXSTYLE,
+                        (uint)(WindowStylesEx.TOOLWINDOW | WindowStylesEx.NOACTIVATE));
                 }
                 catch
                 {
