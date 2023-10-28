@@ -94,6 +94,9 @@ namespace StarfallAfterlife.Bridge.Server
                 case DiscoveryClientAction.SendInventoryToMotherhsip:
                     HandleSendInventoryToMotherhsip(reader, systemId); break;
 
+                case DiscoveryClientAction.ProcessLocationAction:
+                    HandleProcessLocationAction(reader, systemId); break;
+
                 case DiscoveryClientAction.DockToObject:
                     HandleDockToObject(reader); break;
 
@@ -635,6 +638,38 @@ namespace StarfallAfterlife.Bridge.Server
                 }
             });
         }
+
+
+        private void HandleProcessLocationAction(SfReader reader, int systemId)
+        {
+            var locName = reader.ReadShortString(Encoding.UTF8);
+            var data = reader.ReadShortString(Encoding.UTF8);
+
+            if (CurrentCharacter is ServerCharacter character &&
+                character.Fleet is DiscoveryFleet fleet &&
+                fleet.System is StarSystem system)
+            {
+                Invoke(() =>
+                {
+                    if (locName == "fd")
+                    {
+                        var cost = SfaDatabase.GetWarpingCost(Galaxy?.Map?.GetSystem(systemId)?.Level ?? 0);
+                        character.AddCharacterCurrencies(igc: -cost);
+
+                        Galaxy?.BeginPreUpdateAction(g =>
+                        {
+                            fleet.AddEffect(new FleetEffectInfo()
+                            {
+                                Duration = 600,
+                                Logic = GameplayEffectType.FuelStationBoost,
+                                EngineBoost = 1.5f,
+                            });
+                        });
+                    }
+                });
+            }
+        }
+
 
         private void HandleDockToObject(SfReader reader)
         {

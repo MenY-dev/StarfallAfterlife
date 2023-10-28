@@ -149,7 +149,7 @@ namespace StarfallAfterlife.Bridge.Server
                         locs.Add(new JsonObject
                         {
                             ["type"] = "fd",
-                            ["refuel_price"] = 500,
+                            ["refuel_price"] = SfaDatabase.GetRefuelCost(obj.System?.Info?.Level ?? 0)
                         });
                     }
 

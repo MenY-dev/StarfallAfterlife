@@ -439,6 +439,18 @@ namespace StarfallAfterlife.Bridge.Database
             _ => 1500
         };
 
+
+        public static int GetRefuelCost(int circle) => circle switch
+        {
+            <= 1 => 50,
+            2 => 75,
+            3 => 100,
+            4 => 200,
+            5 => 300,
+            6 => 400,
+            _ => 500
+        };
+
         public int GetLevelForShipXp(int shipId, int shipXp) =>
             GetLevelForShipXp(GetShip(shipId), shipXp);
 
