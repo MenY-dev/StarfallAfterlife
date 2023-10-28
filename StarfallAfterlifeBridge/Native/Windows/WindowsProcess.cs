@@ -154,6 +154,7 @@ namespace StarfallAfterlife.Bridge.Native.Windows
 
                 ReleaseUnmanagedResources();
                 Exited?.Invoke(this, EventArgs.Empty);
+                _isExitCompleted = true;
             }
         }
 
