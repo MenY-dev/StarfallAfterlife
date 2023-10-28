@@ -428,6 +428,17 @@ namespace StarfallAfterlife.Bridge.Database
             _ => 100
         };
 
+        public static int GetWarpingCost(int circle) => circle switch
+        {
+            <= 1 => 100,
+            2 => 250,
+            3 => 500,
+            4 => 750,
+            5 => 100,
+            6 => 1250,
+            _ => 1500
+        };
+
         public int GetLevelForShipXp(int shipId, int shipXp) =>
             GetLevelForShipXp(GetShip(shipId), shipXp);
 

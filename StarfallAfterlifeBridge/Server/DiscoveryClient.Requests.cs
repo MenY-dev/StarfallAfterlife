@@ -91,6 +91,9 @@ namespace StarfallAfterlife.Bridge.Server
                 case DiscoveryClientAction.WarpToStarSystem:
                     HandleWarpToStarSystem(reader, systemId); break;
 
+                case DiscoveryClientAction.SendInventoryToMotherhsip:
+                    HandleSendInventoryToMotherhsip(reader, systemId); break;
+
                 case DiscoveryClientAction.DockToObject:
                     HandleDockToObject(reader); break;
 
@@ -575,6 +578,9 @@ namespace StarfallAfterlife.Bridge.Server
                 {
                     Invoke(() =>
                     {
+                        var cost = SfaDatabase.GetWarpingCost(g?.Map?.GetSystem(systemId)?.Level ?? 0);
+
+                        CurrentCharacter?.AddCharacterCurrencies(igc: -cost);
                         SendFleetWarpedMothership();
 
                         Galaxy.BeginPostUpdateAction(g =>
@@ -582,6 +588,50 @@ namespace StarfallAfterlife.Bridge.Server
                             newSystem.AddFleet(fleet, gate.Location);
                         });
                     });
+                }
+            });
+        }
+
+        private void HandleSendInventoryToMotherhsip(SfReader reader, int systemId)
+        {
+            Invoke(() =>
+            {
+                if (CurrentCharacter is ServerCharacter character)
+                {
+                    var ships = character.Ships;
+                    var cost = SfaDatabase.GetWarpingCost(Galaxy?.Map?.GetSystem(systemId)?.Level ?? 0);
+                    var dst = CargoTransactionEndPoint.CreateForCharacterInventory(character);
+                    var result = 0;
+
+                    if (ships is null || dst is null)
+                        return;
+
+                    foreach (var ship in ships.Where(s => s is not null).ToArray())
+                    {
+                        var cargo = ship?.Cargo;
+
+                        if (cargo is null)
+                            continue;
+
+                        var src = CargoTransactionEndPoint.CreateForCharacterStoc(
+                            character, character.CreateShipStocName(ship.Id));
+
+                        if (src is null)
+                            continue;
+
+                        foreach (var item in cargo.Where(i => i is not null).ToArray())
+                        {
+                            result += src.SendItemTo(dst, item.Id, item.Count, item.UniqueData);
+                        }
+                    }
+
+                    if (result > 0)
+                    {
+                        character.AddCharacterCurrencies(igc: -cost);
+
+                        SynckSessionFleetInfo();
+                        SendFleetCargo();
+                    }
                 }
             });
         }
@@ -646,7 +696,7 @@ namespace StarfallAfterlife.Bridge.Server
                     fleet.Id == objectId &&
                     fleet.System is not null)
                 {
-                    
+
                     if (character.GetShipCargoByStockName(stockName) is InventoryStorage cargo)
                     {
                         SendObjectStock(fleet, cargo, stockName);

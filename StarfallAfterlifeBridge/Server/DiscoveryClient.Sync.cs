@@ -93,7 +93,7 @@ namespace StarfallAfterlife.Bridge.Server
                         locs.Add(new JsonObject
                         {
                             ["type"] = "wb_warp",
-                            ["service_price"] = 1500,
+                            ["service_price"] = SfaDatabase.GetWarpingCost(obj.System?.Info?.Level ?? 0)
                         });
                     }
                     else if (obj is Planet planet)

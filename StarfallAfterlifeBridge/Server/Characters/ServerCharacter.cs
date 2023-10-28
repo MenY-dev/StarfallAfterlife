@@ -253,9 +253,11 @@ namespace StarfallAfterlife.Bridge.Server.Characters
         public InventoryStorage GetShipCargoByStockName(string stockName) =>
             GetShipByStockName(stockName)?.Cargo;
 
+        public string CreateShipStocName(int shipId) => "cargo_ship_" + shipId;
+
         public ShipConstructionInfo GetShipByStockName(string stockName)
         {
-            return Ships?.FirstOrDefault(s => stockName == "cargo_ship_" + s.Id);
+            return Ships?.FirstOrDefault(s => stockName == CreateShipStocName(s.Id));
         }
 
         public ShipConstructionInfo GetShipById(int shipId)
