@@ -124,7 +124,7 @@ namespace StarfallAfterlife.Bridge.Game
                         {
                             var inv = character.GetInventoryItem(database.GetItem(material.Id));
 
-                            if (inv is null || inv.Count < (material.Count * count))
+                            if (inv.IsEmpty || inv.Count < (material.Count * count))
                             {
                                 result = false;
                                 return;

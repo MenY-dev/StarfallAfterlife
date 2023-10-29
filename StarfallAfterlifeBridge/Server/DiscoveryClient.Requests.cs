@@ -622,7 +622,7 @@ namespace StarfallAfterlife.Bridge.Server
                         if (src is null)
                             continue;
 
-                        foreach (var item in cargo.Where(i => i is not null).ToArray())
+                        foreach (var item in cargo.Where(i => i.IsEmpty == false).ToArray())
                         {
                             result += src.SendItemTo(dst, item.Id, item.Count, item.UniqueData);
                         }

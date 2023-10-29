@@ -436,7 +436,7 @@ namespace StarfallAfterlife.Bridge.Game
                 {
                     foreach (var item in session.SessionStartInventory ?? new())
                     {
-                        if (item is null)
+                        if (item.IsEmpty)
                             continue;
 
                         doc.Add(new JsonObject

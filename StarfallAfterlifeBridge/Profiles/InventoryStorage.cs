@@ -3,6 +3,7 @@ using StarfallAfterlife.Bridge.Networking;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -17,7 +18,7 @@ namespace StarfallAfterlife.Bridge.Profiles
             get
             {
                 if (item is null)
-                    return null;
+                    return InventoryItem.Empty;
 
                 return this[item.Id, uniqueData];
             }
@@ -28,9 +29,9 @@ namespace StarfallAfterlife.Bridge.Profiles
             get
             {
                 if (Bindings.TryGetValue(itemId, out var items))
-                    return items.FirstOrDefault(i => i.UniqueData == uniqueData);
+                    return items.FirstOrDefault(i => i.UniqueData == uniqueData, InventoryItem.Empty);
 
-                return null;
+                return InventoryItem.Empty;
             }
         }
 
@@ -50,22 +51,22 @@ namespace StarfallAfterlife.Bridge.Profiles
 
         void ICollection<InventoryItem>.Add(InventoryItem item)
         {
-            if (item is null)
+            if (item.IsEmpty)
                 return;
 
             Add(item.Id, item.Type, item.Count, item.IGCPrice, item.BGCPrice, item.UniqueData);
         }
 
         public InventoryItem Add(SfaItem item, int count = 1, string uniqueData = default) =>
-            item is null ? null : Add(item.Id, item.ItemType, count, item.IGC, item.BGC, uniqueData);
+            item is null ? InventoryItem.Empty : Add(item.Id, item.ItemType, count, item.IGC, item.BGC, uniqueData);
 
         public InventoryItem Add(InventoryItem item, int count = 1) =>
-            item is null ? null : Add(item.Id, item.Type, count, item.IGCPrice, item.BGCPrice, item.UniqueData);
+            item.IsEmpty ? InventoryItem.Empty : Add(item.Id, item.Type, count, item.IGCPrice, item.BGCPrice, item.UniqueData);
 
-        protected InventoryItem Add(int itemId, InventoryItemType itemType, int count, int igc = -1, int bgc = -1, string uniqueData = default)
+        protected InventoryItem Add(int itemId, InventoryItemType itemType, int count, int igc = 0, int bgc = 0, string uniqueData = default)
         {
             List<InventoryItem> variants = null;
-            InventoryItem item = null;
+            InventoryItem item = InventoryItem.Empty;
 
             if (Bindings.TryGetValue(itemId, out variants) == false)
                 Bindings[itemId] = variants = new();
@@ -73,15 +74,19 @@ namespace StarfallAfterlife.Bridge.Profiles
             if (string.IsNullOrWhiteSpace(uniqueData))
                 uniqueData = null;
 
-            if ((item = variants.FirstOrDefault(i => i.UniqueData == uniqueData)) is not null)
+            var index = variants.FindIndex(i => i.UniqueData == uniqueData);
+
+            if (index > -1 && (item = variants[index]).IsEmpty == false)
             {
                 item.Count += Math.Max(0, count);
 
-                if (igc > -1)
+                if (igc > 0)
                     item.IGCPrice = igc;
 
-                if (bgc > -1)
+                if (bgc > 0)
                     item.BGCPrice = bgc;
+
+                variants[index] = item;
             }
             else
             {
@@ -104,15 +109,17 @@ namespace StarfallAfterlife.Bridge.Profiles
 
         bool ICollection<InventoryItem>.Remove(InventoryItem item)
         {
-            if (item is null)
+            if (item.IsEmpty)
                 return false;
+
             var result = Bindings.Remove(item.Id);
             UpdateCount();
+
             return result;
         }
 
         public int Remove(InventoryItem item, int count = 1) =>
-            item is null ? 0 : Remove(item.Id, count, item?.UniqueData);
+            item.IsEmpty ? 0 : Remove(item.Id, count, item.UniqueData);
 
         public int Remove(SfaItem item, int count = 1, string uniqueData = default) =>
             item is null ? 0 : Remove(item.Id, count, uniqueData);
@@ -121,16 +128,28 @@ namespace StarfallAfterlife.Bridge.Profiles
         {
             count = Math.Max(0, count);
 
-            if (Bindings.TryGetValue(itemId, out var items) == true &&
-                items.FirstOrDefault(i => i.UniqueData == uniqueData) is InventoryItem item)
+            if (string.IsNullOrWhiteSpace(uniqueData))
+                uniqueData = null;
+
+            if (Bindings.TryGetValue(itemId, out var items) == true)
             {
+                var index = items.FindIndex(i => i.UniqueData == uniqueData);
+
+                if (index < 0 || items is null)
+                    return 0;
+
+                var item = items[index];
                 var toRemove = Math.Min(item.Count, count);
+
                 item.Count -= toRemove;
 
                 if (item.Count < 1)
                 {
-                    items.Remove(item);
-                    Count--;
+                    items.RemoveAt(index);
+                }
+                else
+                {
+                    items[index] = item;
                 }
 
                 if (items.Count < 1)
@@ -151,15 +170,17 @@ namespace StarfallAfterlife.Bridge.Profiles
 
         public bool Contains(InventoryItem item)
         {
-            if (item is null)
+            if (item.IsEmpty)
                 return false;
 
-            return Bindings.ContainsKey(item.Id);
+            return Contains(item.Id, item.UniqueData);
         }
 
-        public bool Contains(int itemId)
+        public bool Contains(int itemId, string uniqueData = default)
         {
-            return Bindings.ContainsKey(itemId);
+            return
+                Bindings.TryGetValue(itemId, out var items) == true &&
+                items?.Any(i => i.UniqueData == uniqueData) == true;
         }
 
         public void CopyTo(InventoryItem[] array, int arrayIndex)
@@ -185,7 +206,7 @@ namespace StarfallAfterlife.Bridge.Profiles
             var clone = new InventoryStorage();
 
             foreach (var item in Items)
-                ((ICollection<InventoryItem>)clone).Add(item?.Clone());
+                ((ICollection<InventoryItem>)clone).Add(item.Clone());
 
             return clone;
         }

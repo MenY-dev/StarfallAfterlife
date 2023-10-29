@@ -44,14 +44,14 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                         return item;
                     }
                     
-                    return null;
+                    return InventoryItem.Empty;
 
-                }) ?? Task.FromResult<InventoryItem>(null);
+                }) ?? Task.FromResult(InventoryItem.Empty);
         }
 
         public Task<int> AddItem(InventoryItem item)
         {
-            if (item is null)
+            if (item.IsEmpty)
                 Task.FromResult(0);
 
             return Client?
@@ -108,8 +108,8 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
         InventoryItem ICharInventoryStorage.Add(InventoryItem item, int count)
         {
-            if (item is null)
-                return null;
+            if (item.IsEmpty)
+                return InventoryItem.Empty;
 
             item = item.Clone();
             item.Count = count;

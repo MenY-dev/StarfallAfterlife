@@ -8,25 +8,34 @@ using System.Threading.Tasks;
 
 namespace StarfallAfterlife.Bridge.Profiles
 {
-    public class InventoryItem : ICloneable
+    public struct InventoryItem : ICloneable
     {
         [JsonPropertyName("itemtype")]
         public InventoryItemType Type { get; set; } = InventoryItemType.Equipment;
 
         [JsonPropertyName("id")]
-        public int Id { get; set; } = 0;
+        public int Id { get; set; }
 
         [JsonPropertyName("count")]
-        public int Count { get; set; } = 0;
+        public int Count { get; set; }
 
         [JsonIgnore]
-        public int IGCPrice { get; set; } = -1;
+        public int IGCPrice { get; set; }
 
         [JsonIgnore]
-        public int BGCPrice { get; set; } = -1;
+        public int BGCPrice { get; set; }
 
         [JsonPropertyName("unique_data"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string UniqueData { get; set; } = null;
+        public string UniqueData { get; set; }
+
+        [JsonIgnore]
+        public bool IsEmpty => Id == 0;
+
+        public static InventoryItem Empty => new();
+
+        public InventoryItem()
+        {
+        }
 
         public static InventoryItem Create(SfaItem item, int count = 1, string uniqueData = null) => new()
         {
@@ -42,7 +51,7 @@ namespace StarfallAfterlife.Bridge.Profiles
 
         public InventoryItem Clone()
         {
-            return MemberwiseClone() as InventoryItem;
+            return (InventoryItem)MemberwiseClone();
         }
     }
 }

@@ -83,13 +83,13 @@ namespace StarfallAfterlife.Bridge.Server.Inventory
                 return 0;
 
             ICharInventoryStorage storage = null;
-            InventoryItem item = null;
+            InventoryItem item = InventoryItem.Empty;
 
             if (_type == EndPointType.Shop)
             {
-                item = _shop?.Items?.FirstOrDefault(i => i.Id == itemId && i.UniqueData == uniqueData)?.Clone();
+                item = _shop?.Items?.FirstOrDefault(i => i.Id == itemId && i.UniqueData == uniqueData) ?? InventoryItem.Empty;
 
-                if (item is null || item.Count < 1)
+                if (item.IsEmpty || item.Count < 1)
                     return 0;
 
                 item.Count = count;
@@ -109,9 +109,9 @@ namespace StarfallAfterlife.Bridge.Server.Inventory
                 }
             }
 
-            item = storage?[itemId, uniqueData]?.Clone();
+            item = storage?[itemId, uniqueData] ?? InventoryItem.Empty;
 
-            if (item is null || item.Count < 1)
+            if (item.IsEmpty || item.Count < 1)
                 return 0;
 
             item.Count = Math.Min(item.Count, count);
@@ -126,7 +126,7 @@ namespace StarfallAfterlife.Bridge.Server.Inventory
 
         public int Receive(InventoryItem item, int count)
         {
-            if (item is null || count < 1)
+            if (item.IsEmpty || count < 1)
                 return 0;
 
             var newItem = item.Clone();
@@ -136,13 +136,13 @@ namespace StarfallAfterlife.Bridge.Server.Inventory
 
         protected int Receive(InventoryItem item)
         {
-            if (item is null)
+            if (item.IsEmpty)
                 return 0;
 
             if (_type == EndPointType.Inventory)
             {
                 if (_character?.Inventory is ICharInventoryStorage inventory &&
-                    inventory.Add(item, item.Count) is not null)
+                    inventory.Add(item, item.Count).IsEmpty == false)
                     return item.Count;
             }
             else if (_type == EndPointType.Shop)

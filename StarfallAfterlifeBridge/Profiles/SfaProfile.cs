@@ -314,7 +314,7 @@ namespace StarfallAfterlife.Bridge.Profiles
                         SessionStartTime = DateTime.Now,
                         LastUpdate = DateTime.Now,
                         SessionStartInventory = character.Inventory?
-                            .Where(i => i is not null)
+                            .Where(i => i.IsEmpty == false)
                             .Select(i => i.Clone())
                             .ToList() ?? new(),
                         StartShipsXps = new(character.Ships?

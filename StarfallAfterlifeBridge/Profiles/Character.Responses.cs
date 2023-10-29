@@ -396,7 +396,7 @@ namespace StarfallAfterlife.Bridge.Profiles
 
         public JsonNode CreateInventoryItemResponse(InventoryItem item)
         {
-            if (item is null)
+            if (item.IsEmpty)
                 return new JsonObject();
 
 

@@ -498,9 +498,11 @@ namespace StarfallAfterlife.Bridge.Server
                                         UniqueData = (string)doc["unique_data"]
                                     };
 
-                                    if (inventory.Add(item) is InventoryItem newItem)
+                                    var result = inventory.Add(item, count);
+
+                                    if (result.IsEmpty == false)
                                     {
-                                        responce["result"] = Math.Max(0, newItem.Count);
+                                        responce["result"] = Math.Max(0, result.Count);
                                         inventoryUpdated = true;
                                     }
                                 }
@@ -676,7 +678,7 @@ namespace StarfallAfterlife.Bridge.Server
                     var newItems = session.Ships?
                         .Where(s => s?.Cargo is not null)
                         .SelectMany(s => s.Cargo)
-                        .Where(i => i is not null)
+                        .Where(i => i.IsEmpty == false)
                         .ToList() ?? new();
 
                     foreach (var item in newItems)

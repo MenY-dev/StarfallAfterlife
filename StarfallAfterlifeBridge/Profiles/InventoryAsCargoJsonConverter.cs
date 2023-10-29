@@ -16,7 +16,7 @@ namespace StarfallAfterlife.Bridge.Profiles
             var doc = JsonNode.Parse(ref reader);
 
             if (doc is null)
-                return null;
+                return InventoryItem.Empty;
 
             return new InventoryItem()
             {
@@ -28,7 +28,7 @@ namespace StarfallAfterlife.Bridge.Profiles
 
         public override void Write(Utf8JsonWriter writer, InventoryItem value, JsonSerializerOptions options)
         {
-            if (value is null)
+            if (value.IsEmpty)
                 writer.WriteNullValue();
 
             writer.WriteStartObject();

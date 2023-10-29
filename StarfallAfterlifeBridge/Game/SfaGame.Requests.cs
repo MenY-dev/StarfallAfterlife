@@ -386,7 +386,7 @@ namespace StarfallAfterlife.Bridge.Game
                     else
                         newItems.Add(character.AddInventoryItem(item, 1));
 
-                    doc["inventory"] = CreateInventoryResponce(newItems.Where(i => i is not null).ToArray());
+                    doc["inventory"] = CreateInventoryResponce(newItems.Where(i => i.IsEmpty == false).ToArray());
                     doc["ships"] = CreateShipsResponce(newShips.Where(i => i is not null).ToArray());
                     doc["crafting"] = CreateCraftingResponce(character.Crafting.ToArray());
 
