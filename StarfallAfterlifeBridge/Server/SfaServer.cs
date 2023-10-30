@@ -14,6 +14,7 @@ using System.IO;
 using StarfallAfterlife.Bridge.Realms;
 using StarfallAfterlife.Bridge.Server.Characters;
 using System.Text.Json.Nodes;
+using StarfallAfterlife.Bridge.Collections;
 
 namespace StarfallAfterlife.Bridge.Server
 {
@@ -29,7 +30,7 @@ namespace StarfallAfterlife.Bridge.Server
 
         public List<SfaServerClient> Clients { get; } = new();
 
-        public SortedList<int, ServerCharacter> Characters { get; } = new();
+        public IdCollection<ServerCharacter> Characters { get; } = new() { StartId = 1 };
 
         public Stack<int> FreePlayersIds { get; } = new();
 
@@ -78,7 +79,7 @@ namespace StarfallAfterlife.Bridge.Server
                 if (clientCharacters is not null)
                     foreach (var item in clientCharacters)
                         if (item is ServerCharacter character)
-                            Characters.Remove(character.UniqueId);
+                            Characters.RemoveId(character.UniqueId);
 
                 clients.Remove(client);
                 client.Dispose();
@@ -91,28 +92,16 @@ namespace StarfallAfterlife.Bridge.Server
                 handler?.Invoke(Clients);
         }
 
-        public virtual void RegisterCharacter(ServerCharacter character)
+        public virtual int RegisterCharacter(ServerCharacter character)
         {
             lock (ClientsLockher)
             {
                 if (character is null || character.UniqueId > -1 ||
-                Characters.IndexOfKey(character.UniqueId) > 0)
-                    return;
-
-                if (FreePlayersIds.Count > 0)
-                {
-                    character.UniqueId = FreePlayersIds.Pop();
-                }
-                else
-                {
-                    if (Characters.Count > 0)
-                        character.UniqueId = Characters.GetKeyAtIndex(Characters.Count - 1) + 1;
-                    else
-                        character.UniqueId = 1;
-                }
+                    Characters.ContainsId(character.UniqueId) == true)
+                    return -1;
 
                 character.UniqueName = CreateUnicueCharacterName(character.Name);
-                Characters.Add(character.UniqueId, character);
+                return character.UniqueId = Characters.Add(character);
             }
         }
 
@@ -124,7 +113,7 @@ namespace StarfallAfterlife.Bridge.Server
             while (GetCharacter(name) != null)
             {
                 index++;
-                name = $"{baseName}({index})";
+                name = $"{baseName}_{index}";
             }
 
             return name;
@@ -133,13 +122,13 @@ namespace StarfallAfterlife.Bridge.Server
         public ServerCharacter GetCharacter(string name)
         {
             lock (ClientsLockher)
-                return Characters.Values.FirstOrDefault(c => c.Name == name);
+                return Characters.FirstOrDefault(c => c.UniqueName == name);
         }
 
         public ServerCharacter GetCharacter(int id)
         {
             lock (ClientsLockher)
-                return Characters.Values.FirstOrDefault(c => c.UniqueId == id);
+                return Characters[id];
         }
 
         public ServerCharacter GetCharacter(DiscoveryFleet fleet)
@@ -148,7 +137,7 @@ namespace StarfallAfterlife.Bridge.Server
                 return null;
 
             lock (ClientsLockher)
-                return Characters.Values.FirstOrDefault(c => c.Fleet == fleet);
+                return Characters.FirstOrDefault(c => c.Fleet == fleet);
         }
 
 

@@ -68,7 +68,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         protected virtual void CharacterDataRequested(object sender, CharacterDataRequestEventArgs e)
         {
-            if (Server.Characters.TryGetValue(e.CharacterId, out var character) == true)
+            if (Server?.GetCharacter(e.CharacterId) is ServerCharacter character)
             {
                 if (e.GameMode == "battlegrounds")
                 {
