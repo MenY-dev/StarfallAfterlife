@@ -24,13 +24,13 @@ namespace StarfallAfterlife.Bridge.Profiles
         public int HasPremium { get; set; } = 0;
 
         [JsonPropertyName("xp_boost")]
-        public int XpBoost { get; set; } = 1;
+        public int XpBoost { get; set; } = 0;
 
         [JsonPropertyName("igc_boost")]
-        public int IgcBoost { get; set; } = 1;
+        public int IgcBoost { get; set; } = 0;
 
         [JsonPropertyName("craft_boost")]
-        public int CraftBoost { get; set; } = 1;
+        public int CraftBoost { get; set; } = 0;
 
         [JsonPropertyName("premium_minutes_left")]
         public int PremiumMinutesLeft { get; set; } = 0;
@@ -48,7 +48,7 @@ namespace StarfallAfterlife.Bridge.Profiles
         public int IGC { get; set; } = 10000;
 
         [JsonPropertyName("currentdetachment")]
-        public int CurrentDetachment { get; set; } = 1820250578;
+        public int CurrentDetachment { get; set; } = 1732028966;
 
         [JsonPropertyName("rank")]
         public int Rank { get; set; } = 0;
@@ -75,7 +75,7 @@ namespace StarfallAfterlife.Bridge.Profiles
         public string SelfService { get; set; } = "";
 
         [JsonPropertyName("char_for_tutorial")]
-        public int CharForTutorial { get; set; } = 1;
+        public int CharForTutorial { get; set; } = 0;
 
         [JsonPropertyName("production_points")]
         public int ProductionPoints { get; set; } = 3000;
