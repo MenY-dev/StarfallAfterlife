@@ -2,13 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace StarfallAfterlife.Bridge.Profiles
 {
-    public class ShipConstructionInfo : ICloneable
+    public class ShipConstructionInfo : ICloneable, ICharInventoryStorage
     {
 
         [JsonPropertyName("elid")]
@@ -61,6 +62,8 @@ namespace StarfallAfterlife.Bridge.Profiles
 
         [JsonPropertyName("cargo_list")]
         public InventoryStorage Cargo { get; set; } = new();
+
+        InventoryItem ICharInventoryStorage.this[int itemId, string uniqueData] => (Cargo ??= new())[itemId, uniqueData];
 
         object ICloneable.Clone() => Clone();
 
@@ -144,6 +147,26 @@ namespace StarfallAfterlife.Bridge.Profiles
             }
 
             return totalCost;
+        }
+
+        int ICharInventoryStorage.Add(InventoryItem item, int count)
+        {
+
+            if ((Cargo ??= new()) is InventoryStorage cargo &&
+                SfaDatabase.Instance is SfaDatabase database &&
+                database.GetItem(item.Id) is SfaItem itemInfo)
+            {
+                var freeSpace = CargoHoldSize - database.CalculateUsedCargoSpace(cargo);
+                var receivedCargo = itemInfo.Cargo > 0 ? Math.Min(count, freeSpace / itemInfo.Cargo) : count;
+                return cargo.Add(item, receivedCargo);
+            }
+
+            return 0;
+        }
+
+        int ICharInventoryStorage.Remove(int itemId, int count, string uniqueData)
+        {
+            return (Cargo ??= new()).Remove(itemId, count, uniqueData);
         }
     }
 }

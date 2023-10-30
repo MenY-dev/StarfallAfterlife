@@ -30,7 +30,8 @@ namespace StarfallAfterlife.Bridge.Profiles
             if (Inventory is null)
                 Inventory = new();
 
-            return Inventory.Add(item, count, uniqueData);
+            Inventory.Add(item, count, uniqueData);
+            return Inventory[item, uniqueData];
         }
 
         public InventoryItem AddInventoryItem(InventoryItem item, int count)
@@ -38,7 +39,8 @@ namespace StarfallAfterlife.Bridge.Profiles
             if (Inventory is null)
                 Inventory = new();
 
-            return Inventory.Add(item, count);
+            Inventory.Add(item, count);
+            return Inventory[item];
         }
 
         public int DeleteInventoryItem(SfaItem item, int count = 1, string uniqueData = null)

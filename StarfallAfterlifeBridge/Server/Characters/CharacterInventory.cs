@@ -106,16 +106,12 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                 }) ?? Task.FromResult(0);
         }
 
-        InventoryItem ICharInventoryStorage.Add(InventoryItem item, int count)
+        int ICharInventoryStorage.Add(InventoryItem item, int count)
         {
-            if (item.IsEmpty)
-                return InventoryItem.Empty;
+            if (item.IsEmpty || count < 1)
+                return 0;
 
-            item = item.Clone();
-            item.Count = count;
-            item.Count = AddItem(item).Result;
-
-            return item;
+            return AddItem(item).Result;
         }
 
         int ICharInventoryStorage.Remove(int itemId, int count, string uniqueData)

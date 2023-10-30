@@ -500,9 +500,9 @@ namespace StarfallAfterlife.Bridge.Server
 
                                     var result = inventory.Add(item, count);
 
-                                    if (result.IsEmpty == false)
+                                    if (result > 0)
                                     {
-                                        responce["result"] = Math.Max(0, result.Count);
+                                        responce["result"] = Math.Max(0, result);
                                         inventoryUpdated = true;
                                     }
                                 }

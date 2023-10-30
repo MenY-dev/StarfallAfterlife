@@ -811,7 +811,9 @@ namespace StarfallAfterlife.Bridge.Server
                         else if (srcObjectId == objectId)
                         {
                             var src = CargoTransactionEndPoint.CreateForCharacterStoc(character, srcStockName);
-                            var dst = CargoTransactionEndPoint.CreateForCharacterStoc(character, stockName);
+                            var dst = srcStockName == "inventory" ?
+                                CargoTransactionEndPoint.CreateForCharacterFleet(character, stockName) :
+                                CargoTransactionEndPoint.CreateForCharacterStoc(character, stockName);
 
                             foreach (var item in items)
                             {

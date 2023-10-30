@@ -141,9 +141,8 @@ namespace StarfallAfterlife.Bridge.Server.Inventory
 
             if (_type == EndPointType.Inventory)
             {
-                if (_character?.Inventory is ICharInventoryStorage inventory &&
-                    inventory.Add(item, item.Count).IsEmpty == false)
-                    return item.Count;
+                if (_character?.Inventory is ICharInventoryStorage inventory)
+                    return inventory.Add(item, item.Count);
             }
             else if (_type == EndPointType.Shop)
             {
@@ -152,75 +151,37 @@ namespace StarfallAfterlife.Bridge.Server.Inventory
             else if (_type == EndPointType.ShipCargo)
             {
                 if (_character is not null &&
-                    _character.GetShipByStockName(StockName) is ShipConstructionInfo ship &&
-                    ship.Cargo is InventoryStorage cargo &&
-                    _character?.DiscoveryClient?.Server?.Realm?.Database is SfaDatabase database &&
-                    database.GetItem(item.Id) is SfaItem itemInfo)
+                    _character.GetShipByStockName(StockName) is ICharInventoryStorage cargo)
                 {
-                    var usedCargo = database.CalculateUsedCargoSpace(cargo);
-                    var freeSpace = ship.CargoHoldSize - usedCargo;
-
-                    if (itemInfo.Cargo > 0)
-                    {
-                        var receivedCargo = Math.Min(item.Count, freeSpace / itemInfo.Cargo);
-                        cargo.Add(item, receivedCargo);
-                        return receivedCargo;
-                    }
-                    else
-                    {
-                        cargo.Add(item, item.Count);
-                        return item.Count;
-                    }
+                    return cargo.Add(item, item.Count);
                 }
             }
             else if (_type == EndPointType.FleetCargo)
             {
                 if (_character is not null &&
-                    _character.Ships is List<ShipConstructionInfo> ships &&
+                    _character.Ships?.ToList() is List<ShipConstructionInfo> ships &&
                     _character?.DiscoveryClient?.Server?.Realm?.Database is SfaDatabase database &&
                     database.GetItem(item.Id) is SfaItem itemInfo)
                 {
                     if (_character.GetShipByStockName(StockName) is ShipConstructionInfo targetShip)
                     {
-                        ships = new(ships);
                         ships.Remove(targetShip);
                         ships.Insert(0, targetShip);
                     }
 
-                    var cargoCount = item.Count;
                     var totalReceivedCargo = 0;
 
                     foreach (var ship in ships)
                     {
-                        if (ship.Cargo is InventoryStorage storage)
-                        {
-                            var usedCargo = database.CalculateUsedCargoSpace(storage);
-                            var freeSpace = ship.CargoHoldSize - usedCargo;
+                        var storage = ship as ICharInventoryStorage;
 
-                            if (freeSpace < itemInfo.Cargo)
-                                continue;
-
-                            if (itemInfo.Cargo > 0)
-                            {
-                                var receivedCargo = Math.Min(cargoCount, freeSpace / itemInfo.Cargo);
-                                storage.Add(item, receivedCargo);
-                                cargoCount -= receivedCargo;
-                                totalReceivedCargo += receivedCargo;
-                            }
-                            else
-                            {
-                                storage.Add(itemInfo, cargoCount);
-                                totalReceivedCargo = cargoCount;
-                                cargoCount = 0;
-                            }
-
-                            if (cargoCount < 1)
-                                break;
-                        }
-                        else
-                        {
+                        if (storage is null)
                             continue;
-                        }
+
+                        totalReceivedCargo += storage.Add(item, item.Count);
+
+                        if (totalReceivedCargo >= item.Count)
+                            break;
                     }
 
                     return totalReceivedCargo;

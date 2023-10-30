@@ -13,6 +13,8 @@ namespace StarfallAfterlife.Bridge.Profiles
 {
     public class InventoryStorage : ICollection<InventoryItem>, ICharInventoryStorage, ICloneable
     {
+        public InventoryItem this[InventoryItem item] => this[item.Id, item.UniqueData];
+
         public InventoryItem this[SfaItem item, string uniqueData = null]
         {
             get
@@ -57,14 +59,18 @@ namespace StarfallAfterlife.Bridge.Profiles
             Add(item.Id, item.Type, item.Count, item.IGCPrice, item.BGCPrice, item.UniqueData);
         }
 
-        public InventoryItem Add(SfaItem item, int count = 1, string uniqueData = default) =>
-            item is null ? InventoryItem.Empty : Add(item.Id, item.ItemType, count, item.IGC, item.BGC, uniqueData);
+        public int Add(SfaItem item, int count = 1, string uniqueData = default) =>
+            item is null ? 0 : Add(item.Id, item.ItemType, count, item.IGC, item.BGC, uniqueData);
 
-        public InventoryItem Add(InventoryItem item, int count = 1) =>
-            item.IsEmpty ? InventoryItem.Empty : Add(item.Id, item.Type, count, item.IGCPrice, item.BGCPrice, item.UniqueData);
+        public int Add(InventoryItem item, int count = 1) =>
+            item.IsEmpty ? 0 : Add(item.Id, item.Type, count, item.IGCPrice, item.BGCPrice, item.UniqueData);
 
-        protected InventoryItem Add(int itemId, InventoryItemType itemType, int count, int igc = 0, int bgc = 0, string uniqueData = default)
+        protected int Add(int itemId, InventoryItemType itemType, int count, int igc = 0, int bgc = 0, string uniqueData = default)
         {
+            if (itemId == 0)
+                return 0;
+
+            count = Math.Max(0, count);
             List<InventoryItem> variants = null;
             InventoryItem item = InventoryItem.Empty;
 
@@ -78,7 +84,7 @@ namespace StarfallAfterlife.Bridge.Profiles
 
             if (index > -1 && (item = variants[index]).IsEmpty == false)
             {
-                item.Count += Math.Max(0, count);
+                item.Count += count;
 
                 if (igc > 0)
                     item.IGCPrice = igc;
@@ -94,7 +100,7 @@ namespace StarfallAfterlife.Bridge.Profiles
                 {
                     Id = itemId,
                     Type = itemType,
-                    Count = Math.Max(0, count),
+                    Count = count,
                     IGCPrice = igc,
                     BGCPrice = bgc,
                     UniqueData = uniqueData
@@ -104,7 +110,7 @@ namespace StarfallAfterlife.Bridge.Profiles
                 UpdateCount();
             }
 
-            return item;
+            return count;
         }
 
         bool ICollection<InventoryItem>.Remove(InventoryItem item)
