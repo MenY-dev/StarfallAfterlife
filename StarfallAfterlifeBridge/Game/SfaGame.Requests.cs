@@ -124,7 +124,9 @@ namespace StarfallAfterlife.Bridge.Game
                 
                 int newProductionPoints = 0;
 
-                if (eqForDisassemble?["eqlist"] is JsonArray eqlist)
+                if (eqForDisassemble?["eqlist"] is JsonArray eqlist &&
+                    p.GameProfile.CurrentCharacter is Character character &&
+                    p.Database is SfaDatabase database)
                 {
                     var rnd = new Random();
 
@@ -133,8 +135,6 @@ namespace StarfallAfterlife.Bridge.Game
                         if ((int?)eq["entity"] is int entity &&
                             (int?)eq["count"] is int count &&
                             count > 0 &&
-                            p.GameProfile.CurrentCharacter is Character character &&
-                            p.Database is SfaDatabase database &&
                             database.GetItem(entity) is SfaItem disassembleItem)
                         {
                             character.DeleteInventoryItem(disassembleItem, count);
@@ -208,41 +208,44 @@ namespace StarfallAfterlife.Bridge.Game
                                         }
                                     }
                                 }
-
-                                AddProductionPoints(newProductionPoints);
-                                Profile.SaveGameProfile();
-                                SfaClient.SyncCharacterNewResearch(character, newOpenResearch.ToList());
                             }
                         }
                     }
+
+                    AddProductionPoints(newProductionPoints, false);
+                    Profile.SaveGameProfile();
+                    SfaClient.SyncCharacterNewResearch(character, newOpenResearch.ToList());
                 }
 
-                JsonArray receivedItems = new JsonArray();
-                JsonArray projectResearch = new JsonArray();
-
-                foreach (var item in newItems)
+                if (newItems.Count > 0 || newResearch.Count > 0)
                 {
-                    receivedItems.Add(new JsonObject
-                    {
-                        ["id"] = SValue.Create(item.Key),
-                        ["count"] = SValue.Create(item.Value),
-                    });
-                }
+                    JsonArray receivedItems = new JsonArray();
+                    JsonArray projectResearch = new JsonArray();
 
-                foreach (var item in newResearch)
-                {
-                    projectResearch.Add(new JsonObject
+                    foreach (var item in newItems)
                     {
-                        ["id"] = SValue.Create(item.id),
-                        ["previous_xp"] = SValue.Create(item.laxtXp),
-                        ["current_xp"] = SValue.Create(item.newXp),
-                        ["required_project_to_open_xp"] = SValue.Create(item.needXp),
-                        ["is_opened"] = SValue.Create(item.isOpened),
-                    });
-                }
+                        receivedItems.Add(new JsonObject
+                        {
+                            ["id"] = SValue.Create(item.Key),
+                            ["count"] = SValue.Create(item.Value),
+                        });
+                    }
 
-                doc["received_items"] = receivedItems;
-                doc["project_research"] = projectResearch;
+                    foreach (var item in newResearch)
+                    {
+                        projectResearch.Add(new JsonObject
+                        {
+                            ["id"] = SValue.Create(item.id),
+                            ["previous_xp"] = SValue.Create(item.laxtXp),
+                            ["current_xp"] = SValue.Create(item.newXp),
+                            ["required_project_to_open_xp"] = SValue.Create(item.needXp),
+                            ["is_opened"] = SValue.Create(item.isOpened),
+                        });
+                    }
+
+                    doc["received_items"] = receivedItems;
+                    doc["project_research"] = projectResearch;
+                }
             });
             
             return doc;
