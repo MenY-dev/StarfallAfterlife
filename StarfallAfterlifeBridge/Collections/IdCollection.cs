@@ -46,7 +46,7 @@ namespace StarfallAfterlife.Bridge.Collections
             if (_freeIds.Count > 0)
                 id = _freeIds.Pop();
             else if (_innerList.Count > 0)
-                id = _innerList.LastOrDefault().Key;
+                id = _innerList.LastOrDefault().Key + 1;
 
             _innerList.Add(id, item);
             return id;
