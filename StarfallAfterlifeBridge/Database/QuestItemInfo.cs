@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StarfallAfterlife.Bridge.Profiles;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,5 +18,12 @@ namespace StarfallAfterlife.Bridge.Database
 
         [JsonInclude, JsonPropertyName("count")]
         public int Count;
+
+        public InventoryItem ToInventoryItem() => new()
+        {
+            Id = Id,
+            Type = (InventoryItemType)Type,
+            Count = Count
+        };
     }
 }

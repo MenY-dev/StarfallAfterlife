@@ -247,6 +247,23 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                 DiscoveryClient?.SendQuestCompleteData(quest);
                 DiscoveryClient?.SyncQuestCompleted(questId);
                 Events?.Broadcast<ICharacterListener>(l => l.OnQuestCompleted(this, quest));
+
+                if (quest.Info?.Reward is QuestReward reward)
+                {
+                    AddCharacterCurrencies(
+                        igc: reward.IGC > 0 ? reward.IGC : null,
+                        xp: reward.Xp > 0 ? reward.Xp : null);
+
+                    if (reward.Items is not null &&
+                        (Database ?? SfaDatabase.Instance) is SfaDatabase database)
+                    {
+                        foreach (var item in reward.Items)
+                        {
+                            if (database.GetItem(item.Id) is SfaItem itemInfo)
+                                Inventory.AddItem(item.ToInventoryItem());
+                        }
+                    }
+                }
             }
         }
 
