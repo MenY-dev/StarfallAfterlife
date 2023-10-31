@@ -335,7 +335,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             var vision = (GetCurrentVision() + target.AgroVision);
             var distance = Hex.GetDistanceTo(target.Hex);
 
-            return distance <= vision;
+            return distance < vision;
         }
 
         public virtual bool CanAttack(DiscoveryFleet target)
