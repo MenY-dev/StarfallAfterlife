@@ -330,7 +330,7 @@ namespace StarfallAfterlife.Bridge.Generators
             if (info.Conditions.Count > 0 && quest.Conditions.Count < 1)
                 return null;
 
-            quest.Reward = info.Rewards.FirstOrDefault();
+            quest.Reward = info.Rewards.FirstOrDefault().Combine(GenerateRewardForTaskBoardQuest(quest));
 
             return quest;
         }

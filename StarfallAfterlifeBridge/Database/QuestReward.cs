@@ -52,5 +52,37 @@ namespace StarfallAfterlife.Bridge.Database
             c.Items = Items?.ToList() ?? new();
             return c;
         }
+
+        public QuestReward Combine(QuestReward reward)
+        {
+            var newItems = reward.Items?.ToList() ?? new();
+
+            if (Items is List<QuestItemInfo> items)
+            {
+                foreach (var item in items)
+                {
+                    var index = newItems.FindIndex(m => m.Id == item.Id && m.Type == item.Type);
+
+                    if (index < 0)
+                    {
+                        newItems.Add(item);
+                    }
+                    else
+                    {
+                        var newItem = newItems[index];
+                        newItem.Count += item.Count;
+                        newItems[index] = newItem;
+                    }
+                }
+            }
+
+            return new QuestReward
+            {
+                IGC = IGC + reward.IGC,
+                Xp = Xp + reward.Xp,
+                HouseCurrency = HouseCurrency + reward.HouseCurrency,
+                Items = newItems,
+            };
+        }
     }
 }

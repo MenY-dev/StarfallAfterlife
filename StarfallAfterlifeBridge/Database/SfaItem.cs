@@ -136,10 +136,19 @@ namespace StarfallAfterlife.Bridge.Database
                     if ((string)item is string tag)
                         Tags.Add(tag);
 
-            IsImproved = Tags.Contains("Item.Quality.Improved", StringComparer.InvariantCultureIgnoreCase);
-            IsDefective = Tags.Contains("Item.Quality.Broken", StringComparer.InvariantCultureIgnoreCase);
-            IsRareShopItem = Tags.Contains("Item.RareShopItem", StringComparer.InvariantCultureIgnoreCase);
-            IsUniqueReward = Tags.Contains("Item.Role.UniqueReward", StringComparer.InvariantCultureIgnoreCase);
+            if (Tags.Count > 0)
+            {
+                IsImproved = Tags.Contains("Item.Quality.Improved", StringComparer.InvariantCultureIgnoreCase);
+                IsDefective = Tags.Contains("Item.Quality.Broken", StringComparer.InvariantCultureIgnoreCase);
+                IsRareShopItem = Tags.Contains("Item.RareShopItem", StringComparer.InvariantCultureIgnoreCase);
+                IsUniqueReward = Tags.Contains("Item.Role.UniqueReward", StringComparer.InvariantCultureIgnoreCase);
+            }
+            else if (Name?.Split('_').ElementAtOrDefault(1) is string quality)
+            {
+
+                IsImproved = quality.StartsWith("Improved", StringComparison.InvariantCultureIgnoreCase);
+                IsDefective = quality.StartsWith("Defective", StringComparison.InvariantCultureIgnoreCase);
+            }
         }
     }
 }
