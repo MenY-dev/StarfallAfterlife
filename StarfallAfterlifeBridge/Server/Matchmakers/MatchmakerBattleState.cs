@@ -8,9 +8,10 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 {
     public enum MatchmakerBattleState
     {
-        PendingPlayers = 0,
-        PendingMatch = 1,
-        Started = 2,
-        Finished = 3
+        Created = 0,
+        PendingPlayers = 1,
+        PendingMatch = 2,
+        Started = 3,
+        Finished = 4
     }
 }

@@ -20,14 +20,12 @@ namespace StarfallAfterlife.Bridge.Server
             SfaDebug.Print($"Battle Started! (Hex = {battle.Hex})");
         });
 
-        void IBattleListener.OnBattleFleetAdded(StarSystemBattle battle, BattleMember newMember) => Invoke(() =>
+        void IBattleListener.OnBattleFleetAdded(StarSystemBattle battle, BattleMember newMember) => Galaxy.BeginPreUpdateAction(g =>
         {
             Matchmaker?.DiscoveryGameMode?.GetBattle(battle)?.AddToBattle(newMember);
 
             if (newMember.Fleet is UserFleet fleet)
             {
-                var attacker = battle.Members.FirstOrDefault(m => m?.Role == BattleRole.Attack)?.Fleet;
-
                 GetCharacter(fleet)?.DiscoveryClient?.SendFleetAttacked(
                    battle.AttackerId,
                    battle.AttackerTargetType,

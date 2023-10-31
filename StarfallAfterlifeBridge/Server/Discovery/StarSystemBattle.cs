@@ -4,6 +4,7 @@ using StarfallAfterlife.Bridge.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -78,6 +79,11 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                 AttackerId = aiFleet.Id;
                 AttackerTargetType = DiscoveryObjectType.UserFleet;
             }
+            else if (Members.FirstOrDefault(m => m.Role == BattleRole.Attack)?.Fleet is UserFleet userFleet)
+            {
+                AttackerId = userFleet.Id;
+                AttackerTargetType = IsDungeon ? DungeonInfo?.Target?.Type ?? DiscoveryObjectType.None : DiscoveryObjectType.AiFleet;
+            }
             else if (Members.FirstOrDefault(m => m.Role != BattleRole.Attack)?.Fleet is StarSystemObject target)
             {
                 AttackerId = target.Id;
@@ -119,7 +125,9 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                 Members?.FirstOrDefault(m => m.Fleet == member.Fleet) is not null)
                 return;
 
-            Members.Add(member);
+            if (Members.Contains(member) == false &&
+                Members?.FirstOrDefault(m => m.Fleet == member.Fleet) is null)
+                Members.Add(member);
 
             if (IsStarted == true && IsFinished == false && IsCancelled == false)
             {

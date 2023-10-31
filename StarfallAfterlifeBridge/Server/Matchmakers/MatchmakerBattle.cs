@@ -15,7 +15,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         public SfaServer Server => GameMode?.Server;
 
-        public MatchmakerBattleState State { get; set; } = MatchmakerBattleState.PendingPlayers;
+        public MatchmakerBattleState State { get; set; } = MatchmakerBattleState.Created;
 
         public InstanceInfo InstanceInfo { get; } = new();
 

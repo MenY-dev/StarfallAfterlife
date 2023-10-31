@@ -34,66 +34,96 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         public List<DiscoveryBattleBossInfo> Bosses { get; } = new();
 
+        public List<BattleMember> PendingMembers { get; } = new();
+
+        protected readonly object _lockher = new();
+
         public virtual void AddToBattle(BattleMember member)
         {
-            if (member?.Fleet is null)
-                return;
-
-            if (State == MatchmakerBattleState.Started)
+            lock (_lockher)
             {
-                AddToActiveBattle(member);
-                return;
-            }
-            else if (State == MatchmakerBattleState.Finished)
-            {
-                SystemBattle?.Leave(member, SystemBattle?.Hex ?? SystemHex.Zero);
-                return;
-            }
+                if (member?.Fleet is null ||
+                    PendingMembers.FirstOrDefault(m => m.Fleet == member.Fleet) is not null)
+                    return;
 
-            if (member.Fleet is UserFleet)
-            {
-                var info = CreateCharacterInfo(member);
+                if (State == MatchmakerBattleState.Started &&
+                    Characters.FirstOrDefault(c => c.Member.Fleet == member.Fleet) is DiscoveryBattleCharacterInfo character)
+                    GameMode.InstanceManager.JoinNewChar(InstanceInfo, character.InstanceCharacter);
 
-                if (info is not null)
-                    Characters.Add(info);
-            }
-            else if (member.Fleet is DiscoveryAiFleet)
-            {
-                var info = CreateMobInfo(member);
+                if (State == MatchmakerBattleState.PendingMatch)
+                {
+                    PendingMembers.Add(member);
+                    return;
+                }
+                else if (State == MatchmakerBattleState.Started)
+                {
+                    AddToActiveBattle(member);
+                    return;
+                }
+                else if (State == MatchmakerBattleState.Finished)
+                {
+                    SystemBattle?.Leave(member, SystemBattle?.Hex ?? SystemHex.Zero);
+                    return;
+                }
 
-                if (info is not null)
-                    Mobs.Add(info);
+                if (member.Fleet is UserFleet)
+                {
+                    var info = CreateCharacterInfo(member);
+
+                    if (info is not null)
+                    {
+                        Characters.Add(info);
+
+                        if (State == MatchmakerBattleState.PendingPlayers)
+                        {
+                            StartInstance();
+                        }
+                    }
+                }
+                else if (member.Fleet is DiscoveryAiFleet)
+                {
+                    var info = CreateMobInfo(member);
+
+                    if (info is not null)
+                        Mobs.Add(info);
+                }
             }
         }
 
         protected virtual void AddToActiveBattle(BattleMember member)
         {
-            if (member?.Fleet is null)
-                return;
-
-            if (member.Fleet is UserFleet)
+            lock (_lockher)
             {
-                var info = CreateCharacterInfo(member);
+                if (member?.Fleet is null)
+                    return;
 
-                if (info is not null)
+                if (member.Fleet is UserFleet)
                 {
-                    Characters.Add(info);
-                    GameMode.InstanceManager.JoinNewChar(InstanceInfo, info.InstanceCharacter);
-                }
-            }
-            else if (member.Fleet is DiscoveryAiFleet)
-            {
-                var info = CreateMobInfo(member);
+                    var info = CreateCharacterInfo(member);
 
-                if (info is not null)
-                    Mobs.Add(info);
+                    if (info is not null)
+                    {
+                        Characters.Add(info);
+                        GameMode.InstanceManager.JoinNewChar(InstanceInfo, info.InstanceCharacter);
+                    }
+                }
+                else if (member.Fleet is DiscoveryAiFleet)
+                {
+                    var info = CreateMobInfo(member);
+
+                    if (info is not null)
+                        Mobs.Add(info);
+                }
             }
         }
 
         public void Leave(DiscoveryBattleCharacterInfo character, SystemHex spawnHex)
         {
-            Characters.Remove(character);
-            Galaxy?.BeginPreUpdateAction(g => SystemBattle?.Leave(character.Member, spawnHex));
+            lock (_lockher)
+            {
+                Characters.Remove(character);
+                Galaxy?.BeginPreUpdateAction(g => SystemBattle?.Leave(character.Member, spawnHex));
+            }
         }
 
         protected virtual DiscoveryBattleCharacterInfo CreateCharacterInfo(BattleMember member)
@@ -202,28 +232,44 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
         public override void Init()
         {
             base.Init();
-            InstanceInfo.Type = InstanceType.DiscoveryBattle;
 
-            if (SystemBattle is null)
-                return;
-
-            SystemId = SystemBattle.System?.Id ?? -1;
-            Location = SystemBattle.Hex;
-
-            foreach (var member in SystemBattle.Members)
+            lock (_lockher)
             {
-                AddToBattle(member);
+                InstanceInfo.Type = InstanceType.DiscoveryBattle;
+
+                if (SystemBattle is null)
+                    return;
+
+                SystemId = SystemBattle.System?.Id ?? -1;
+                Location = SystemBattle.Hex;
+
+                foreach (var member in SystemBattle.Members)
+                {
+                    AddToBattle(member);
+                }
             }
         }
 
         public override void Start()
         {
-            State = MatchmakerBattleState.PendingMatch;
+            lock (_lockher)
+            {
+                if (Characters.Count > 0)
+                    StartInstance();
+                else
+                    State = MatchmakerBattleState.PendingPlayers;
+            }
+        }
 
-            InstanceInfo.Characters.AddRange(Characters.Select(c => c.InstanceCharacter));
-            InstanceInfo.ExtraData = CreateExtraData().ToJson().ToJsonString();
-
-            GameMode.InstanceManager.StartInstance(InstanceInfo);
+        protected virtual void StartInstance()
+        {
+            lock (_lockher)
+            {
+                State = MatchmakerBattleState.PendingMatch;
+                InstanceInfo.Characters.AddRange(Characters.Select(c => c.InstanceCharacter));
+                InstanceInfo.ExtraData = CreateExtraData().ToJson().ToJsonString();
+                GameMode.InstanceManager.StartInstance(InstanceInfo);
+            }
         }
 
         protected virtual InstanceExtraData CreateExtraData()
@@ -292,81 +338,95 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
         {
             base.InstanceStateChanged(state);
 
-            if (state == InstanceState.Started)
+            lock (_lockher)
             {
-                var info = InstanceInfo;
-                State = MatchmakerBattleState.Started;
+                if (state == InstanceState.Started)
+                {
+                    State = MatchmakerBattleState.Started;
 
-                foreach (var character in Characters)
-                    character.Client?.Invoke(c => c.SendStartBattle(
-                        "discovery",
-                        Matchmaker?.CreateBattleIpAddress(),
-                        InstanceInfo?.Port ?? -1,
-                        character.InstanceCharacter?.Auth,
-                        character.ServerCharacter?.Fleet?.System.Id ?? 0,
-                        character.ServerCharacter?.Fleet?.Id ?? -1));
-            }
-            else if (state == InstanceState.Finished)
-            {
-                State = MatchmakerBattleState.Finished;
-                SystemBattle.Finish();
+                    foreach (var member in PendingMembers)
+                        AddToActiveBattle(member);
+
+                    foreach (var character in Characters)
+                        character.Client?.Invoke(c => c.SendStartBattle(
+                            "discovery",
+                            Matchmaker?.CreateBattleIpAddress(),
+                            InstanceInfo?.Port ?? -1,
+                            character.InstanceCharacter?.Auth,
+                            character.ServerCharacter?.Fleet?.System.Id ?? 0,
+                            character.ServerCharacter?.Fleet?.Id ?? -1));
+                }
+                else if (state == InstanceState.Finished)
+                {
+                    State = MatchmakerBattleState.Finished;
+                    SystemBattle.Finish();
+                }
             }
         }
 
         public void OnFleetLeavesFromInstance(DiscoveryObjectType fleetType, int fleetId, SystemHex hex)
         {
-            if (fleetType is DiscoveryObjectType.UserFleet)
+            lock (_lockher)
             {
-                var character = Characters?.FirstOrDefault(c => c.InstanceCharacter.Id == fleetId);
-                Leave(character, (SystemBattle?.Hex ?? SystemHex.Zero) + hex);
+                if (fleetType is DiscoveryObjectType.UserFleet)
+                {
+                    var character = Characters?.FirstOrDefault(c => c.InstanceCharacter.Id == fleetId);
+                    Leave(character, (SystemBattle?.Hex ?? SystemHex.Zero) + hex);
+                }
             }
         }
 
         public ServerCharacter GetCharByShipId(int shipId)
         {
-            return Characters
-                .Select(c => c?.ServerCharacter)
-                .FirstOrDefault(c => c?.GetShipById(shipId) is not null);
+            lock ( _lockher)
+            {
+                return Characters
+                    .Select(c => c?.ServerCharacter)
+                    .FirstOrDefault(c => c?.GetShipById(shipId) is not null);
+            }
         }
 
         public virtual JsonNode GetMobData(int fleetId)
         {
-            var mob =
+            lock ( _lockher)
+            {
+                var mob =
                 Mobs?.FirstOrDefault(m => m?.FleetId == fleetId)?.Mob ??
                 Bosses?.FirstOrDefault(b => b?.FleetId == fleetId)?.Mob;
 
-            if (mob is not null)
-            {
-                var ships = new JsonArray();
-
-                foreach (var ship in mob.Ships ?? Enumerable.Empty<DiscoveryMobShipData>())
+                if (mob is not null)
                 {
-                    if (ship?.Data is null)
-                        continue;
+                    var ships = new JsonArray();
 
-                    ships.Add(new JsonObject
+                    foreach (var ship in mob.Ships ?? Enumerable.Empty<DiscoveryMobShipData>())
                     {
-                        ["id"] = SValue.Create(ship.Data.Id),
-                        ["data"] = SValue.Create(JsonHelpers.ParseNodeUnbuffered(ship.Data).ToJsonString(false)),
-                        ["service_data"] = SValue.Create(JsonHelpers.ParseNodeUnbuffered(ship.ServiceData).ToJsonString(false)),
-                    });
+                        if (ship?.Data is null)
+                            continue;
+
+                        ships.Add(new JsonObject
+                        {
+                            ["id"] = SValue.Create(ship.Data.Id),
+                            ["data"] = SValue.Create(JsonHelpers.ParseNodeUnbuffered(ship.Data).ToJsonString(false)),
+                            ["service_data"] = SValue.Create(JsonHelpers.ParseNodeUnbuffered(ship.ServiceData).ToJsonString(false)),
+                        });
+                    }
+
+                    var doc = new JsonObject
+                    {
+                        ["id"] = SValue.Create(fleetId),
+                        ["level"] = SValue.Create(mob.Level),
+                        ["faction"] = SValue.Create((byte)mob.Faction),
+                        ["internal_name"] = SValue.Create(mob.InternalName),
+                        ["battle_bt"] = SValue.Create(mob.BehaviorTreeName),
+                        ["tags"] = mob.Tags?.Select(SValue.Create).ToJsonArray(),
+                        ["ships"] = ships,
+                    };
+
+                    return doc;
                 }
 
-                var doc = new JsonObject
-                {
-                    ["id"] = SValue.Create(fleetId),
-                    ["level"] = SValue.Create(mob.Level),
-                    ["faction"] = SValue.Create((byte)mob.Faction),
-                    ["internal_name"] = SValue.Create(mob.InternalName),
-                    ["battle_bt"] = SValue.Create(mob.BehaviorTreeName),
-                    ["tags"] = mob.Tags?.Select(SValue.Create).ToJsonArray(),
-                    ["ships"] = ships,
-                };
-
-                return doc;
+                return null;
             }
-
-            return null;
         }
 
         public virtual void OnInstanceAuthReady(int characterId, string auth)
@@ -387,35 +447,38 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         public void OnMobDestroyed(string data)
         {
-            if (JsonNode.Parse(data) is JsonObject doc &&
+            lock (_lockher)
+            {
+                if (JsonNode.Parse(data) is JsonObject doc &&
                 (DiscoveryObjectType?)(byte?)doc["killer_type"] == DiscoveryObjectType.UserFleet &&
                 (int?)doc["killer_id"] is int fleetId &&
                 (int?)doc["mob_id"] is int mobFleetId &&
                 Server.GetCharacter(fleetId) is ServerCharacter character)
-            {
-                var battleMob = Mobs?.FirstOrDefault(m => m?.FleetId == mobFleetId);
+                {
+                    var battleMob = Mobs?.FirstOrDefault(m => m?.FleetId == mobFleetId);
 
-                if (battleMob is not null)
-                    SystemBattle.Leave(battleMob.Member, Location, true);
+                    if (battleMob is not null)
+                        SystemBattle.Leave(battleMob.Member, Location, true);
 
-                var mobInfo = battleMob?.Mob ?? Bosses?.FirstOrDefault(b => b?.FleetId == mobFleetId)?.Mob;
-                var killInfo = new MobKillInfo();
+                    var mobInfo = battleMob?.Mob ?? Bosses?.FirstOrDefault(b => b?.FleetId == mobFleetId)?.Mob;
+                    var killInfo = new MobKillInfo();
 
-                killInfo.SystemId = SystemId;
-                killInfo.MobId = mobInfo?.Id ?? -1;
-                killInfo.FleetId = mobFleetId;
-                killInfo.ObjectId = (int?)doc["obj_id"] ?? -1;
-                killInfo.ObjectType = (DiscoveryObjectType?)(byte?)doc["type"] ?? DiscoveryObjectType.None;
-                killInfo.Faction = (Faction?)(byte?)doc["faction"] ?? Faction.None;
-                killInfo.FactionGroup = (int?)doc["faction_group"] ?? -1;
-                killInfo.ShipClass = (int?)doc["ship_class"] ?? 0;
-                killInfo.Level = (int?)doc["level"] ?? 0;
-                killInfo.RepEarned = (int?)doc["rep_earned"] ?? 0;
-                killInfo.IsInAttackEvent = (int?)doc["is_in_attack_event"] ?? 0;
-                killInfo.Tags.AddRange(doc["tags"]?.DeserializeUnbuffered<List<string>>() ?? new());
+                    killInfo.SystemId = SystemId;
+                    killInfo.MobId = mobInfo?.Id ?? -1;
+                    killInfo.FleetId = mobFleetId;
+                    killInfo.ObjectId = (int?)doc["obj_id"] ?? -1;
+                    killInfo.ObjectType = (DiscoveryObjectType?)(byte?)doc["type"] ?? DiscoveryObjectType.None;
+                    killInfo.Faction = (Faction?)(byte?)doc["faction"] ?? Faction.None;
+                    killInfo.FactionGroup = (int?)doc["faction_group"] ?? -1;
+                    killInfo.ShipClass = (int?)doc["ship_class"] ?? 0;
+                    killInfo.Level = (int?)doc["level"] ?? 0;
+                    killInfo.RepEarned = (int?)doc["rep_earned"] ?? 0;
+                    killInfo.IsInAttackEvent = (int?)doc["is_in_attack_event"] ?? 0;
+                    killInfo.Tags.AddRange(doc["tags"]?.DeserializeUnbuffered<List<string>>() ?? new());
 
-                character.Events?.Broadcast<IBattleInstanceListener>(l =>
-                    l.OnMobDestroyed(fleetId, killInfo));
+                    character.Events?.Broadcast<IBattleInstanceListener>(l =>
+                        l.OnMobDestroyed(fleetId, killInfo));
+                }
             }
         }
 

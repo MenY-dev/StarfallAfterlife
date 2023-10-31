@@ -16,17 +16,20 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
     {
         public override void Start()
         {
-            InstanceInfo.Type = InstanceType.DiscoveryDungeon;
-            InstanceInfo.DungeonFaction = SystemBattle?.DungeonInfo?.Target?.Faction ?? Faction.None;
-            InstanceInfo.DungeonType = SystemBattle?.DungeonInfo?.Target.Type switch
+            lock (_lockher)
             {
-                DiscoveryObjectType.PiratesOutpost => DungeonType.Outpost,
-                DiscoveryObjectType.PiratesStation => DungeonType.Station,
-                _ => DungeonType.None,
-            };
+                InstanceInfo.Type = InstanceType.DiscoveryDungeon;
+                InstanceInfo.DungeonFaction = SystemBattle?.DungeonInfo?.Target?.Faction ?? Faction.None;
+                InstanceInfo.DungeonType = SystemBattle?.DungeonInfo?.Target.Type switch
+                {
+                    DiscoveryObjectType.PiratesOutpost => DungeonType.Outpost,
+                    DiscoveryObjectType.PiratesStation => DungeonType.Station,
+                    _ => DungeonType.None,
+                };
 
-            CreateBosses();
-            base.Start();
+                CreateBosses();
+                base.Start();
+            }
         }
 
         protected virtual void CreateBosses()
