@@ -437,5 +437,16 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 character.AddNewStats(stats);
             }
         }
+
+        internal void OnPiratesAssaultStatusUpdated(string data)
+        {
+            if (JsonHelpers.ParseNodeUnbuffered(data) is JsonNode doc &&
+                (int?)doc["destroyed"] == 1 &&
+                SystemBattle.IsDungeon &&
+                SystemBattle.DungeonInfo?.Target is StarSystemObject obj &&
+                (DiscoveryObjectType?)(byte?)doc["obj_type"] == obj.Type &&
+                (int?)doc["obj_id"] == obj.Id )
+                SystemBattle.SetDungeonCompleted();
+        }
     }
 }

@@ -5,6 +5,7 @@ using StarfallAfterlife.Bridge.Server.Galaxy;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -51,6 +52,8 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
         public SystemHexMap ObstacleMap { get; protected set; } = new();
 
         public List<StarSystemBattle> ActiveBattles { get; } = new();
+
+        protected Dictionary<Action, DateTime> DefferedActions { get; } = new();
 
         public SfaDatabase Database { get; set; }
 
@@ -156,6 +159,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
         public virtual void Update()
         {
             UpdateFleets();
+            UpdateDefferedActions();
         }
 
         protected virtual void UpdateFleets()
@@ -164,7 +168,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                 fleet?.Update();
         }
 
-        protected virtual void UpdateNavigationMap()
+        public virtual void UpdateNavigationMap()
         {
             var starSize = Info?.Size / 150f ?? 1;
             List<Vector2> centers = new();
@@ -239,6 +243,35 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             Fleets.Remove(fleet);
             fleet.ParentObject = null;
             Broadcast<IStarSystemObjectListener>(l => l.OnObjectDestroed(fleet));
+        }
+
+        public void AddDeferredAction(Action action, TimeSpan waitingTime) =>
+            AddDeferredAction(action, DateTime.Now + waitingTime);
+
+        public void AddDeferredAction(Action action, DateTime invokeTime)
+        {
+            if (action is null)
+                return;
+
+            DefferedActions[action] = invokeTime;
+        }
+
+        public void UpdateDefferedActions()
+        {
+            var now = DateTime.Now;
+            var toRemove = new List<Action>();
+
+            foreach (var action in DefferedActions)
+            {
+                if (action.Value <= now)
+                {
+                    toRemove.Add(action.Key);
+                    action.Key.Invoke();
+                }
+            }
+
+            foreach (var action in toRemove)
+                DefferedActions.Remove(action);
         }
 
         public virtual SystemHex GetNearestSafeHex(DiscoveryFleet fleet, SystemHex targetHex, bool ignoreTargetHex = true)

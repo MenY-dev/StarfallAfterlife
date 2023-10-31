@@ -150,7 +150,6 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                 }
                 else
                 {
-
                     if (fleet is UserFleet)
                         fleet.AddEffect(new(){Duration = 10, Logic = GameplayEffectType.Immortal});
 
@@ -158,6 +157,14 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                     fleet.System?.Broadcast<IStarSystemObjectListener>(l => l.OnObjectSpawned(member.Fleet));
                 }
             }
+        }
+
+
+        public void SetDungeonCompleted()
+        {
+            if (IsDungeon == true &&
+                DungeonInfo.Target is StarSystemDungeon dungeon)
+                dungeon.SetDungeonVisible(false);
         }
 
         public virtual BattleMember GetMember(DiscoveryFleet fleet) =>

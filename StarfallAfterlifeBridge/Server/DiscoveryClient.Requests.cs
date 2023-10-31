@@ -266,7 +266,7 @@ namespace StarfallAfterlife.Bridge.Server
             {
                 if (CurrentCharacter?.Fleet is DiscoveryFleet fleet)
                 {
-                    if (fleet.System is StarSystem system && system.Id == systemId)
+                    if (g.GetActiveSystem(systemId, true) is StarSystem system)
                     {
                         foreach (var item in system.Fleets)
                         {
@@ -279,86 +279,14 @@ namespace StarfallAfterlife.Bridge.Server
                             SyncFleetData(item);
                         }
 
-                        if (system.Info.Motherships is List<GalaxyMapMothership> motherships)
+                        foreach (var obj in system.GetAllObjects(false))
                         {
-                            foreach (var item in motherships)
-                            {
-                                RequestDiscoveryObjectSync(systemId, DiscoveryObjectType.Mothership, item.Id);
-                                SyncMothership(systemId, item.Id);
-                            }
-                        }
+                            if (obj is StarSystemDungeon dungeon &&
+                                dungeon.IsDungeonVisible == false)
+                                continue;
 
-                        if (system.PiratesOutposts is List<PiratesOutpost> piratesOutposts)
-                        {
-                            foreach (var item in piratesOutposts)
-                            {
-                                RequestDiscoveryObjectSync(systemId, DiscoveryObjectType.PiratesOutpost, item.Id);
-                                SyncPiratesOutpost(systemId, item.Id);
-                            }
-                        }
-
-                        if (system.PiratesStations is List<PiratesStation> piratesStations)
-                        {
-                            foreach (var item in piratesStations)
-                            {
-                                RequestDiscoveryObjectSync(systemId, DiscoveryObjectType.PiratesStation, item.Id);
-                                SyncPiratesStation(systemId, item.Id);
-                            }
-                        }
-
-
-                        if (system.MinerMotherships is List<MinerMothership> minerMotherships)
-                        {
-                            foreach (var item in minerMotherships)
-                            {
-                                RequestDiscoveryObjectSync(systemId, DiscoveryObjectType.MinerMothership, item.Id);
-                                SyncMinerMothership(systemId, item.Id);
-                            }
-                        }
-
-                        if (system.ScienceStations is List<ScienceStation> scienceStations)
-                        {
-                            foreach (var item in scienceStations)
-                            {
-                                RequestDiscoveryObjectSync(item);
-                                SyncStarSystemOnject(item);
-                            }
-                        }
-
-                        if (system.RepairStations is List<RepairStation> repairStations)
-                        {
-                            foreach (var item in repairStations)
-                            {
-                                RequestDiscoveryObjectSync(item);
-                                SyncStarSystemOnject(item);
-                            }
-                        }
-
-                        if (system.FuelStation is List<FuelStation> fuelStations)
-                        {
-                            foreach (var item in fuelStations)
-                            {
-                                RequestDiscoveryObjectSync(item);
-                                SyncStarSystemOnject(item);
-                            }
-                        }
-
-                        if (system.TradeStations is List<TradeStation> tradeStations)
-                        {
-                            foreach (var item in tradeStations)
-                            {
-                                RequestDiscoveryObjectSync(item);
-                                SyncStarSystemOnject(item);
-                            }
-                        }
-
-                        if (system.RichAsteroids is List<StarSystemRichAsteroid> richAsteroids)
-                        {
-                            foreach (var item in richAsteroids)
-                            {
-                                RequestDiscoveryObjectSync(item);
-                                SyncRichAsteroid(systemId, item.Id);
-                            }
+                            RequestDiscoveryObjectSync(obj);
+                            SyncDiscoveryObject(systemId, obj.Type, obj.Id);
                         }
                     }
                 }

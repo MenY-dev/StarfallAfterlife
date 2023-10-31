@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace StarfallAfterlife.Bridge.Server.Discovery
 {
-    public class PiratesStation : StarSystemObject
+    public class PiratesStation : PiratesMothership
     {
         public override DiscoveryObjectType Type => DiscoveryObjectType.PiratesStation;
         public int Level { get; set; } = 0;

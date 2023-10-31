@@ -184,6 +184,12 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                             battle.UpdateCharacterStats(e.Data);
                     }
                     break;
+                case "pirates_assault_status":
+                    {
+                        if (Battles.FirstOrDefault(b => b.InstanceInfo == e.Instance) is DiscoveryBattle battle)
+                            battle.OnPiratesAssaultStatusUpdated(e.Data);
+                    }
+                    break;
                 default:
                     break;
             }

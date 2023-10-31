@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace StarfallAfterlife.Bridge.Instances
 {
@@ -58,7 +59,8 @@ namespace StarfallAfterlife.Bridge.Instances
                     ; break;
 
                 case DiscoveryClientAction.UpdatePirateOutpostAssaultStatus:
-                    HandleUpdatePirateOutpostAssaultStatus(reader, objectType, objectId)
+                case DiscoveryClientAction.UpdatePirateStationAssaultStatus:
+                    HandleUpdatePirateAssaultStatus(reader, objectType, objectId)
                     ; break;
             }
         }
@@ -135,14 +137,25 @@ namespace StarfallAfterlife.Bridge.Instances
             SfaDebug.Print($"EnemyShipDestroyed ({data})", GetType().Name);
         }
 
-        private void HandleUpdatePirateOutpostAssaultStatus(SfReader reader, DiscoveryObjectType objectType, int objectId)
+        private void HandleUpdatePirateAssaultStatus(SfReader reader, DiscoveryObjectType objectType, int objectId)
         {
             var playersInBattle = reader.ReadInt32();
-            var isOutpostDestroyed = reader.ReadInt32();
-            var isInstanceFinished = reader.ReadInt32();
+            var isDestroyed = reader.ReadInt32();
+            var isFinished = reader.ReadInt32();
 
-            SfaDebug.Print($"PirateOutpostAssaultStatus (Id = {objectId}, Players = {playersInBattle}, " +
-                $"Destroyed = {isOutpostDestroyed}, Finished = {isInstanceFinished})", GetType().Name);
+            Owner.SendInstanceAction(Instance?.Auth, "pirates_assault_status", new JsonObject
+            {
+                ["obj_type"] = (int)objectType,
+                ["obj_id"] = objectId,
+                ["players_in_battle"] = playersInBattle,
+                ["destroyed"] = isDestroyed,
+                ["finished"] = isFinished,
+            }.ToJsonStringUnbuffered(false));
+
+            SfaDebug.Print($"PirateAssaultStatus (Id = {objectId}, Players = {playersInBattle}, " +
+                $"Destroyed = {isDestroyed}, Finished = {isFinished})", GetType().Name);
+
+
         }
 
         public void SendNewPlayerJoiningToInstance(InstanceCharacter character)

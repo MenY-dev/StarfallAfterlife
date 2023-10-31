@@ -371,10 +371,10 @@ namespace StarfallAfterlife.Bridge.Server
             }
         }
 
-        public virtual void SyncStarSystemOnject(StarSystemObject systemObject)
-        {
-            SendSyncMessage(systemObject);
-        }
+        public virtual void SyncFleetData(int systemId, DiscoveryObjectType fleetType, int fleetId) =>
+            SyncFleetData(Galaxy
+                .GetActiveSystem(systemId, true)
+                .GetObject(fleetId, fleetType) as DiscoveryFleet);
 
         public virtual void SyncFleetData(DiscoveryFleet fleet)
         {
@@ -487,63 +487,33 @@ namespace StarfallAfterlife.Bridge.Server
         {
             switch (objectType)
             {
-                case DiscoveryObjectType.None:
-                    break;
                 case DiscoveryObjectType.UserFleet:
+                case DiscoveryObjectType.AiFleet:
+                case DiscoveryObjectType.UserPhantom:
+                    SyncFleetData(systemId, objectType, objectId);
                     break;
                 case DiscoveryObjectType.Planet:
                     SyncPlanetInfo(systemId, objectId);
                     break;
-                case DiscoveryObjectType.Repairstation:
-                    break;
-                case DiscoveryObjectType.Fuelstation:
-                    break;
-                case DiscoveryObjectType.AiFleet:
-                    break;
                 case DiscoveryObjectType.Mothership:
                     SyncMothership(systemId, objectId);
                     break;
-                case DiscoveryObjectType.Trash:
-                    break;
-                case DiscoveryObjectType.Asteroid:
-                    break;
-                case DiscoveryObjectType.Blackmarket:
-                    break;
-                case DiscoveryObjectType.AttackEventInstance:
-                    break;
                 case DiscoveryObjectType.PiratesStation:
-                    break;
-                case DiscoveryObjectType.InstanceBattle:
+                    SyncPiratesStation(systemId, objectId);
                     break;
                 case DiscoveryObjectType.RichAsteroids:
-                    break;
-                case DiscoveryObjectType.Nebula:
-                    break;
-                case DiscoveryObjectType.UserPhantom:
-                    break;
-                case DiscoveryObjectType.WarpBeacon:
-                    break;
-                case DiscoveryObjectType.MiningStation:
-                    break;
-                case DiscoveryObjectType.MessageBeacon:
+                    SyncRichAsteroid(systemId, objectId);
                     break;
                 case DiscoveryObjectType.MinerMothership:
-                    break;
-                case DiscoveryObjectType.ScienceStation:
-                    break;
-                case DiscoveryObjectType.QuickTravelGate:
+                    SyncMinerMothership(systemId, objectId);
                     break;
                 case DiscoveryObjectType.PiratesOutpost:
-                    break;
-                case DiscoveryObjectType.SecretObject:
-                    break;
-                case DiscoveryObjectType.CustomInstance:
-                    break;
-                case DiscoveryObjectType.Tradestation:
-                    break;
-                case DiscoveryObjectType.HouseActionHolder:
+                    SyncPiratesOutpost(systemId, objectId);
                     break;
                 default:
+                    SendSyncMessage(Galaxy
+                        .GetActiveSystem(systemId, true)
+                        .GetObject(objectId, objectType));
                     break;
             }
         }
