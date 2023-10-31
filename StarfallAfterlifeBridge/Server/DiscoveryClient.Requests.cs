@@ -653,7 +653,7 @@ namespace StarfallAfterlife.Bridge.Server
                 {
                     if (locName == "fd")
                     {
-                        var cost = SfaDatabase.GetWarpingCost(Galaxy?.Map?.GetSystem(systemId)?.Level ?? 0);
+                        var cost = SfaDatabase.GetRefuelCost(Galaxy?.Map?.GetSystem(systemId)?.Level ?? 0);
                         character.AddCharacterCurrencies(igc: -cost);
 
                         Galaxy?.BeginPreUpdateAction(g =>
