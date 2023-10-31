@@ -51,6 +51,10 @@ namespace StarfallAfterlife.Bridge.Database
 
         public bool IsDefective { get; set; } = false;
 
+        public bool IsRareShopItem { get; set; } = false;
+
+        public bool IsUniqueReward { get; set; } = false;
+
         public int Width { get; set; } = 0;
 
         public int Height { get; set; } = 0;
@@ -134,6 +138,8 @@ namespace StarfallAfterlife.Bridge.Database
 
             IsImproved = Tags.Contains("Item.Quality.Improved", StringComparer.InvariantCultureIgnoreCase);
             IsDefective = Tags.Contains("Item.Quality.Broken", StringComparer.InvariantCultureIgnoreCase);
+            IsRareShopItem = Tags.Contains("Item.RareShopItem", StringComparer.InvariantCultureIgnoreCase);
+            IsUniqueReward = Tags.Contains("Item.Role.UniqueReward", StringComparer.InvariantCultureIgnoreCase);
         }
     }
 }

@@ -103,17 +103,26 @@ namespace StarfallAfterlife.Bridge.Database
 
             if (doc["discovery_items"]?.AsArray() is JsonArray discoveryItems)
             {
+                var itemsForProduction = dtb.Blueprints.Where(b =>
+                    b.Value is SfaItem item &&
+                    item.TechLvl != 0 &&
+                    item.GalaxyValue != 0 &&
+                    item.IsBoundToCharacter == false &&
+                    item.IsRareShopItem == false &&
+                    item.IsUniqueReward == false)
+                    .ToList();
+
                 foreach (var item in discoveryItems)
                 {
                     var discoveryItem = new DiscoveryItem(
                         item, JsonHelpers.ParseNodeUnbuffered((string)item["additionalparams"]));
 
-                    discoveryItem.ProductionFrequency += dtb.Blueprints
+                    discoveryItem.ProductionFrequency += itemsForProduction
                         .SelectMany(b => b.Value.Materials ?? new())
                         .Where(i => i.Id == discoveryItem.Id)
                         .Count();
 
-                    discoveryItem.DisassemblyFrequency += dtb.Blueprints
+                    discoveryItem.DisassemblyFrequency += itemsForProduction
                         .SelectMany(b => b.Value.DisassembleMaterialsDrop ?? new())
                         .Where(i => i.Id == discoveryItem.Id)
                         .Count();
