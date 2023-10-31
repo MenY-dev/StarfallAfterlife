@@ -208,6 +208,9 @@ namespace StarfallAfterlife.Bridge.Generators
 
             foreach (var system in systems)
             {
+                if (system.Id == context.Quest.ObjectSystem)
+                    continue;
+
                 var obj = system
                     .GetObjectsWithTaskBoard()
                     .ToList()
@@ -248,6 +251,9 @@ namespace StarfallAfterlife.Bridge.Generators
 
             foreach (var system in systems)
             {
+                if (system.Id == context.Quest.ObjectSystem)
+                    continue;
+
                 foreach (var obj in system.GetObjectsWithTaskBoard())
                 {
                     if (addedObjects.Any(i => obj.Id == i.Id && obj.ObjectType == i.Type) == false)
