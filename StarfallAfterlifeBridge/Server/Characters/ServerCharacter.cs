@@ -250,9 +250,11 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
                 if (quest.Info?.Reward is QuestReward reward)
                 {
+                    var xpFactor = (quest.Info?.Level ?? 0) < AccessLevel ? 0.1 : 1;
+
                     AddCharacterCurrencies(
                         igc: reward.IGC > 0 ? reward.IGC : null,
-                        xp: reward.Xp > 0 ? reward.Xp : null);
+                        xp: reward.Xp > 0 ? (int)(reward.Xp * xpFactor) : null);
 
                     if (reward.Items is not null &&
                         (Database ?? SfaDatabase.Instance) is SfaDatabase database)
