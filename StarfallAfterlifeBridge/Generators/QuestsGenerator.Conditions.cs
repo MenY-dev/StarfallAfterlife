@@ -187,11 +187,13 @@ namespace StarfallAfterlife.Bridge.Generators
 
             foreach (var item in items)
             {
-                if (addedItems.Contains(item) == false)
-                {
-                    condition["item_to_deliver"] = item;
-                    return true;
-                }
+                if (addedItems.Contains(item) == true ||
+                    (Realm?.Database?.GetItem(item) is var itemInfo &&
+                    itemInfo.DisassemblyFrequency < 2))
+                    continue;
+
+                condition["item_to_deliver"] = item;
+                return true;
             }
 
             return false;
