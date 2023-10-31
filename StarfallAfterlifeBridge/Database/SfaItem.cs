@@ -67,6 +67,9 @@ namespace StarfallAfterlife.Bridge.Database
 
         public List<string> Tags { get; } = new();
 
+        public int ProductionFrequency { get; set; } = 0;
+
+        public int DisassemblyFrequency { get; set; } = 0;
 
         public SfaItem(JsonNode doc, JsonNode info)
         {

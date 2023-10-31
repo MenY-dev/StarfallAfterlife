@@ -108,6 +108,16 @@ namespace StarfallAfterlife.Bridge.Database
                     var discoveryItem = new DiscoveryItem(
                         item, JsonHelpers.ParseNodeUnbuffered((string)item["additionalparams"]));
 
+                    discoveryItem.ProductionFrequency += dtb.Blueprints
+                        .SelectMany(b => b.Value.Materials ?? new())
+                        .Where(i => i.Id == discoveryItem.Id)
+                        .Count();
+
+                    discoveryItem.DisassemblyFrequency += dtb.Blueprints
+                        .SelectMany(b => b.Value.DisassembleMaterialsDrop ?? new())
+                        .Where(i => i.Id == discoveryItem.Id)
+                        .Count();
+
                     dtb.DiscoveryItems.Add(discoveryItem.Id, discoveryItem);
 
                     for (int i = discoveryItem.MinLvl; i <= discoveryItem.MaxLvl; i++)
