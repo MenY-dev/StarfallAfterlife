@@ -166,7 +166,7 @@ namespace StarfallAfterlife.Bridge.Generators
                     if (item.IsDefective == false ||
                         item.IsAvailableForTrading == false ||
                         item.Faction is not (Faction.None or Faction.Other) ||
-                        rnd.Next() % 6 != 0)
+                        rnd.Next() % GetDropChance(item) != 0)
                         continue;
 
                     shop.Items.Add(InventoryItem.Create(item, 999));
@@ -188,7 +188,7 @@ namespace StarfallAfterlife.Bridge.Generators
                     if (item.ItemType != InventoryItemType.DiscoveryItem ||
                         item.IsAvailableForTrading == false ||
                         item.Tags.Contains("Item.Role.Primitives", StringComparer.InvariantCultureIgnoreCase) == false ||
-                        rnd.Next() % 3 != 0)
+                        rnd.Next() % GetDropChance(item) != 0)
                         continue;
 
                     shop.Items.Add(InventoryItem.Create(item, 999));
@@ -210,7 +210,7 @@ namespace StarfallAfterlife.Bridge.Generators
                     if (item.IsAvailableForTrading == false ||
                         item.Faction is not (Faction.None or Faction.Other) ||
                         item.Tags.Contains("Item.MiltipleItemBP", StringComparer.InvariantCultureIgnoreCase) == false ||
-                        rnd.Next() % 6 != 0)
+                        rnd.Next() % GetDropChance(item) != 0)
                         continue;
 
                     shop.Items.Add(InventoryItem.Create(item, 999));
@@ -234,7 +234,7 @@ namespace StarfallAfterlife.Bridge.Generators
                         TechType.Weapons.HasFlag(item.TechType) == false ||
                         item.IsImproved == true ||
                         item.IsDefective == true ||
-                        rnd.Next() % 6 != 0)
+                        rnd.Next() % GetDropChance(item) != 0)
                         continue;
 
                     shop.Items.Add(InventoryItem.Create(item, 999));
@@ -278,7 +278,7 @@ namespace StarfallAfterlife.Bridge.Generators
                         item.TechType != TechType.Engineering ||
                         item.IsImproved == true ||
                         item.IsDefective == true ||
-                        rnd.Next() % 6 != 0)
+                        rnd.Next() % GetDropChance(item) != 0)
                         continue;
 
                     shop.Items.Add(InventoryItem.Create(item, 999));
@@ -300,7 +300,7 @@ namespace StarfallAfterlife.Bridge.Generators
                     if (item.IsAvailableForTrading == false ||
                         item.Id == 724131681 || // Experimental fuel
                         item.Tags.Contains("Item.Role.Consumable", StringComparer.InvariantCultureIgnoreCase) == false ||
-                        rnd.Next() % 3 != 0)
+                        rnd.Next() % GetDropChance(item) != 0)
                         continue;
 
                     shop.Items.Add(InventoryItem.Create(item, 999));
@@ -324,7 +324,7 @@ namespace StarfallAfterlife.Bridge.Generators
                         item.TechLvl > 2 ||
                         item.ItemType != InventoryItemType.ItemProject ||
                         item.IsImproved == false ||
-                        rnd.Next() % 6 != 0)
+                        rnd.Next() % GetDropChance(item) != 0)
                         continue;
 
                     shop.Items.Add(InventoryItem.Create(item, 999));
@@ -348,7 +348,7 @@ namespace StarfallAfterlife.Bridge.Generators
                         item.TechLvl < 3 ||
                         item.ItemType != InventoryItemType.ItemProject ||
                         item.IsImproved == false ||
-                        rnd.Next() % 3 != 0)
+                        rnd.Next() % GetDropChance(item) != 0)
                         continue;
 
                     shop.Items.Add(InventoryItem.Create(item, 999));
@@ -371,8 +371,8 @@ namespace StarfallAfterlife.Bridge.Generators
                         item.Faction is not (Faction.None or Faction.Other) ||
                         item.TechLvl > 2 ||
                         item.ItemType != InventoryItemType.ItemProject ||
-                        item.IsImproved == true || 
-                        rnd.Next() % 6 != 0)
+                        item.IsImproved == true ||
+                        rnd.Next() % GetDropChance(item) != 0)
                         continue;
 
                     shop.Items.Add(InventoryItem.Create(item, 999));
@@ -396,7 +396,7 @@ namespace StarfallAfterlife.Bridge.Generators
                         item.TechLvl < 3 ||
                         item.ItemType != InventoryItemType.ItemProject ||
                         item.IsImproved == true ||
-                        rnd.Next() % 3 != 0)
+                        rnd.Next() % GetDropChance(item) != 0)
                         continue;
 
                     shop.Items.Add(InventoryItem.Create(item, 999));
@@ -417,7 +417,7 @@ namespace StarfallAfterlife.Bridge.Generators
                 {
                     if (item.IsAvailableForTrading == false ||
                         item.Id != 724131681 || // Experimental fuel
-                        rnd.Next() % 2 != 0)
+                        rnd.Next() % GetDropChance(item) != 0)
                         continue;
 
                     shop.Items.Add(InventoryItem.Create(item, 999));
@@ -429,6 +429,26 @@ namespace StarfallAfterlife.Bridge.Generators
 
         protected SfaCircleData GetCircleData(GalaxyMapStarSystem system) =>
             Realm.Database.CircleDatabase.TryGetValue(system?.Level ?? -1, out var circle) ? circle : null;
+
+        protected int GetDropChance(SfaItem item)
+        {
+            var chance = 1;
+
+            if (item is null)
+                return chance;
+
+            chance += Math.Max(1, item.TechLvl * 2);
+            chance += Math.Max(2, item.MaxLvl - item.MinLvl);
+
+            if (item.IsImproved == true ||
+                item.IsDefective == true)
+                chance *= 2;
+
+            if (Math.Min(item.MinLvl, item.MaxLvl) > 4)
+                chance /= 2;
+
+            return Math.Max(1, chance);
+        }
 
         public IEnumerable<IGalaxyMapObject> GetObjectsWithShops(GalaxyMapStarSystem system)
         {
