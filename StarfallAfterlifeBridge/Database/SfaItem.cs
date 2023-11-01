@@ -55,6 +55,17 @@ namespace StarfallAfterlife.Bridge.Database
 
         public bool IsUniqueReward { get; set; } = false;
 
+        public bool IsStationAttackItem { get; set; } = false;
+
+        public bool IsAvailableForTrading =>
+            IsBoundToCharacter == false &&
+            IsUniqueReward == false &&
+            IsRareShopItem == false &&
+            IsStationAttackItem == false &&
+            IGC > 0 &&
+            TechLvl > 0 &&
+            GalaxyValue > 0;
+
         public int Width { get; set; } = 0;
 
         public int Height { get; set; } = 0;
@@ -145,10 +156,14 @@ namespace StarfallAfterlife.Bridge.Database
             }
             else if (Name?.Split('_').ElementAtOrDefault(1) is string quality)
             {
-
                 IsImproved = quality.StartsWith("Improved", StringComparison.InvariantCultureIgnoreCase);
                 IsDefective = quality.StartsWith("Defective", StringComparison.InvariantCultureIgnoreCase);
             }
+
+            if (Name is string name && (
+                name.StartsWith("BP_SA_", StringComparison.InvariantCultureIgnoreCase) == true ||
+                name.StartsWith("Default__BP_SA_", StringComparison.InvariantCultureIgnoreCase) == true))
+                IsStationAttackItem = true;
         }
     }
 }

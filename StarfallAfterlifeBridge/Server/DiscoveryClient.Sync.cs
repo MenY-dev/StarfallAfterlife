@@ -214,7 +214,7 @@ namespace StarfallAfterlife.Bridge.Server
                         }
                     }
 
-                    if (Server?.Realm?.ShopsMap?.GetObjectShops(obj.Id, obj.Type) is ObjectShops shopsInfo)
+                    if (Server?.GetObjectShops(obj.Id, (GalaxyMapObjectType)obj.Type) is ObjectShops shopsInfo)
                     {
                         foreach (var item in shopsInfo.Shops)
                         {

@@ -43,6 +43,7 @@ namespace StarfallAfterlife.Bridge.Database
 
         public Dictionary<int, SfaCircleData> CircleDatabase { get; } = new()
         {
+            { 0, new SfaCircleData(0) },
             { 1, new SfaCircleData(1) },
             { 2, new SfaCircleData(2) },
             { 3, new SfaCircleData(3) },
@@ -129,7 +130,16 @@ namespace StarfallAfterlife.Bridge.Database
 
                     dtb.DiscoveryItems.Add(discoveryItem.Id, discoveryItem);
 
-                    for (int i = discoveryItem.MinLvl; i <= discoveryItem.MaxLvl; i++)
+                    var minLvl = discoveryItem.MinLvl;
+                    var maxLvl = discoveryItem.MaxLvl;
+
+                    if (dtb.GetItem(discoveryItem.ProductItem) is SfaItem product)
+                    {
+                        minLvl = Math.Max(minLvl, product.MinLvl);
+                        maxLvl = Math.Max(maxLvl, product.MaxLvl);
+                    }
+
+                    for (int i = minLvl; i <= maxLvl; i++)
                         if (dtb.CircleDatabase.TryGetValue(i, out var circle) == true)
                             circle.DiscoveryItems.Add(discoveryItem.Id, discoveryItem);
                 }

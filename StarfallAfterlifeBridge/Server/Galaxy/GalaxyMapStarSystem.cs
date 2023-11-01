@@ -162,6 +162,10 @@ namespace StarfallAfterlife.Bridge.Server.Galaxy
 
         }
 
+
+        public IGalaxyMapObject GetObject(GalaxyMapObjectType objectType, int objectId) =>
+            GetAllObjects().FirstOrDefault(o => o is not null && o.ObjectType == objectType && o.Id == objectId);
+
         public IGalaxyMapObject GetObjectAt(int x, int y)
         {
             return GetAllObjects()?.FirstOrDefault(o => o?.X == x && o.Y == y);

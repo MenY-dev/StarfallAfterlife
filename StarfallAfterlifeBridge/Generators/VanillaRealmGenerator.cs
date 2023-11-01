@@ -38,7 +38,7 @@ namespace StarfallAfterlife.Bridge.Generators
 
                 result = RunChildTasks(
                     new MobsMapGenerator(Realm),
-                    new ShopsGenerator(Realm),
+                    //new ShopsGenerator(Realm),
                     new QuestsGenerator(Realm));
             }
             catch

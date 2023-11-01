@@ -15,6 +15,8 @@ using StarfallAfterlife.Bridge.Realms;
 using StarfallAfterlife.Bridge.Server.Characters;
 using System.Text.Json.Nodes;
 using StarfallAfterlife.Bridge.Collections;
+using StarfallAfterlife.Bridge.Server.Galaxy;
+using StarfallAfterlife.Bridge.Generators;
 
 namespace StarfallAfterlife.Bridge.Server
 {
@@ -41,6 +43,12 @@ namespace StarfallAfterlife.Bridge.Server
         public InstanceManager InstanceManager { get; set; }
 
         public Task Task => CompletionSource?.Task ?? Task.CompletedTask;
+
+        public int ShopsMapSeed { get; set; } = 1;
+
+        public ShopsMap ShopsMap { get; protected set; }
+
+        public ShopsGenerator ShopsGenerator{ get; protected set; }
 
         protected TaskCompletionSource CompletionSource { get; set; }
 
@@ -149,6 +157,24 @@ namespace StarfallAfterlife.Bridge.Server
                     .Where(c => c.State == SfaClientState.InDiscoveryMod)
                     .ToList();
             }
+        }
+
+        public ObjectShops GetObjectShops(int objectId, GalaxyMapObjectType objectType)
+        {
+            var generator = ShopsGenerator ??= new(Realm);
+            var map = ShopsMap ??= new();
+            var shops = map.GetObjectShops(objectId, objectType);
+
+            if (shops is null)
+            {
+                var system = Realm?.GalaxyMap?.GetSystem(objectType, objectId);
+                shops = generator.GenerateObjectShops(system, system?.GetObject(objectType, objectId), ShopsMapSeed);
+
+                if (shops is not null)
+                    map.SetObjectShops(shops);
+            }
+
+            return shops;
         }
 
         public virtual void Invoke(Action action) => ActionBuffer?.Invoke(action);

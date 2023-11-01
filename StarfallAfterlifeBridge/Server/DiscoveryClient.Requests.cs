@@ -668,9 +668,8 @@ namespace StarfallAfterlife.Bridge.Server
             }
             else
             {
-                if (Server?.Realm?.ShopsMap is ShopsMap map &&
-                    Galaxy?.ActivateStarSystem(systemId).GetObject(objectId, objectType) is StarSystemObject obj &&
-                    map.GetObjectShops(objectId, objectType) is ObjectShops shopsInfo &&
+                if (Galaxy?.ActivateStarSystem(systemId).GetObject(objectId, objectType) is StarSystemObject obj &&
+                    Server.GetObjectShops(objectId, (GalaxyMapObjectType)objectType) is ObjectShops shopsInfo &&
                     shopsInfo.Shops.FirstOrDefault(s => s.StocName == stockName) is ShopInfo shop)
                 {
                     SendObjectStock(obj, shop.Items, stockName);
@@ -712,7 +711,7 @@ namespace StarfallAfterlife.Bridge.Server
                     {
                         if (srcObjectType != DiscoveryObjectType.UserFleet &&
                             Galaxy?.GetActiveSystem(systemId)?.GetObject(srcObjectId, srcObjectType) is StarSystemObject obj &&
-                            Server?.Realm?.ShopsMap?.GetObjectShops(obj.Id, obj.Type) is ObjectShops shopsInfo &&
+                            Server.GetObjectShops(obj.Id, (GalaxyMapObjectType)obj.Type) is ObjectShops shopsInfo &&
                             shopsInfo?.Shops?.FirstOrDefault(s => s.StocName == srcStockName) is ShopInfo shop)
                         {
                             var dst = CargoTransactionEndPoint.CreateForCharacterFleet(character, stockName);
