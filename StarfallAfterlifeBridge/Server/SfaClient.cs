@@ -25,6 +25,7 @@ using StarfallAfterlife.Bridge.Server.Discovery;
 using StarfallAfterlife.Bridge.Database;
 using System.Net;
 using System.Net.Sockets;
+using System.Xml;
 
 namespace StarfallAfterlife.Bridge.Server
 {
@@ -108,6 +109,10 @@ namespace StarfallAfterlife.Bridge.Server
 
                 case SfaServerAction.AddCharacterCurrencies:
                     ProcessAddCharacterCurrencies(JsonHelpers.ParseNodeUnbuffered(text));
+                    break;
+
+                case SfaServerAction.SaveShipsGroup:
+                    ProcessSaveShipsGroup(JsonHelpers.ParseNodeUnbuffered(text));
                     break;
             }
         }
@@ -322,7 +327,7 @@ namespace StarfallAfterlife.Bridge.Server
                         session?.Save();
                     }
 
-                    doc["char_data"] = JsonHelpers.ParseNode(character?.CreateCharacterResponse(UserDataFlag.All)?.ToJsonString());
+                    doc["char_data"] = JsonHelpers.ParseNode(Game.CreateCharacterResponse(character, UserDataFlag.All)?.ToJsonString());
                     request.SendResponce(doc.ToJsonString(), SfaServerAction.StartSession);
                 }
             });
@@ -819,6 +824,29 @@ namespace StarfallAfterlife.Bridge.Server
                 ["char_id"] = character.UniqueId,
                 ["new_items"] = JsonHelpers.ParseNodeUnbuffered(newItems),
             }, SfaServerAction.SyncCharacterNewResearch);
+        }
+
+
+        private void ProcessSaveShipsGroup(JNode doc)
+        {
+            Game?.Profile.Use(p =>
+            {
+                if ((int?)doc?["char_id"] is int charId &&
+                    p.GameProfile?.DiscoveryModeProfile is DiscoveryProfile profile &&
+                    profile.GetCharByUniqueId(charId) is Character character &&
+                    JsonHelpers.DeserializeUnbuffered<ShipsGroup>((string)doc?["group"] ?? "") is ShipsGroup newGroup)
+                {
+                    var groups = character.ShipGroups ??= new();
+
+                    foreach (var item in newGroup.Ships)
+                        if (item is not null)
+                            item.Id -= character.IndexSpace;
+
+                    groups.RemoveAll(g => g?.Number == newGroup.Number);
+                    groups.Add(newGroup);
+                    p.SaveGameProfile();
+                }
+            });
         }
     }
 }

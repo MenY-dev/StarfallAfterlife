@@ -75,7 +75,7 @@ namespace StarfallAfterlife.Bridge.Server
             if (CurrentCharacter is ServerCharacter character)
             {
                 if (character.Fleet is UserFleet fleet &&
-                    fleet.State is FleetState.None or FleetState.InBattle)
+                    fleet.State is not FleetState.None)
                 {
                     Galaxy?.BeginPreUpdateAction(g =>
                     {

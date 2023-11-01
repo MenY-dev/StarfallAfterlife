@@ -27,7 +27,7 @@ namespace StarfallAfterlife.Bridge.Game
             {
                 ["data_result"] = new JsonObject
                 {
-                    ["$"] = CreateCharacterResponse(flags)?.ToJsonString(),
+                    ["$"] = CreateCharacterResponse(GameProfile.CurrentCharacter, flags)?.ToJsonString(),
                 },
                 ["session_start_inventory"] = new JsonObject
                 {
@@ -51,14 +51,14 @@ namespace StarfallAfterlife.Bridge.Game
             };
         }
 
-        public JsonNode CreateCharacterResponse(UserDataFlag flags = UserDataFlag.All)
+        public JsonNode CreateCharacterResponse(Character character, UserDataFlag flags = UserDataFlag.All)
         {
-            var character = GameProfile.CurrentCharacter;
-            var progress = Profile.CurrentProgress;
             var doc = new JsonObject();
 
             if (character is null)
                 return doc;
+
+            var progress = Profile?.CurrentRealm?.Progress?.FirstOrDefault(p => p?.CharacterId == character.Id);
 
             flags |= UserDataFlag.CharacterInfo | UserDataFlag.Boosters | UserDataFlag.DiscoveryBattleInfo;
 
@@ -122,11 +122,17 @@ namespace StarfallAfterlife.Bridge.Game
             if (flags.HasFlag(UserDataFlag.Ships))
             {
                 JsonArray ships = new JsonArray();
+                JsonArray groups = new JsonArray();
 
-                foreach (var item in character.Ships)
+
+                foreach (var item in character.Ships ?? new())
                     ships.Add(CreateShipResponse(item));
 
+                foreach (var item in character.ShipGroups ?? new())
+                    groups.Add(CreateShipGroupResponse(character, item));
+
                 doc["ships"] = ships;
+                doc["ship_groups"] = groups;
             }
 
             if (flags.HasFlag(UserDataFlag.Inventory))
@@ -422,6 +428,22 @@ namespace StarfallAfterlife.Bridge.Game
             doc["progression"] = progression;
 
             return doc;
+        }
+
+        public JsonNode CreateShipGroupResponse(Character character, ShipsGroup group)
+        {
+            return new JsonObject
+            {
+                ["group_num"] = group.Number,
+                ["lock_formation"] = group.LockFormation,
+                ["ships"] = new JsonArray(group.Ships.Select(s => new JsonObject
+                {
+                    ["id"] = s.Id + character?.IndexSpace ?? 0,
+                    ["x"] = s.X,
+                    ["y"] = s.Y,
+                    ["rot"] = s.Rotation,
+                }).ToArray()),
+            };
         }
 
         private JsonNode CreateCharacterSessionStartInventoryResponse()

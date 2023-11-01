@@ -190,6 +190,15 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                             battle.OnPiratesAssaultStatusUpdated(e.Data);
                     }
                     break;
+                case "save_ships_group":
+                    {
+                        if (JsonHelpers.ParseNodeUnbuffered(e.Data) is JsonObject data &&
+                            Server?.GetCharacter((int?)data["char_id"] ?? -1) is ServerCharacter character)
+                        {
+                            character.SaveShipsGroup((string)data["group"]);
+                        }
+                    }
+                    break;
                 default:
                     break;
             }

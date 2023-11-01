@@ -74,7 +74,7 @@ namespace StarfallAfterlife.Bridge.Instances
                 case "update_charact_stats":
                     UpdateCharacterStats(
                         (int?)query["charid"] ?? -1,
-                        JsonNode.Parse((string)query["stats"]),
+                        JsonHelpers.ParseNodeUnbuffered((string)query["stats"]),
                         (string)query["auth"]);
                     break;
 
@@ -82,6 +82,13 @@ namespace StarfallAfterlife.Bridge.Instances
                     HandleBattleResults(
                         (string)query["game_mode"],
                         (string)query["results"],
+                        (string)query["auth"]);
+                    break;
+                case "save_ships_group":
+                    HandleSaveShipsGroup(
+                        (int?)query["charact"] ?? -1,
+                        (int?)query["group_num"] ?? -1,
+                        JsonHelpers.ParseNodeUnbuffered((string)query["selection_data"]),
                         (string)query["auth"]);
                     break;
 
@@ -188,5 +195,22 @@ namespace StarfallAfterlife.Bridge.Instances
             SendInstanceAction(instanceAuth, "update_character_stats", doc.ToJsonString(false));
         }
 
+        private void HandleSaveShipsGroup(int characterId, int groupNumber, JsonNode data, string instanceAuth)
+        {
+            var formation = data?.DeserializeUnbuffered<ShipsGroup>();
+
+            if (formation is null)
+                return;
+
+            formation.Number = groupNumber;
+
+            var doc = new JsonObject
+            {
+                ["char_id"] = characterId,
+                ["group"] = JsonHelpers.ParseNodeUnbuffered(formation).ToJsonString(),
+            };
+
+            SendInstanceAction(instanceAuth, "save_ships_group", doc.ToJsonString(false));
+        }
     }
 }

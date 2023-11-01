@@ -75,6 +75,8 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
         public List<int> Abilities { get; } = new();
 
+        public List<ShipsGroup> ShipGroups { get; } = new();
+
         protected Dictionary<int, DateTime> AbilitiesCooldown { get; } = new();
 
         private readonly object _characterLockher = new();
@@ -100,6 +102,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
             Ships.Clear();
             Abilities.Clear();
+            ShipGroups.Clear();
 
             if (doc["ships"]?.AsArraySelf() is JsonArray ships)
             {
@@ -151,6 +154,12 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                     }
                 }
             }
+
+            if (doc["ship_groups"]?.AsArraySelf() is JsonArray shipGroups)
+            {
+                ShipGroups.AddRange(shipGroups.DeserializeUnbuffered<List<ShipsGroup>>() ?? new());
+            }
+
             Inventory = new(this);
             Events?.Broadcast<ICharacterListener>(l => l.OnCurrencyUpdated(this));
         }
@@ -191,7 +200,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                     ["id"] = s.Id,
                     ["data"] = JsonHelpers.ParseNodeUnbuffered(s, jsonOptions)?.ToJsonString()
                 }).ToJsonArray(),
-                ["ship_groups"] = new JsonArray(),
+                ["ship_groups"] = JsonHelpers.ParseNodeUnbuffered(ShipGroups),
             };
         }
 
@@ -573,6 +582,23 @@ namespace StarfallAfterlife.Bridge.Server.Characters
             lock (_characterLockher)
                 return AbilitiesCooldown.Select(a => KeyValuePair.Create(
                     a.Key, Math.Max(0, (float)(a.Value - now).TotalSeconds))).ToArray();
+        }
+
+        public void SaveShipsGroup(string group)
+        {
+            DiscoveryClient.Invoke(() =>
+            {
+                var newGroup = JsonHelpers.DeserializeUnbuffered<ShipsGroup>(group ?? "");
+
+                ShipGroups.RemoveAll(g => g.Number == newGroup.Number);
+                ShipGroups.Add(newGroup);
+
+                DiscoveryClient?.Client?.Send(new JsonObject
+                {
+                    ["char_id"] = UniqueId,
+                    ["group"] = group
+                }, SfaServerAction.SaveShipsGroup);
+            });
         }
     }
 }

@@ -41,6 +41,7 @@ namespace StarfallAfterlife.Bridge.Server
         SyncCharacterCurrencies = 182,
         RequestItemResearch = 182,
         SyncCharacterNewResearch = 183,
+        SaveShipsGroup = 184,
 
         RegisterChannel = 190,
         DiscoveryChannel = 192,
