@@ -149,7 +149,9 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                             Hex = mob.SpawnHex,
                         };
 
+                        fleet.SetLocation(SystemHexMap.HexToSystemPoint(mob.SpawnHex), true);
                         fleet.SetAI(new MobAI());
+
                         AddFleet(fleet);
                     }
                 }
