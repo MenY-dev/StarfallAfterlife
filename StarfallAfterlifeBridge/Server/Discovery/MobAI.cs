@@ -53,6 +53,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                     f.State == FleetState.InGalaxy &&
                     f.Faction.IsEnemy(faction) &&
                     fleet.CanAttack(f) &&
+                    fleet.GetBattle() is null &&
                     fleet.IsVisible(f));
 
                 if ((time - AttackEndTime).TotalSeconds > AttackCooldown &&
@@ -68,8 +69,9 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                     }
                 }
             }
-            else if(fleet.Hex.GetDistanceTo(targetFleet.Hex) >= TargetLostDistance||
+            else if(fleet.Hex.GetDistanceTo(targetFleet.Hex) >= TargetLostDistance ||
                     fleet.CanAttack(targetFleet) == false ||
+                    fleet.GetBattle() is not null ||
                     (time - AttackStartTime).TotalSeconds > AttackTime)
             {
                 AttackEndTime = time;

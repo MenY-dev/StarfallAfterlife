@@ -58,5 +58,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                 }
             }
         }
+
+        public StarSystemBattle GetBattle() => System?.GetBattle(this);
     }
 }
