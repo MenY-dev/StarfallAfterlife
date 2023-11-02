@@ -1,4 +1,5 @@
 ﻿using StarfallAfterlife.Bridge.Database;
+using StarfallAfterlife.Bridge.Instances;
 using StarfallAfterlife.Bridge.IO;
 using StarfallAfterlife.Bridge.Mathematics;
 using StarfallAfterlife.Bridge.Profiles;
@@ -6,6 +7,7 @@ using StarfallAfterlife.Bridge.Serialization;
 using StarfallAfterlife.Bridge.Server.Characters;
 using StarfallAfterlife.Bridge.Server.Discovery;
 using StarfallAfterlife.Bridge.Server.Galaxy;
+using StarfallAfterlife.Bridge.Server.Matchmakers;
 using StarfallAfterlife.Bridge.Tasks;
 using System;
 using System.Collections.Generic;
@@ -263,6 +265,12 @@ namespace StarfallAfterlife.Bridge.Server
 
             State = SfaCharacterState.InGalaxy;
             Galaxy?.BeginPreUpdateAction(g => g.EnterToStarSystem(system, character.Fleet, location));
+
+            if (Server.Matchmaker is SfaMatchmaker matchmaker &&
+                        matchmaker.GetBattle(character) is DiscoveryBattle battle)
+            {
+                Galaxy.BeginPreUpdateAction(g => battle.SystemBattle?.AddToBattle(CurrentCharacter.Fleet, BattleRole.Join, Vector2.Zero));
+            }
         }
 
         public GalaxyMapStarSystem GetCharactDefaultSystem()

@@ -707,27 +707,7 @@ namespace StarfallAfterlife.Bridge.Server
                 (int?)doc["port"] is int port &&
                 (string)doc["auth"] is string auth)
             {
-                if (IPAddress.TryParse(address, out var ip) == true)
-                {
-                    if (ip.IsIPv4MappedToIPv6 == true)
-                        ip = ip.MapToIPv4();
-
-                    if (ip.Equals(IPAddress.Any) == true)
-                    {
-                        IPAddress serverIp = null;
-
-                        try
-                        {
-                            serverIp = Dns.GetHostAddresses(
-                                Game?.ServerAddress?.Host ?? "",
-                                AddressFamily.InterNetwork)?
-                                .FirstOrDefault();
-                        }
-                        catch { }
-
-                        address = (serverIp ?? IPAddress.Loopback).ToString();
-                    }
-                }
+                address = RemapInstanceAddress(address);
 
                 switch (gameMode)
                 {
@@ -753,6 +733,32 @@ namespace StarfallAfterlife.Bridge.Server
             }
         }
 
+        public string RemapInstanceAddress(string address)
+        {
+            if (IPAddress.TryParse(address, out var ip) == true)
+            {
+                if (ip.IsIPv4MappedToIPv6 == true)
+                    ip = ip.MapToIPv4();
+
+                if (ip.Equals(IPAddress.Any) == true)
+                {
+                    IPAddress serverIp = null;
+
+                    try
+                    {
+                        serverIp = Dns.GetHostAddresses(
+                            Game?.ServerAddress?.Host ?? "",
+                            AddressFamily.InterNetwork)?
+                            .FirstOrDefault();
+                    }
+                    catch { }
+
+                    address = (serverIp ?? IPAddress.Loopback).ToString();
+                }
+            }
+
+            return address;
+        }
 
         private void ProcessAddCharacterCurrencies(JNode doc)
         {

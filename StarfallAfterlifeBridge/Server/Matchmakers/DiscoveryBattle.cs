@@ -46,10 +46,6 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                     PendingMembers.FirstOrDefault(m => m.Fleet == member.Fleet) is not null)
                     return;
 
-                if (State == MatchmakerBattleState.Started &&
-                    Characters.FirstOrDefault(c => c.Member.Fleet == member.Fleet) is DiscoveryBattleCharacterInfo character)
-                    GameMode.InstanceManager.JoinNewChar(InstanceInfo, character.InstanceCharacter);
-
                 if (State == MatchmakerBattleState.PendingMatch)
                 {
                     PendingMembers.Add(member);
@@ -99,9 +95,14 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
                 if (member.Fleet is UserFleet)
                 {
-                    var info = CreateCharacterInfo(member);
+                    var info = Characters.FirstOrDefault(c => c.Member.Fleet == member.Fleet);
 
                     if (info is not null)
+                    {
+                        info.Member = member;
+                        JoinToInstance(info);
+                    }
+                    else if ((info = CreateCharacterInfo(member)) is not null)
                     {
                         Characters.Add(info);
                         GameMode.InstanceManager.JoinNewChar(InstanceInfo, info.InstanceCharacter);
@@ -132,8 +133,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
             if (member.Fleet is UserFleet fleet)
             {
-                if (Server?.GetCharacter(fleet) is ServerCharacter character &&
-                    GetCharacter(character) is null)
+                if (Server?.GetCharacter(fleet) is ServerCharacter character)
                 {
                     info = new DiscoveryBattleCharacterInfo(member, character);
                 }
@@ -347,14 +347,10 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                     foreach (var member in PendingMembers)
                         AddToActiveBattle(member);
 
+                    PendingMembers.Clear();
+
                     foreach (var character in Characters)
-                        character.Client?.Invoke(c => c.SendStartBattle(
-                            "discovery",
-                            Matchmaker?.CreateBattleIpAddress(),
-                            InstanceInfo?.Port ?? -1,
-                            character.InstanceCharacter?.Auth,
-                            character.ServerCharacter?.Fleet?.System.Id ?? 0,
-                            character.ServerCharacter?.Fleet?.Id ?? -1));
+                        JoinToInstance(character);
                 }
                 else if (state == InstanceState.Finished)
                 {
@@ -434,14 +430,27 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
             if (Characters?
                 .FirstOrDefault(c => c?.InstanceCharacter?.Id == characterId)
                 is DiscoveryBattleCharacterInfo info)
+                JoinToInstance(info, auth);
+        }
+
+        public void JoinToInstance(DiscoveryBattleCharacterInfo character, string newAuth = null)
+        {
+            lock (_lockher)
             {
-                info.Client?.Invoke(c => c.SendStartBattle(
+                if (character is null)
+                    return;
+
+                if (newAuth is not null &&
+                    character.InstanceCharacter is InstanceCharacter instanceCharacter)
+                    instanceCharacter.Auth = newAuth;
+
+                character.Client?.Invoke(c => c.SendStartBattle(
                     "discovery",
                     Matchmaker?.CreateBattleIpAddress(),
                     InstanceInfo?.Port ?? -1,
-                    auth,
-                    info.ServerCharacter?.Fleet?.System.Id ?? 0,
-                    info.ServerCharacter?.Fleet?.Id ?? -1));
+                    character.InstanceCharacter?.Auth,
+                    character.ServerCharacter?.Fleet?.System.Id ?? 0,
+                    character.ServerCharacter?.Fleet?.Id ?? -1));
             }
         }
 

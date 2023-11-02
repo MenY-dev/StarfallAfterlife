@@ -120,13 +120,12 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
         public virtual void AddToBattle(BattleMember member)
         {
             if (member is null ||
-                member.Fleet is null ||
-                Members.Contains(member) == true ||
-                Members?.FirstOrDefault(m => m.Fleet == member.Fleet) is not null)
+                member.Fleet is null)
                 return;
 
-            if (Members.Contains(member) == false &&
-                Members?.FirstOrDefault(m => m.Fleet == member.Fleet) is null)
+            Members.RemoveAll(m => m.Fleet == member.Fleet);
+
+            if (Members.Contains(member) == false)
                 Members.Add(member);
 
             if (IsStarted == true && IsFinished == false && IsCancelled == false)

@@ -213,6 +213,23 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
         }
 
 
+        public MatchmakerBattle GetBattle(ServerCharacter character)
+        {
+            lock (Lockher)
+            {
+                foreach (var battle in Battles)
+                {
+                    if ((battle as DiscoveryBattle)?.Characters.ToArray()?.Any(c => c.ServerCharacter == character) == true)
+                        return battle;
+
+                    if ((battle as MothershipAssaultBattle)?.Chars.ToArray()?.Any(c => c.Char == character) == true)
+                        return battle;
+                }
+
+                return null;
+            }
+        }
+
         public string CreateBattleIpAddress()
         {
             if (InstanceManager?.RemoteEndPoint.Address is IPAddress address)

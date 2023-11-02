@@ -20,7 +20,7 @@ namespace StarfallAfterlife.Bridge.Server
             SfaDebug.Print($"Battle Started! (Hex = {battle.Hex})");
         });
 
-        void IBattleListener.OnBattleFleetAdded(StarSystemBattle battle, BattleMember newMember) => Galaxy.BeginPreUpdateAction(g =>
+        void IBattleListener.OnBattleFleetAdded(StarSystemBattle battle, BattleMember newMember) => Invoke(() =>
         {
             Matchmaker?.DiscoveryGameMode?.GetBattle(battle)?.AddToBattle(newMember);
 

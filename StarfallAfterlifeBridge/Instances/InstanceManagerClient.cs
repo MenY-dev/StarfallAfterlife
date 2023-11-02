@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
@@ -161,7 +162,7 @@ namespace StarfallAfterlife.Bridge.Instances
                     }
                     else if (state == InstanceState.Started)
                     {
-                        info.Address = (string)doc["address"];
+                        info.Address = CreateBattleIpAddress();
                         info.Port = (int?)doc["port"] ?? -1;
                     }
 
@@ -300,6 +301,21 @@ namespace StarfallAfterlife.Bridge.Instances
         protected virtual string CreateSyncKey()
         {
             return Guid.NewGuid().ToString("N");
+        }
+
+        public string CreateBattleIpAddress()
+        {
+            if (RemoteEndPoint?.Address is IPAddress address)
+            {
+                if (address.IsIPv4MappedToIPv6 == true)
+                    address = address.MapToIPv4();
+
+                if (address.Equals(IPAddress.Loopback) == false &&
+                    address.Equals(IPAddress.IPv6Loopback) == false)
+                    return address.ToString();
+            }
+
+            return IPAddress.Any.ToString();
         }
     }
 }
