@@ -136,6 +136,10 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                     if (mob is not null &&
                         mobsDatabase.GetMob(mob.MobId) is DiscoveryMobInfo mobInfo)
                     {
+                        if (mob.ObjectType != GalaxyMapObjectType.None ||
+                            mob.ObjectId > -1)
+                            continue;
+
                         var fleet = new DiscoveryAiFleet
                         {
                             Id = mob.FleetId,
