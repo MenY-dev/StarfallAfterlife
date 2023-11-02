@@ -5,6 +5,7 @@ using StarfallAfterlife.Bridge.Server.Discovery;
 using StarfallAfterlife.Bridge.Server.Galaxy;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +21,9 @@ namespace StarfallAfterlife.Bridge.Generators
 
         protected int CurrentMobId { get; set; }
 
+        protected record struct InfluenceInfo(Faction Faction, int Group, int Influence);
+
+        protected Dictionary<int, InfluenceInfo> InfluenceMap { get; set; } = new();
 
         public MobsMapGenerator(SfaRealm realm)
         {
@@ -41,6 +45,7 @@ namespace StarfallAfterlife.Bridge.Generators
             var map = new MobsMap();
             ExtraMap.Build();
             CurrentMobId = 1000000;
+            GenerateInfluenceMap(InfluenceMap = new(), 4);
             GenerateMobsMap(map);
             return map;
         }
@@ -66,35 +71,73 @@ namespace StarfallAfterlife.Bridge.Generators
         private void GenerateForSystem(MobsMap map, GalaxyMapStarSystem system, SfaDatabase database)
         {
             var rnd = new Random(system.Id);
+            var influenceInfo = InfluenceMap.GetValueOrDefault(system.Id, new(Faction.None, -1, 0));
 
-            foreach (var mob in GetMobsForCircle(system.Level))
+            var minCount = influenceInfo.Influence switch
             {
-                var deltaLvl = Math.Abs(mob.Level - GetSystemMobsLevel(system));
+                > 3 => 3,
+                3 => 2,
+                2 => 2,
+                1 => 1,
+                _ => 0
+            };
 
-                if ((rnd.Next() % (deltaLvl + 1)) != 0 ||
-                    (system.Faction != Faction.None && system.Faction != mob.Faction))
-                    continue;
+            var maxCount = influenceInfo.Influence switch
+            {
+                > 3 => 6,
+                3 => 5,
+                2 => 3,
+                1 => 2,
+                _ => 0
+            };
 
-                int count = 1 + rnd.Next() % 3;
+            var mobsCount = minCount + (rnd.Next() % (maxCount - minCount + 1));
+            var totalCount = 0;
 
-                for (int i = 0; i < count; i++)
+            for (int n = 0; n < mobsCount; n++)
+            {
+                foreach (var mob in GetMobsForCircle(system.Level))
                 {
-                    CurrentMobId++;
+                    var deltaLvl = mob.Level - GetSystemMobsLevel(system);
 
-                    var fleet = new GalaxyMapMob
+                    if (deltaLvl < 0)
+                        deltaLvl /= -3;
+
+                    if ((rnd.Next() % (deltaLvl + 1)) != 0 ||
+                        mob.Faction != influenceInfo.Faction)
+                        continue;
+
+                    var variantCount = 1 + rnd.Next() % 4;
+
+                    for (int i = 0; i < variantCount; i++)
                     {
-                        FleetId = CurrentMobId,
-                        MobId = mob.Id,
-                        SystemId = system.Id,
-                        FactionGroup = system.FactionGroup,
-                        ObjectId = -1,
-                        ObjectType = GalaxyMapObjectType.None,
-                        SpawnHex = SystemHexMap.ArrayIndexToHex(
-                            rnd.Next(0, SystemHexMap.HexesCount))
-                    };
+                        CurrentMobId++;
 
-                    map.AddMob(fleet);
+                        var fleet = new GalaxyMapMob
+                        {
+                            FleetId = CurrentMobId,
+                            MobId = mob.Id,
+                            SystemId = system.Id,
+                            FactionGroup = influenceInfo.Group,
+                            ObjectId = -1,
+                            ObjectType = GalaxyMapObjectType.None,
+                            SpawnHex = SystemHexMap.ArrayIndexToHex(
+                                rnd.Next(0, SystemHexMap.HexesCount))
+                        };
+
+                        map.AddMob(fleet);
+                        totalCount++;
+
+                        if (totalCount >= mobsCount)
+                            break;
+                    }
+
+                    if (totalCount >= mobsCount)
+                        break;
                 }
+
+                if (totalCount >= mobsCount)
+                    break;
             }
 
             foreach (var item in system.PiratesOutposts ?? new())
@@ -221,5 +264,57 @@ namespace StarfallAfterlife.Bridge.Generators
 
             return minLevel + (int)(levelRange * t);
         }
+
+        private void GenerateInfluenceMap(Dictionary<int, InfluenceInfo> influenceMap, int maxInfluence = 4)
+        {
+            var radius = maxInfluence - 1;
+            var galaxyMap = Realm?.GalaxyMap;
+
+            if (radius < 1 || influenceMap is null || galaxyMap is null)
+                return;
+
+            foreach (var system in galaxyMap.Systems ?? new())
+            {
+                if (IsActiveFaction(system.Faction) == false)
+                    continue;
+
+                var faction = system.Faction;
+                var factionGroup = system.FactionGroup;
+                var radiusMultiplier = faction.IsPirates() ? 2 : 1;
+
+                influenceMap[system.Id] = new(faction, factionGroup, maxInfluence);
+
+                foreach (var neighbor in galaxyMap.GetSystemsArround(system.Id, radius * radiusMultiplier, true))
+                {
+                    var id = neighbor.Key.Id;
+                    var newInfluence = maxInfluence - (int)Math.Round((float)neighbor.Value / radiusMultiplier);
+
+                    if (IsActiveFaction(neighbor.Key.Faction) == true)
+                        continue;
+
+                    if (influenceMap.TryGetValue(id, out var currentInfluence) == false)
+                    {
+                        influenceMap[id] = new(faction, factionGroup, newInfluence);
+                    }
+                    else if (newInfluence > currentInfluence.Influence ||
+                            (newInfluence == currentInfluence.Influence && faction.IsPirates()))
+                    {
+                        influenceMap[id] = new(faction, factionGroup, newInfluence);
+                    }
+                }
+            }
+        }
+
+        private bool IsActiveFaction(Faction faction) => faction is
+            Faction.Deprived or
+            Faction.Eclipse or
+            Faction.Vanguard or
+            Faction.Screechers or
+            Faction.Nebulords or
+            Faction.Pyramid or
+            Faction.FreeTraders or
+            Faction.Scientists or
+            Faction.NeutralPlanets or
+            Faction.MineworkerUnion;
     }
 }
