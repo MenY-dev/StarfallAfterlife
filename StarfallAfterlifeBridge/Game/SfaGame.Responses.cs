@@ -210,8 +210,8 @@ namespace StarfallAfterlife.Bridge.Game
                         {
                             ["id"] = detachment.Key,
                             ["xp"] = detachment.Value.Xp,
-                            ["slots"] = JsonHelpers.ParseNodeUnbuffered(character.CreateDetachmentSlotsResponse(detachment.Value)?.ToJsonString()),
-                            ["abilities"] = JsonHelpers.ParseNodeUnbuffered(character.CreateDetachmentAbilitiesResponse(detachment.Value)?.ToJsonString()),
+                            ["slots"] = character.CreateDetachmentSlotsResponse(detachment.Value),
+                            ["abilities"] = character.CreateDetachmentAbilitiesResponse(detachment.Value),
                         });
                     }
                 }

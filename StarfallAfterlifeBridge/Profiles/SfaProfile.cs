@@ -327,6 +327,24 @@ namespace StarfallAfterlife.Bridge.Profiles
                             .ToList() ?? new()),
                     };
 
+                    if (character.Detachments is CharacterDetachments allDetachments &&
+                        allDetachments.FirstOrDefault(d => d.Key == character.CurrentDetachment) is var detachment &&
+                        detachment.Value?.Slots is DetachmentSlots slots)
+                    {
+                        (session.Ships ??= new()).AddRange(slots.Select(slot =>
+                        {
+                            var ship = character.GetShip(slot.Value)?.Data?.Clone();
+
+                            if (ship is not null)
+                            {
+                                ship.Detachment = detachment.Key;
+                                ship.Slot = slot.Key;
+                            }
+
+                            return ship;
+                        }).Where(s => s is not null));
+                    }
+
                     session.Save();
                     Sessions.Add(session);
                     CurrentSession = session;
