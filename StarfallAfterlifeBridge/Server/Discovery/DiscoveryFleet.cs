@@ -136,15 +136,12 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
         protected virtual void SetTargetLocation(Vector2 location)
         {
             if (Location != location)
-            {
                 Route.Update(CreateRoute(location));
-                Broadcast<IFleetListener>(l => l.OnFleetMoved(this));
-                Broadcast<IFleetListener>(l => l.OnFleetRouteChanged(this));
-            }
             else
-            {
                 OnTargetLocationReached();
-            }
+
+            Broadcast<IFleetListener>(l => l.OnFleetMoved(this));
+            Broadcast<IFleetListener>(l => l.OnFleetRouteChanged(this));
         }
 
         protected virtual void SetTargetFleet(DiscoveryFleet target)
