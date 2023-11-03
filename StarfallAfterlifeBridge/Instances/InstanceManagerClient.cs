@@ -78,7 +78,7 @@ namespace StarfallAfterlife.Bridge.Instances
 
         public virtual bool StartInstance(InstanceInfo instance)
         {
-            lock(Lockher)
+            lock (Lockher)
             {
                 if (Instances.ContainsValue(instance))
                     return false;
@@ -94,6 +94,17 @@ namespace StarfallAfterlife.Bridge.Instances
             }
 
             return true;
+        }
+
+        public virtual bool RemoveInstance(InstanceInfo instance)
+        {
+            lock (Lockher)
+            {
+                if (GetSyncKey(instance) is string syncKey)
+                    return Instances.Remove(syncKey);
+            }
+
+            return false;
         }
 
 

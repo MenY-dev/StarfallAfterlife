@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Nodes;
+using System.Threading;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -36,6 +37,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         public List<BattleMember> PendingMembers { get; } = new();
 
+        protected CancellationTokenSource _cts;
         protected readonly object _lockher = new();
 
         public virtual void AddToBattle(BattleMember member)
@@ -58,7 +60,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 }
                 else if (State == MatchmakerBattleState.Finished)
                 {
-                    SystemBattle?.Leave(member, SystemBattle?.Hex ?? SystemHex.Zero);
+                    Galaxy?.BeginPreUpdateAction(g => SystemBattle?.Leave(member, SystemBattle.Hex));
                     return;
                 }
 
@@ -72,6 +74,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
                         if (State == MatchmakerBattleState.PendingPlayers)
                         {
+                            _cts?.Cancel();
                             StartInstance();
                         }
                     }
@@ -124,6 +127,15 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
             {
                 Characters.Remove(character);
                 Galaxy?.BeginPreUpdateAction(g => SystemBattle?.Leave(character.Member, spawnHex));
+            }
+        }
+
+        public void Leave(DiscoveryBattleMobInfo mob, SystemHex spawnHex)
+        {
+            lock (_lockher)
+            {
+                Mobs.Remove(mob);
+                Galaxy?.BeginPreUpdateAction(g => SystemBattle?.Leave(mob.Member, spawnHex));
             }
         }
 
@@ -255,9 +267,22 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
             lock (_lockher)
             {
                 if (Characters.Count > 0)
+                {
                     StartInstance();
+                }
                 else
+                {
                     State = MatchmakerBattleState.PendingPlayers;
+                    _cts = new();
+
+                    Matchmaker.Invoke(() =>
+                    {
+                        if (_cts?.IsCancellationRequested == true)
+                            return;
+
+                        Stop();
+                    }, TimeSpan.FromMinutes(1));
+                }
             }
         }
 
@@ -269,6 +294,31 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 InstanceInfo.Characters.AddRange(Characters.Select(c => c.InstanceCharacter));
                 InstanceInfo.ExtraData = CreateExtraData().ToJson().ToJsonString();
                 GameMode.InstanceManager.StartInstance(InstanceInfo);
+            }
+        }
+
+        public override void Stop()
+        {
+            lock (_lockher)
+            {
+                State = MatchmakerBattleState.Finished;
+
+                foreach (var item in PendingMembers.ToArray())
+                    Galaxy?.BeginPreUpdateAction(g => SystemBattle?.Leave(item, SystemBattle.Hex, false));
+
+                PendingMembers.Clear();
+
+                foreach (var character in Characters.ToArray())
+                    Leave(character, SystemBattle.Hex);
+
+                foreach (var mob in Mobs.ToArray())
+                    Leave(mob, SystemBattle.Hex);
+
+                Bosses?.Clear();
+
+                GameMode.InstanceManager.RemoveInstance(InstanceInfo);
+                Matchmaker.RemoveBattle(this);
+                Galaxy?.BeginPreUpdateAction(g => SystemBattle.Finish());
             }
         }
 
@@ -354,8 +404,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 }
                 else if (state == InstanceState.Finished)
                 {
-                    State = MatchmakerBattleState.Finished;
-                    SystemBattle.Finish();
+                    Stop();
                 }
             }
         }
@@ -368,6 +417,11 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 {
                     var character = Characters?.FirstOrDefault(c => c.InstanceCharacter.Id == fleetId);
                     Leave(character, (SystemBattle?.Hex ?? SystemHex.Zero) + hex);
+                }
+                else if (fleetType is DiscoveryObjectType.AiFleet)
+                {
+                    var mob = Mobs?.FirstOrDefault(c => c.FleetId == fleetId);
+                    Leave(mob, (SystemBattle?.Hex ?? SystemHex.Zero) + hex);
                 }
             }
         }

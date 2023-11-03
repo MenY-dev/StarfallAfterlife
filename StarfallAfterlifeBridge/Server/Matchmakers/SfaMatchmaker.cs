@@ -7,6 +7,7 @@ using StarfallAfterlife.Bridge.Serialization;
 using StarfallAfterlife.Bridge.Server.Characters;
 using StarfallAfterlife.Bridge.Server.Discovery;
 using StarfallAfterlife.Bridge.Server.Galaxy;
+using StarfallAfterlife.Bridge.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,8 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
         public HashSet<MatchmakerGameMode> GameModes { get; } = new();
 
         public HashSet<MatchmakerBattle> Battles { get; } = new();
+
+        protected ActionBuffer Actions { get; } = new();
 
         protected object Lockher { get; } = new();
 
@@ -213,6 +216,14 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
         }
 
 
+        internal void RemoveBattle(DiscoveryBattle battle)
+        {
+            lock (Lockher)
+            {
+                Battles.Remove(battle);
+            }
+        }
+
         public MatchmakerBattle GetBattle(ServerCharacter character)
         {
             lock (Lockher)
@@ -244,5 +255,9 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
             return IPAddress.Any.ToString();
         }
+
+        public void Invoke(Action action) => Actions.Invoke(action);
+
+        public void Invoke(Action action, TimeSpan delay) => Actions.Invoke(action, delay);
     }
 }

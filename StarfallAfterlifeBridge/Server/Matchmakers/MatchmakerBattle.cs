@@ -29,6 +29,11 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         }
 
+        public virtual void Stop()
+        {
+
+        }
+
         public virtual void InstanceStateChanged(InstanceState state)
         {
 

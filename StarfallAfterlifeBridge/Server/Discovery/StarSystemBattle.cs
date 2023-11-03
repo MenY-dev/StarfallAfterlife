@@ -22,8 +22,6 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
         public bool IsFinished { get; set; }
 
-        public bool IsCancelled { get; set; }
-
         public bool IsDungeon { get; set; }
 
         public bool HasNebula { get; set; }
@@ -107,13 +105,6 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             System?.RemoveBattle(this);
         }
 
-        public virtual void Cancell()
-        {
-            IsCancelled = false;
-            Galaxy?.Listeners.Broadcast<IBattleListener>(l => l.OnBattleFinished(this));
-        }
-
-
         public void AddToBattle(DiscoveryFleet fleet, BattleRole role, Vector2 hexOffset) =>
             AddToBattle(new BattleMember(fleet, role, hexOffset));
 
@@ -128,7 +119,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             if (Members.Contains(member) == false)
                 Members.Add(member);
 
-            if (IsStarted == true && IsFinished == false && IsCancelled == false)
+            if (IsStarted == true && IsFinished == false)
             {
                 member.Fleet.SetFleetState(FleetState.InBattle);
                 Galaxy?.Listeners.Broadcast<IBattleListener>(l => l.OnBattleFleetAdded(this, member));
