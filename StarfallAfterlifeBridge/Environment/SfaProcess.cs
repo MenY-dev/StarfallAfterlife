@@ -83,6 +83,9 @@ namespace StarfallAfterlife.Bridge.Environment
                     {
                         string line = output.ReadLine();
                         OutputUpdated?.Invoke(this, new(line));
+#if DEBUG
+                        Debug.WriteLine("> " + line);
+#endif
                     }
                 }
                 catch { }
