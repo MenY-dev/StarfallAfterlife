@@ -303,7 +303,7 @@ namespace StarfallAfterlife.Bridge.Server
                     var doc = new JObject();
                     var session = p.CurrentSession;
 
-                    if (session is not null)
+                    if (session is not null && session.Ships is not null and { Count: > 0 })
                     {
                         var ships = JsonHelpers.ParseNode(session.Ships ?? new())?.AsArray() ?? new();
 

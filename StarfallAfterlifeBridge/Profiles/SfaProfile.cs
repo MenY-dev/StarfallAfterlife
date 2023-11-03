@@ -280,7 +280,11 @@ namespace StarfallAfterlife.Bridge.Profiles
                     }
 
                     CurrentProgress = charProgress;
-                    CurrentSession = Sessions.FirstOrDefault(s => s.CharacterId == character.Id && s.RealmId == CurrentRealm?.Realm?.Id);
+
+                    if (CurrentRealm?.Realm?.Id is string realmId &&
+                        Sessions.FirstOrDefault(s => s?.CharacterId == character.Id && s.RealmId == realmId) is DiscoverySession session &&
+                        session.Ships is not null and { Count: > 0 })
+                        CurrentSession = session;
                 }
             }
         }
