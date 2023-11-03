@@ -15,18 +15,27 @@ namespace StarfallAfterlife.Bridge.Tasks
 
         protected Queue<Action> Queue { get; } = new();
 
-        protected object Lokher = new();
+        protected List<DelayedAction> DelayedQueue { get; } = new();
 
         protected Task QueueTask { get; set; }
 
+        protected Task DelayedQueueTask { get; set; }
+
         protected CancellationTokenSource WaitingCancellation { get; set; }
+
+        protected CancellationTokenSource DelayedWaitingCancellation { get; set; }
+
+        protected object _locker = new();
+        protected object _invokeLocker = new();
+
+        protected record class DelayedAction(Action Action, DateTime Time);
 
         public void Invoke(Action action)
         {
             if (action is null)
                 return;
 
-            lock (Lokher)
+            lock (_locker)
             {
                 Queue.Enqueue(action);
                 WaitingCancellation?.Cancel();
@@ -36,13 +45,34 @@ namespace StarfallAfterlife.Bridge.Tasks
             }
         }
 
-        protected virtual void ProcessActions()
+        public void Invoke(Action action, int delay) =>
+            Invoke(action, TimeSpan.FromMilliseconds(delay));
+
+        public void Invoke(Action action, TimeSpan delay) =>
+            Invoke(action, DateTime.Now + delay);
+
+        protected void Invoke(Action action, DateTime time)
         {
-            if (Queue.Count == 0)
+            if (action is null)
                 return;
 
-            lock (Lokher)
+            lock (_locker)
             {
+                DelayedQueue.Add(new(action, time));
+                DelayedWaitingCancellation?.Cancel();
+
+                if (DelayedQueueTask == null)
+                    ProcessDelayedActions();
+            }
+        }
+
+        protected virtual void ProcessActions()
+        {
+            lock (_locker)
+            {
+                if (Queue.Count == 0)
+                    return;
+
                 QueueTask = Task.Factory.StartNew(() =>
                 {
                     while (true)
@@ -51,16 +81,17 @@ namespace StarfallAfterlife.Bridge.Tasks
                         {
                             Action action;
 
-                            lock (Lokher)
+                            lock (_locker)
                                 action = Queue.Dequeue();
 
-                            action?.Invoke();
+                            lock (_invokeLocker)
+                                action?.Invoke();
                         }
                         catch { }
 
                         if (Queue.Count == 0)
                         {
-                            lock (Lokher)
+                            lock (_locker)
                                 WaitingCancellation = new CancellationTokenSource();
 
                             Task.Delay((int)(WaitTime * 1000), WaitingCancellation.Token)
@@ -68,7 +99,7 @@ namespace StarfallAfterlife.Bridge.Tasks
                                 .Wait();
                         }
 
-                        lock (Lokher)
+                        lock (_locker)
                         {
                             if (Queue.Count == 0)
                             {
@@ -81,12 +112,82 @@ namespace StarfallAfterlife.Bridge.Tasks
             }
         }
 
+        protected virtual void ProcessDelayedActions()
+        {
+            lock (_locker)
+            {
+                if (DelayedQueue.Count == 0)
+                    return;
+
+                DelayedQueueTask = Task.Factory.StartNew(() =>
+                {
+                    while (true)
+                    {
+                        var time = DateTime.Now;
+
+                        while (true)
+                        {
+                            try
+                            {
+                                DelayedAction entry;
+
+                                lock (_locker)
+                                {
+                                    entry = DelayedQueue.FirstOrDefault(t => t.Time <= time);
+
+                                    if (entry is null)
+                                        break;
+
+                                    DelayedQueue.Remove(entry);
+                                }
+
+                                lock (_invokeLocker)
+                                    entry.Action?.Invoke();
+                            }
+                            catch { }
+                        }
+
+                        int waitingTime;
+
+                        lock (_locker)
+                        {
+                            if (DelayedQueue.Count > 0)
+                                waitingTime = (DelayedQueue.Min(a => a.Time) - time).Milliseconds;
+                            else
+                                waitingTime = (int)(WaitTime * 1000);
+                        }
+
+                        if (DelayedQueue.Count == 0)
+                        {
+                            lock (_locker)
+                                DelayedWaitingCancellation = new CancellationTokenSource();
+
+                            Task.Delay((int)(waitingTime), DelayedWaitingCancellation.Token)
+                                .ContinueWith(t => { DelayedWaitingCancellation = null; })
+                                .Wait();
+                        }
+
+                        lock (_locker)
+                        {
+                            if (DelayedQueue.Count == 0)
+                            {
+                                QueueTask = null;
+                                return;
+                            }
+                        }
+                    }
+                }, TaskCreationOptions.LongRunning);
+            }
+        }
+
         public void Dispose()
         {
-            lock (Lokher)
+            lock (_locker)
             {
                 Queue?.Clear();
                 WaitingCancellation?.Dispose();
+                DelayedQueue?.Clear();
+                DelayedWaitingCancellation?.Dispose();
             }
         }
     }
