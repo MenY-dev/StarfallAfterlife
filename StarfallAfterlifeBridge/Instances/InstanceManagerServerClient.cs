@@ -1,4 +1,5 @@
-﻿using StarfallAfterlife.Bridge.Mathematics;
+﻿using StarfallAfterlife.Bridge.Database;
+using StarfallAfterlife.Bridge.Mathematics;
 using StarfallAfterlife.Bridge.Networking;
 using StarfallAfterlife.Bridge.Networking.Messaging;
 using StarfallAfterlife.Bridge.Profiles;
@@ -196,6 +197,18 @@ namespace StarfallAfterlife.Bridge.Instances
             {
                 ["auth"] = auth,
                 ["mob_id"] = mobId,
+            });
+        }
+
+        public virtual void RequestCustomMobData(int mobId, Faction faction, string[] tags, string auth)
+        {
+            Send("get_mob_data", new JsonObject
+            {
+                ["auth"] = auth,
+                ["mob_id"] = mobId,
+                ["custom"] = 1,
+                ["faction"] = (int)faction,
+                ["tags"] = JsonHelpers.ParseNodeUnbuffered(tags ?? Array.Empty<string>()),
             });
         }
 

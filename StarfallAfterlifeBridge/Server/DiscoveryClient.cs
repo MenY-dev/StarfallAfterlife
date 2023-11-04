@@ -234,11 +234,11 @@ namespace StarfallAfterlife.Bridge.Server
                 });
         }
 
-        public Task<JsonNode> RequestDiscoveryCharacterData()
+        public Task<JsonNode> RequestDiscoveryCharacterData(bool allShips = true)
         {
             return Client?.SendRequest(
                 SfaServerAction.RequestCharacterDiscoveryData,
-                new JsonObject {},
+                new JsonObject { ["all_ships"] = allShips ? 1 : 0 },
                 5000)
                 .ContinueWith<JsonNode>(t =>
                 {

@@ -47,6 +47,7 @@ namespace StarfallAfterlife.Bridge.Server
         DiscoveryChannel = 192,
         GalacticChannel = 193,
         BattleGroundChannel = 194,
+        QuickMatchChannel = 195,
 
         GlobalChat = 220
     }

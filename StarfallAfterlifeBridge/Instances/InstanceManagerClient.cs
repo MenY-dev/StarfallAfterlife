@@ -1,4 +1,5 @@
-﻿using StarfallAfterlife.Bridge.Mathematics;
+﻿using StarfallAfterlife.Bridge.Database;
+using StarfallAfterlife.Bridge.Mathematics;
 using StarfallAfterlife.Bridge.Networking.Messaging;
 using StarfallAfterlife.Bridge.Serialization;
 using StarfallAfterlife.Bridge.Server.Discovery;
@@ -145,7 +146,7 @@ namespace StarfallAfterlife.Bridge.Instances
             {
                 ["auth"] = instanceAuth,
                 ["mob_id"] = id,
-                ["mob_data"] = data?.ToJsonString(false),
+                ["mob_data"] = data?.ToJsonString(false) ?? "{}",
             });
         }
 
@@ -215,7 +216,18 @@ namespace StarfallAfterlife.Bridge.Instances
                 (string)doc["auth"] is string auth &&
                 (int?)doc["mob_id"] is int id)
             {
-                MobDataRequested?.Invoke(this, new(auth, id));
+                if ((int?)doc["custom"] == 1)
+                {
+                    MobDataRequested?.Invoke(this, new(
+                        auth,
+                        id,
+                        (Faction?)(int?)doc["faction"] ?? Faction.None,
+                        doc["tags"]?.DeserializeUnbuffered<string[]>() ?? Array.Empty<string>()));
+                }
+                else
+                {
+                    MobDataRequested?.Invoke(this, new(auth, id));
+                }
             }
         }
 

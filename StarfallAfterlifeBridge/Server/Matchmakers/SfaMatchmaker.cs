@@ -30,6 +30,8 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         public MothershipAssaultGameMode MothershipAssaultGameMode { get; protected set; }
 
+        public QuickMatchGameMode QuickMatchGameMode { get; protected set; }
+
         public HashSet<MatchmakerGameMode> GameModes { get; } = new();
 
         public HashSet<MatchmakerBattle> Battles { get; } = new();
@@ -44,10 +46,13 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
             DiscoveryGameMode ??= new DiscoveryGameMode();
             MothershipAssaultGameMode ??= new MothershipAssaultGameMode();
+            QuickMatchGameMode ??= new QuickMatchGameMode();
             GameModes.Add(DiscoveryGameMode);
             GameModes.Add(MothershipAssaultGameMode);
+            GameModes.Add(QuickMatchGameMode);
             DiscoveryGameMode.Init(this);
             MothershipAssaultGameMode.Init(this);
+            QuickMatchGameMode.Init(this);
 
             InstanceManager = new InstanceManagerClient();
             InstanceManager.CharacterDataRequested += CharacterDataRequested;
@@ -76,7 +81,13 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 if (e.GameMode == "battlegrounds")
                 {
                     character.DiscoveryClient?
-                        .RequestDiscoveryCharacterData()
+                        .RequestDiscoveryCharacterData(true)
+                        .ContinueWith(t => InstanceManager.SendCharacterData(e.CharacterId, JsonNode.Parse(t.Result?.ToJsonString())));
+                }
+                else if (e.GameMode == "station_attack")
+                {
+                    character.DiscoveryClient?
+                        .RequestDiscoveryCharacterData(false)
                         .ContinueWith(t => InstanceManager.SendCharacterData(e.CharacterId, JsonNode.Parse(t.Result?.ToJsonString())));
                 }
                 else
@@ -88,12 +99,17 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         private void MobDataRequested(object sender, MobDataRequestEventArgs e)
         {
-            if (e.InstanceAuth is not null &&
-                Battles.FirstOrDefault(b => b.InstanceInfo?.Auth == e.InstanceAuth) is DiscoveryBattle battle &&
-                battle.GetMobData(e.MobId) is JsonNode doc)
+            JsonNode data = null;
+
+            if (e.InstanceAuth is not null)
             {
-                InstanceManager.SendMobData(e.InstanceAuth, e.MobId, doc);
+                if (e.IsCustom == true)
+                    data = (GetBattle(e.InstanceAuth) as StationAttackBattle).GetMobData(e.MobId, e.Faction, e.Tags);
+                else
+                    data = (GetBattle(e.InstanceAuth) as DiscoveryBattle).GetMobData(e.MobId);
             }
+
+            InstanceManager.SendMobData(e.InstanceAuth, e.MobId, data);
         }
 
         private void SpecialFleetRequested(object sender, SpecialFleetRequestEventArgs e)
@@ -238,6 +254,17 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 }
 
                 return null;
+            }
+        }
+
+        public MatchmakerBattle GetBattle(string auth)
+        {
+            lock (Lockher)
+            {
+                if (auth is null)
+                    return null;
+
+                return Battles.FirstOrDefault(b => b.InstanceInfo?.Auth == auth);
             }
         }
 

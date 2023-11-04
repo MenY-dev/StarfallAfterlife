@@ -11,6 +11,8 @@ namespace StarfallAfterlife.Bridge.Instances
 {
     public class InstanceExtraData : SfaObject
     {
+        public int NoPlayersLifetime { get; set; } = 0;
+
         public int LevelBoxSize { get; set; } = 0;
 
         public int ParentObjId { get; set; } = 0;
@@ -20,6 +22,8 @@ namespace StarfallAfterlife.Bridge.Instances
         public int ParentObjGroup { get; set; } = 0;
 
         public int ParentObjLvl { get; set; } = 0;
+
+        public int SpecOpsDifficulty { get; set; } = 0;
 
         public InstanceEnviropmentInfo EnviropmentInfo { get; set; }
 
@@ -53,6 +57,10 @@ namespace StarfallAfterlife.Bridge.Instances
             doc["instance_parent_obj_type"] = ParentObjType;
             doc["instance_parent_obj_group"] = ParentObjGroup;
             doc["instance_parent_obj_lvl"] = ParentObjLvl;
+            doc["spec_ops_difficulty"] = SpecOpsDifficulty;
+
+            if (NoPlayersLifetime > 0)
+                doc["no_players_lifetime"] = NoPlayersLifetime;
 
             if (LevelBoxSize > 0)
                 doc["level_box_size"] = LevelBoxSize;
@@ -73,12 +81,14 @@ namespace StarfallAfterlife.Bridge.Instances
             if (doc is not JsonObject)
                 return;
 
+            NoPlayersLifetime = (int?)doc["no_players_lifetime"] ?? 0;
             ParentObjId = (int?)doc["instance_parent_obj_id"] ?? 0;
             ParentObjType = (int?)doc["instance_parent_obj_type"] ?? 0;
             ParentObjGroup = (int?)doc["instance_parent_obj_group"] ?? 0;
             ParentObjLvl = (int?)doc["instance_parent_obj_lvl"] ?? 0;
-
             LevelBoxSize = (int?)doc["level_box_size"] ?? 0;
+            SpecOpsDifficulty = (int?)doc["spec_ops_difficulty"] ?? 0;
+
 
             if (doc["env_info"] is JsonObject enviropmentInfoNode)
                 (EnviropmentInfo ??= new()).LoadFromJson(enviropmentInfoNode);

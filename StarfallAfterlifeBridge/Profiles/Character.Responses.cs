@@ -1,4 +1,5 @@
-﻿using StarfallAfterlife.Bridge.Serialization;
+﻿using StarfallAfterlife.Bridge.Database;
+using StarfallAfterlife.Bridge.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -214,12 +215,12 @@ namespace StarfallAfterlife.Bridge.Profiles
             return doc;
         }
 
-        public JsonNode CreateDiscoveryCharacterDataResponse()
+        public JsonNode CreateDiscoveryCharacterDataResponse(bool includeAllShips = true, bool includeDestroyedShips = true)
         {
             JsonNode doc = new JsonObject
             {
-                ["charactname"] = CurrentName,
                 ["faction"] = Faction,
+                ["charactname"] = CurrentName,
                 ["xp_factor"] = XpBoost,
                 ["bonus_xp"] = BonusXp,
                 ["access_level"] = AccessLevel,
@@ -230,13 +231,101 @@ namespace StarfallAfterlife.Bridge.Profiles
             JsonArray ships = new JsonArray();
             JsonArray groups = new JsonArray();
 
-            foreach (var item in Ships)
-                ships.Add(CreateShipResponse(item));
+            if (includeAllShips == true)
+            {
+                foreach (var item in Ships)
+                    ships.Add(CreateDiscoveryShipDataResponse(item));
+            }
+            else
+            {
+                var detachment =
+                    Detachments.FirstOrDefault(d => d.Key == CurrentDetachment);
+
+                foreach (var item in detachment.Value?.Slots ?? new())
+                {
+                    if (item.Value > 0 &&
+                        GetShip(item.Value) is FleetShipInfo ship)
+                        ships.Add(CreateDiscoveryShipDataResponse(ship, detachment.Key, item.Key));
+                }
+            }
+
+            foreach (var item in ShipGroups ?? new())
+                groups.Add(CreateShipGroupResponse(item));
 
             doc["ships_list"] = ships;
             doc["ship_groups"] = groups;
 
             return doc;
+        }
+
+
+        public JsonNode CreateDiscoveryShipDataResponse(FleetShipInfo ship, int detachment = 0, int slot = 0)
+        {
+            if (ship is null)
+                return new JsonObject();
+
+            var shipData = ship?.Data ?? new();
+
+            JsonNode doc = new JsonObject
+            {
+                ["hull"] = shipData.Hull,
+                ["elid"] = shipData.Id + IndexSpace,
+                ["plid"] = UniqueId,
+                ["xp"] = shipData.Xp,
+                ["armor"] = shipData.ArmorDelta,
+                ["structure"] = shipData.StructureDelta,
+                ["detachment"] = detachment,
+                ["slot"] = slot,
+                ["destroyed"] = 0,
+                ["ship_skin"] = shipData.ShipSkin,
+                ["skin_color_1"] = shipData.SkinColor1,
+                ["skin_color_2"] = shipData.SkinColor2,
+                ["skin_color_3"] = shipData.SkinColor3,
+                ["shipdecal"] = shipData.ShipDecal,
+                ["cargo_hold_size"] = SfaDatabase.Instance.GetShipCargo(shipData.Hull),
+            };
+
+            JsonArray hardpoints = new JsonArray();
+            JsonArray progression = new JsonArray();
+
+            foreach (var item in shipData.HardpointList)
+            {
+                JsonArray equipments = new JsonArray();
+
+                foreach (var eq in item.EquipmentList)
+                {
+                    equipments.Add(new JsonObject
+                    {
+                        ["eq"] = eq.Equipment,
+                        ["x"] = eq.X,
+                        ["y"] = eq.Y,
+                    });
+                }
+
+                hardpoints.Add(new JsonObject
+                {
+                    ["hp"] = item.Hardpoint,
+                    ["eqlist"] = equipments
+                });
+            }
+
+            foreach (var item in shipData.Progression)
+            {
+                progression.Add(new JsonObject
+                {
+                    ["id"] = item.Id,
+                    ["points"] = item.Points
+                });
+            }
+
+            doc["hplist"] = hardpoints;
+            doc["progression"] = progression;
+
+            return new JsonObject
+            {
+                ["id"] = shipData.Id + IndexSpace,
+                ["data"] = doc?.ToJsonStringUnbuffered(false),
+            };
         }
 
         public JsonNode CreateCraftingResponse(IEnumerable<int> newShips = null, IEnumerable<int> newCrafts = null)
@@ -328,6 +417,23 @@ namespace StarfallAfterlife.Bridge.Profiles
             };
 
             return doc;
+        }
+
+
+        public JsonNode CreateShipGroupResponse(ShipsGroup group)
+        {
+            return new JsonObject
+            {
+                ["group_num"] = group.Number,
+                ["lock_formation"] = group.LockFormation,
+                ["ships"] = new JsonArray(group.Ships.Select(s => new JsonObject
+                {
+                    ["id"] = s.Id + IndexSpace,
+                    ["x"] = s.X,
+                    ["y"] = s.Y,
+                    ["rot"] = s.Rotation,
+                }).ToArray()),
+            };
         }
 
         public JsonNode CreateShipDataResponse(FleetShipInfo ship)

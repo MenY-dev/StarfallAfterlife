@@ -1,4 +1,5 @@
-﻿using StarfallAfterlife.Bridge.Diagnostics;
+﻿using StarfallAfterlife.Bridge.Database;
+using StarfallAfterlife.Bridge.Diagnostics;
 using StarfallAfterlife.Bridge.Networking;
 using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Serialization;
@@ -43,6 +44,16 @@ namespace StarfallAfterlife.Bridge.Instances
                     response = new JsonObject
                     {
                         ["mobdata"] = HandleGetMobFleet((string)query["auth"], (int?)query["mobid"] ?? -1)
+                    };
+                    break;
+
+                case "getmobfleetcustom":
+                    response = new JsonObject
+                    {
+                        ["mobdata"] = HandleGetMobFleetCustom(
+                            (Faction?)(byte?)query["faction"] ?? Faction.None,
+                            ((string)query["tags"])?.Split(',', StringSplitOptions.RemoveEmptyEntries) ?? Array.Empty<string>(),
+                            (string)query["auth"]),
                     };
                     break;
 
@@ -147,6 +158,37 @@ namespace StarfallAfterlife.Bridge.Instances
             return mobData;
         }
 
+        private JsonNode HandleGetMobFleetCustom(Faction faction, string[] tags, string auth)
+        {
+            if (auth is null)
+                return null;
+
+            int mobId = (int)faction + auth.GetHashCode();
+            tags ??= Array.Empty<string>();
+
+            foreach (var item in tags)
+                mobId ^= item?.GetHashCode() ?? 0;
+
+            JsonNode mobData = null;
+            var responseWaiter = EventWaiter<MobDataResponseEventArgs>
+                .Create()
+                .Subscribe(e => MobDataReceived += e)
+                .Unsubscribe(e => MobDataReceived -= e)
+                .Where((o, e) =>
+                {
+                    if (e.InstanceAuth != auth ||
+                        e.MobId != mobId)
+                        return false;
+
+                    mobData = e.Data;
+                    return true;
+                })
+                .Start(20000);
+
+            RequestCustomMobData(mobId, faction, tags, auth);
+            responseWaiter.Wait();
+            return mobData;
+        }
 
         private JsonNode HandleGetSpecialFleet(string fleetName, string auth)
         {

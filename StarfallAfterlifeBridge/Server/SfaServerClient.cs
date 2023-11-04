@@ -64,6 +64,9 @@ namespace StarfallAfterlife.Bridge.Server
                 case SfaServerAction.BattleGroundChannel:
                     DiscoveryClient?.InputFromBattleGroundChannel(reader);
                     break;
+                case SfaServerAction.QuickMatchChannel:
+                    DiscoveryClient?.InputFromQuickMatchChannel(reader);
+                    break;
             }
         }
 

@@ -49,6 +49,8 @@ namespace StarfallAfterlife.Bridge.Server
 
         protected GalacticChannel GalacticChannel => Game?.GalacticChannel;
 
+        protected QuickMatchChannel QuickMatchChannel => Game?.QuickMatchChannel;
+
         protected BattleGroundChannel BattleGroundChannel => Game?.BattleGroundChannel;
 
         public SfaClient(SfaGame game)
@@ -73,6 +75,9 @@ namespace StarfallAfterlife.Bridge.Server
                     break;
                 case SfaServerAction.BattleGroundChannel:
                     BattleGroundChannel?.Send(reader.ReadToEnd());
+                    break;
+                case SfaServerAction.QuickMatchChannel:
+                    QuickMatchChannel?.Send(reader.ReadToEnd());
                     break;
             }
         }
@@ -555,7 +560,7 @@ namespace StarfallAfterlife.Bridge.Server
                 if (p.GameProfile?.CurrentCharacter is Character character)
                 {
                     request.SendResponce(
-                        character.CreateDiscoveryCharacterDataResponse()?.ToJsonString(),
+                        character.CreateDiscoveryCharacterDataResponse((byte?)doc["all_ships"] == 1)?.ToJsonString(),
                         SfaServerAction.RequestCharacterDiscoveryData);
                 }
             });
@@ -727,6 +732,12 @@ namespace StarfallAfterlife.Bridge.Server
                             auth);
                         break;
 
+                    case "quick_match":
+                        QuickMatchChannel?.SendInstanceReady(
+                            address,
+                            port,
+                            auth);
+                        break;
                     default:
                         break;
                 }
