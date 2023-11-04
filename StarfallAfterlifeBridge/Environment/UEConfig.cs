@@ -30,7 +30,7 @@ namespace StarfallAfterlife.Bridge.Environment
                     if (line is null)
                         continue;
 
-                    doc.AppendLine(section.SectionClass);
+                    doc.AppendLine(line);
                 }
 
                 doc.AppendLine();
