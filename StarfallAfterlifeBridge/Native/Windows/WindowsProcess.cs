@@ -183,15 +183,21 @@ namespace StarfallAfterlife.Bridge.Native.Windows
             catch { }
         }
 
-        public void Kill()
+        public void Close()
         {
             lock (_processLockher)
             {
                 if (_isStarted == false)
                     return;
 
-                SharpProcess?.Kill();
-                ProcessExit();
+                try
+                {
+                    SharpProcess?.Close();
+                }
+                finally
+                {
+                    ProcessExit();
+                }
             }
         }
 
@@ -202,9 +208,14 @@ namespace StarfallAfterlife.Bridge.Native.Windows
             {
                 if (_isStarted == false)
                     return;
-
-                SharpProcess?.CloseMainWindow();
-                ProcessExit();
+                try
+                {
+                    SharpProcess?.CloseMainWindow();
+                }
+                finally
+                {
+                    ProcessExit();
+                }
             }
         }
 
@@ -256,7 +267,7 @@ namespace StarfallAfterlife.Bridge.Native.Windows
             if (!_disposedValue)
             {
                 if (_isStarted == true)
-                    Kill();
+                    Close();
 
                 if (disposing)
                 {

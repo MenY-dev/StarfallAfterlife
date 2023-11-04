@@ -70,7 +70,7 @@ namespace StarfallAfterlife.Bridge.Environment
 
         public void Close()
         {
-            WinProcess?.Kill();
+            WinProcess?.Close();
         }
 
         protected virtual void BeginReadingOutput(StreamReader output)

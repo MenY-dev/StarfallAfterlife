@@ -97,7 +97,13 @@ namespace StarfallAfterlife.Bridge.Instances
         public virtual void Stop()
         {
             State = InstanceState.Finished;
-            Process?.Close();
+
+            try
+            {
+
+                Process?.Close();
+            }
+            catch { }
         }
 
         public virtual JsonNode CreateInstanceConfig()
