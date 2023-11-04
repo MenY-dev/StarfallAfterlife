@@ -83,7 +83,7 @@ namespace StarfallAfterlife.Bridge.Environment
                     {
                         string line = output.ReadLine();
                         OutputUpdated?.Invoke(this, new(line));
-#if DEBUG
+#if INSTANCES_DEBUG
                         Debug.WriteLine("> " + line);
 #endif
                     }
@@ -149,8 +149,8 @@ namespace StarfallAfterlife.Bridge.Environment
             //sb.Append(" -ExecCmds=\"DebugRemovePlayer 0\"");
 
 
-            sb.Append(" -stdout");
-            sb.Append(" -FullStdOutLogOutput");
+            //sb.Append(" -stdout");
+            //sb.Append(" -FullStdOutLogOutput");
             sb.Append(" -unattended");
             sb.Append(" -nopause");
 
@@ -167,8 +167,8 @@ namespace StarfallAfterlife.Bridge.Environment
             if (ConsoleCommands is not null && ConsoleCommands.Count > 0)
                 sb.Append($" -ExecCmds=\"{string.Join("; ", ConsoleCommands)}\"");
 
-            if (EnableLog == true && Listen == false)
-                sb.Append(" -log");
+            //if (EnableLog == true && Listen == false)
+            //    sb.Append(" -log");
 
             //sb.Append(" -NOWRITE");
 
@@ -198,10 +198,10 @@ namespace StarfallAfterlife.Bridge.Environment
                 if (string.IsNullOrWhiteSpace(sandbox.OutputLocation) == false)
                     sb.Append($" -OutputDir=\"{sandbox.OutputLocation}\"");
 
-                if (sandbox.EngineIni is not null && string.IsNullOrWhiteSpace(sandbox.EngineIniLocation))
+                if (sandbox.EngineIni is not null && string.IsNullOrWhiteSpace(sandbox.EngineIniLocation) == false)
                     sb.Append($" -ENGINEINI=\"{sandbox.EngineIniLocation}\"");
 
-                if (sandbox.GameIni is not null && string.IsNullOrWhiteSpace(sandbox.GameIniLocation))
+                if (sandbox.GameIni is not null && string.IsNullOrWhiteSpace(sandbox.GameIniLocation) == false)
                     sb.Append($" -GAMEINI=\"{sandbox.GameIniLocation}\"");
             }
 

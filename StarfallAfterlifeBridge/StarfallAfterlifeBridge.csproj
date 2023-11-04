@@ -4,10 +4,13 @@
     <TargetFramework>net7.0</TargetFramework>
     <RootNamespace>StarfallAfterlife.Bridge</RootNamespace>
     <OutputType>Library</OutputType>
+    <Configurations>Debug;Release;DebugInstances</Configurations>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>$(DefineConstants);DEBUG</DefineConstants>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'" />
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugInstances|AnyCPU'">
+    <DefineConstants>$(DefineConstants);INSTANCES_DEBUG</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

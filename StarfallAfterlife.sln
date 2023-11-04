@@ -12,19 +12,26 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		InstancesDebug|Any CPU = InstancesDebug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{A8D58AB4-9C04-4DA1-9460-E88FBABA7373}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A8D58AB4-9C04-4DA1-9460-E88FBABA7373}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8D58AB4-9C04-4DA1-9460-E88FBABA7373}.InstancesDebug|Any CPU.ActiveCfg = DebugInstances|Any CPU
+		{A8D58AB4-9C04-4DA1-9460-E88FBABA7373}.InstancesDebug|Any CPU.Build.0 = DebugInstances|Any CPU
 		{A8D58AB4-9C04-4DA1-9460-E88FBABA7373}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A8D58AB4-9C04-4DA1-9460-E88FBABA7373}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C53ED83C-2DB1-4512-92E8-EA5A999CB077}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C53ED83C-2DB1-4512-92E8-EA5A999CB077}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C53ED83C-2DB1-4512-92E8-EA5A999CB077}.InstancesDebug|Any CPU.ActiveCfg = DebugInstances|Any CPU
+		{C53ED83C-2DB1-4512-92E8-EA5A999CB077}.InstancesDebug|Any CPU.Build.0 = DebugInstances|Any CPU
 		{C53ED83C-2DB1-4512-92E8-EA5A999CB077}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C53ED83C-2DB1-4512-92E8-EA5A999CB077}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1AC9B12B-C047-4864-8683-A61886A33202}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1AC9B12B-C047-4864-8683-A61886A33202}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AC9B12B-C047-4864-8683-A61886A33202}.InstancesDebug|Any CPU.ActiveCfg = DebugInstances|Any CPU
+		{1AC9B12B-C047-4864-8683-A61886A33202}.InstancesDebug|Any CPU.Build.0 = DebugInstances|Any CPU
 		{1AC9B12B-C047-4864-8683-A61886A33202}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1AC9B12B-C047-4864-8683-A61886A33202}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
