@@ -1,4 +1,5 @@
 ﻿using StarfallAfterlife.Bridge.Instances;
+using StarfallAfterlife.Bridge.Server.Characters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +38,26 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
         public virtual void InstanceStateChanged(InstanceState state)
         {
 
+        }
+
+        public virtual void UserStatusChanged(SfaServerClient user, UserInGameStatus status)
+        {
+
+        }
+
+        public virtual void CharStatusChanged(ServerCharacter character, UserInGameStatus status)
+        {
+
+        }
+
+        public virtual bool ContainsChar(ServerCharacter character)
+        {
+            return false;
+        }
+
+        public virtual bool ContainsUser(SfaServerClient user)
+        {
+            return false;
         }
     }
 }

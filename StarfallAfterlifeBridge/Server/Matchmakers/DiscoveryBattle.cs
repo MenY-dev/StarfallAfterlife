@@ -316,7 +316,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
                 Bosses?.Clear();
 
-                GameMode.InstanceManager.RemoveInstance(InstanceInfo);
+                GameMode.InstanceManager.StopInstance(InstanceInfo);
                 Matchmaker.RemoveBattle(this);
                 Galaxy?.BeginPreUpdateAction(g => SystemBattle.Finish());
             }
@@ -573,6 +573,15 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 (DiscoveryObjectType?)(byte?)doc["obj_type"] == obj.Type &&
                 (int?)doc["obj_id"] == obj.Id )
                 SystemBattle.SetDungeonCompleted();
+        }
+
+        public override bool ContainsChar(ServerCharacter character)
+        {
+            if (character is null)
+                return false;
+
+            lock (_lockher)
+                return Characters?.Any(c => c?.ServerCharacter == character) == true;
         }
     }
 }

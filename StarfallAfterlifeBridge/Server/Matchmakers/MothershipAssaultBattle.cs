@@ -119,5 +119,13 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 Chars.Clear();
             }
         }
+
+        public override bool ContainsChar(ServerCharacter character)
+        {
+            if (character is null)
+                return false;
+
+            return Chars.ToArray()?.Any(c => c?.Char == character) == true;
+        }
     }
 }

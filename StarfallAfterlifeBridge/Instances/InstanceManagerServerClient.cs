@@ -46,6 +46,9 @@ namespace StarfallAfterlife.Bridge.Instances
                 case "start_instance":
                     HandleStartInstance(doc); break;
 
+                case "stop_instance":
+                    HandleStopInstance(doc); break;
+
                 case "join_new_char":
                     HandleJoinNewChar(doc); break;
 
@@ -77,6 +80,19 @@ namespace StarfallAfterlife.Bridge.Instances
                         instance.Start();
                     }
                     catch  { }
+                }
+            }
+        }
+
+        private void HandleStopInstance(JsonNode doc)
+        {
+            lock (Lockher)
+            {
+                if ((string)doc?["sync_key"] is string syncKey &&
+                    GetInstanceWithSyncKey(syncKey) is DiscoveryBattleInstance instance)
+                {
+                    instance.Stop();
+                    Instances.Remove(syncKey);
                 }
             }
         }

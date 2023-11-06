@@ -159,8 +159,13 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
         {
             lock (Lockher)
             {
-                var battle = Battles.FirstOrDefault(b => b.InstanceInfo == e.Instance) as DiscoveryBattle;
-                battle?.OnFleetLeavesFromInstance(e.FleetType, e.FleetId, e.Hex);
+                var battle = Battles.FirstOrDefault(b => b.InstanceInfo == e.Instance);
+
+                if (battle is DiscoveryBattle discoveryBattle)
+                    discoveryBattle?.OnFleetLeavesFromInstance(e.FleetType, e.FleetId, e.Hex);
+                else if (battle is StationAttackBattle stationAttackBattle)
+                    stationAttackBattle?.OnFleetLeavesFromInstance(e.FleetType, e.FleetId, e.Hex);
+
             }
         }
 
@@ -223,6 +228,24 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
             }
         }
 
+        public void OnUserStatusChanged(SfaServerClient user, UserInGameStatus status)
+        {
+            lock (Lockher)
+            {
+                if (user is null)
+                    return;
+
+                foreach (var battle in GetBattles(user))
+                    battle?.UserStatusChanged(user, status);
+
+                foreach (var character in user.DiscoveryClient.Characters?.ToArray() ?? Array.Empty<ServerCharacter>())
+                {
+                    foreach (var battle in GetBattles(character))
+                        battle?.CharStatusChanged(character, status);
+                }
+            }
+        }
+
         public void AddBattle(MatchmakerBattle battle)
         {
             lock (Lockher)
@@ -244,16 +267,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
         {
             lock (Lockher)
             {
-                foreach (var battle in Battles)
-                {
-                    if ((battle as DiscoveryBattle)?.Characters.ToArray()?.Any(c => c.ServerCharacter == character) == true)
-                        return battle;
-
-                    if ((battle as MothershipAssaultBattle)?.Chars.ToArray()?.Any(c => c.Char == character) == true)
-                        return battle;
-                }
-
-                return null;
+                return GetBattles(character).FirstOrDefault();
             }
         }
 
@@ -265,6 +279,22 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                     return null;
 
                 return Battles.FirstOrDefault(b => b.InstanceInfo?.Auth == auth);
+            }
+        }
+
+        public MatchmakerBattle[] GetBattles(ServerCharacter character)
+        {
+            lock (Lockher)
+            {
+                return Battles.Where(b => b?.ContainsChar(character) == true).ToArray();
+            }
+        }
+
+        public MatchmakerBattle[] GetBattles(SfaServerClient user)
+        {
+            lock (Lockher)
+            {
+                return Battles.Where(b => b?.ContainsUser(user) == true).ToArray();
             }
         }
 

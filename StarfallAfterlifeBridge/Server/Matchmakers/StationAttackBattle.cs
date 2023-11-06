@@ -1,6 +1,8 @@
 ﻿using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Instances;
+using StarfallAfterlife.Bridge.Mathematics;
 using StarfallAfterlife.Bridge.Serialization;
+using StarfallAfterlife.Bridge.Server.Characters;
 using StarfallAfterlife.Bridge.Server.Discovery;
 using System;
 using System.Collections.Generic;
@@ -37,6 +39,16 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 InstanceInfo.Characters.AddRange(Characters.Select(c => c.InstanceCharacter));
                 InstanceInfo.ExtraData = CreateExtraData().ToJson().ToJsonString();
                 GameMode.InstanceManager.StartInstance(InstanceInfo);
+            }
+        }
+
+        public override void Stop()
+        {
+            base.Stop();
+
+            lock (_lockher)
+            {
+                Matchmaker?.InstanceManager?.StopInstance(InstanceInfo);
             }
         }
 
@@ -139,6 +151,37 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
                 return null;
             }
+        }
+
+        public void OnFleetLeavesFromInstance(DiscoveryObjectType fleetType, int fleetId, SystemHex hex)
+        {
+            if (fleetType is DiscoveryObjectType.UserFleet)
+            {
+                Characters.RemoveAll(c => c.InstanceCharacter.Id == fleetId);
+
+                if (Characters.Count < 1)
+                    Stop();
+            };
+        }
+
+        public override void CharStatusChanged(ServerCharacter character, UserInGameStatus status)
+        {
+            if (status != UserInGameStatus.CharInBattle)
+            {
+                Characters.RemoveAll(c => c.Char == character);
+
+                if (Characters.Count < 1)
+                    Stop();
+            }
+        }
+
+        public override bool ContainsChar(ServerCharacter character)
+        {
+            if (character is null)
+                return false;
+
+            lock (_lockher)
+                return Characters?.Any(c => c?.Char == character) == true;
         }
     }
 }

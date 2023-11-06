@@ -67,6 +67,12 @@ namespace StarfallAfterlife.Bridge.Server
                 case SfaServerAction.QuickMatchChannel:
                     DiscoveryClient?.InputFromQuickMatchChannel(reader);
                     break;
+                case SfaServerAction.UserFriendChannel:
+                    InputFromFriendChannel(reader, false);
+                    break;
+                case SfaServerAction.CharacterFriendChannel:
+                    InputFromFriendChannel(reader, true);
+                    break;
             }
         }
 

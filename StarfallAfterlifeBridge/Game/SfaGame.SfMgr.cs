@@ -26,7 +26,7 @@ namespace StarfallAfterlife.Bridge.Game
 
         public GameChannel UserAnalyticsChannel { get; protected set; }
 
-        public GameChannel UserFriendsChannel { get; protected set; }
+        public FriendChannel UserFriendsChannel { get; protected set; }
 
         protected MgrServer SfMgrServer { get; set; }
 
@@ -144,7 +144,7 @@ namespace StarfallAfterlife.Bridge.Game
             GeneralTextChatChannel ??= new ChatConsoleChannel("GeneralTextChat", 2, this);
             SystemMessagesChannel ??= new GameChannel("SystemMessages", 3);
             UserAnalyticsChannel ??= new GameChannel("UserAnalytics", 4);
-            UserFriendsChannel ??= new GameChannel("UserFriends", 5);
+            UserFriendsChannel ??= new FriendChannel("UserFriends", 5, this) { IsUserChannel = true };
 
             SfMgrChannelManager.Add(MatchmakerChannel);
             SfMgrChannelManager.Add(GeneralTextChatChannel);

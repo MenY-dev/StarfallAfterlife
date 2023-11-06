@@ -33,6 +33,9 @@ namespace StarfallAfterlife.Bridge.Server
             string gameMode = reader.ReadShortString(Encoding.UTF8);
             byte difficulty = reader.ReadByte();
 
+            if (CurrentCharacter.Fleet?.System is null)
+                Invoke(() => StartGhostSession());
+
             Invoke(() =>
             {
                 var battle = Server.Matchmaker.QuickMatchGameMode.CreateStationAttackMatch(difficulty, CurrentCharacter);

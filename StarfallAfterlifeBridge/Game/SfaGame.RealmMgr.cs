@@ -28,7 +28,7 @@ namespace StarfallAfterlife.Bridge.Game
 
         public ChatConsoleChannel VanguardChatChannel { get; protected set; }
 
-        public GameChannel CharacterFriendsChannel { get; protected set; }
+        public FriendChannel CharacterFriendsChannel { get; protected set; }
 
         public QuickMatchChannel QuickMatchChannel { get; protected set; }
 
@@ -207,7 +207,7 @@ namespace StarfallAfterlife.Bridge.Game
             DeprivedChatChannel ??= new ChatConsoleChannel("Deprived Chat", 6, this);
             EclipseChatChannel ??= new ChatConsoleChannel("Eclipse Chat", 7, this);
             VanguardChatChannel ??= new ChatConsoleChannel("Vanguard Chat", 8, this);
-            CharacterFriendsChannel ??= new GameChannel("CharacterFriends", 9);
+            CharacterFriendsChannel ??= new FriendChannel("CharacterFriends", 9, this);
             QuickMatchChannel ??= new QuickMatchChannel("QuickMatch", 10, this);
             CharactPartyChannel ??= new GameChannel("CharactParty", 11);
             BattleGroundChannel ??= new BattleGroundChannel("BattleGround", 12, this);

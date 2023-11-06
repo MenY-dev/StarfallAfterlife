@@ -43,6 +43,10 @@ namespace StarfallAfterlife.Bridge.Instances
                     HandleFleetLeavesInstance(reader, objectType, objectId);
                     ; break;
 
+                case DiscoveryClientAction.PlayerLeaveBattle:
+                    HandlePlayerLeaveBattle(reader, objectType, objectId);
+                    ; break;
+
                 case DiscoveryClientAction.CharacterStatsNotification:
                     ; break;
 
@@ -70,6 +74,11 @@ namespace StarfallAfterlife.Bridge.Instances
             var hex = reader.ReadHex();
             SfaDebug.Print($"FleetLeaves (Instance = {Instance?.InstanceId} FleetType = {fleetType}, FleetId = {fleetId}, Hex = {hex})", "InstanceDiscoveryChannel");
             (Instance as DiscoveryBattleInstance)?.OnFleetLeaves(fleetType, fleetId, hex);
+        }
+
+        private void HandlePlayerLeaveBattle(SfReader reader, DiscoveryObjectType objectType, int objectId)
+        {
+            SfaDebug.Print($"PlayerLeaves (Id = {objectId}");
         }
 
         public virtual void HandleInstanceBattleSignal(SfReader reader)

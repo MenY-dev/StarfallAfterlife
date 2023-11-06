@@ -4,14 +4,16 @@
     <TargetFramework>net7.0</TargetFramework>
     <RootNamespace>StarfallAfterlife.Bridge</RootNamespace>
     <OutputType>Library</OutputType>
-    <Configurations>Debug;Release;DebugInstances</Configurations>
+    <Configurations>Debug;Release;InstancesDebug</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'" />
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugInstances|AnyCPU'">
-    <DefineConstants>$(DefineConstants);INSTANCES_DEBUG</DefineConstants>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='InstancesDebug|AnyCPU'">
+    <DefineConstants>$(DefineConstants);INSTANCES_DEBUG;TRACE;DEBUG;</DefineConstants>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugInstances|AnyCPU'" />
 
   <ItemGroup>
     <None Update="Database\database.json">

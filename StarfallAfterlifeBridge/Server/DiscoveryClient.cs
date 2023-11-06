@@ -104,6 +104,48 @@ namespace StarfallAfterlife.Bridge.Server
             }
         }
 
+        public void StartGhostSession()
+        {
+            State = SfaCharacterState.EnterToGalaxy;
+
+            if (CurrentCharacter is ServerCharacter character)
+            {
+                Client.SendRequest(SfaServerAction.StartSession, new JsonObject
+                {
+                    ["character_id"] = CurrentCharacter.UniqueId
+                }
+                ).ContinueWith(t =>
+                {
+                    if (t.Result is SfaClientResponse response &&
+                        response.IsSuccess == true &&
+                        response.Action == SfaServerAction.StartSession)
+                    {
+                        var doc = JsonHelpers.ParseNodeUnbuffered(response.Text);
+
+                        if (doc is not JsonObject)
+                            return;
+
+                        if (CurrentCharacter is ServerCharacter character &&
+                            doc["char_data"] is JsonObject charData)
+                        {
+                            if (character.Fleet is UserFleet currentFleet)
+                            {
+                                currentFleet.RemoveListener(this);
+                                character.Fleet = null;
+                                Galaxy?.BeginPreUpdateAction(g => currentFleet.LeaveFromGalaxy());
+                            }
+
+                            var spawnSystem = GetCharactDefaultSystem() ?? new();
+                            var spawnPos = spawnSystem.GetDefaultSpawnPosition(CurrentCharacter?.Faction ?? Faction.None);
+                            character.LoadFromCharacterData(charData);
+
+                            SynckSessionFleetInfo();
+                            SynckSessionSystemInfo(spawnSystem.Id, spawnPos);
+                        }
+                    }
+                });
+            }
+        }
         public void EndGalaxySession()
         {
             if (State != SfaCharacterState.InGalaxy)

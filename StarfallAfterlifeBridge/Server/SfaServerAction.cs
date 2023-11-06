@@ -33,7 +33,7 @@ namespace StarfallAfterlife.Bridge.Server
         DropSession = 162,
         SyncGalaxySessionData = 163,
         GetFullGalaxySessionData = 164,
-        
+
         StartBattle = 170,
 
         SyncProgress = 180,
@@ -48,7 +48,9 @@ namespace StarfallAfterlife.Bridge.Server
         GalacticChannel = 193,
         BattleGroundChannel = 194,
         QuickMatchChannel = 195,
+        UserFriendChannel = 196,
+        CharacterFriendChannel = 197,
 
-        GlobalChat = 220
+        GlobalChat = 220,
     }
 }

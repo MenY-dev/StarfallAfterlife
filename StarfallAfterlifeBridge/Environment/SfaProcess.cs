@@ -148,12 +148,13 @@ namespace StarfallAfterlife.Bridge.Environment
 
             //sb.Append(" -ExecCmds=\"DebugRemovePlayer 0\"");
 
+#if INSTANCES_DEBUG
+            sb.Append(" -stdout");
+            sb.Append(" -FullStdOutLogOutput");
+#endif
 
-            //sb.Append(" -stdout");
-            //sb.Append(" -FullStdOutLogOutput");
             sb.Append(" -unattended");
             sb.Append(" -nopause");
-
 
             //sb.Append(" -forcelogflush");
             //sb.Append(" -dx10");
@@ -167,8 +168,8 @@ namespace StarfallAfterlife.Bridge.Environment
             if (ConsoleCommands is not null && ConsoleCommands.Count > 0)
                 sb.Append($" -ExecCmds=\"{string.Join("; ", ConsoleCommands)}\"");
 
-            //if (EnableLog == true && Listen == false)
-            //    sb.Append(" -log");
+            if (EnableLog == true && Listen == false)
+                sb.Append(" -log");
 
             //sb.Append(" -NOWRITE");
 

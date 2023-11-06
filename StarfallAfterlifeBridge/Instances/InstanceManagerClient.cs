@@ -97,15 +97,20 @@ namespace StarfallAfterlife.Bridge.Instances
             return true;
         }
 
-        public virtual bool RemoveInstance(InstanceInfo instance)
+        public virtual void StopInstance(InstanceInfo instance)
         {
             lock (Lockher)
             {
                 if (GetSyncKey(instance) is string syncKey)
-                    return Instances.Remove(syncKey);
-            }
+                {
+                    Instances.Remove(syncKey);
 
-            return false;
+                    Send("stop_instance", new JsonObject
+                    {
+                        ["sync_key"] = syncKey
+                    });
+                }
+            }
         }
 
 

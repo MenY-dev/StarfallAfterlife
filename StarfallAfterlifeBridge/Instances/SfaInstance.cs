@@ -96,11 +96,11 @@ namespace StarfallAfterlife.Bridge.Instances
 
         public virtual void Stop()
         {
-            State = InstanceState.Finished;
+            if (State != InstanceState.Finished)
+                State = InstanceState.Finished;
 
             try
             {
-
                 Process?.Close();
             }
             catch { }
