@@ -328,6 +328,69 @@
     <None Update="Database\Mobs\sadists_213017224.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Database\Mobs\sa_basic_289803837.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\sa_easy_access_station_mob_763870603.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\sa_easy_elite_commander_678463746.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\sa_easy_stealth_starhammer_marker_451454447.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\sa_easy_support_repair_336262774.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\sa_easy_target_designation_station_mob_1955796880.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\sa_expert_access_station_mob_763870606.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\sa_expert_elite_commander_678463749.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\sa_expert_stealth_starhammer_marker_451454440.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\sa_expert_support_repair_336262777.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\sa_expert_target_designation_station_mob_1955796883.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\sa_hard_access_station_mob_763870605.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\sa_hard_elite_commander_678463748.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\sa_hard_stealth_starhammer_marker_451454449.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\sa_hard_support_repair_336262776.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\sa_hard_target_designation_station_mob_1955796882.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\sa_normal_access_station_mob_763870604.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\sa_normal_elite_commander_678463747.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\sa_normal_stealth_starhammer_marker_451454448.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\sa_normal_support_repair_336262775.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\sa_normal_target_designation_station_mob_1955796881.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Database\Mobs\scamps_1189130733.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

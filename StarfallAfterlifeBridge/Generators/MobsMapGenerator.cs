@@ -228,7 +228,7 @@ namespace StarfallAfterlife.Bridge.Generators
             return Realm?.MobsDatabase?
                 .GetCircleMobs(circle)?
                 .Where(m => m is not null)
-                .Where(m => m.IsServiceFleet() == false)
+                .Where(m => m.IsServiceFleet() == false && m.IsSpecOps() == false)
                 ?? new List<DiscoveryMobInfo>();
         }
 

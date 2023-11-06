@@ -1,0 +1,175 @@
+{
+	"Id": 763870603,
+	"InternalName": "sa_easy_access_station_mob",
+	"Faction": 13,
+	"Level": 1,
+	"VisionRadius": 3,
+	"Speed": 0.7,
+	"BehaviorTreeName": "",
+	"MainShipIndex": 0,
+	"Tags": [
+		"Mob.SpecOps",
+		"Mob.SpecOps.StationAttack.Difficulty.Easy",
+		"Mob.SpecOps.StationAttack.Role.AccessStationMob"
+	],
+	"Ships": [
+		{
+			"Data": {
+	"hull": 804048296,
+	"ship_skin": 1352249193,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": []
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": []
+		},
+		{
+			"hp": "EnginneringBay1",
+			"eqlist": []
+		},
+		{
+			"hp": "EnginneringBay3",
+			"eqlist": []
+		},
+		{
+			"hp": "FrontLeftBeams",
+			"eqlist": [
+				{
+					"eq": 790081391,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightBeams",
+			"eqlist": [
+				{
+					"eq": 790081391,
+					"x": 3,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "LeftBeams",
+			"eqlist": [
+				{
+					"eq": 790081391,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Beams",
+			"eqlist": []
+		},
+		{
+			"hp": "FrontRightBeams",
+			"eqlist": [
+				{
+					"eq": 790081391,
+					"x": 3,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Rockets",
+			"eqlist": [
+				{
+					"eq": 778267190,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EnginneringBay4",
+			"eqlist": []
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 7500,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 1766637571,
+	"ship_skin": 984359508,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": []
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": []
+		},
+		{
+			"hp": "LeftBeams",
+			"eqlist": [
+				{
+					"eq": 1292515329,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightBeams",
+			"eqlist": [
+				{
+					"eq": 1292515329,
+					"x": 3,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Rockets1",
+			"eqlist": [
+				{
+					"eq": 1704073823,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Rockets2",
+			"eqlist": [
+				{
+					"eq": 1704073823,
+					"x": 1,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 7500,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		}
+	]
+}

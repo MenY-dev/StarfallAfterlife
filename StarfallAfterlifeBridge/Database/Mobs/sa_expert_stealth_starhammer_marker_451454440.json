@@ -1,0 +1,86 @@
+{
+	"Id": 451454440,
+	"InternalName": "sa_expert_stealth_starhammer_marker",
+	"Faction": 254,
+	"Level": 1,
+	"VisionRadius": 3,
+	"Speed": 0.7,
+	"BehaviorTreeName": "/Game/gameplay/ai/fleets/BT_Fleet_StarHammerMarker.BT_Fleet_StarHammerMarker",
+	"MainShipIndex": 0,
+	"Tags": [
+		"Mob.SpecOps",
+		"Mob.SpecOps.StationAttack.Difficulty.Expert",
+		"Mob.SpecOps.StationAttack.Role.StealthStarhammerMarker"
+	],
+	"Ships": [
+		{
+			"Data": {
+				"hull": 306993508,
+				"ship_skin": 1616340837,
+				"hplist": [
+					{
+						"hp": "EnginneringBay2",
+						"eqlist": [
+							{
+								"eq": 569202811,
+								"x": 1,
+								"y": 0
+							}
+						]
+					},
+					{
+						"hp": "FrontCannons",
+						"eqlist": []
+					},
+					{
+						"hp": "LeftCannons",
+						"eqlist": [
+							{
+								"eq": 902096294,
+								"x": 0,
+								"y": 0
+							}
+						]
+					},
+					{
+						"hp": "RightCannons",
+						"eqlist": [
+							{
+								"eq": 902096294,
+								"x": 1,
+								"y": 0
+							}
+						]
+					},
+					{
+						"hp": "EngineHardpoint",
+						"eqlist": []
+					},
+					{
+						"hp": "EngineHardpoint1",
+						"eqlist": []
+					},
+					{
+						"hp": "Rockets",
+						"eqlist": [
+							{
+								"eq": 607814668,
+								"x": 2,
+								"y": 0
+							}
+						]
+					}
+				]
+			},
+			"ServiceData": {
+				"xp": 20000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		}
+	]
+}

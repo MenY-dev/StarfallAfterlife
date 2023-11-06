@@ -79,6 +79,8 @@ namespace StarfallAfterlife.Bridge.Database
 
         public bool IsElite() => Tags?.Contains("Mob.Role.Elite", StringComparer.InvariantCultureIgnoreCase) == true;
 
+        public bool IsSpecOps() => Tags?.Contains("Mob.SpecOps", StringComparer.InvariantCultureIgnoreCase) == true;
+
         public bool IsServiceFleet() => ServiceFleetNames?.Contains(InternalName) == true;
 
         public IReadOnlyCollection<int> GetDropItems()

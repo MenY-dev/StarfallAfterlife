@@ -18,6 +18,8 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
     {
         public List<QuickMatchCharInfo> Characters { get; } = new();
 
+        public List<DiscoveryMobInfo> Mobs { get; } = new();
+
         public byte Difficulty { get; internal set; }
 
         private readonly object _lockher = new();
@@ -102,22 +104,23 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
             }
         }
 
-        protected List<DiscoveryMobInfo> AddedMobs { get; } = new();
-
         public JsonNode GetMobData(int mobId, Faction faction, string[] tags)
         {
             lock (_lockher)
             {
+                tags ??= new string[0];
+
                 var mob = Server.Realm.MobsDatabase.Mobs.FirstOrDefault(
-                    m => m.Value?.Faction == faction).Value;
+                    m => m.Value?.Faction == faction &&
+                    tags.All(t => m.Value?.Tags.Contains(t, StringComparer.InvariantCultureIgnoreCase) == true)).Value;
 
                 mob ??= Server.Realm.MobsDatabase.Mobs.FirstOrDefault().Value;
 
                 if (mob is not null)
                 {
-                    AddedMobs.Add(mob);
+                    Mobs.Add(mob);
                     var ships = new JsonArray();
-                    var shipId = 1000000000 + AddedMobs.Count * 1000;
+                    var shipId = 1000000000 + Mobs.Count * 1000;
 
                     foreach (var ship in mob.Ships ?? Enumerable.Empty<DiscoveryMobShipData>())
                     {
@@ -140,9 +143,9 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                         ["id"] = SValue.Create(mobId),
                         ["level"] = SValue.Create(mob.Level),
                         ["faction"] = SValue.Create((byte)mob.Faction),
-                        ["internal_name"] = SValue.Create(mob.InternalName),
+                        ["internal_name"] = SValue.Create(""),
                         ["battle_bt"] = SValue.Create(mob.BehaviorTreeName),
-                        ["tags"] = tags?.Select(SValue.Create).ToJsonArray(),
+                        ["tags"] = mob.Tags?.Select(SValue.Create).ToJsonArray(),
                         ["ships"] = ships,
                     };
 
