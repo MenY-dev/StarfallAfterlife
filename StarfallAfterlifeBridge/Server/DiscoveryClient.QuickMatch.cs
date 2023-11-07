@@ -32,15 +32,27 @@ namespace StarfallAfterlife.Bridge.Server
         {
             string gameMode = reader.ReadShortString(Encoding.UTF8);
             byte difficulty = reader.ReadByte();
+            var comparison = StringComparison.InvariantCultureIgnoreCase;
 
-            if (CurrentCharacter.Fleet?.System is null)
-                Invoke(() => StartGhostSession());
-
-            Invoke(() =>
+            if ("spec_ops_station_attack".Equals(gameMode, comparison) == true)
             {
-                var battle = Server.Matchmaker.QuickMatchGameMode.CreateStationAttackMatch(difficulty, CurrentCharacter);
-                battle.Start();
-            });
+                if (CurrentCharacter.Fleet?.System is null)
+                    Invoke(() => StartGhostSession());
+
+                Invoke(() =>
+                {
+                    var battle = Server.Matchmaker.QuickMatchGameMode.CreateStationAttackMatch(difficulty, CurrentCharacter);
+                    battle.Start();
+                });
+            }
+            else if ("srv1".Equals(gameMode, comparison) == true)
+            {
+                Invoke(() =>
+                {
+                    var battle = Server.Matchmaker.QuickMatchGameMode.CreateSurvivalMatch(difficulty, CurrentCharacter);
+                    battle.Start();
+                });
+            }
 
             SfaDebug.Print($"QuickMatchReadyToPlay (GameMode = {gameMode}, Difficulty = {difficulty})", GetType().Name);
         }

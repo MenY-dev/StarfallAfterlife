@@ -213,6 +213,7 @@ namespace StarfallAfterlife.Bridge.Instances
                 case InstanceType.DiscoveryDungeon: return new DiscoveryDungeonInstance() { Info = info };
                 case InstanceType.MothershipAssault: return new MothershipAssaultInstanse() { Info = info };
                 case InstanceType.StationAttack: return new StationAttackInstance() { Info = info };
+                case InstanceType.SurvivalMode: return new SurvivalModeInstance() { Info = info };
                 default: return null;
             }
         }

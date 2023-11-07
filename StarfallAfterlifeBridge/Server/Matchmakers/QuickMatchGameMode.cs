@@ -22,9 +22,17 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
             return battle;
         }
 
-        public StationAttackBattle CreateSurvivalMatch(byte difficulty, ServerCharacter character)
+        public SurvivalModeBattle CreateSurvivalMatch(byte difficulty, ServerCharacter character)
         {
-            return null;
+            if (character is null ||
+                Matchmaker.GetBattle(character) is MatchmakerBattle currentBattle &&
+                currentBattle.State is not (MatchmakerBattleState.Created or MatchmakerBattleState.Finished))
+                return null;
+
+            var battle = new SurvivalModeBattle() { GameMode = this, Difficulty = difficulty };
+            battle.Characters.Add(new(character));
+            Matchmaker.AddBattle(battle);
+            return battle;
         }
     }
 }

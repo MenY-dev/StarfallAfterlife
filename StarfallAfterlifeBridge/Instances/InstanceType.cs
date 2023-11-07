@@ -13,5 +13,6 @@ namespace StarfallAfterlife.Bridge.Instances
         DiscoveryDungeon = 2,
         MothershipAssault = 3,
         StationAttack = 4,
+        SurvivalMode = 5
     }
 }

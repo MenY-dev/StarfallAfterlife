@@ -79,13 +79,16 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
         {
             if (Server?.GetCharacter(e.CharacterId) is ServerCharacter character)
             {
-                if (e.GameMode == "battlegrounds")
+                var comparison = StringComparison.InvariantCultureIgnoreCase;
+
+                if ("battlegrounds".Equals(e.GameMode, comparison) ||
+                    "srv".Equals(e.GameMode, comparison))
                 {
                     character.DiscoveryClient?
                         .RequestDiscoveryCharacterData(true)
                         .ContinueWith(t => InstanceManager.SendCharacterData(e.CharacterId, JsonNode.Parse(t.Result?.ToJsonString())));
                 }
-                else if (e.GameMode == "station_attack")
+                else if ("station_attack".Equals(e.GameMode, comparison))
                 {
                     character.DiscoveryClient?
                         .RequestDiscoveryCharacterData(false)
