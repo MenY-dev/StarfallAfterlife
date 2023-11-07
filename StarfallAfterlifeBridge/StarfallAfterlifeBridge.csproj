@@ -286,6 +286,9 @@
     <None Update="Database\Mobs\pushers_1012319027.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Database\Mobs\pve_service_fleet_308175701.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Database\Mobs\pyramid_fleets_318767454.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
