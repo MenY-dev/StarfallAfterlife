@@ -419,7 +419,7 @@
 			"hp": "Hardpoint",
 			"eqlist": [
 				{
-					"eq": 260472816,
+					"eq": 1524533717,
 					"x": 0,
 					"y": 0
 				},
@@ -470,6 +470,176 @@
 			"ServiceData":
 			{
 				"xp": 5000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 1529398679,
+	"ship_skin": 1845146280,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 1734255009,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay2",
+			"eqlist": [
+				{
+					"eq": 396456366,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 396456366,
+					"x": 11,
+					"y": 0
+				},
+				{
+					"eq": 463388270,
+					"x": 11,
+					"y": 2
+				},
+				{
+					"eq": 463388270,
+					"x": 0,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "LeftBeams",
+			"eqlist": [
+				{
+					"eq": 1438033486,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightBeams",
+			"eqlist": [
+				{
+					"eq": 1438033486,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "CenterBeams",
+			"eqlist": []
+		},
+		{
+			"hp": "RightRockets",
+			"eqlist": []
+		},
+		{
+			"hp": "LeftRockets",
+			"eqlist": []
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 7500,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 1529398679,
+	"ship_skin": 1845146280,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 1734255009,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay2",
+			"eqlist": [
+				{
+					"eq": 396456366,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 396456366,
+					"x": 11,
+					"y": 0
+				},
+				{
+					"eq": 463388270,
+					"x": 11,
+					"y": 2
+				},
+				{
+					"eq": 463388270,
+					"x": 0,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "LeftBeams",
+			"eqlist": [
+				{
+					"eq": 1438033486,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightBeams",
+			"eqlist": [
+				{
+					"eq": 1438033486,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "CenterBeams",
+			"eqlist": []
+		},
+		{
+			"hp": "RightRockets",
+			"eqlist": []
+		},
+		{
+			"hp": "LeftRockets",
+			"eqlist": []
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 7500,
 				"fleet_min": -1,
 				"fleet_max": -1,
 				"drop_state": true,
