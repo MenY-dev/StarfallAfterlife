@@ -272,7 +272,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
         }
 
 
-        internal void RemoveBattle(DiscoveryBattle battle)
+        internal void RemoveBattle(MatchmakerBattle battle)
         {
             lock (Lockher)
             {

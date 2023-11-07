@@ -54,7 +54,9 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
             lock (_lockher)
             {
+                State = MatchmakerBattleState.Finished;
                 Matchmaker?.InstanceManager?.StopInstance(InstanceInfo);
+                Matchmaker.RemoveBattle(this);
             }
         }
 
