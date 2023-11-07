@@ -115,10 +115,10 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         private void SpecialFleetRequested(object sender, SpecialFleetRequestEventArgs e)
         {
+            var ships = new JsonArray();
 
             if (Server?.Realm?.MobsDatabase?.GetMob(e.FleetName) is DiscoveryMobInfo mob)
             {
-                var ships = new JsonArray();
                 int shipId = 2000000000;
 
                 foreach (var item in mob.Ships ?? Enumerable.Empty<DiscoveryMobShipData>())
@@ -132,9 +132,9 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
                     shipId++;
                 }
-
-                InstanceManager.SendSpecialFleetData(e.FleetName, e.Auth, ships);
             }
+
+            InstanceManager.SendSpecialFleetData(e.FleetName, e.Auth, ships);
         }
 
 
