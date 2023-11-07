@@ -1,4 +1,5 @@
-﻿using StarfallAfterlife.Bridge.Instances;
+﻿using StarfallAfterlife.Bridge.Database;
+using StarfallAfterlife.Bridge.Instances;
 using StarfallAfterlife.Bridge.Server.Characters;
 using System;
 using System.Collections.Generic;
@@ -58,6 +59,11 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
         public virtual bool ContainsUser(SfaServerClient user)
         {
             return false;
+        }
+
+        public virtual CharacterReward[] GetRewards()
+        {
+            return Array.Empty<CharacterReward>();
         }
     }
 }

@@ -22,6 +22,8 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         public byte Difficulty { get; internal set; }
 
+        protected List<CharacterReward> Rewards { get; } = new();
+
         private readonly object _lockher = new();
 
         public override void Start()
@@ -30,6 +32,8 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
             lock (_lockher)
             {
+                CreateRewards();
+
                 foreach (var item in Characters)
                 {
                     item?.Char?.DiscoveryClient.SendQuickMatchState(MatchMakingStage.StartingInstance);
@@ -186,5 +190,33 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
             lock (_lockher)
                 return Characters?.Any(c => c?.Char == character) == true;
         }
+
+        protected void CreateRewards()
+        {
+            lock (_lockher)
+            {
+                Rewards.Clear();
+
+                foreach (var reward in Server?.Realm?.CharacterRewardDatabase?.GetStationAttackRewards() ?? new())
+                {
+                    foreach (var character in Characters.ToArray().Select(c => c.Char))
+                    {
+                        if (character is null ||
+                            character.CheckReward(reward.Id) == true)
+                            continue;
+
+                        Rewards.Add(new()
+                        {
+                            Character = character.UniqueId,
+                            Id = reward.Id,
+                            RewardId = reward.RewardId,
+                            Count = reward.Count,
+                        });
+                    }
+                }
+            }
+        }
+
+        public override CharacterReward[] GetRewards() => Rewards.ToArray();
     }
 }

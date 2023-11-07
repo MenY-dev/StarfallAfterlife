@@ -27,6 +27,8 @@ namespace StarfallAfterlife.Bridge.Instances
 
         public event EventHandler<SpecialFleetRequestEventArgs> SpecialFleetRequested;
 
+        public event EventHandler<RewardForEvenRequestEventArgs> RewardForEvenRequested;
+
         public event EventHandler<InstanceFleetLeavesEventArgs> FleetLeaves;
 
         public event EventHandler<ShipStatusUpdatedEventArgs> ShipStatusUpdated;
@@ -62,6 +64,9 @@ namespace StarfallAfterlife.Bridge.Instances
 
                 case "get_special_fleet":
                     HandleSpecialFleet(doc); break;
+
+                case "get_reward_for_even":
+                    HandleRewardForEven(doc); break;
 
                 case "fleet_leaves":
                     HandleFleetLeaves(doc); break;
@@ -246,6 +251,24 @@ namespace StarfallAfterlife.Bridge.Instances
             {
                 SpecialFleetRequested?.Invoke(this, new(auth, fleetName));
             }
+        }
+
+        private void HandleRewardForEven(JsonNode doc)
+        {
+            if ((string)doc?["auth"] is string auth)
+            {
+                RewardForEvenRequested?.Invoke(this, new(auth));
+            }
+        }
+
+
+        internal void SendRewardForEven(string reward, string auth)
+        {
+            Send("send_reward_for_even", new JsonObject
+            {
+                ["auth"] = auth,
+                ["reward"] = reward,
+            });
         }
 
         protected void HandleFleetLeaves(JsonNode doc)

@@ -57,9 +57,10 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
             InstanceManager = new InstanceManagerClient();
             InstanceManager.CharacterDataRequested += CharacterDataRequested;
             InstanceManager.MobDataRequested += MobDataRequested;
-            InstanceManager.SpecialFleetRequested += SpecialFleetRequested; ;
+            InstanceManager.SpecialFleetRequested += SpecialFleetRequested;
+            InstanceManager.RewardForEvenRequested += RewardForEvenRequested;
             InstanceManager.InstanceStateChanged += InstanceStateChanged;
-            InstanceManager.InstanceAuthReady += InstanceAuthReady; ;
+            InstanceManager.InstanceAuthReady += InstanceAuthReady;
             InstanceManager.FleetLeaves += FleetLeaves;
             InstanceManager.ShipStatusUpdated += ShipStatusUpdated;
             InstanceManager.AddCharacterShipsXp += AddCharacterShipsXp;
@@ -134,6 +135,22 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
                 InstanceManager.SendSpecialFleetData(e.FleetName, e.Auth, ships);
             }
+        }
+
+
+        private void RewardForEvenRequested(object sender, RewardForEvenRequestEventArgs e)
+        {
+            string reward = null;
+
+            if (GetBattle(e.Auth) is MatchmakerBattle battle)
+            {
+                reward = new JsonObject
+                {
+                    ["charact_reward_queue"] = JsonHelpers.ParseNodeUnbuffered(battle.GetRewards()),
+                }.ToJsonString(false);
+            }
+
+            InstanceManager.SendRewardForEven(reward ?? "{}", e.Auth);
         }
 
         protected virtual void InstanceStateChanged(object sender, InstanceInfoEventArgs e)

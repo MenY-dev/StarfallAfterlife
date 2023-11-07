@@ -32,6 +32,8 @@ namespace StarfallAfterlife.Bridge.Instances
 
         public event EventHandler<SpecialFleetResponseEventArgs> SpecialFleetReceived;
 
+        public event EventHandler<RewardForEvenResponseEventArgs> RewardForEvenReceived;
+
         protected object Lockher { get; } = new();
 
         protected override void OnReceive(string msgType, JsonNode doc)
@@ -60,6 +62,10 @@ namespace StarfallAfterlife.Bridge.Instances
 
                 case "send_special_fleet":
                     HandleSpecialFleetResponse(doc); break;
+
+                case "send_reward_for_even":
+                    HandleRewardForEven(doc); break;
+
             }
         }
 
@@ -248,7 +254,6 @@ namespace StarfallAfterlife.Bridge.Instances
             });
         }
 
-
         protected virtual void HandleSpecialFleetResponse(JsonNode doc)
         {
             if (doc is not null &&
@@ -259,6 +264,23 @@ namespace StarfallAfterlife.Bridge.Instances
             }
         }
 
+        private void RequestRewardForEven(string auth)
+        {
+            Send("get_reward_for_even", new JsonObject
+            {
+                ["auth"] = auth,
+            });
+        }
+
+        private void HandleRewardForEven(JsonNode doc)
+        {
+            if (doc is not null &&
+                (string)doc["reward"] is string reward &&
+                (string)doc["auth"] is string auth)
+            {
+                RewardForEvenReceived?.Invoke(this, new(auth, reward));
+            }
+        }
 
         public virtual void UpdateShipStatus(int shipId, string shipData, string shipStats, string auth)
         {

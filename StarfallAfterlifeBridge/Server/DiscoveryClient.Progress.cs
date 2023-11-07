@@ -51,6 +51,15 @@ namespace StarfallAfterlife.Bridge.Server
             }, SfaServerAction.SyncProgress);
         }
 
+        public void SyncCharReward(int rewardId)
+        {
+
+            Client?.Send(new JsonObject()
+            {
+                ["new_rewards"] = new JsonArray(JsonValue.Create(rewardId))
+            }, SfaServerAction.SyncProgress);
+        }
+
         public void SyncExploration(int systemId, IEnumerable<IGalaxyMapObject> newObjects = null)
         {
             if (systemId > -1 &&

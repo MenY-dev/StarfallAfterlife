@@ -3,6 +3,7 @@ using StarfallAfterlife.Bridge.Diagnostics;
 using StarfallAfterlife.Bridge.Networking;
 using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Serialization;
+using StarfallAfterlife.Bridge.Server.Discovery;
 using StarfallAfterlife.Bridge.Tasks;
 using System;
 using System.Collections.Generic;
@@ -101,6 +102,13 @@ namespace StarfallAfterlife.Bridge.Instances
                         (int?)query["group_num"] ?? -1,
                         JsonHelpers.ParseNodeUnbuffered((string)query["selection_data"]),
                         (string)query["auth"]);
+                    break;
+
+                case "add_charact_reward_for_event":
+                    response = new JsonObject
+                    {
+                        ["data_result"] = SValue.Create(HandleAddCharactRewardForEvent((string)query["auth"])),
+                    };
                     break;
 
                 default:
@@ -253,6 +261,28 @@ namespace StarfallAfterlife.Bridge.Instances
             };
 
             SendInstanceAction(instanceAuth, "save_ships_group", doc.ToJsonString(false));
+        }
+
+        private string HandleAddCharactRewardForEvent(string auth)
+        {
+            string doc = null;
+            var responseWaiter = EventWaiter<RewardForEvenResponseEventArgs>
+                .Create()
+                .Subscribe(e => RewardForEvenReceived += e)
+                .Unsubscribe(e => RewardForEvenReceived -= e)
+                .Where((o, e) =>
+                {
+                    if (e.Auth != auth)
+                        return false;
+
+                    doc = e.Reward;
+                    return true;
+                })
+                .Start(20000);
+
+            RequestRewardForEven(auth);
+            responseWaiter.Wait();
+            return doc ?? "{}";
         }
     }
 }

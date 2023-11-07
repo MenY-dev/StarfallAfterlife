@@ -278,6 +278,32 @@ namespace StarfallAfterlife.Bridge.Server.Characters
             }
         }
 
+        public bool CheckReward(int rewardId)
+        {
+            lock (_characterLockher)
+                return Progress.TakenRewards.Contains(rewardId);
+
+        }
+
+        public bool AddReward(int rewardId)
+        {
+            lock (_characterLockher)
+            {
+                if (CheckReward(rewardId) == false &&
+                    Realm?.CharacterRewardDatabase?.GetReward(rewardId) is CharacterReward reward &&
+                    Database.GetItem(reward.RewardId) is SfaItem item &&
+                    Progress.TakenRewards.Add(rewardId) == true)
+                {
+                    DiscoveryClient?.SyncCharReward(rewardId);
+                    var dst = CargoTransactionEndPoint.CreateForCharacterInventory(this);
+                    dst.Receive(item, reward.Count);
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
         public InventoryStorage GetShipCargoByStockName(string stockName) =>
             GetShipByStockName(stockName)?.Cargo;
 

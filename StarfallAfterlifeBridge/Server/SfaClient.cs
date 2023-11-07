@@ -452,6 +452,17 @@ namespace StarfallAfterlife.Bridge.Server
                     }
                 }
 
+                if (doc["new_rewards"]?.AsArray() is JArray rewards)
+                {
+                    foreach (var item in rewards)
+                    {
+                        if ((int?)item is int rewardsId)
+                        {
+                            progress.TakenRewards.Add(rewardsId);
+                        }
+                    }
+                }
+
                 if (doc["systems"]?.AsArray() is JArray systems)
                 {
                     foreach (var system in systems)
@@ -874,6 +885,15 @@ namespace StarfallAfterlife.Bridge.Server
                     p.SaveGameProfile();
                 }
             });
+        }
+
+        public void TakeCharactRewardFromQueue(int charId, int rewardId)
+        {
+            Send(new JObject
+            {
+                ["char_id"] = charId,
+                ["reward_id"] = rewardId,
+            }, SfaServerAction.TakeCharactRewardFromQueue);
         }
     }
 }

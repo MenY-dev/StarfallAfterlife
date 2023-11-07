@@ -32,6 +32,8 @@ namespace StarfallAfterlife.Bridge.Realms
 
         public MobsDatabase MobsDatabase { get; set; }
 
+        public CharacterRewardDatabase CharacterRewardDatabase { get; } = new();
+
         public RichAsteroidsMap RichAsteroidsMap { get; set; }
 
         public ShopsMap ShopsMap { get; set; }

@@ -515,6 +515,21 @@ namespace StarfallAfterlife.Bridge.Game
             return doc;
         }
 
+        public JsonNode HandleTakeCharactRewardFromQueue(SfaHttpQuery query)
+        {
+            var doc = new JsonObject();
+
+            Profile.Use(p =>
+            {
+                if (p.GameProfile.CurrentCharacter is Character character)
+                {
+                    SfaClient?.TakeCharactRewardFromQueue(character.UniqueId, (int?)query["reward_id"] ?? -1);
+                }
+            });
+
+            return doc;
+        }
+
         public JsonNode HandleSaveShip(SfaHttpQuery query)
         {
             var doc = new JsonObject{ };

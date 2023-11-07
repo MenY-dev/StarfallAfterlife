@@ -33,6 +33,9 @@ namespace StarfallAfterlife.Bridge.Server
                 case SfaServerAction.RegisterChannel:
                     ProcessRegisterChannel(JsonHelpers.ParseNodeUnbuffered(text));
                     break;
+                case SfaServerAction.TakeCharactRewardFromQueue:
+                    ProcessTakeCharactRewardFromQueue(JsonHelpers.ParseNodeUnbuffered(text));
+                    break;
                 default:
                     break;
             }
@@ -942,6 +945,18 @@ namespace StarfallAfterlife.Bridge.Server
             var actionSystemId = reader.ReadInt32();
 
             CurrentCharacter?.UseAbility(actionId, actionSystemId, hex);
+        }
+
+        private void ProcessTakeCharactRewardFromQueue(JsonNode doc)
+        {
+            Invoke(() =>
+            {
+                if (doc is not null &&
+                (int?)doc["char_id"] is int charId &&
+                (int?)doc["reward_id"] is int rewardId)
+                    Characters?.FirstOrDefault(c => c?.UniqueId == charId)?
+                        .AddReward(rewardId);
+            });
         }
     }
 }

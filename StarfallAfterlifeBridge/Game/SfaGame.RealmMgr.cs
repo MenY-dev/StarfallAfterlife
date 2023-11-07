@@ -185,6 +185,11 @@ namespace StarfallAfterlife.Bridge.Game
                         p.SaveGameProfile();
                         break;
 
+                    case "take_charact_reward_from_queue":
+                        response = HandleTakeCharactRewardFromQueue(query);
+                        p.SaveGameProfile();
+                        break;
+
                     default:
                         break;
                 }

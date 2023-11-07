@@ -35,6 +35,8 @@ namespace StarfallAfterlife.Bridge.Profiles
         public Dictionary<int, QuestProgress> ActiveQuests { get; set; } = new();
         public HashSet<int> CompletedQuests { get; set; } = new();
 
+        public HashSet<int> TakenRewards { get; set; } = new();
+
         public string Path { get; set; }
 
 
@@ -113,6 +115,7 @@ namespace StarfallAfterlife.Bridge.Profiles
 
             CompletedQuests = doc["completed_quests"]?.DeserializeUnbuffered<HashSet<int>>() ?? new();
             ActiveQuests = doc["active_quests"]?.DeserializeUnbuffered<Dictionary<int, QuestProgress>>() ?? new();
+            TakenRewards = doc["taken_rewards"]?.DeserializeUnbuffered<HashSet<int>>() ?? new();
         }
 
         public override JsonNode ToJson()
@@ -136,6 +139,7 @@ namespace StarfallAfterlife.Bridge.Profiles
 
             doc["completed_quests"] = JsonHelpers.ParseNodeUnbuffered(CompletedQuests) ?? new JsonArray();
             doc["active_quests"] = JsonHelpers.ParseNodeUnbuffered(ActiveQuests) ?? new JsonArray();
+            doc["taken_rewards"] = JsonHelpers.ParseNodeUnbuffered(TakenRewards) ?? new JsonArray();
 
             var systems = new JsonArray();
 
