@@ -160,7 +160,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                 ShipGroups.AddRange(shipGroups.DeserializeUnbuffered<List<ShipsGroup>>() ?? new());
             }
 
-            Inventory = new(this);
+            Inventory ??= new(this);
             Events?.Broadcast<ICharacterListener>(l => l.OnCurrencyUpdated(this));
         }
 
@@ -487,6 +487,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
         public void LoadProgress(CharacterProgress progress)
         {
             Progress = progress ?? new();
+            Inventory ??= new(this);
             LoadQuestsFromProgress();
         }
 
