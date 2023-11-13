@@ -13,6 +13,8 @@ namespace StarfallAfterlife.Bridge.Instances
         public string InstanceAuth { get; }
         public int MobId { get; }
         public bool IsCustom { get; }
+        public int MinLvl { get; }
+        public int MaxLvl { get; }
         public Faction Faction { get; }
         public string[] Tags { get; }
 
@@ -22,13 +24,15 @@ namespace StarfallAfterlife.Bridge.Instances
             MobId = mobId;
         }
 
-        public MobDataRequestEventArgs(string instanceAuth, int mobId, Faction faction, string[] tags)
+        public MobDataRequestEventArgs(string instanceAuth, int mobId, int minLvl, int maxLvl, Faction faction, string[] tags)
         {
             IsCustom = true;
             InstanceAuth = instanceAuth;
             MobId = mobId;
             Faction = faction;
             Tags = tags;
+            MinLvl = minLvl;
+            MaxLvl = maxLvl;
         }
     }
 }

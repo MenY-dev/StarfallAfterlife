@@ -232,6 +232,9 @@
     <None Update="Database\Mobs\Meritocrats_333348730.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Database\Mobs\miners_fleets_2066900355.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Database\Mobs\mommylvl6_134182426.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

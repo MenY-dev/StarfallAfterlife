@@ -58,6 +58,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
             InstanceManager.CharacterDataRequested += CharacterDataRequested;
             InstanceManager.MobDataRequested += MobDataRequested;
             InstanceManager.SpecialFleetRequested += SpecialFleetRequested;
+            InstanceManager.DropListRequested += DropListRequested;
             InstanceManager.RewardForEvenRequested += RewardForEvenRequested;
             InstanceManager.InstanceStateChanged += InstanceStateChanged;
             InstanceManager.InstanceAuthReady += InstanceAuthReady;
@@ -69,6 +70,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
             SfaDebug.Print($"Matchmaker Started! (InstanceManagerAddress = {InstanceManagerAddress})");
         }
+
 
         public void Stop()
         {
@@ -107,13 +109,21 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
             if (e.InstanceAuth is not null)
             {
-                if (e.IsCustom == true)
-                    data = (GetBattle(e.InstanceAuth) as StationAttackBattle).GetMobData(e.MobId, e.Faction, e.Tags);
-                else
-                    data = (GetBattle(e.InstanceAuth) as DiscoveryBattle).GetMobData(e.MobId);
+                if (GetBattle(e.InstanceAuth) is MatchmakerBattle battle)
+                {
+                    data = battle.GetMobData(new MobDataRequest
+                    {
+                        IsCustom = e.IsCustom,
+                        MinLvl = e.MinLvl,
+                        MaxLvl = e.MaxLvl,
+                        Faction = e.Faction,
+                        FleetId = e.MobId,
+                        Tags = e.Tags?.ToArray() ?? Array.Empty<string>(),
+                    });
+                }
             }
 
-            InstanceManager.SendMobData(e.InstanceAuth, e.MobId, data);
+            InstanceManager.SendMobData(e.InstanceAuth, e.MobId, data ?? new JsonObject());
         }
 
         private void SpecialFleetRequested(object sender, SpecialFleetRequestEventArgs e)
@@ -140,6 +150,16 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
             InstanceManager.SendSpecialFleetData(e.FleetName, e.Auth, ships);
         }
 
+
+        private void DropListRequested(object sender, DropListRequestEventArgs e)
+        {
+            JsonArray drop = null;
+
+            if (GetBattle(e.Auth) is MatchmakerBattle battle)
+                drop = battle.GetDropList(e.DropName);
+
+            InstanceManager.SendDropList(e.DropName, e.Auth, drop?.ToJsonString() ?? "[]");
+        }
 
         private void RewardForEvenRequested(object sender, RewardForEvenRequestEventArgs e)
         {
@@ -241,6 +261,18 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                         {
                             character.SaveShipsGroup((string)data["group"]);
                         }
+                    }
+                    break;
+                case "object_interact_event":
+                    {
+                        if (Battles.FirstOrDefault(b => b.InstanceInfo == e.Instance) is DiscoveryBattle battle)
+                            battle.HandleInstanceObjectInteractEvent(e.Data);
+                    }
+                    break;
+                case "secret_object_looted":
+                    {
+                        if (Battles.FirstOrDefault(b => b.InstanceInfo == e.Instance) is DiscoveryBattle battle)
+                            battle.HandleSecretObjectLooted(e.Data);
                     }
                     break;
                 default:

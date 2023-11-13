@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StarfallAfterlife.Bridge.Mathematics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,10 +9,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 {
     public interface IObjectScanningListener : IDiscoveryListener
     {
-        void OnScanningStarted(DiscoveryFleet fleet, StarSystemObject toScan, float seconds);
-
-        void OnScanningFinished(DiscoveryFleet fleet, StarSystemObject toScan);
-
-        void OnScanningCanceled(DiscoveryFleet fleet, StarSystemObject toScan);
+        void OnScanningStateChanged(DiscoveryFleet fleet, ScanInfo info);
+        void OnSecretObjectRevealed(DiscoveryFleet fleet, SecretObject secretObject);
     }
 }

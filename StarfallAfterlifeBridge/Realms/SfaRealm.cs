@@ -36,6 +36,8 @@ namespace StarfallAfterlife.Bridge.Realms
 
         public RichAsteroidsMap RichAsteroidsMap { get; set; }
 
+        public SecretObjectsMap SecretObjectsMap { get; set; }
+
         public ShopsMap ShopsMap { get; set; }
 
         public MobsMap MobsMap { get; set; }
@@ -86,6 +88,7 @@ namespace StarfallAfterlife.Bridge.Realms
 
             string galaxyMapPath = Path.Combine(directory, "GalaxyMap.json");
             string richAsteroidsMapPath = Path.Combine(directory, "RichAsteroidsMap.json");
+            string secretObjectsMapPath = Path.Combine(directory, "SecretObjectsMap.json");
             string shopsMappPath = Path.Combine(directory, "ShopsMap.json");
             string mobsMapPath = Path.Combine(directory, "MobsMap.json");
             string questsDatabasePath = Path.Combine(directory, "QuestsDatabase.json");
@@ -104,6 +107,12 @@ namespace StarfallAfterlife.Bridge.Realms
             {
                 RichAsteroidsMap = new();
                 RichAsteroidsMap.LoadFromJson(ReadJson(richAsteroidsMapPath));
+            }
+
+            if (File.Exists(secretObjectsMapPath) == true)
+            {
+                SecretObjectsMap = new();
+                SecretObjectsMap.LoadFromJson(ReadJson(secretObjectsMapPath));
             }
 
             if (File.Exists(shopsMappPath) == true)
@@ -155,6 +164,7 @@ namespace StarfallAfterlife.Bridge.Realms
 
             string galaxyMapPath = Path.Combine(directory, "GalaxyMap.json");
             string richAsteroidsMapPath = Path.Combine(directory, "RichAsteroidsMap.json");
+            string secretObjectsMapPath = Path.Combine(directory, "SecretObjectsMap.json");
             string shopsMappPath = Path.Combine(directory, "ShopsMap.json");
             string mobsMapPath = Path.Combine(directory, "MobsMap.json");
             string questsDatabasePath = Path.Combine(directory, "QuestsDatabase.json");
@@ -169,6 +179,9 @@ namespace StarfallAfterlife.Bridge.Realms
 
             if (RichAsteroidsMap is not null)
                 File.WriteAllText(richAsteroidsMapPath, RichAsteroidsMap.ToJson().ToJsonString(false), Encoding.UTF8);
+
+            if (SecretObjectsMap is not null)
+                File.WriteAllText(secretObjectsMapPath, SecretObjectsMap.ToJson().ToJsonString(false), Encoding.UTF8);
 
             if (ShopsMap is not null)
                 File.WriteAllText(shopsMappPath, ShopsMap.ToJson().ToJsonString(false), Encoding.UTF8);

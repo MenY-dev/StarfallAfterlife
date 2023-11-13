@@ -15,6 +15,8 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
         public bool ScanningStarted { get; set; }
 
+        public bool ScanningFinished { get; set; }
+
         public float ScanningTime { get; set; }
 
         public List<string> Actions { get; } = new();

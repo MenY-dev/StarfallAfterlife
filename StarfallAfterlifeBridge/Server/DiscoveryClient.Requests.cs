@@ -147,6 +147,9 @@ namespace StarfallAfterlife.Bridge.Server
 
                 case DiscoveryClientAction.ActivateAbility:
                     HandleActivateAbility(reader, systemId, objectType, objectId); break;
+
+                case DiscoveryClientAction.SecretObjectLooted:
+                    HandleSecretObjectLooted(reader, systemId, objectType, objectId); break;
             }
         }
 
@@ -205,23 +208,36 @@ namespace StarfallAfterlife.Bridge.Server
                 if (CurrentCharacter?.Progress is CharacterProgress progress &&
                     CurrentCharacter?.Fleet?.System is StarSystem currentSystem)
                 {
+                    var newSystems = new List<int>();
+                    var newObjects = new List<IGalaxyMapObject>();
+
                     foreach (var system in Map.GetSystemsArround(currentSystem.Id, exploreRadius).Select(i => i.Key))
                     {
-                        var newObjects = system.GetAllObjects();
+                        newSystems.Add(system.Id);
+                        newObjects.AddRange(system.GetAllObjects());
 
                         foreach (var item in newObjects)
                         {
-                            progress.AddObject(item.ObjectType, item.Id, system.Id);
+                            progress.AddObject(item.ObjectType, item.Id);
+
+                            if (item.ObjectType is GalaxyMapObjectType.QuickTravelGate)
+                                progress.AddWarpSystem(system.Id);
                         }
 
                         progress.SetSystemProgress(system.Id, new SystemHexMap(true));
-
-                        SyncExploration(system.Id, newObjects);
-
-                        Client?.Send(
-                            $"Explore {system.Id}",
-                            SfaServerAction.GlobalChat);
                     }
+
+                    SyncExploration(newSystems, newObjects);
+
+                    Client?.Send(
+                        $"Exploration result:",
+                        SfaServerAction.GlobalChat);
+                    Client?.Send(
+                        $"Systems:{newSystems.Count}",
+                        SfaServerAction.GlobalChat);
+                    Client?.Send(
+                        $"Objects:{newObjects.Count}",
+                        SfaServerAction.GlobalChat);
                 }
             }
             else if (text.StartsWith("\\add sxp ") &&
@@ -288,6 +304,10 @@ namespace StarfallAfterlife.Bridge.Server
                                 dungeon.IsDungeonVisible == false)
                                 continue;
 
+                            if (obj is SecretObject secret &&
+                                CurrentCharacter?.Progress?.SecretLocs?.Contains(secret.Id) == true)
+                                continue;
+
                             RequestDiscoveryObjectSync(obj);
                             SyncDiscoveryObject(systemId, obj.Type, obj.Id);
                         }
@@ -300,25 +320,25 @@ namespace StarfallAfterlife.Bridge.Server
                 string text = $"Factiom: {(Faction)systemInfo.Faction}\n";
 
                 text += $"FactionGroup: {systemInfo.FactionGroup}\n";
-                text += $"Convexhull: {systemInfo.Convexhull}\n";
-                text += $"Out: {systemInfo.Out}\n";
+                //text += $"Convexhull: {systemInfo.Convexhull}\n";
+                //text += $"Out: {systemInfo.Out}\n";
 
-                if (systemInfo.PiratesStations is not null && systemInfo.PiratesStations.Count > 0)
-                {
-                    text += $"PiratesStations:\n";
-                    text += "[\n";
-                    foreach (var item in systemInfo.PiratesStations)
-                    {
-                        text += "  {\n";
-                        text += $"     Id: {item.Id}\n";
-                        text += $"     Hex: {item.Hex}\n";
-                        text += $"     Level: {item.Level}\n";
-                        text += $"     Factiom: {(Faction)systemInfo.Faction}\n";
-                        text += $"     FactionGroup: {systemInfo.FactionGroup}\n";
-                        text += "  }\n";
-                    }
-                    text += "]\n";
-                }
+                //if (systemInfo.PiratesStations is not null && systemInfo.PiratesStations.Count > 0)
+                //{
+                //    text += $"PiratesStations:\n";
+                //    text += "[\n";
+                //    foreach (var item in systemInfo.PiratesStations)
+                //    {
+                //        text += "  {\n";
+                //        text += $"     Id: {item.Id}\n";
+                //        text += $"     Hex: {item.Hex}\n";
+                //        text += $"     Level: {item.Level}\n";
+                //        text += $"     Factiom: {(Faction)systemInfo.Faction}\n";
+                //        text += $"     FactionGroup: {systemInfo.FactionGroup}\n";
+                //        text += "  }\n";
+                //    }
+                //    text += "]\n";
+                //}
 
                 //if (systemInfo.Planets is not null && systemInfo.Planets.Count > 0)
                 //{
@@ -332,14 +352,24 @@ namespace StarfallAfterlife.Bridge.Server
                 //    text += "]\n";
                 //}
 
-                if (systemInfo.Portals is not null && systemInfo.Portals.Count > 0)
+                //if (systemInfo.Portals is not null && systemInfo.Portals.Count > 0)
+                //{
+                //    text += $"Portals:\n";
+                //    text += "[\n";
+                //    foreach (var item in systemInfo.Portals)
+                //    {
+                //        text += $"   Destination: {item.Destination}\n";
+                //    }
+                //    text += "]\n";
+                //}
+
+                if (Galaxy?.GetActiveSystem(systemId)?.SecretObjects is List<SecretObject> secrets &&
+                    secrets.Count > 0)
                 {
-                    text += $"Portals:\n";
+                    text += $"Secret Objects:\n";
                     text += "[\n";
-                    foreach (var item in systemInfo.Portals)
-                    {
-                        text += $"   Destination: {item.Destination}\n";
-                    }
+                    foreach (var item in secrets)
+                        text += $"   {item.SecretType}:{item.Id}\n";
                     text += "]\n";
                 }
 
@@ -435,6 +465,10 @@ namespace StarfallAfterlife.Bridge.Server
 
                     foreach (var item in objects)
                     {
+                        if (item is SecretObject secret &&
+                            CurrentCharacter?.Progress?.SecretLocs?.Contains(secret.Id) == true)
+                            continue;
+
                         info.Objects.Add(new() { Target = item });
                     }
                 }
@@ -456,7 +490,7 @@ namespace StarfallAfterlife.Bridge.Server
             if (fleet is null)
                 return;
 
-            SyncExploration(fleet.System?.Id ?? -1);
+            SyncExploration(new[]{ fleet.System?.Id ?? -1 });
 
             Galaxy?.BeginPreUpdateAction(g =>
             {
@@ -494,7 +528,7 @@ namespace StarfallAfterlife.Bridge.Server
             if (fleet is null)
                 return;
 
-            SyncExploration(fleet.System?.Id ?? -1);
+            SyncExploration(new[] { fleet.System?.Id ?? -1 });
 
             Galaxy?.BeginPreUpdateAction(g =>
             {
@@ -860,7 +894,28 @@ namespace StarfallAfterlife.Bridge.Server
         private void HandleExploreSystemHex(SfReader reader, int systemId, DiscoveryObjectType objectType, int objectId)
         {
             var hex = reader.ReadHex();
-            Galaxy.BeginPreUpdateAction(g => { CurrentCharacter?.Fleet?.ExploreCurrentHex(); hex.ToString(); });
+
+            Galaxy.BeginPreUpdateAction(g =>
+            { 
+                if (CurrentCharacter is ServerCharacter character &&
+                    character.Fleet is UserFleet fleet &&
+                    fleet.System is StarSystem system &&
+                    fleet.Id == objectId &&
+                    system.Id == systemId)
+                {
+                    if (system.GetObjectsAt<SecretObject>(hex, false).FirstOrDefault() is SecretObject secret &&
+                        character.Progress?.SecretLocs?.Contains(secret.Id) is null or false)
+                    {
+                        fleet.ExploreSecretObject(secret);
+                    }
+                    else
+                    {
+                        fleet.ExploreCurrentHex();
+                    }
+                }
+            });
+
+            SfaDebug.Print($"HandleExploreSystemHex (System = {systemId}, ObjType = {objectType}, ObjId = {objectId})", GetType().Name);
         }
 
         private void HandleSetTarget(SfReader reader, int systemId, DiscoveryObjectType objectType, int objectId)
@@ -912,11 +967,15 @@ namespace StarfallAfterlife.Bridge.Server
 
             Galaxy?.BeginPreUpdateAction(g =>
             {
-                if (type != DiscoveryObjectType.None &&
-                    id > -1 &&
+                if (id > -1 &&
+                    type is not (DiscoveryObjectType.None or DiscoveryObjectType.SecretObject) &&
                     CurrentCharacter?.Selection?.GetObjectInfo(id, type) is ObjectSelectionInfo info)
                 {
                     CurrentCharacter?.Fleet?.ScanObject(id, type);
+                }
+                else
+                {
+                    CurrentCharacter?.Fleet?.ScanSector(pos);
                 }
             });
 
@@ -956,6 +1015,14 @@ namespace StarfallAfterlife.Bridge.Server
                 (int?)doc["reward_id"] is int rewardId)
                     Characters?.FirstOrDefault(c => c?.UniqueId == charId)?
                         .AddReward(rewardId);
+            });
+        }
+
+        private void HandleSecretObjectLooted(SfReader reader, int systemId, DiscoveryObjectType objectType, int objectId)
+        {
+            Invoke(() =>
+            {
+
             });
         }
     }

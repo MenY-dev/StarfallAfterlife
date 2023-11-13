@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace StarfallAfterlife.Bridge.Server.Matchmakers
@@ -64,6 +65,16 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
         public virtual CharacterReward[] GetRewards()
         {
             return Array.Empty<CharacterReward>();
+        }
+
+        public virtual JsonArray GetDropList(string dropName)
+        {
+            return null;
+        }
+
+        public virtual JsonNode GetMobData(MobDataRequest request)
+        {
+            throw new NotImplementedException();
         }
     }
 }

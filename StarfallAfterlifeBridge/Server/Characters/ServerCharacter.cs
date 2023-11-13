@@ -271,7 +271,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                         foreach (var item in reward.Items)
                         {
                             if (database.GetItem(item.Id) is SfaItem itemInfo)
-                                Inventory.AddItem(item.ToInventoryItem());
+                                (Inventory ?? new(this)).AddItem(item.ToInventoryItem());
                         }
                     }
                 }
@@ -523,11 +523,21 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
         public List<DiscoveryDropRule> CreateDropRules()
         {
-            return ActiveQuests?
+            return ActiveQuests.ToArray()?
                 .Select(q => q.CreateDropRules())
                 .Where(r => r is not null)
                 .SelectMany(r => r)
                 .Where(r => r is not null)
+                .ToList() ?? new();
+        }
+
+        public List<QuestTileParams> CreateInstanceTileParams(int systemId, DiscoveryObjectType objectType, int objectId)
+        {
+            return ActiveQuests.ToArray()?
+                .Select(q => q.CreateInstanceTileParams(systemId, objectType, objectId))
+                .Where(r => r is not null)
+                .SelectMany(r => r)
+                .Where(r => r.TileName is not null)
                 .ToList() ?? new();
         }
 
@@ -624,6 +634,24 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                     ["char_id"] = UniqueId,
                     ["group"] = group
                 }, SfaServerAction.SaveShipsGroup);
+            });
+        }
+
+        public void HandleInstanceObjectInteractEvent(int systemId, string eventType, string eventData)
+        {
+            DiscoveryClient.Invoke(() =>
+            {
+                Events.Broadcast<ICharacterInstanceListener>(l =>
+                    l.OnInstanceInteractEvent(this, systemId, eventType, eventData));
+            });
+        }
+
+        public void HandleSecretObjectLooted(int secretId)
+        {
+            DiscoveryClient.Invoke(() =>
+            {
+                Progress?.AddSecretObject(secretId);
+                DiscoveryClient.SyncSecretObject(secretId);
             });
         }
     }

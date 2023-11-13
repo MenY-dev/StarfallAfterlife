@@ -859,5 +859,11 @@ namespace StarfallAfterlife.Bridge.Generators
 
             return true;
         }
+
+        protected bool GenExploreRelictShipCondition(QuestContext context, JsonNode condition, QuestConditionInfo info)
+        {
+            condition["lvl"] = context.TargetLevel;
+            return true;
+        }
     }
 }

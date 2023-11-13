@@ -1,4 +1,5 @@
-﻿using StarfallAfterlife.Bridge.Database;
+﻿using StarfallAfterlife.Bridge.Collections;
+using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Instances;
 using StarfallAfterlife.Bridge.Mathematics;
 using StarfallAfterlife.Bridge.Networking;
@@ -11,6 +12,7 @@ using StarfallAfterlife.Bridge.Server.Galaxy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading;
@@ -35,7 +37,11 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         public List<DiscoveryBattleBossInfo> Bosses { get; } = new();
 
+        public List<string> ServiceFleets { get; } = new();
+
         public List<BattleMember> PendingMembers { get; } = new();
+
+        public Dictionary<string, JsonArray> Drops { get; } = new();
 
         protected CancellationTokenSource _cts;
         protected readonly object _lockher = new();
@@ -259,6 +265,8 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 {
                     AddToBattle(member);
                 }
+
+                CreateLocationDrop();
             }
         }
 
@@ -324,11 +332,53 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         protected virtual InstanceExtraData CreateExtraData()
         {
+            var aiList = ServiceFleets
+                .Select(n => new InstanceAIFleet
+                {
+                    Id = -1,
+                    Mob = new InstanceMob { Id = -1, MobInternalName = n, Tags = new() },
+                    Cargo = new(),
+                })
+                .Concat(Mobs?.Select(m => m.InstanceFleet) ?? Enumerable.Empty<InstanceAIFleet>())
+                .ToList();
+
+            var tiles = CreateLocationTiles();
+
+            if (tiles is not null && 
+                SystemBattle is StarSystemBattle battle)
+            {
+                var objectType = DiscoveryObjectType.None;
+                var objectId = 0;
+
+                if (battle.IsDungeon == true &&
+                    battle.DungeonInfo?.Target is StarSystemObject obj)
+                {
+                    objectType = obj.Type;
+                    objectId = obj.Id;
+                }
+
+                foreach (var item in Characters
+                    .SelectMany(c => c.ServerCharacter?.CreateInstanceTileParams(SystemId, objectType, objectId))
+                    .Where(p => p.TileName is not null))
+                {
+                    var tile = tiles.FirstOrDefault(t => item.TileName.Equals(t.Name, StringComparison.InvariantCultureIgnoreCase));
+
+                    if (tile is null)
+                        continue;
+
+                    foreach (var p in (item.Params ?? new()).Where(p => p.Key is not null))
+                    {
+                        (tile.Params ??= new())[p.Key] = p.Value;
+                    }
+                }
+            }
+            
             return new InstanceExtraData
             {
-                AiList = Mobs?.Select(m => m.InstanceFleet).ToList() ?? new(),
+                AiList = aiList,
                 Bosses = Bosses?.Select(b => b.InstanceMob).ToList() ?? new(),
                 EnviropmentInfo = CreateEnviropment(),
+                Tiles = tiles,
             };
         }
 
@@ -384,6 +434,11 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
             return Characters.FirstOrDefault(c => c.ServerCharacter == character);
         }
 
+        public DiscoveryBattleCharacterInfo GetCharacter(int id)
+        {
+            return Characters.FirstOrDefault(c => c.ServerCharacter?.UniqueId == id);
+        }
+
         public override void InstanceStateChanged(InstanceState state)
         {
             base.InstanceStateChanged(state);
@@ -436,47 +491,50 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
             }
         }
 
-        public virtual JsonNode GetMobData(int fleetId)
+        public override JsonNode GetMobData(MobDataRequest request)
         {
-            lock ( _lockher)
+            if (request.IsCustom == false)
             {
-                var mob =
-                Mobs?.FirstOrDefault(m => m?.FleetId == fleetId)?.Mob ??
-                Bosses?.FirstOrDefault(b => b?.FleetId == fleetId)?.Mob;
-
-                if (mob is not null)
+                lock (_lockher)
                 {
-                    var ships = new JsonArray();
+                    var mob =
+                        Mobs?.FirstOrDefault(m => m?.FleetId == request.FleetId)?.Mob ??
+                        Bosses?.FirstOrDefault(b => b?.FleetId == request.FleetId)?.Mob;
 
-                    foreach (var ship in mob.Ships ?? Enumerable.Empty<DiscoveryMobShipData>())
+                    if (mob is not null)
                     {
-                        if (ship?.Data is null)
-                            continue;
+                        var ships = new JsonArray();
 
-                        ships.Add(new JsonObject
+                        foreach (var ship in mob.Ships ?? Enumerable.Empty<DiscoveryMobShipData>())
                         {
-                            ["id"] = SValue.Create(ship.Data.Id),
-                            ["data"] = SValue.Create(JsonHelpers.ParseNodeUnbuffered(ship.Data).ToJsonString(false)),
-                            ["service_data"] = SValue.Create(JsonHelpers.ParseNodeUnbuffered(ship.ServiceData).ToJsonString(false)),
-                        });
+                            if (ship?.Data is null)
+                                continue;
+
+                            ships.Add(new JsonObject
+                            {
+                                ["id"] = SValue.Create(ship.Data.Id),
+                                ["data"] = SValue.Create(JsonHelpers.ParseNodeUnbuffered(ship.Data).ToJsonString(false)),
+                                ["service_data"] = SValue.Create(JsonHelpers.ParseNodeUnbuffered(ship.ServiceData).ToJsonString(false)),
+                            });
+                        }
+
+                        var doc = new JsonObject
+                        {
+                            ["id"] = SValue.Create(request.FleetId),
+                            ["level"] = SValue.Create(mob.Level),
+                            ["faction"] = SValue.Create((byte)mob.Faction),
+                            ["internal_name"] = SValue.Create(mob.InternalName),
+                            ["battle_bt"] = SValue.Create(mob.BehaviorTreeName),
+                            ["tags"] = mob.Tags?.Select(SValue.Create).ToJsonArray(),
+                            ["ships"] = ships,
+                        };
+
+                        return doc;
                     }
-
-                    var doc = new JsonObject
-                    {
-                        ["id"] = SValue.Create(fleetId),
-                        ["level"] = SValue.Create(mob.Level),
-                        ["faction"] = SValue.Create((byte)mob.Faction),
-                        ["internal_name"] = SValue.Create(mob.InternalName),
-                        ["battle_bt"] = SValue.Create(mob.BehaviorTreeName),
-                        ["tags"] = mob.Tags?.Select(SValue.Create).ToJsonArray(),
-                        ["ships"] = ships,
-                    };
-
-                    return doc;
                 }
-
-                return null;
             }
+
+            return base.GetMobData(request);
         }
 
         public virtual void OnInstanceAuthReady(int characterId, string auth)
@@ -582,6 +640,51 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
             lock (_lockher)
                 return Characters?.Any(c => c?.ServerCharacter == character) == true;
+        }
+
+        protected virtual List<TileInfo> CreateLocationTiles()
+        {
+            return null;
+        }
+
+        protected virtual void CreateLocationDrop()
+        {
+
+        }
+
+        public override JsonArray GetDropList(string dropName)
+        {
+            lock (_lockher)
+                return Drops.GetValueOrDefault(dropName) ?? base.GetDropList(dropName);
+        }
+
+        public virtual void HandleInstanceObjectInteractEvent(string data)
+        {
+            lock (_lockher)
+            {
+                if (JsonHelpers.ParseNodeUnbuffered(data ?? "") is JsonObject doc &&
+                    (DiscoveryObjectType?)(byte?)doc["obj_type"] is DiscoveryObjectType.UserFleet &&
+                    (int?)doc["obj_id"] is int charId &&
+                    GetCharacter(charId)?.ServerCharacter is ServerCharacter character &&
+                    (string)doc["event_type"] is string eventType &&
+                    (string)doc["event_data"] is string eventData)
+                {
+                    character.HandleInstanceObjectInteractEvent(SystemId, eventType, eventData);
+                }
+            }
+        }
+
+        public virtual void HandleSecretObjectLooted(string data)
+        {
+            lock (_lockher)
+            {
+                if (JsonHelpers.ParseNodeUnbuffered(data ?? "") is JsonObject doc &&
+                    (int?)doc["obj_id"] is int secretId)
+                {
+                    foreach (var item in Characters)
+                        item?.ServerCharacter?.HandleSecretObjectLooted(secretId);
+                }
+            }
         }
     }
 }

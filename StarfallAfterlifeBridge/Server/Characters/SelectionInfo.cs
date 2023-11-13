@@ -14,6 +14,12 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
         public int SystemId { get; set; }
 
+        public bool ScanningStarted { get; set; }
+
+        public float ScanningTime { get; set; }
+
+        public bool Scanned { get; set; }
+
         public List<ObjectSelectionInfo> Objects { get; } = new();
 
         public ObjectSelectionInfo GetObjectInfo(int id, DiscoveryObjectType type) =>

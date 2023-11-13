@@ -168,9 +168,12 @@ namespace StarfallAfterlife.Bridge.Server
         {
             var info = new JsonArray();
             var process = new JsonObject();
+            var scanned = false;
 
             if (selection is not null)
             {
+                scanned = selection.Scanned;
+
                 foreach (var item in selection.Objects)
                 {
                     if (item is null)
@@ -179,6 +182,8 @@ namespace StarfallAfterlife.Bridge.Server
                     var obj = item.Target;
                     var objInfo = new JsonArray();
                     var actions = new JsonArray();
+
+                    scanned |= item.Scanned;
 
                     if (obj is Planet planet)
                     {
@@ -269,6 +274,17 @@ namespace StarfallAfterlife.Bridge.Server
                             ["group_id"] = fleet.FactionGroup,
                         });
                     }
+                    else if (obj is SecretObject secret)
+                    {
+                        if (selection.Scanned == true)
+                        {
+                            objInfo.Add(new JsonObject
+                            {
+                                ["info_type"] = "secret_stash",
+                                ["phase"] = 0,
+                            });
+                        }
+                    }
 
                     if (item.ScanningStarted == true)
                     {
@@ -286,12 +302,21 @@ namespace StarfallAfterlife.Bridge.Server
                 }
             }
 
+            if (selection.ScanningStarted == true)
+            {
+                process["process_type"] = "scaning_sector";
+                process["time_left"] = selection.ScanningTime;
+            }
+
             var doc = new JsonObject
             {
-                ["hexx"] = selection?.Hex.X ?? 0,
-                ["hexy"] = selection?.Hex.Y ?? 0,
-                ["info"] = info,
+                ["hexx"] = selection.Hex.X,
+                ["hexy"] = selection.Hex.Y,
+                ["info"] = info
             };
+
+            if (scanned == true)
+                doc["scan_finished"] = 1;
 
             if (string.IsNullOrEmpty((string)process["process_type"]) == false)
                 doc["process"] = process;
@@ -303,102 +328,9 @@ namespace StarfallAfterlife.Bridge.Server
             SfaDebug.Print($"InfoWidgetData (SystemId = {selection?.SystemId}, Location = {selection?.Hex}", GetType().Name);
         }
 
-        public virtual void SendInfoWidgetData(int systemId, DiscoveryObjectType objectType, int objectId, SystemHex hex)
+        public void SendSecretObjectRevealed(StarSystemObject obj)
         {
-            var system = Galaxy.GetActiveSystem(systemId);
-
-            var objects = Enumerable.Empty<StarSystemObject>();
-
-            if (objectType == DiscoveryObjectType.None)
-            {
-                objects = system?.GetObjectsAt(hex) ?? Enumerable.Empty<StarSystemObject>();
-            }
-            else if (objectType == DiscoveryObjectType.AiFleet || objectType == DiscoveryObjectType.UserFleet)
-            {
-                objects = Enumerable.Repeat(system?.Fleets.FirstOrDefault(f => f.Id == objectId), 1);
-            }
-
-            JsonArray info = new JsonArray();
-
-            //foreach (var planet in planets)
-            //{
-            //    info.Add(new JsonObject
-            //    {
-            //        ["id"] = planet.Id,
-            //        ["type"] = (int)planet.Type,
-            //        ["obj_info"] = new JsonArray
-            //        {
-            //            new JsonObject
-            //            {
-            //                ["info_type"] = "planet_base",
-            //                ["planet_name"] = planet.Name,
-            //                ["planet_type"] = (int)planet.Type
-            //            },
-            //            //new JsonObject
-            //            //{
-            //            //    ["info_type"] = "planet_advance",
-            //            //    ["atmosphere"] = planet.Atmosphere,
-            //            //    ["gravity"] = planet.Gravitation,
-            //            //    ["size"] = planet.Size,
-            //            //    ["temperature"] = planet.Temperature,
-            //            //},
-            //        }
-            //    });
-            //}
-
-            foreach (var obj in objects)
-            {
-                var objInfo = new JsonArray();
-
-                if (obj is Planet planet)
-                {
-                    objInfo.Add(new JsonObject
-                    {
-                        ["info_type"] = "planet_base",
-                        ["phase"] = 2,
-                        ["planet_name"] = planet.Name,
-                        ["planet_type"] = (int)planet.PlanetType,
-                    });
-                }
-                else if (obj is DiscoveryFleet fleet)
-                {
-                    objInfo.Add(new JsonObject
-                    {
-                        ["info_type"] = "base_fleet",
-                        ["faction"] = (int)fleet.Faction,
-                        ["group_id"] = fleet.FactionGroup,
-                    });
-                }
-
-                info.Add(new JsonObject
-                {
-                    ["id"] = obj.Id,
-                    ["type"] = (int)obj.Type,
-                    ["actions"] = new JsonArray { "scan" },
-                    ["obj_info"] = objInfo,
-                });
-            }
-
-            JsonNode process = new JsonObject
-            {
-                ["process_type"] = "scanning",
-                ["time_left"] = 5,
-            };
-
-            JsonNode doc = new JsonObject
-            {
-                ["hexx"] = hex.X,
-                ["hexy"] = hex.Y,
-                ["info"] = info,
-                //["process"] = process,
-                //["scan_finished"] = 0,
-            };
-
-            SendDiscoveryMessage(
-                systemId, DiscoveryObjectType.UserFleet, CurrentCharacter?.Fleet?.Id ?? -1, DiscoveryServerAction.InfoWidgetData,
-                writer => writer.WriteShortString(doc.ToJsonString(), -1, true, Encoding.UTF8));
-
-            SfaDebug.Print($"InfoWidgetData (SystemId = {systemId}, Location = {hex}, Type = {objectType}, Id = {objectId})", "DiscoveryServerClient");
+            SendDiscoveryMessage(obj, DiscoveryServerAction.SecretObjectRevealed);
         }
 
         public void SendQuestDialog(int entityId, QuestLogicInfo logic)

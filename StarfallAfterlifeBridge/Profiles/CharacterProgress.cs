@@ -40,17 +40,15 @@ namespace StarfallAfterlife.Bridge.Profiles
         public string Path { get; set; }
 
 
-        public bool AddObject(GalaxyMapObjectType type, int id, int system = -1) =>
-            AddObject((DiscoveryObjectType)type, id, system);
+        public bool AddObject(GalaxyMapObjectType type, int id) =>
+            AddObject((DiscoveryObjectType)type, id);
 
-        public bool AddObject(DiscoveryObjectType type, int id, int system = -1)
-        {
-            if (system > -1 && type == DiscoveryObjectType.QuickTravelGate)
-                WarpSystems.Add(system);
+        public bool AddObject(DiscoveryObjectType type, int id) =>
+            GetCollectionFromType(type)?.Add(id) ?? false;
 
-            return GetCollectionFromType(type)?.Add(id) ?? false;
-        }
+        public bool AddSecretObject(int id) => (SecretLocs ??= new()).Add(id);
 
+        public bool AddWarpSystem(int id) => (WarpSystems ??= new()).Add(id);
 
         public void SetSystemProgress(int systemId, SystemHexMap progress)
         {
@@ -77,7 +75,6 @@ namespace StarfallAfterlife.Bridge.Profiles
                 case DiscoveryObjectType.MinerMothership: return MMS ??= new();
                 case DiscoveryObjectType.ScienceStation: return SCS ??= new();
                 case DiscoveryObjectType.QuickTravelGate: return QuickTravelGates ??= new();
-                case DiscoveryObjectType.SecretObject: return SecretLocs ??= new();
                 default: return null;
             }
         }

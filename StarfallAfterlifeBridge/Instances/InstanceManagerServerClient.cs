@@ -34,6 +34,8 @@ namespace StarfallAfterlife.Bridge.Instances
 
         public event EventHandler<RewardForEvenResponseEventArgs> RewardForEvenReceived;
 
+        public event EventHandler<DropListResponseEventArgs> DropListReceived;
+
         protected object Lockher { get; } = new();
 
         protected override void OnReceive(string msgType, JsonNode doc)
@@ -62,6 +64,9 @@ namespace StarfallAfterlife.Bridge.Instances
 
                 case "send_special_fleet":
                     HandleSpecialFleetResponse(doc); break;
+
+                case "send_drop_list":
+                    HandleDropListResponse(doc); break;
 
                 case "send_reward_for_even":
                     HandleRewardForEven(doc); break;
@@ -222,12 +227,14 @@ namespace StarfallAfterlife.Bridge.Instances
             });
         }
 
-        public virtual void RequestCustomMobData(int mobId, Faction faction, string[] tags, string auth)
+        public virtual void RequestCustomMobData(int mobId, int minLvl, int maxLvl, Faction faction, string[] tags, string auth)
         {
             Send("get_mob_data", new JsonObject
             {
                 ["auth"] = auth,
                 ["mob_id"] = mobId,
+                ["min_lvl"] = minLvl,
+                ["max_lvl"] = maxLvl,
                 ["custom"] = 1,
                 ["faction"] = (int)faction,
                 ["tags"] = JsonHelpers.ParseNodeUnbuffered(tags ?? Array.Empty<string>()),
@@ -261,6 +268,26 @@ namespace StarfallAfterlife.Bridge.Instances
                 (string)doc["auth"] is string auth)
             {
                 SpecialFleetReceived?.Invoke(this, new(auth, name, JsonHelpers.ParseNodeUnbuffered((string)doc["data"])));
+            }
+        }
+
+
+        private void RequestDropList(string dropName, string auth)
+        {
+            Send("get_drop_list", new JsonObject
+            {
+                ["auth"] = auth,
+                ["name"] = dropName,
+            });
+        }
+
+        protected virtual void HandleDropListResponse(JsonNode doc)
+        {
+            if (doc is not null &&
+                (string)doc["name"] is string name &&
+                (string)doc["auth"] is string auth)
+            {
+                DropListReceived?.Invoke(this, new(name, auth, (string)doc["data"]));
             }
         }
 

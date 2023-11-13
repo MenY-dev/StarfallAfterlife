@@ -37,6 +37,8 @@ namespace StarfallAfterlife.Bridge.Instances
 
         public event EventHandler<InstanceActionEventArgs> NewInstanceAction;
 
+        public event EventHandler<DropListRequestEventArgs> DropListRequested;
+
         protected Dictionary<string, InstanceInfo> Instances { get; } = new();
 
         protected object Lockher { get; } = new();
@@ -64,6 +66,9 @@ namespace StarfallAfterlife.Bridge.Instances
 
                 case "get_special_fleet":
                     HandleSpecialFleet(doc); break;
+
+                case "get_drop_list":
+                    HandleGetDropList(doc); break;
 
                 case "get_reward_for_even":
                     HandleRewardForEven(doc); break;
@@ -231,6 +236,8 @@ namespace StarfallAfterlife.Bridge.Instances
                     MobDataRequested?.Invoke(this, new(
                         auth,
                         id,
+                        (int?)doc["min_lvl"] ?? 0,
+                        (int?)doc["max_lvl"] ?? 0,
                         (Faction?)(int?)doc["faction"] ?? Faction.None,
                         doc["tags"]?.DeserializeUnbuffered<string[]>() ?? Array.Empty<string>()));
                 }
@@ -251,6 +258,26 @@ namespace StarfallAfterlife.Bridge.Instances
             {
                 SpecialFleetRequested?.Invoke(this, new(auth, fleetName));
             }
+        }
+
+        private void HandleGetDropList(JsonNode doc)
+        {
+            if (doc is not null &&
+                (string)doc["name"] is string dropName &&
+                (string)doc["auth"] is string auth)
+            {
+                DropListRequested?.Invoke(this, new(auth, dropName));
+            }
+        }
+
+        public void SendDropList(string dropName, string instanceAuth, string drop)
+        {
+            Send("send_drop_list", new JsonObject
+            {
+                ["auth"] = instanceAuth,
+                ["name"] = dropName,
+                ["data"] = drop,
+            });
         }
 
         private void HandleRewardForEven(JsonNode doc)

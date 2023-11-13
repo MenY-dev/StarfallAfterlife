@@ -36,36 +36,34 @@ namespace StarfallAfterlife.Bridge.Instances
             switch (action)
             {
                 case DiscoveryClientAction.SignalForInstanceBattle:
-                    HandleInstanceBattleSignal(reader);
-                    ; break;
+                    HandleInstanceBattleSignal(reader); break;
 
                 case DiscoveryClientAction.FleetLeavesInstance:
-                    HandleFleetLeavesInstance(reader, objectType, objectId);
-                    ; break;
+                    HandleFleetLeavesInstance(reader, objectType, objectId); break;
 
                 case DiscoveryClientAction.PlayerLeaveBattle:
-                    HandlePlayerLeaveBattle(reader, objectType, objectId);
-                    ; break;
+                    HandlePlayerLeaveBattle(reader, objectType, objectId); break;
 
-                case DiscoveryClientAction.CharacterStatsNotification:
-                    ; break;
+                case DiscoveryClientAction.CharacterStatsNotification: break;
 
                 case DiscoveryClientAction.AddCharacterShipsXp:
-                    HandleAddCharacterShipsXp(reader, objectType, objectId)
-                    ; break;
+                    HandleAddCharacterShipsXp(reader, objectType, objectId); break;
                     
                 case DiscoveryClientAction.AuthForInstance:
-                    HandleAuthForInstance(reader)
-                    ; break;
+                    HandleAuthForInstance(reader); break;
 
                 case DiscoveryClientAction.EnemyShipDestroyedNotification:
-                    HandleEnemyShipDestroyedNotification(reader, objectType, objectId)
-                    ; break;
+                    HandleEnemyShipDestroyedNotification(reader, objectType, objectId); break;
 
                 case DiscoveryClientAction.UpdatePirateOutpostAssaultStatus:
                 case DiscoveryClientAction.UpdatePirateStationAssaultStatus:
-                    HandleUpdatePirateAssaultStatus(reader, objectType, objectId)
-                    ; break;
+                    HandleUpdatePirateAssaultStatus(reader, objectType, objectId); break;
+
+                case DiscoveryClientAction.InstanceObjectInteractEvent:
+                    HandleInstanceObjectInteractEvent(reader, objectType, objectId); break;
+
+                case DiscoveryClientAction.SecretObjectLooted:
+                    HandleSecretObjectLooted(reader, objectType, objectId); break;
             }
         }
 
@@ -213,6 +211,35 @@ namespace StarfallAfterlife.Bridge.Instances
 
             foreach (var item in shipsXps)
                 SfaDebug.Print($"AddCharacterShipsXp (Ship = {item.Key}, Xp = {item.Value})", GetType().Name);
+        }
+
+        private void HandleInstanceObjectInteractEvent(SfReader reader, DiscoveryObjectType objectType, int objectId)
+        {
+            var eventType = reader.ReadShortString(Encoding.UTF8);
+            var eventData = reader.ReadShortString(Encoding.UTF8);
+
+            Owner.SendInstanceAction(Instance?.Auth, "object_interact_event", new JsonObject
+            {
+                ["obj_type"] = (int)objectType,
+                ["obj_id"] = objectId,
+                ["event_type"] = eventType,
+                ["event_data"] = eventData,
+            }.ToJsonStringUnbuffered(false));
+
+            SfaDebug.Print($"InstanceObjectInteractEvent " +
+                $"(ObjectType = {objectType}, ObjectId = {objectId}, Event = {eventType})", GetType().Name);
+        }
+
+        private void HandleSecretObjectLooted(SfReader reader, DiscoveryObjectType objectType, int objectId)
+        {
+            Owner.SendInstanceAction(Instance?.Auth, "secret_object_looted", new JsonObject
+            {
+                ["obj_type"] = (int)objectType,
+                ["obj_id"] = objectId,
+            }.ToJsonStringUnbuffered(false));
+
+            SfaDebug.Print($"SecretObjectLooted " +
+                $"(ObjectType = {objectType}, ObjectId = {objectId})");
         }
 
         public void SendMessage(DiscoveryServerAction action, Action<SfWriter> writeAction = null)

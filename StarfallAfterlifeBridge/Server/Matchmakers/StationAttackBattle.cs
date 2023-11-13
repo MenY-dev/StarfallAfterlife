@@ -110,56 +110,59 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
             }
         }
 
-        public JsonNode GetMobData(int mobId, Faction faction, string[] tags)
+        public override JsonNode GetMobData(MobDataRequest request)
         {
-            lock (_lockher)
+            if (request.IsCustom == true)
             {
-                tags ??= new string[0];
-
-                var mob = Server.Realm.MobsDatabase.Mobs.FirstOrDefault(
-                    m => m.Value?.Faction == faction &&
-                    tags.All(t => m.Value?.Tags.Contains(t, StringComparer.InvariantCultureIgnoreCase) == true)).Value;
-
-                mob ??= Server.Realm.MobsDatabase.Mobs.FirstOrDefault().Value;
-
-                if (mob is not null)
+                lock (_lockher)
                 {
-                    Mobs.Add(mob);
-                    var ships = new JsonArray();
-                    var shipId = 1000000000 + Mobs.Count * 1000;
+                    var tags = request.Tags ?? Array.Empty<string>();
 
-                    foreach (var ship in mob.Ships ?? Enumerable.Empty<DiscoveryMobShipData>())
+                    var mob = Server.Realm.MobsDatabase.Mobs.FirstOrDefault(
+                        m => m.Value?.Faction == request.Faction &&
+                        tags.All(t => m.Value?.Tags.Contains(t, StringComparer.InvariantCultureIgnoreCase) == true)).Value;
+
+                    mob ??= Server.Realm.MobsDatabase.Mobs.FirstOrDefault().Value;
+
+                    if (mob is not null)
                     {
-                        if (ship?.Data is null)
-                            continue;
+                        Mobs.Add(mob);
+                        var ships = new JsonArray();
+                        var shipId = 1000000000 + Mobs.Count * 1000;
 
-                        var shipData = ship.Data.Clone();
-                        shipData.Id = shipId++;
-
-                        ships.Add(new JsonObject
+                        foreach (var ship in mob.Ships ?? Enumerable.Empty<DiscoveryMobShipData>())
                         {
-                            ["id"] = SValue.Create(shipData.Id),
-                            ["data"] = SValue.Create(JsonHelpers.ParseNodeUnbuffered(shipData).ToJsonString(false)),
-                            ["service_data"] = SValue.Create(JsonHelpers.ParseNodeUnbuffered(ship.ServiceData).ToJsonString(false)),
-                        });
+                            if (ship?.Data is null)
+                                continue;
+
+                            var shipData = ship.Data.Clone();
+                            shipData.Id = shipId++;
+
+                            ships.Add(new JsonObject
+                            {
+                                ["id"] = SValue.Create(shipData.Id),
+                                ["data"] = SValue.Create(JsonHelpers.ParseNodeUnbuffered(shipData).ToJsonString(false)),
+                                ["service_data"] = SValue.Create(JsonHelpers.ParseNodeUnbuffered(ship.ServiceData).ToJsonString(false)),
+                            });
+                        }
+
+                        var doc = new JsonObject
+                        {
+                            ["id"] = SValue.Create(request.FleetId),
+                            ["level"] = SValue.Create(mob.Level),
+                            ["faction"] = SValue.Create((byte)mob.Faction),
+                            ["internal_name"] = SValue.Create(""),
+                            ["battle_bt"] = SValue.Create(mob.BehaviorTreeName),
+                            ["tags"] = mob.Tags?.Select(SValue.Create).ToJsonArray(),
+                            ["ships"] = ships,
+                        };
+
+                        return doc;
                     }
-
-                    var doc = new JsonObject
-                    {
-                        ["id"] = SValue.Create(mobId),
-                        ["level"] = SValue.Create(mob.Level),
-                        ["faction"] = SValue.Create((byte)mob.Faction),
-                        ["internal_name"] = SValue.Create(""),
-                        ["battle_bt"] = SValue.Create(mob.BehaviorTreeName),
-                        ["tags"] = mob.Tags?.Select(SValue.Create).ToJsonArray(),
-                        ["ships"] = ships,
-                    };
-
-                    return doc;
                 }
-
-                return null;
             }
+
+            return base.GetMobData(request);
         }
 
         public void OnFleetLeavesFromInstance(DiscoveryObjectType fleetType, int fleetId, SystemHex hex)

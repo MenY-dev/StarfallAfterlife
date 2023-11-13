@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Text.Json.Nodes;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace StarfallAfterlife.Bridge.Server.Quests
 {
@@ -23,11 +24,14 @@ namespace StarfallAfterlife.Bridge.Server.Quests
 
         public Dictionary<int, DiscoveryQuest> Quests { get; set; } = new();
 
+        public Dictionary<int, DiscoveryQuest> LevelingQuests { get; set; } = new();
+
         protected Dictionary<ulong, HashSet<DiscoveryQuest>> Bindings { get; set; } = new();
 
         public DiscoveryQuest GetQuest(int id)
         {
-            if (Quests.TryGetValue(id, out DiscoveryQuest quest) == true)
+            if (Quests.TryGetValue(id, out DiscoveryQuest quest) == true ||
+                LevelingQuests.TryGetValue(id, out quest) == true)
                 return quest;
 
             return null;
@@ -102,8 +106,35 @@ namespace StarfallAfterlife.Bridge.Server.Quests
                 QuestLines.Contains(questLine) ||
                 QuestLines.Any(q => q.Id == questLine.Id))
                 return;
-            
+
             QuestLines.Add(questLine);
+        }
+
+        public DiscoveryQuest GetLevelingQuestById(int id)
+        {
+            if (LevelingQuests.TryGetValue(id, out DiscoveryQuest quest) == true)
+                return quest;
+
+            return null;
+        }
+
+        public DiscoveryQuest[] GetLevelingQuest(int level) =>
+            LevelingQuests.Values.Where(q => q.Level == level).ToArray() ?? Array.Empty<DiscoveryQuest>();
+
+        public void AddLevelingQuest(DiscoveryQuest quest)
+        {
+            if (quest?.Id is int questId)
+                LevelingQuests.TryAdd(questId, quest);
+        }
+
+        public bool RemoveLevelingQuest(DiscoveryQuest quest)
+        {
+            if (quest?.Id is int questId &&
+                LevelingQuests.TryGetValue(quest.Id, out DiscoveryQuest outQuest) == true &&
+                outQuest == quest)
+                return Quests.Remove(questId);
+
+            return false;
         }
 
         protected void RemoveFromBindings(DiscoveryQuest quest)
@@ -148,6 +179,12 @@ namespace StarfallAfterlife.Bridge.Server.Quests
                     AddQuest(quest.DeserializeUnbuffered<DiscoveryQuest>());
             }
 
+            if (doc["leveling_quests"]?.AsArray() is JsonArray lvlQuests)
+            {
+                foreach (var quest in lvlQuests)
+                    AddLevelingQuest(quest.DeserializeUnbuffered<DiscoveryQuest>());
+            }
+
             foreach (var item in doc["quest_lines"]?.AsArraySelf() ?? new())
             {
                 if (item is null)
@@ -173,6 +210,7 @@ namespace StarfallAfterlife.Bridge.Server.Quests
             doc["hash"] = Hash;
             doc["quests"] = quests;
             doc["quest_lines"] = new JsonArray(QuestLines.Select(l => l.ToJson()).ToArray());
+            doc["leveling_quests"] = new JsonArray(LevelingQuests.Values.Select(l => JsonHelpers.ParseNodeUnbuffered(l)).ToArray());
 
             return doc;
         }

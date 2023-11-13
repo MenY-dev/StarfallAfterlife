@@ -23,6 +23,37 @@ namespace StarfallAfterlife.Bridge.Generators
 
         protected Random Rnd { get; set; }
 
+        protected static readonly List<LevelQuestInfo> RelictShipLevelingQuests = new()
+        {
+            new() { Faction = Faction.Deprived, Level = 0, Logics = new(){ 1315019028 } },
+            new() { Faction = Faction.Eclipse,  Level = 0, Logics = new(){ 1315019028 } },
+            new() { Faction = Faction.Vanguard, Level = 0, Logics = new(){ 1315019028 } },
+
+            new() { Faction = Faction.Deprived, Level = 15, Logics = new(){ 1704588733 } },
+            new() { Faction = Faction.Eclipse,  Level = 15, Logics = new(){ 1704588733 } },
+            new() { Faction = Faction.Vanguard, Level = 15, Logics = new(){ 1704588733 } },
+
+            new() { Faction = Faction.Deprived, Level = 29, Logics = new(){ 2094158438 } },
+            new() { Faction = Faction.Eclipse,  Level = 29, Logics = new(){ 2094158438 } },
+            new() { Faction = Faction.Vanguard, Level = 29, Logics = new(){ 2094158438 } },
+
+            new() { Faction = Faction.Deprived, Level = 43, Logics = new(){ 336244495 } },
+            new() { Faction = Faction.Eclipse,  Level = 43, Logics = new(){ 336244495 } },
+            new() { Faction = Faction.Vanguard, Level = 43, Logics = new(){ 336244495 } },
+
+            new() { Faction = Faction.Deprived, Level = 57, Logics = new(){ 725814200 } },
+            new() { Faction = Faction.Eclipse,  Level = 57, Logics = new(){ 725814200 } },
+            new() { Faction = Faction.Vanguard, Level = 57, Logics = new(){ 725814200 } },
+
+            new() { Faction = Faction.Deprived, Level = 71, Logics = new(){ 1115383905 } },
+            new() { Faction = Faction.Eclipse,  Level = 71, Logics = new(){ 1115383905 } },
+            new() { Faction = Faction.Vanguard, Level = 71, Logics = new(){ 1115383905 } },
+
+            new() { Faction = Faction.Deprived, Level = 85, Logics = new(){ 1504953610 } },
+            new() { Faction = Faction.Eclipse,  Level = 85, Logics = new(){ 1504953610 } },
+            new() { Faction = Faction.Vanguard, Level = 85, Logics = new(){ 1504953610 } },
+        };
+
         public QuestsGenerator(SfaRealm realm)
         {
             if (realm is null)
@@ -189,7 +220,7 @@ namespace StarfallAfterlife.Bridge.Generators
 
         protected virtual void GenerateLevelingQuests(DiscoveryQuestsDatabase qd)
         {
-            var groups = Realm.Database.LevelQuests
+            var groups = Realm.Database.LevelQuests.Concat(RelictShipLevelingQuests)
                 .GroupBy(x => x.Faction);
 
             foreach (var group in groups)
@@ -252,8 +283,17 @@ namespace StarfallAfterlife.Bridge.Generators
                         if (logic.Conditions.Count > quest.Conditions.Count)
                             continue;
 
-                        quest.Reward = logic.Rewards.FirstOrDefault();
-                        qd.AddQuest(quest);
+                        var reward = logic.Rewards.FirstOrDefault();
+
+                        reward.Items = (reward.Items ?? new()).Select(i => new QuestItemInfo()
+                        {
+                            Id = i.Id,
+                            Type = i.Type,
+                            Count = i.Count * 4
+                        }).ToList();
+
+                        quest.Reward = reward;
+                        qd.AddLevelingQuest(quest);
                     }
                 }
             }
@@ -374,7 +414,7 @@ namespace StarfallAfterlife.Bridge.Generators
                     //Tutorial
                     break;
                 case QuestConditionType.ExploreObject:
-                    GenExploreSystemObjectCondition(context, condition, info);
+                    result = GenExploreSystemObjectCondition(context, condition, info);
                     break;
                 case QuestConditionType.StatTracking:
                     result = GenStatTrackingCondition(context, condition, info);
@@ -383,7 +423,7 @@ namespace StarfallAfterlife.Bridge.Generators
                     //Tutorial
                     break;
                 case QuestConditionType.ExploreRelictShip:
-                    //Relic quest line
+                    result = GenExploreRelictShipCondition(context, condition, info);
                     break;
                 case QuestConditionType.DeliverMobDrop:
                     result = GenDeliverMobDropCondition(context, condition, info);

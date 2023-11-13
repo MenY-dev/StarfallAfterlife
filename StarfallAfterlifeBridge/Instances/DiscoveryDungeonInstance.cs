@@ -11,7 +11,7 @@ namespace StarfallAfterlife.Bridge.Instances
     {
         public override string Map => DungeonMap;
 
-        protected string DungeonMap { get; set; } = "psa_PiratesStationAttackMap";
+        protected string DungeonMap { get; set; } = "DFA_first";
 
         public override void Init(InstanceManagerServerClient context)
         {
@@ -34,6 +34,10 @@ namespace StarfallAfterlife.Bridge.Instances
                         Faction.Pyramid => "pso_PyramidOutpostAttack",
                         _ => "pso_ScreechersOutpostDungeon",
                     };
+                }
+                else if (Info?.DungeonType == DungeonType.Secret)
+                {
+                    DungeonMap = "DMining_RichAsteroids2";
                 }
             }
 

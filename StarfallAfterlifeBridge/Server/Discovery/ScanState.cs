@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StarfallAfterlife.Bridge.Instances
+namespace StarfallAfterlife.Bridge.Server.Discovery
 {
-    public enum DungeonType : byte
+    public enum ScanState
     {
         None = 0,
-        Outpost = 1,
-        Station = 2,
-        Secret = 3,
+        Started = 1,
+        Finished = 2,
+        Cancelled = 3,
     }
 }

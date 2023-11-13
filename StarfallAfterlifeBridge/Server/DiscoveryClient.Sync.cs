@@ -342,6 +342,39 @@ namespace StarfallAfterlife.Bridge.Server
                     });
             }
         }
+
+        public virtual void SyncSecretObject(int systemId, int objId)
+        {
+            if (Galaxy
+                .GetActiveSystem(systemId, true)
+                .GetObject(objId, DiscoveryObjectType.SecretObject) is SecretObject secret)
+            {
+                SendSyncMessage(
+                    secret,
+                    writer =>
+                    {
+                        var hex = secret.Hex;
+                        writer.WriteHex(secret.Hex); // Position
+                        writer.WriteByte((byte)secret.SecretType); // Type
+                        writer.WriteInt32(20); // PingRange
+
+                        if (secret.PossibleLocations is SystemHex[] locations)
+                        {
+                            writer.WriteUInt16((ushort)locations.Length);
+
+                            foreach (var loc in locations)
+                                writer.WriteHex(loc);
+                        }
+                        else
+                        {
+                            writer.WriteUInt16(0);
+                        }
+
+                        writer.WriteHex(secret.Hex); // SignalSource
+                    });
+            }
+        }
+
         public virtual void SyncRichAsteroid(int systemId, int asteroidId)
         {
             if (Galaxy
@@ -509,6 +542,9 @@ namespace StarfallAfterlife.Bridge.Server
                     break;
                 case DiscoveryObjectType.PiratesOutpost:
                     SyncPiratesOutpost(systemId, objectId);
+                    break;
+                case DiscoveryObjectType.SecretObject:
+                    SyncSecretObject(systemId, objectId);
                     break;
                 default:
                     SendSyncMessage(Galaxy

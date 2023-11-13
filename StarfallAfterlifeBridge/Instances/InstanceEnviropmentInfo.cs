@@ -47,10 +47,10 @@ namespace StarfallAfterlife.Bridge.Instances
             doc["distance_from_center"] = DistanceFromCenter;
             doc["sector_lock_seconds"] = SectorLockSeconds;
             doc["env_effects"] = EnviropmentEffects?.Select(e => new JsonObject { ["type"] = e }).ToJsonArray();
+            doc["floating_asteroids_count"] = FloatingAsteroidsCount;
 
             if (RichAsteroidsId != -1)
             {
-                doc["floating_asteroids_count"] = FloatingAsteroidsCount;
                 doc["rich_asteroids_id"] = RichAsteroidsId;
                 doc["rich_asteroids_type"] = RichAsteroidsType;
                 doc["asteroids_content"] = AsteroidsContent.Select(a => new JsonObject

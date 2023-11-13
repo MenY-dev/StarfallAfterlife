@@ -50,7 +50,7 @@ namespace StarfallAfterlife.Bridge.Server
         PlayerLeaveBattle = 1253881240,
         UpdateFleetStatusFromInstance = 1297702626,
         EnemyShipDestroyedNotification = 393277193,
-        InstanceObjectIntractEvent = 575015484,
+        InstanceObjectInteractEvent = 575015484,
         SpecialInstanceComplete = 440969559,
         UpdatePirateStationAssaultStatus = 981809702,
         UpdatePirateOutpostAssaultStatus = 572974302,

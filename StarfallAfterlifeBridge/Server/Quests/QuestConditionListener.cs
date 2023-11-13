@@ -136,6 +136,9 @@ namespace StarfallAfterlife.Bridge.Server.Quests
                     case QuestConditionType.ExploreObject:
                         return new ExploreSystemObjectConditionListener(quest, info);
 
+                    case QuestConditionType.ExploreRelictShip:
+                        return new ExploreRelictShipConditionListener(quest, info);
+
                     default:
                         return new QuestConditionListener(quest, info);
                 }
@@ -239,6 +242,11 @@ namespace StarfallAfterlife.Bridge.Server.Quests
         public virtual void RaiseProgressChanged() => OnProgressChanged();
 
         public virtual List<DiscoveryDropRule> CreateDropRules()
+        {
+            return null;
+        }
+
+        public virtual List<QuestTileParams> CreateInstanceTileParams(int systemId, DiscoveryObjectType objectType, int objectId)
         {
             return null;
         }

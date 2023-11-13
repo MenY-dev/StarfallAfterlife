@@ -98,46 +98,70 @@ namespace StarfallAfterlife.Bridge.Server
             }
         });
 
-        void IObjectScanningListener.OnScanningStarted(DiscoveryFleet fleet, StarSystemObject toScan, float seconds) => Invoke(() =>
+        void IObjectScanningListener.OnScanningStateChanged(DiscoveryFleet fleet, ScanInfo info) => Invoke(() =>
         {
-            if (CurrentCharacter is ServerCharacter character &&
-                character.Fleet == fleet &&
-                character.Selection?.GetObjectInfo(toScan) is ObjectSelectionInfo info)
+            void SetScanning(SelectionInfo selection, bool started, bool finished, float time)
             {
-                info.ScanningStarted = true;
-                info.ScanningTime = seconds;
-                Invoke(() => SendInfoWidgetData(character.Selection));
-            }
-        });
+                if (selection is null)
+                    return;
 
-        void IObjectScanningListener.OnScanningFinished(DiscoveryFleet fleet, StarSystemObject toScan) => Invoke(() =>
-        {
-            if (CurrentCharacter is ServerCharacter character &&
-                character.Fleet == fleet &&
-                character.Selection?.GetObjectInfo(toScan) is ObjectSelectionInfo info)
-            {
-                info.ScanningStarted = false;
-                info.ScanningTime = 0;
-                info.Scanned = true;
-                Invoke(() =>
+                if (info.SectorScanning == true)
+                { 
+                    selection.ScanningStarted = started;
+                    selection.Scanned = finished;
+                    selection.ScanningTime = time;
+                }
+                else if(selection.GetObjectInfo(info.SystemObject) is ObjectSelectionInfo objSelection)
                 {
-                    SendInfoWidgetData(character.Selection);
+                    objSelection.ScanningStarted = started;
+                    objSelection.Scanned = finished;
+                    objSelection.ScanningTime = time;
+                }
+            }
 
-                    if (info.Target is StarSystemObject target)
-                        character.Events.Broadcast<IExplorationListener>(l => l.OnObjectScanned(target));
-                });
+            if (CurrentCharacter is ServerCharacter character &&
+                character.Fleet == fleet)
+            {
+                if (info.State == ScanState.Started)
+                {
+                    if (character.Selection is SelectionInfo selection)
+                    {
+                        SetScanning(selection, true, false, info.Time);
+                        Invoke(() => SendInfoWidgetData(selection));
+                    }
+
+                }
+                else if (info.State == ScanState.Cancelled)
+                {
+                    if (character.Selection is SelectionInfo selection)
+                    {
+                        SetScanning(selection, false, false, 0);
+                        Invoke(() => SendInfoWidgetData(selection));
+                    }
+                }
+                else if(info.State == ScanState.Finished)
+                {
+                    if (character.Selection is SelectionInfo selection)
+                    {
+                        SetScanning(selection, false, true, 0);
+                        Invoke(() => SendInfoWidgetData(selection));
+                    }
+
+                    if (info.SectorScanning == false &&
+                        info.SystemObject is StarSystemObject target)
+                        Invoke(() => character.Events.Broadcast<IExplorationListener>(l => l.OnObjectScanned(target)));
+                }
             }
         });
 
-        void IObjectScanningListener.OnScanningCanceled(DiscoveryFleet fleet, StarSystemObject toScan) => Invoke(() =>
+        void IObjectScanningListener.OnSecretObjectRevealed(DiscoveryFleet fleet, SecretObject secretObject) => Invoke(() =>
         {
-            if (CurrentCharacter is ServerCharacter character &&
-                character.Fleet == fleet &&
-                character.Selection?.GetObjectInfo(toScan) is ObjectSelectionInfo info)
+            if (fleet is not null &&
+                fleet.System is StarSystem system &&
+                CurrentCharacter is ServerCharacter character &&
+                character.Fleet == fleet)
             {
-                info.ScanningStarted = false;
-                info.ScanningTime = 0;
-                Invoke(() => SendInfoWidgetData(character.Selection));
+                SendSecretObjectRevealed(secretObject);
             }
         });
     }

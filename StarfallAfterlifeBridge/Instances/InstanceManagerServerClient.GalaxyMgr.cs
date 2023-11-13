@@ -52,6 +52,8 @@ namespace StarfallAfterlife.Bridge.Instances
                     response = new JsonObject
                     {
                         ["mobdata"] = HandleGetMobFleetCustom(
+                            (int?)query["level_min"] ?? 0,
+                            (int?)query["level_max"] ?? 0,
                             (Faction?)(byte?)query["faction"] ?? Faction.None,
                             ((string)query["tags"])?.Split(',', StringSplitOptions.RemoveEmptyEntries) ?? Array.Empty<string>(),
                             (string)query["auth"]),
@@ -70,7 +72,7 @@ namespace StarfallAfterlife.Bridge.Instances
                     {
                         ["listdata"] = new JsonObject
                         {
-                            ["items"] = new JsonArray()
+                            ["items"] = HandleGetDropList((string)query["listname"], (string)query["auth"])
                         }
                     };
                     break;
@@ -166,7 +168,7 @@ namespace StarfallAfterlife.Bridge.Instances
             return mobData;
         }
 
-        private JsonNode HandleGetMobFleetCustom(Faction faction, string[] tags, string auth)
+        private JsonNode HandleGetMobFleetCustom(int minLvl, int maxLvl, Faction faction, string[] tags, string auth)
         {
             if (auth is null)
                 return null;
@@ -193,7 +195,7 @@ namespace StarfallAfterlife.Bridge.Instances
                 })
                 .Start(20000);
 
-            RequestCustomMobData(mobId, faction, tags, auth);
+            RequestCustomMobData(mobId, minLvl, maxLvl, faction, tags, auth);
             responseWaiter.Wait();
             return mobData;
         }
@@ -221,6 +223,28 @@ namespace StarfallAfterlife.Bridge.Instances
             return new JsonObject { ["ships"] = fleet };
         }
 
+        private JsonNode HandleGetDropList(string dropName, string auth)
+        {
+            string drop = null;
+            var responseWaiter = EventWaiter<DropListResponseEventArgs>
+                .Create()
+                .Subscribe(e => DropListReceived += e)
+                .Unsubscribe(e => DropListReceived -= e)
+                .Where((o, e) =>
+                {
+                    if (e.DropName != dropName ||
+                        e.Auth != auth)
+                        return false;
+
+                    drop = e.Data;
+                    return true;
+                })
+                .Start(20000);
+
+            RequestDropList(dropName, auth);
+            responseWaiter.Wait();
+            return JsonHelpers.ParseNodeUnbuffered(drop ?? "[]") ?? new JsonArray();
+        }
 
         private void HandleBattleResults(string gameMode, string results, string auth)
         {

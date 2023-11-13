@@ -35,6 +35,7 @@ namespace StarfallAfterlife.Bridge.Server
         NewAchievements = 76,
         ShowAiMessage = 77,
         InfoWidgetData = 78,
+        SecretObjectRevealed = 79,
         SetVision = 100,
         SharedFleetVision = 101,
         SyncAbility = 102

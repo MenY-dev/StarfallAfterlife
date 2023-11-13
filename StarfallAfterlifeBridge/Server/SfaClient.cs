@@ -463,6 +463,17 @@ namespace StarfallAfterlife.Bridge.Server
                     }
                 }
 
+                if (doc["new_secrets"]?.AsArray() is JArray secrets)
+                {
+                    foreach (var item in secrets)
+                    {
+                        if ((int?)item is int secretId)
+                        {
+                            progress.SecretLocs.Add(secretId);
+                        }
+                    }
+                }
+
                 if (doc["systems"]?.AsArray() is JArray systems)
                 {
                     foreach (var system in systems)
@@ -472,19 +483,28 @@ namespace StarfallAfterlife.Bridge.Server
                             (string)system["progress"] is string map)
                         {
                             progress.SetSystemProgress(systemId, new SystemHexMap(map));
-
-                            if (system["new_objects"]?.AsArray() is JArray newObjects)
-                            {
-                                foreach (var item in newObjects)
-                                {
-                                    if ((byte?)item["type"] is byte type &&
-                                        (int?)item["id"] is int id)
-                                    {
-                                        progress.AddObject((DiscoveryObjectType)type, id, systemId);
-                                    }
-                                }
-                            }
                         }
+                    }
+                }
+
+                if (doc["new_objects"]?.AsArray() is JArray objs)
+                {
+                    foreach (var obj in objs)
+                    {
+                        if ((int?)obj["type"] is int type &&
+                            (int?)obj["id"] is int id)
+                        {
+                            progress.AddObject((DiscoveryObjectType)type, id);
+                        }
+                    }
+                }
+
+                if (doc["new_warp_systems"]?.AsArray() is JArray warpSystems)
+                {
+                    foreach (var item in warpSystems)
+                    {
+                        if ((int?)item is int systemId)
+                            progress.AddWarpSystem(systemId);
                     }
                 }
 

@@ -193,6 +193,9 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             var translation = EngineEnabled == true ? Speed * DeltaTime : 0;
             var moveResult = Route.Move(translation);
 
+            if (Location != Route.Location)
+                Location = Route.Location;
+
             if (moveResult != RouteMoveResult.None)
             {
                 if (moveResult == RouteMoveResult.TargetLocationReached)
@@ -201,9 +204,6 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                 Broadcast<IFleetListener>(l => l.OnFleetMoved(this));
                 Broadcast<IFleetListener>(l => l.OnFleetRouteChanged(this));
             }
-
-            if (Location != Route.Location)
-                Location = Route.Location;
         }
 
         protected virtual void UpdateRouteToAttackTarget()
@@ -283,6 +283,24 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             battle.HasNebula = System?.NebulaMap?[battle.Hex] == true;
             battle.HasAsteroids = System?.AsteroidsMap?[battle.Hex] == true;
             battle.RichAsteroidField = System?.GetObjectAt(battle.Hex, DiscoveryObjectType.RichAsteroids) as StarSystemRichAsteroid;
+            battle.Init();
+            battle.Start();
+        }
+
+        public virtual void ExploreSecretObject(SecretObject secret)
+        {
+            if (secret is null || secret.System != System)
+                return;
+
+            var battle = new StarSystemBattle
+            {
+                Hex = Hex,
+            };
+
+            System?.AddBattle(battle);
+            battle.IsDungeon = true;
+            battle.DungeonInfo = new() { Target = secret };
+            battle.AddToBattle(this, BattleRole.Explore, CreateHexOffset());
             battle.Init();
             battle.Start();
         }

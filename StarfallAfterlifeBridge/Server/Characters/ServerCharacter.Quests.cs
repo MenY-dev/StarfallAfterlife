@@ -21,6 +21,13 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                     .Where(l => Database.GetQuestLine(l?.Id ?? -1)?.Faction == Faction)
                     .SelectMany(l => l.GetNewQuests(this) ?? new()))
                     AcceptQuest(questId);
+
+                foreach (var quest in questsDatabase.LevelingQuests?.Values
+                    .Where(
+                        q => q?.ObjectFaction == Faction &&
+                        q.Level <= Level &&
+                        Progress?.CompletedQuests?.Contains(q.Id) != true))
+                    AcceptQuest(quest.Id);
             }
         }
     }

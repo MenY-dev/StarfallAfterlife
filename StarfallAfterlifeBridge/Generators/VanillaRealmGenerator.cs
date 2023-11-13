@@ -37,8 +37,8 @@ namespace StarfallAfterlife.Bridge.Generators
                 Realm.GalaxyMapHash = Realm.GalaxyMap.Hash;
 
                 result = RunChildTasks(
+                    new SecretObjectsGenerator(Realm),
                     new MobsMapGenerator(Realm),
-                    //new ShopsGenerator(Realm),
                     new QuestsGenerator(Realm));
             }
             catch

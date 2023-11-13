@@ -197,5 +197,15 @@ namespace StarfallAfterlife.Bridge.Server.Quests
                 .Where(r => r is not null)
                 .ToList() ?? new();
         }
+
+        public List<QuestTileParams> CreateInstanceTileParams(int systemId, DiscoveryObjectType objectType, int objectId)
+        {
+            return Conditions?
+                .Select(q => q.CreateInstanceTileParams(systemId, objectType, objectId))
+                .Where(r => r is not null)
+                .SelectMany(r => r)
+                .Where(r => r.TileName is not null)
+                .ToList() ?? new();
+        }
     }
 }

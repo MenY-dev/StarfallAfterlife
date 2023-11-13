@@ -43,6 +43,8 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
         public List<StarSystemRichAsteroid> RichAsteroids { get; } = new();
 
+        public List<SecretObject> SecretObjects { get; } = new();
+
         public NavigationMap NavigationMap { get; protected set; } = new();
 
         public SystemHexMap AsteroidsMap { get; protected set; } = new();
@@ -120,6 +122,9 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
             foreach (var item in Info.RichAsteroids ?? Enumerable.Empty<GalaxyMapRichAsteroid>())
                 RichAsteroids.Add(new StarSystemRichAsteroid(item, this));
+
+            foreach (var item in Galaxy?.Realm?.SecretObjectsMap?.GetSystemObjects(Id) ?? Enumerable.Empty<SecretObjectInfo>())
+                SecretObjects.Add(new SecretObject(item, this));
 
             UpdateNavigationMap();
             AsteroidsMap = new(Info.AsteroidsMask);
@@ -395,6 +400,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                 .Concat(TradeStations)
                 .Concat(Motherships)
                 .Concat(QuickTravelGates)
+                .Concat(SecretObjects)
                 .Concat(RichAsteroids);
 
             return includeFleets == true ? objects.Concat(Fleets) : objects;

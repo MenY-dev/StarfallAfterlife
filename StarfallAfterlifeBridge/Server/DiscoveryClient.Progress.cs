@@ -60,43 +60,71 @@ namespace StarfallAfterlife.Bridge.Server
             }, SfaServerAction.SyncProgress);
         }
 
-        public void SyncExploration(int systemId, IEnumerable<IGalaxyMapObject> newObjects = null)
+        public void SyncSecretObject(int id)
         {
-            if (systemId > -1 &&
+
+            Client?.Send(new JsonObject()
+            {
+                ["new_secrets"] = new JsonArray(JsonValue.Create(id))
+            }, SfaServerAction.SyncProgress);
+        }
+
+        public void SyncExploration(IEnumerable<int> systems, IEnumerable<IGalaxyMapObject> newObjects = null)
+        {
+            var newSystemsResponse = new JsonArray();
+            var newObjectsResponse = new JsonArray();
+            var newWarpSystemsResponse = new JsonArray();
+
+            if (systems is not null &&
                 CurrentCharacter is ServerCharacter character &&
                 character.Fleet is UserFleet fleet)
             {
-                SystemHexMap map;
+                if (systems is not null)
+                {
+                    foreach (var systemId in systems)
+                    {
+                        SystemHexMap map;
 
-                if (character.ExplorationProgress.TryGetValue(systemId, out map) == false)
-                    character.ExplorationProgress.Add(systemId, map = new SystemHexMap());
+                        if (character.ExplorationProgress.TryGetValue(systemId, out map) == false)
+                            character.ExplorationProgress.Add(systemId, map = new SystemHexMap());
 
-                var newObjectsResponse = new JsonArray();
+                        newSystemsResponse.Add(new JsonObject
+                        {
+                            ["system_id"] = systemId,
+                            ["progress"] = map.ToBase64String(),
+                        });
+                    }
+                }
 
                 if (newObjects is not null)
                 {
                     foreach (var item in newObjects)
                     {
-                        if (item is not null)
-                            newObjectsResponse.Add(new JsonObject
-                            {
-                                ["id"] = item.Id,
-                                ["type"] = (byte)item.ObjectType,
-                                ["system"] = systemId,
-                            });
+                        if (item is null)
+                            continue;
+
+                        newObjectsResponse.Add(new JsonObject
+                        {
+                            ["id"] = item.Id,
+                            ["type"] = (int)item.ObjectType,
+                        });
+
+                        if (item.ObjectType is GalaxyMapObjectType.QuickTravelGate &&
+                            Map?.GetSystem(GalaxyMapObjectType.QuickTravelGate, item.Id) is GalaxyMapStarSystem system)
+                        {
+                            newWarpSystemsResponse.Add(JsonValue.Create(system.Id));
+                        }
                     }
                 }
-
-                Client?.Send(new JsonObject()
-                {
-                    ["systems"] = new JsonArray(new JsonObject
-                    {
-                        ["system_id"] = systemId,
-                        ["progress"] = map.ToBase64String(),
-                        ["new_objects"] = newObjectsResponse,
-                    })
-                }, SfaServerAction.SyncProgress);
             }
+
+            Client?.Send(new JsonObject()
+            {
+                ["systems"] = newSystemsResponse,
+                ["new_objects"] = newObjectsResponse,
+                ["new_warp_systems"] = newWarpSystemsResponse,
+
+            }, SfaServerAction.SyncProgress);
         }
 
         public void UpdateExploration(int systemId, SystemHex location, int vision)
@@ -152,9 +180,13 @@ namespace StarfallAfterlife.Bridge.Server
                         if (item.Hex.GetDistanceTo(location) > vision)
                             continue;
 
-                        if (progress.AddObject(item.Type, item.Id, systemId) == true)
+                        if (progress.AddObject(item.Type, item.Id) == true)
                         {
                             newObjects.Add(item);
+
+                            if (item.Type is DiscoveryObjectType.QuickTravelGate)
+                                progress.AddWarpSystem(system.Id);
+
                             CurrentCharacter?.Events?.Broadcast<IExplorationListener>(l =>
                                 l.OnObjectExplored(systemId, item.Type, item.Id));
                         }
@@ -164,7 +196,7 @@ namespace StarfallAfterlife.Bridge.Server
 
                     if (needSync == true)
                     {
-                        SyncExploration(systemId, newObjects);
+                        SyncExploration(new[] { systemId }, newObjects);
                     }
                 }
             });

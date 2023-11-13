@@ -11,9 +11,11 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
     {
         protected StarSystemObject ObjectToScan;
 
-        protected DateTime ScanEndTime;
+        protected ScanInfo ScanInfo;
 
         protected SystemHex ScanStartHex;
+
+        protected DateTime ScanEndTime;
 
         protected virtual void TickActions()
         {
@@ -28,23 +30,45 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             if (obj is null)
                 return;
 
-            var seconds = 5f;
-            ObjectToScan = obj;
-            ScanEndTime = DateTime.Now.AddSeconds(seconds);
+            ScanInfo = new()
+            {
+                State = ScanState.Started,
+                SystemObject = ObjectToScan = obj,
+                Sector = obj.Hex,
+                Time = 5f,
+            };
+
             ScanStartHex = Hex;
-            Broadcast<IObjectScanningListener>(l => l.OnScanningStarted(this, ObjectToScan, seconds));
+            ScanEndTime = DateTime.Now.AddSeconds(ScanInfo.Time);
+            Broadcast<IObjectScanningListener>(l => l.OnScanningStateChanged(this, ScanInfo));
+        }
+
+        public void ScanSector(SystemHex sector)
+        {
+            ScanInfo = new()
+            {
+                State = ScanState.Started,
+                SectorScanning = true,
+                Sector = sector,
+                Time = 5f,
+            };
+
+            ScanStartHex = Hex;
+            ScanEndTime = DateTime.Now.AddSeconds(ScanInfo.Time);
+            Broadcast<IObjectScanningListener>(l => l.OnScanningStateChanged(this, ScanInfo));
         }
 
         public void CancelScanning()
         {
-            var obj = ObjectToScan;
-            ObjectToScan = null;
-            Broadcast<IObjectScanningListener>(l => l.OnScanningCanceled(this, obj));
+            var info = ScanInfo;
+            info.State = ScanState.Cancelled;
+            ScanInfo = new();
+            Broadcast<IObjectScanningListener>(l => l.OnScanningStateChanged(this, info));
         }
 
         public void TickScanObject()
         {
-            if (ObjectToScan is not null)
+            if (ScanInfo.State is ScanState.Started)
             {
                 if (Hex != ScanStartHex)
                 {
@@ -52,9 +76,14 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                 }
                 else if (DateTime.Now >= ScanEndTime)
                 {
-                    var obj = ObjectToScan;
-                    ObjectToScan = null;
-                    Broadcast<IObjectScanningListener>(l => l.OnScanningFinished(this, obj));
+                    var info = ScanInfo;
+                    info.State = ScanState.Finished;
+                    ScanInfo = new();
+                    Broadcast<IObjectScanningListener>(l => l.OnScanningStateChanged(this, info));
+
+                    if (info.SectorScanning == true &&
+                        System?.GetObjectsAt<SecretObject>(info.Sector, false)?.FirstOrDefault() is SecretObject secret)
+                        Broadcast<IObjectScanningListener>(l => l.OnSecretObjectRevealed(this, secret));
                 }
             }
         }

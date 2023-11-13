@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
@@ -25,11 +26,15 @@ namespace StarfallAfterlife.Bridge.Instances
 
         public int SpecOpsDifficulty { get; set; } = 0;
 
+        public float AsteroidIntensity { get; set; } = 0;
+
         public InstanceEnviropmentInfo EnviropmentInfo { get; set; }
 
         public List<InstanceAIFleet> AiList { get; set; } = new();
 
         public List<InstanceMob> Bosses { get; set; } = new();
+
+        public List<TileInfo> Tiles { get; set; } = null;
 
         public override JsonNode ToJson()
         {
@@ -58,6 +63,7 @@ namespace StarfallAfterlife.Bridge.Instances
             doc["instance_parent_obj_group"] = ParentObjGroup;
             doc["instance_parent_obj_lvl"] = ParentObjLvl;
             doc["spec_ops_difficulty"] = SpecOpsDifficulty;
+            doc["AsteroidIntensity"] = AsteroidIntensity;
 
             if (NoPlayersLifetime > 0)
                 doc["no_players_lifetime"] = NoPlayersLifetime;
@@ -67,6 +73,9 @@ namespace StarfallAfterlife.Bridge.Instances
 
             if (EnviropmentInfo is not null)
                 doc["env_info"] = EnviropmentInfo.ToJson();
+
+            if (Tiles is not null and { Count: > 0 })
+                doc["tiles"] = JsonSerializer.SerializeToNode(Tiles);
 
             doc["ai_list"] = aiList;
             doc["bosses"] = bosses;
@@ -88,6 +97,7 @@ namespace StarfallAfterlife.Bridge.Instances
             ParentObjLvl = (int?)doc["instance_parent_obj_lvl"] ?? 0;
             LevelBoxSize = (int?)doc["level_box_size"] ?? 0;
             SpecOpsDifficulty = (int?)doc["spec_ops_difficulty"] ?? 0;
+            AsteroidIntensity = (float?)doc["AsteroidIntensity"] ?? 0;
 
 
             if (doc["env_info"] is JsonObject enviropmentInfoNode)
@@ -124,6 +134,8 @@ namespace StarfallAfterlife.Bridge.Instances
                     }
                 }
             }
+
+            Tiles = doc["tiles"]?.DeserializeUnbuffered<List<TileInfo>>();
         }
     }
 }
