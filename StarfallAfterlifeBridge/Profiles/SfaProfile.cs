@@ -285,6 +285,8 @@ namespace StarfallAfterlife.Bridge.Profiles
                         Sessions.FirstOrDefault(s => s?.CharacterId == character.Id && s.RealmId == realmId) is DiscoverySession session &&
                         session.Ships is not null and { Count: > 0 })
                         CurrentSession = session;
+                    else
+                        CurrentSession = null;
                 }
             }
         }
