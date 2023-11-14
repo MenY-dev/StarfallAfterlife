@@ -21,6 +21,7 @@ using System.Text.Json.Serialization.Metadata;
 using StarfallAfterlife.Bridge.Server.Characters;
 using System.Net;
 using System.Reflection;
+using System.Text.Json.Nodes;
 
 namespace StarfallAfterlife.Bridge.Server
 {
@@ -46,7 +47,7 @@ namespace StarfallAfterlife.Bridge.Server
 
         public GalaxyMap Map => Server.Realm.GalaxyMap;
 
-        public ServerCharacter CurrentCharacter { get; set; }
+        public ServerCharacter CurrentCharacter => DiscoveryClient?.CurrentCharacter;
 
         public DiscoveryClient DiscoveryClient { get; protected set; }
 
@@ -326,6 +327,17 @@ namespace StarfallAfterlife.Bridge.Server
             return doc;
         }
 
+        public void SendToChat(string channel, string sender, string msg, bool isPrivate = false)
+        {
+            Send(new JsonObject
+            {
+                ["channel"] = channel,
+                ["sender"] = sender,
+                ["msg"] = msg,
+                ["is_private"] = isPrivate,
+            }, SfaServerAction.Chat);
+        }
+
         public void TravelToClient(SfaServerClient client)
         {
             if (client is null || client == this)
@@ -338,14 +350,12 @@ namespace StarfallAfterlife.Bridge.Server
             client.IsPlayer = IsPlayer;
             client.Server = Server;
             client.Galaxy = Galaxy;
-            client.CurrentCharacter = CurrentCharacter;
             client.DiscoveryClient = DiscoveryClient;
 
             DiscoveryClient?.TravelToClient(client);
 
             Server = null;
             Galaxy = null;
-            CurrentCharacter = null;
             DiscoveryClient = null;
         }
 
@@ -356,7 +366,6 @@ namespace StarfallAfterlife.Bridge.Server
             Server = null;
             Galaxy = null;
             CurrentCharacter?.Fleet?.RemoveListener(DiscoveryClient);
-            CurrentCharacter = null;
             DiscoveryClient?.Dispose();
             DiscoveryClient = null;
         }

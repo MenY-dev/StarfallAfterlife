@@ -98,10 +98,6 @@ namespace StarfallAfterlife.Bridge.Server
 
             switch (action)
             {
-                case SfaServerAction.GlobalChat:
-                    ReciveGlobalChat(text);
-                    break;
-
                 case SfaServerAction.SyncProgress:
                     SyncProgress(JsonHelpers.ParseNodeUnbuffered(text));
                     break;
@@ -128,6 +124,10 @@ namespace StarfallAfterlife.Bridge.Server
 
                 case SfaServerAction.SaveShipsGroup:
                     ProcessSaveShipsGroup(JsonHelpers.ParseNodeUnbuffered(text));
+                    break;
+
+                case SfaServerAction.Chat:
+                    ProcessNewChatMessage(JsonHelpers.ParseNodeUnbuffered(text));
                     break;
             }
         }
@@ -382,12 +382,6 @@ namespace StarfallAfterlife.Bridge.Server
 
             return Task.CompletedTask;
         }
-
-        private void ReciveGlobalChat(string text)
-        {
-            Game?.VanguardChatChannel?.SendMessage("SFA", text, 85);
-        }
-
 
         public Task<JObject> RequestFullGalaxySesionData()
         {
@@ -927,6 +921,32 @@ namespace StarfallAfterlife.Bridge.Server
                 ["char_id"] = charId,
                 ["reward_id"] = rewardId,
             }, SfaServerAction.TakeCharactRewardFromQueue);
+        }
+
+        public void SendChatMessage(string channel, string msg, bool isPrivate = false, string receiver = null)
+        {
+            Send(new JObject
+            {
+                ["channel"] = channel,
+                ["receiver"] = receiver,
+                ["msg"] = msg,
+                ["is_private"] = isPrivate,
+            }, SfaServerAction.Chat);
+        }
+
+        public void ProcessNewChatMessage(JNode doc)
+        {
+            if (doc is null)
+                return;
+
+            if ((string)doc["channel"] is string channelName &&
+                (string)doc["sender"] is string sender &&
+                (string)doc["msg"] is string msg &&
+                (bool?)doc["is_private"] is bool isPrivate &&
+                Game?.GetChannel(channelName) is ChatChannel channel)
+            {
+                channel.SendMessage(sender, msg, isPrivate);
+            }
         }
     }
 }

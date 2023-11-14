@@ -30,11 +30,8 @@ namespace StarfallAfterlife.Bridge.Server
                 {
                     var system = fleet.System?.Id ?? 0;
 
-                    SyncMove(fleet);
                     SynckSessionSystemInfo(system, fleet.Location);
                     SendEnterToStarSystem(system, fleet.Location);
-                    SyncMove(fleet);
-                    SyncRoute(fleet);
 
                     character.UpdateQuestLines();
 

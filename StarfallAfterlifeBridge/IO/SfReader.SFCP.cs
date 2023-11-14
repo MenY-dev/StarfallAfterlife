@@ -57,6 +57,14 @@ namespace StarfallAfterlife.Bridge.IO
             };
         }
 
+        public SFCP.UnregisterRequest ReadSfcpUnregisterRequest()
+        {
+            return new()
+            {
+                ChannelId = ReadInt32(),
+            };
+        }
+
         public SFCP.UnregisterResponse ReadSfcpUnregisterResponse()
         {
             return new()

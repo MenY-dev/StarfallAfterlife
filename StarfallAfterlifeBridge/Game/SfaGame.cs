@@ -168,6 +168,11 @@ namespace StarfallAfterlife.Bridge.Game
             CompletionSource?.TrySetResult();
         }
 
+        public GameChannel GetChannel(string name)
+        {
+            return SfMgrChannelManager?[name] ?? RealmMgrChannelManager?[name];
+        }
+
         private void OnProcessExited(object sender, EventArgs e)
         {
             if (sender is SfaProcess process)

@@ -2,12 +2,8 @@
 using StarfallAfterlife.Bridge.IO;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Net.Http;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StarfallAfterlife.Bridge.Networking.Channels
 {
@@ -73,6 +69,10 @@ namespace StarfallAfterlife.Bridge.Networking.Channels
 
                 case 2:
                     HandleChannelRegister(client, ReadChannelRegister(client, header));
+                    break;
+
+                case 3:
+                    HandleChannelUnregister(client, ReadChannelUnregister(client, header));
                     break;
 
                 case 4:
@@ -150,6 +150,13 @@ namespace StarfallAfterlife.Bridge.Networking.Channels
             return request;
         }
 
+        protected virtual SFCP.UnregisterRequest ReadChannelUnregister(TClient client, SFCP.Header header)
+        {
+            SFCP.UnregisterRequest request = default;
+            client?.Use((reader, writer) => request = reader.ReadSfcpUnregisterRequest());
+            return request;
+        }
+
         public virtual void HandleChannelRegister(TClient client, SFCP.RegisterRequest request)
         {
             client?.Use((reader, writer) =>
@@ -158,6 +165,18 @@ namespace StarfallAfterlife.Bridge.Networking.Channels
                 channel?.Register(client);
                 SfaDebug.Print(
                     $"HandleChannelRegister (Name = {request.ChannelName}, Id = {channel?.Id}, Succes = {channel is not null})",
+                    GetType().Name);
+            });
+        }
+
+        public virtual void HandleChannelUnregister(TClient client, SFCP.UnregisterRequest unregisterRequest)
+        {
+            client?.Use((reader, writer) =>
+            {
+                var channel = client?.GetChannelById(unregisterRequest.ChannelId);
+                channel?.Unregister(client);
+                SfaDebug.Print(
+                    $"HandleChannelUnregister (Id = {channel?.Id}, Succes = {channel is not null})",
                     GetType().Name);
             });
         }

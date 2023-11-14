@@ -41,6 +41,20 @@ namespace StarfallAfterlife.Bridge.Networking.Channels
             });
         }
 
+        public virtual void Unregister(ChannelClient client)
+        {
+            client?.Use((reader, writer) =>
+            {
+                SfaDebug.Print($"Unregister (Id = {Id}, Name = {Name})", "Channel");
+
+                writer.WriteSfcp(new SFCP.UnregisterResponse()
+                {
+                    ErrorCode = 0,
+                    ChannelId = Id
+                });
+            });
+        }
+
         public virtual void Input(ChannelClient client, string text)
         {
             SfaDebug.Print($"TextInput (Id = {Id}, Name = {Name}, Text = {text})", GetType().Name);

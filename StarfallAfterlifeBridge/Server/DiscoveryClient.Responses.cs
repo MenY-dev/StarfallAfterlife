@@ -55,6 +55,15 @@ namespace StarfallAfterlife.Bridge.Server
             SfaDebug.Print($"FleetWarpedGateway", "DiscoveryServerClient");
         }
 
+        public virtual void SendFleetWarpedGateway(int systemId, DiscoveryObjectType objectType, int objectId)
+        {
+            SendDiscoveryMessage(
+                systemId, objectType, objectId,
+                DiscoveryServerAction.FleetWarpedGateway);
+
+            SfaDebug.Print($"FleetWarpedGateway", "DiscoveryServerClient");
+        }
+
         public virtual void SendFleetWarpedMothership()
         {
             SendDiscoveryMessage(
@@ -64,6 +73,15 @@ namespace StarfallAfterlife.Bridge.Server
             SfaDebug.Print($"FleetWarpedMothership", "DiscoveryServerClient");
         }
 
+
+        public virtual void SendFleetWarpedMothership(int systemId, DiscoveryObjectType objectType, int objectId)
+        {
+            SendDiscoveryMessage(
+                systemId, objectType, objectId,
+                DiscoveryServerAction.FleetWarpedMothership);
+
+            SfaDebug.Print($"FleetWarpedMothership", "DiscoveryServerClient");
+        }
 
         //public virtual void SendCargoListForObject(int objectId, DiscoveryObjectType objectType, string stockName)
         //{

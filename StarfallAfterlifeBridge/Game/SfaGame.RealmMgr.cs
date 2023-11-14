@@ -22,11 +22,11 @@ namespace StarfallAfterlife.Bridge.Game
 {
     public partial class SfaGame
     {
-        public ChatConsoleChannel DeprivedChatChannel { get; protected set; }
+        public ChatChannel DeprivedChatChannel { get; protected set; }
 
-        public ChatConsoleChannel EclipseChatChannel { get; protected set; }
+        public ChatChannel EclipseChatChannel { get; protected set; }
 
-        public ChatConsoleChannel VanguardChatChannel { get; protected set; }
+        public ChatChannel VanguardChatChannel { get; protected set; }
 
         public FriendChannel CharacterFriendsChannel { get; protected set; }
 
@@ -207,17 +207,17 @@ namespace StarfallAfterlife.Bridge.Game
         protected virtual void InitRealmMgr()
         {
             RealmMgrServer ??= new MgrServer(RealmInput);
-            RealmMgrChannelManager ??= new GameChannelManager();
+            RealmMgrChannelManager ??= new GameChannelManager(this);
 
-            DeprivedChatChannel ??= new ChatConsoleChannel("Deprived Chat", 6, this);
-            EclipseChatChannel ??= new ChatConsoleChannel("Eclipse Chat", 7, this);
-            VanguardChatChannel ??= new ChatConsoleChannel("Vanguard Chat", 8, this);
-            CharacterFriendsChannel ??= new FriendChannel("CharacterFriends", 9, this);
-            QuickMatchChannel ??= new QuickMatchChannel("QuickMatch", 10, this);
-            CharactPartyChannel ??= new GameChannel("CharactParty", 11);
-            BattleGroundChannel ??= new BattleGroundChannel("BattleGround", 12, this);
-            DiscoveryChannel ??= new DiscoveryChannel("Discovery", 13, this);
-            GalacticChannel ??= new GalacticChannel("Galactic", 14, this);
+            DeprivedChatChannel ??= new ChatChannel("Deprived Chat", 1, this);
+            EclipseChatChannel ??= new ChatChannel("Eclipse Chat", 2, this);
+            VanguardChatChannel ??= new ChatChannel("Vanguard Chat", 3, this);
+            CharacterFriendsChannel ??= new FriendChannel("CharacterFriends", 4, this);
+            QuickMatchChannel ??= new QuickMatchChannel("QuickMatch", 5, this);
+            CharactPartyChannel ??= new GameChannel("CharactParty", 6);
+            BattleGroundChannel ??= new BattleGroundChannel("BattleGround", 7, this);
+            DiscoveryChannel ??= new DiscoveryChannel("Discovery", 8, this);
+            GalacticChannel ??= new GalacticChannel("Galactic", 9, this);
 
             RealmMgrChannelManager.Add(DeprivedChatChannel);
             RealmMgrChannelManager.Add(EclipseChatChannel);

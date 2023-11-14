@@ -18,6 +18,7 @@ using StarfallAfterlife.Bridge.Server.Inventory;
 using StarfallAfterlife.Bridge.Server.Characters;
 using System.Collections;
 using System.Text.Json.Nodes;
+using System.Threading.Channels;
 
 namespace StarfallAfterlife.Bridge.Server
 {
@@ -27,8 +28,8 @@ namespace StarfallAfterlife.Bridge.Server
         {
             switch (action)
             {
-                case SfaServerAction.GlobalChat:
-                    InputFromChatChannel(text ?? string.Empty);
+                case SfaServerAction.Chat:
+                    InputFromChat(text ?? string.Empty);
                     break;
                 case SfaServerAction.RegisterChannel:
                     ProcessRegisterChannel(JsonHelpers.ParseNodeUnbuffered(text));
@@ -186,89 +187,58 @@ namespace StarfallAfterlife.Bridge.Server
             SfaDebug.Print(BitConverter.ToString(data).Replace("-", ""), "InputFromGalacticChannel");
         }
 
-        public void InputFromChatChannel(string text)
+        public void InputFromChat(string text)
         {
-            Client?.Send(text, SfaServerAction.GlobalChat);
+            var doc = JsonHelpers.ParseNode(text);
 
-            if (text.StartsWith("\\arround ") &&
-                text.Length > 8 &&
-                int.TryParse(text[8..].Trim(), out int jumps))
+            if (doc is not JsonObject)
+                return;
+
+            Invoke(() =>
             {
-                foreach (var system in Map.GetSystemsArround(CurrentCharacter?.Fleet?.System?.Id ?? -1, jumps))
+                var channel = (string)doc["channel"];
+                var msg = (string)doc["msg"];
+                var isPrivate = (bool?)doc["is_private"];
+                var receiver = (string)doc["receiver"];
+                var sender = channel == "GeneralTextChat" ?
+                    Client.Name ?? "" :
+                    CurrentCharacter?.UniqueName ?? "";
+
+                if (msg?.StartsWith('\\') == true)
                 {
-                    Client?.Send(
-                        $"{system.Key?.Id}: {system.Value}",
-                        SfaServerAction.GlobalChat);
+                    Client?.HandleDebugConsoleInput(channel, msg[1..]);
+                    return;
                 }
-            }
-            else if (text.StartsWith("\\explore ") &&
-                text.Length > 8 &&
-                int.TryParse(text[8..].Trim(), out int exploreRadius))
-            {
-                if (CurrentCharacter?.Progress is CharacterProgress progress &&
-                    CurrentCharacter?.Fleet?.System is StarSystem currentSystem)
-                {
-                    var newSystems = new List<int>();
-                    var newObjects = new List<IGalaxyMapObject>();
 
-                    foreach (var system in Map.GetSystemsArround(currentSystem.Id, exploreRadius).Select(i => i.Key))
+                if (isPrivate == false)
+                {
+                    Server.UseClients(clients =>
                     {
-                        newSystems.Add(system.Id);
-                        newObjects.AddRange(system.GetAllObjects());
-
-                        foreach (var item in newObjects)
+                        if (channel.StartsWith("Star System") == true &&
+                            CurrentCharacter?.Fleet?.System is StarSystem system)
                         {
-                            progress.AddObject(item.ObjectType, item.Id);
-
-                            if (item.ObjectType is GalaxyMapObjectType.QuickTravelGate)
-                                progress.AddWarpSystem(system.Id);
+                            foreach (var item in clients)
+                            {
+                                if (item.IsPlayer == true &&
+                                    item.DiscoveryClient.CurrentCharacter?.Fleet?.System == system)
+                                {
+                                    item.SendToChat(channel, sender, msg, false);
+                                }
+                            }
                         }
-
-                        progress.SetSystemProgress(system.Id, new SystemHexMap(true));
-                    }
-
-                    SyncExploration(newSystems, newObjects);
-
-                    Client?.Send(
-                        $"Exploration result:",
-                        SfaServerAction.GlobalChat);
-                    Client?.Send(
-                        $"Systems:{newSystems.Count}",
-                        SfaServerAction.GlobalChat);
-                    Client?.Send(
-                        $"Objects:{newObjects.Count}",
-                        SfaServerAction.GlobalChat);
+                        else
+                        {
+                            foreach (var item in clients)
+                                if (item.IsPlayer == true)
+                                    item.SendToChat(channel, sender, msg, false);
+                        }
+                    });
                 }
-            }
-            else if (text.StartsWith("\\add sxp ") &&
-                text.Length > 9 &&
-                int.TryParse(text[9..].Trim(), out int shipsXp))
-            {
-                if (CurrentCharacter is ServerCharacter character &&
-                    character.Ships is List<ShipConstructionInfo> ships)
+                else
                 {
-                    var shipsForXp = new Dictionary<int, int>();
-
-                    foreach (var ship in ships)
-                        shipsForXp[ship.Id] = shipsXp;
-
-                    character.AddCharacterCurrencies(shipsXp: shipsForXp);
+                    Server?.GetCharacter(receiver)?.DiscoveryClient?.Client?.SendToChat(channel, sender, msg, true);
                 }
-            }
-            else if (text.StartsWith("\\add xp ") &&
-                text.Length > 8 &&
-                int.TryParse(text[8..].Trim(), out int charXp))
-            {
-                CurrentCharacter?.AddCharacterCurrencies(xp: charXp);
-            }
-            else if (text.StartsWith("\\jmp ") &&
-                text.Length > 5 &&
-                int.TryParse(text[5..].Trim(), out int system))
-            {
-                CurrentCharacter?.DiscoveryClient?.SendFleetWarpedMothership();
-                CurrentCharacter?.DiscoveryClient?.EnterToStarSystem(system);
-            }
-
+            });
         }
 
         protected virtual void HandleEnterToGalaxy()
@@ -292,9 +262,7 @@ namespace StarfallAfterlife.Bridge.Server
                             if (item is null || item.State == FleetState.Destroyed)
                                 continue;
 
-                            if (item != fleet)
-                                RequestDiscoveryObjectSync(item);
-
+                            RequestDiscoveryObjectSync(item);
                             SyncFleetData(item);
                         }
 
@@ -505,16 +473,11 @@ namespace StarfallAfterlife.Bridge.Server
                 if (portal is not null &&
                     g.ActivateStarSystem(portal.Destination) is StarSystem newSystem)
                 {
-                    Invoke(() =>
-                    {
-                        SendFleetWarpedGateway();
+                    var newLocation = SystemHexMap.HexToSystemPoint(portal.Hex).GetNegative();
 
-                        Galaxy.BeginPreUpdateAction(g =>
-                        {
-                            var newLocation = SystemHexMap.HexToSystemPoint(portal.Hex).GetNegative();
-                            newSystem.AddFleet(fleet, newLocation);
-                        });
-                    });
+                    currentSystem.RemoveFleet(fleet);
+                    Invoke(() => SendFleetWarpedGateway(currentSystem.Id, fleet.Type, fleet.Id));
+                    newSystem.AddFleet(fleet, newLocation);
                 }
             });
         }
@@ -535,9 +498,10 @@ namespace StarfallAfterlife.Bridge.Server
                 if (fleet.System?.Id != systemId)
                     return;
 
+                var currentSystem = fleet.System;
                 var newSystem = g.ActivateStarSystem(targetSystem);
 
-                if (newSystem is null)
+                if (newSystem is null || currentSystem is null)
                     return;
 
                 var gate = newSystem.QuickTravelGates?.FirstOrDefault();
@@ -547,13 +511,14 @@ namespace StarfallAfterlife.Bridge.Server
                     Invoke(() =>
                     {
                         var cost = SfaDatabase.GetWarpingCost(g?.Map?.GetSystem(systemId)?.Level ?? 0);
-
                         CurrentCharacter?.AddCharacterCurrencies(igc: -cost);
-                        SendFleetWarpedMothership();
 
                         Galaxy.BeginPostUpdateAction(g =>
                         {
+                            currentSystem.RemoveFleet(fleet);
                             newSystem.AddFleet(fleet, gate.Location);
+                            Invoke(() => SendFleetWarpedMothership(currentSystem.Id, fleet.Type, fleet.Id));
+                            newSystem.AddFleet(fleet);
                         });
                     });
                 }

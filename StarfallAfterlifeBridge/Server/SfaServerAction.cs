@@ -53,6 +53,6 @@ namespace StarfallAfterlife.Bridge.Server
         UserFriendChannel = 196,
         CharacterFriendChannel = 197,
 
-        GlobalChat = 220,
+        Chat = 220,
     }
 }
