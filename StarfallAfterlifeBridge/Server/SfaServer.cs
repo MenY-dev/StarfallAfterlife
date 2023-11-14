@@ -82,6 +82,9 @@ namespace StarfallAfterlife.Bridge.Server
 
             UseClients(clients =>
             {
+                if (client.IsPlayer == false)
+                    RemoveClient(client);
+
                 foreach (var item in clients)
                     if ((DateTime.Now - item.LastInput).Hours > 4)
                         RemoveClient(item);
