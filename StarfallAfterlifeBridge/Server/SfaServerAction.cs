@@ -15,6 +15,7 @@ namespace StarfallAfterlife.Bridge.Server
 
         // 1..127 - server actions
         Auth = 1,
+        GetServerInfo = 2,
         LoadGalaxyMap = 32,
 
         // 128..255 - game actions

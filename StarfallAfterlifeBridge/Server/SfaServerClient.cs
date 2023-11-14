@@ -20,6 +20,7 @@ using StarfallAfterlife.Bridge.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using StarfallAfterlife.Bridge.Server.Characters;
 using System.Net;
+using System.Reflection;
 
 namespace StarfallAfterlife.Bridge.Server
 {
@@ -110,6 +111,10 @@ namespace StarfallAfterlife.Bridge.Server
                     ProcessAuth(JsonHelpers.ParseNodeUnbuffered(request.Text)?.AsObjectSelf(), request);
                     break;
 
+                case SfaServerAction.GetServerInfo:
+                    ProcessGetServerInfo(request);
+                    break;
+
                 case SfaServerAction.LoadGalaxyMap:
                     ProcessLoadGalaxyMap(request);
                     break;
@@ -187,6 +192,23 @@ namespace StarfallAfterlife.Bridge.Server
                     ["shops_hash"] = Server.Realm.ShopsMap?.Hash,
                 }.ToJsonString(), SfaServerAction.Auth);
             }
+        }
+
+        private void ProcessGetServerInfo(SfaClientRequest request)
+        {
+            var realm = Server.Realm;
+
+            if (realm is null)
+                return;
+
+            request.SendResponce(new JObject
+            {
+                ["version"] = GetType().Assembly.GetName().Version.ToString(),
+                ["realm_id"] = realm.Id,
+                ["realm_name"] = realm.Name,
+                ["realm_description"] = "",
+                ["need_password"] = false,
+            }.ToJsonString(), SfaServerAction.GetServerInfo);
         }
 
         private void ProcessLoadGalaxyMap(SfaClientRequest request)
