@@ -433,6 +433,15 @@ namespace StarfallAfterlife.Bridge.Server
             Client?.Send(writer.ToArray(), SfaServerAction.BattleGroundChannel);
         }
 
+
+        public void TravelToClient(SfaServerClient client)
+        {
+            if (client is null)
+                return;
+
+            Client = client;
+        }
+
         public void Dispose()
         {
             Client = null;

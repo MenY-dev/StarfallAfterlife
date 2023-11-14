@@ -108,7 +108,12 @@ namespace StarfallAfterlife.Bridge.Game
                 SfaClient.ConnectAsync(ServerAddress).Wait();
                 SfaDebug.Print("Connected to server!", GetType().Name);
 
-                if (SfaClient.Auth(GameProfile).Result == false)
+                if (Realm?.LastAuth is string lastAuth &&
+                    SfaClient.Auth(GameProfile, lastAuth: lastAuth).Result == true)
+                {
+                    SfaDebug.Print("Restore Session: Done!", GetType().Name);
+                }
+                else if (SfaClient.Auth(GameProfile).Result == false)
                 {
                     SfaDebug.Print("Auth Error", GetType().Name);
                     return false;

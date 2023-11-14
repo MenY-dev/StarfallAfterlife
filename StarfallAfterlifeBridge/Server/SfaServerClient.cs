@@ -130,22 +130,63 @@ namespace StarfallAfterlife.Bridge.Server
 
         public void ProcessAuth(JNode authData, SfaClientRequest request)
         {
-            Name = (string)authData["profile_name"] ?? "RenamedUser";
-            ProfileId = (Guid?)authData["profile_id"] ?? Guid.Empty;
-            IsPlayer = true;
-
-            DiscoveryClient ??= new DiscoveryClient(this);
-
-            request.SendResponce(new JObject
+            if ((string)authData["action"] is string action)
             {
-                ["auth_success"] = true,
-                ["auth"] = Auth ??= Guid.NewGuid().ToString("N"),
-                ["realm_id"] = Server.Realm.Id,
-                ["galaxy_hash"] = Server.Realm.GalaxyMapHash,
-                ["mobs_map_hash"] = Server.Realm.MobsMap?.Hash,
-                ["asteroids_map_hash"] = Server.Realm.RichAsteroidsMap?.Hash,
-                ["shops_hash"] = Server.Realm.ShopsMap?.Hash,
-            }.ToJsonString(), SfaServerAction.Auth);
+                var comparsion = StringComparison.InvariantCultureIgnoreCase;
+
+                if ("restore_session".Equals(action, comparsion) == true)
+                {
+                    if ((string)authData["auth"] is string lastAuth &&
+                        Server.GetClient(lastAuth) is SfaServerClient currentClient &&
+                        currentClient.IsConnected == false)
+                    {
+                        if (currentClient.IsConnected == false)
+                        {
+                            currentClient.TravelToClient(this);
+                            Server.RemoveClient(currentClient);
+                            SendSuccessAuth();
+                        }
+                        else
+                        {
+                            request.SendResponce(new JObject
+                            {
+                                ["auth_success"] = false,
+                                ["reason"] = "client_already_connected"
+                            }.ToJsonString(), SfaServerAction.Auth);
+                        }
+                    }
+                    else
+                    {
+                        request.SendResponce(new JObject
+                        {
+                            ["auth_success"] = false,
+                            ["reason"] = "auth_not_found"
+                        }.ToJsonString(), SfaServerAction.Auth);
+                    }
+                }
+                else if ("server_auth".Equals(action, comparsion) == true)
+                {
+                    Name = (string)authData["profile_name"] ?? "RenamedUser";
+                    ProfileId = (Guid?)authData["profile_id"] ?? Guid.Empty;
+                    IsPlayer = true;
+                    DiscoveryClient ??= new DiscoveryClient(this);
+                    SendSuccessAuth();
+                }
+            }
+
+            void SendSuccessAuth()
+            {
+                request.SendResponce(new JObject
+                {
+                    ["auth_success"] = true,
+                    ["auth"] = Auth ??= Guid.NewGuid().ToString("N"),
+                    ["realm_id"] = Server.Realm.Id,
+                    ["galaxy_hash"] = Server.Realm.GalaxyMapHash,
+                    ["mobs_map_hash"] = Server.Realm.MobsMap?.Hash,
+                    ["asteroids_map_hash"] = Server.Realm.RichAsteroidsMap?.Hash,
+                    ["shops_hash"] = Server.Realm.ShopsMap?.Hash,
+                }.ToJsonString(), SfaServerAction.Auth);
+            }
         }
 
         private void ProcessLoadGalaxyMap(SfaClientRequest request)
@@ -232,20 +273,23 @@ namespace StarfallAfterlife.Bridge.Server
             {
                 foreach (var item in chars)
                 {
-                    if ((int?)item?["id"] is int id &&
-                        DiscoveryClient.Characters.Any(c => c.Id == id) == false)
+                    if ((int?)item?["id"] is int id)
                     {
-                        var character = new ServerCharacter()
+                        var character = DiscoveryClient.Characters.FirstOrDefault(c => c.Id == id);
+
+                        if (character is null)
                         {
-                            DiscoveryClient = DiscoveryClient,
-                            Id = (int?)item["id"] ?? -1,
-                            Name = (string)item["name"] ?? "RenamedCharacter",
-                            Faction = (Faction?)(byte?)item["faction"] ?? Faction.None
+                            character = new ServerCharacter()
+                            {
+                                DiscoveryClient = DiscoveryClient,
+                                Id = (int?)item["id"] ?? -1,
+                                Name = (string)item["name"] ?? "RenamedCharacter",
+                                Faction = (Faction?)(byte?)item["faction"] ?? Faction.None
+                            };
 
-                        };
-
-                        DiscoveryClient.Characters.Add(character);
-                        Server.RegisterCharacter(character);
+                            DiscoveryClient.Characters.Add(character);
+                            Server.RegisterCharacter(character);
+                        }
 
                         doc.Add(new JObject
                         {
@@ -258,6 +302,29 @@ namespace StarfallAfterlife.Bridge.Server
             }
 
             return doc;
+        }
+
+        public void TravelToClient(SfaServerClient client)
+        {
+            if (client is null || client == this)
+                return;
+
+            client.Name = Name;
+            client.Auth = Auth;
+            client.PlayerId = PlayerId;
+            client.ProfileId = ProfileId;
+            client.IsPlayer = IsPlayer;
+            client.Server = Server;
+            client.Galaxy = Galaxy;
+            client.CurrentCharacter = CurrentCharacter;
+            client.DiscoveryClient = DiscoveryClient;
+
+            DiscoveryClient?.TravelToClient(client);
+
+            Server = null;
+            Galaxy = null;
+            CurrentCharacter = null;
+            DiscoveryClient = null;
         }
 
         protected override void Dispose(bool disposing)

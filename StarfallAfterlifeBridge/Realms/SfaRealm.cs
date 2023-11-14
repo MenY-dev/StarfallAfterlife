@@ -22,6 +22,8 @@ namespace StarfallAfterlife.Bridge.Realms
 
         public string Name { get; set; }
 
+        public string LastAuth { get; set; }
+
         public string GalaxyMapHash { get; set; }
 
         public SfaDatabase Database { get; set; }
@@ -73,6 +75,7 @@ namespace StarfallAfterlife.Bridge.Realms
                     Id = (string)doc["id"];
                     Name = (string)doc["name"];
                     GalaxyMapHash = (string)doc["galaxy_hash"];
+                    LastAuth = (string)doc["last_auth"];
                 }
 
                 return true;
@@ -154,6 +157,7 @@ namespace StarfallAfterlife.Bridge.Realms
                 ["id"] = Id,
                 ["name"] = Name,
                 ["galaxy_hash"] = GalaxyMapHash,
+                ["last_auth"] = LastAuth,
             }.ToJsonStringUnbuffered(true));
         }
 

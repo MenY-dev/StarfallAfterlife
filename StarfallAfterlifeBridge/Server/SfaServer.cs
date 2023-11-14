@@ -82,16 +82,40 @@ namespace StarfallAfterlife.Bridge.Server
 
             UseClients(clients =>
             {
-                var clientCharacters = client.DiscoveryClient?.Characters;
-
-                if (clientCharacters is not null)
-                    foreach (var item in clientCharacters)
-                        if (item is ServerCharacter character)
-                            Characters.RemoveId(character.UniqueId);
-
-                clients.Remove(client);
-                client.Dispose();
+                foreach (var item in clients)
+                    if ((DateTime.Now - item.LastInput).Hours > 4)
+                        RemoveClient(item);
             });
+        }
+
+        public SfaServerClient GetClient(string auth)
+        {
+            lock (ClientsLockher)
+                return Clients.FirstOrDefault(c => c.Auth == auth);
+        }
+
+        public void RemoveClient(SfaServerClient client)
+        {
+            if (client is null)
+                return;
+
+            try
+            {
+                UseClients(clients =>
+                {
+                    var clientCharacters = client.DiscoveryClient?.Characters;
+
+                    if (clientCharacters is not null)
+                        foreach (var item in clientCharacters)
+                            if (item is ServerCharacter character)
+                                Characters.RemoveId(character.UniqueId);
+
+                    clients.Remove(client);
+                    client.Close();
+                    client.Dispose();
+                });
+            }
+            catch { }
         }
 
         public void UseClients(Action<List<SfaServerClient>> handler)

@@ -28,6 +28,8 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
 
         public TcpClient TcpClient { get; protected set; }
 
+        public DateTime LastInput { get; protected set; }
+
         protected readonly object locker = new();
 
         protected bool disposed;
@@ -168,6 +170,8 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
                             //GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
                             //GC.Collect(GC.MaxGeneration, GCCollectionMode.Optimized);
                         }
+
+                        LastInput = DateTime.Now;
                     }
                 }
                 catch (Exception e)

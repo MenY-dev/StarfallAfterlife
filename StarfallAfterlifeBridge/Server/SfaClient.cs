@@ -160,15 +160,25 @@ namespace StarfallAfterlife.Bridge.Server
             }
         }
 
-        public Task<bool> Auth(SfaGameProfile profile)
+        public Task<bool> Auth(SfaGameProfile profile, string password = null, string lastAuth = null)
         {
-            return SendRequest(SfaServerAction.Auth, new JObject
+            var request = new JObject();
+
+            if (lastAuth is not null)
             {
-                ["action"] = "server_auth",
-                ["profile_id"] = Guid.Empty,
-                ["profile_name"] = profile.Nickname,
+                request["action"] = "restore_session";
+                request["password"] = password;
+                request["auth"] = lastAuth;
             }
-            ).ContinueWith(t =>
+            else
+            {
+                request["action"] = "server_auth";
+                request["password"] = password;
+                request["profile_id"] = Profile?.Id ?? Guid.Empty;
+                request["profile_name"] = profile.Nickname;
+            }
+
+            return SendRequest(SfaServerAction.Auth, request).ContinueWith(t =>
             {
                 if (t.Result is SfaClientResponse response &&
                     response.IsSuccess == true &&
@@ -186,7 +196,7 @@ namespace StarfallAfterlife.Bridge.Server
                     {
                         var realmInfo = p.GetProfileRealm(realmId);
 
-                        if (realmInfo is null)
+                        if (realmInfo is null || realmInfo.Realm is null)
                         {
                             realmInfo = p.AddNewRealm(new SfaRealm
                             {
@@ -196,6 +206,9 @@ namespace StarfallAfterlife.Bridge.Server
 
                             realmInfo.Save();
                         }
+
+                        realmInfo.Realm.LastAuth = ServerAuth;
+                        realmInfo.SaveInfo();
 
                         GalaxyHash = (string)doc["galaxy_hash"];
                         MobsMapHash = (string)doc["mobs_map_hash"];
