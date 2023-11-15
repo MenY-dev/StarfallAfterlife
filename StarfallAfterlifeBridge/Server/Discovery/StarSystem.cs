@@ -348,6 +348,9 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
         public StarSystemBattle GetBattle(Guid id) =>
             ActiveBattles.FirstOrDefault(b => b.Id == id);
 
+        public StarSystemBattle GetBattle(SystemHex hex) =>
+            ActiveBattles.FirstOrDefault(b => b.Hex == hex);
+
         public StarSystemBattle GetBattle(StarSystemObject systemObject) =>
             ActiveBattles.FirstOrDefault(b => b?.IsInBattle(systemObject) == true);
 

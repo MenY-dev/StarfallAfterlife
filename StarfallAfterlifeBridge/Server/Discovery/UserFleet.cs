@@ -25,6 +25,14 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                 OnHexChanged(Hex);
                 _lastHex = Hex;
             }
+
+            if (State == FleetState.InGalaxy &&
+                System.GetBattle(Hex) is StarSystemBattle battle &&
+                battle.IsFinished == false &&
+                battle.GetMember(this) is null)
+            {
+                battle.AddToBattle(this, BattleRole.Defense, CreateHexOffset());
+            }
         }
 
         protected virtual void OnHexChanged(SystemHex newHex)
