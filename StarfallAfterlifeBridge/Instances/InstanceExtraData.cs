@@ -12,9 +12,9 @@ namespace StarfallAfterlife.Bridge.Instances
 {
     public class InstanceExtraData : SfaObject
     {
-        public int NoPlayersLifetime { get; set; } = 0;
+        public int? NoPlayersLifetime { get; set; }
 
-        public int LevelBoxSize { get; set; } = 0;
+        public int? LevelBoxSize { get; set; }
 
         public int ParentObjId { get; set; } = 0;
 
@@ -26,7 +26,7 @@ namespace StarfallAfterlife.Bridge.Instances
 
         public int SpecOpsDifficulty { get; set; } = 0;
 
-        public float AsteroidIntensity { get; set; } = 0;
+        public float? AsteroidIntensity { get; set; }
 
         public InstanceEnviropmentInfo EnviropmentInfo { get; set; }
 
@@ -63,13 +63,15 @@ namespace StarfallAfterlife.Bridge.Instances
             doc["instance_parent_obj_group"] = ParentObjGroup;
             doc["instance_parent_obj_lvl"] = ParentObjLvl;
             doc["spec_ops_difficulty"] = SpecOpsDifficulty;
-            doc["AsteroidIntensity"] = AsteroidIntensity;
 
-            if (NoPlayersLifetime > 0)
-                doc["no_players_lifetime"] = NoPlayersLifetime;
+            if (AsteroidIntensity is not null)
+                doc["AsteroidIntensity"] = (float)AsteroidIntensity;
 
-            if (LevelBoxSize > 0)
-                doc["level_box_size"] = LevelBoxSize;
+            if (NoPlayersLifetime is not null)
+                doc["no_players_lifetime"] = (int)NoPlayersLifetime;
+
+            if (LevelBoxSize is not null)
+                doc["level_box_size"] = (int)LevelBoxSize;
 
             if (EnviropmentInfo is not null)
                 doc["env_info"] = EnviropmentInfo.ToJson();
@@ -90,14 +92,14 @@ namespace StarfallAfterlife.Bridge.Instances
             if (doc is not JsonObject)
                 return;
 
-            NoPlayersLifetime = (int?)doc["no_players_lifetime"] ?? 0;
+            NoPlayersLifetime = (int?)doc["no_players_lifetime"];
             ParentObjId = (int?)doc["instance_parent_obj_id"] ?? 0;
             ParentObjType = (int?)doc["instance_parent_obj_type"] ?? 0;
             ParentObjGroup = (int?)doc["instance_parent_obj_group"] ?? 0;
             ParentObjLvl = (int?)doc["instance_parent_obj_lvl"] ?? 0;
-            LevelBoxSize = (int?)doc["level_box_size"] ?? 0;
+            LevelBoxSize = (int?)doc["level_box_size"];
             SpecOpsDifficulty = (int?)doc["spec_ops_difficulty"] ?? 0;
-            AsteroidIntensity = (float?)doc["AsteroidIntensity"] ?? 0;
+            AsteroidIntensity = (float?)doc["AsteroidIntensity"];
 
 
             if (doc["env_info"] is JsonObject enviropmentInfoNode)
