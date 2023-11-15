@@ -634,5 +634,24 @@ namespace StarfallAfterlife.Bridge.Game
 
             return doc;
         }
+
+        public JsonNode CreateCharacterStatsResponse()
+        {
+            var stats = new JsonArray();
+            var doc = new JsonObject { ["stats"] = stats };
+
+            Profile?.Use(p =>
+            {
+                foreach (var item in p.GameProfile?.CurrentCharacter?.Statistic ?? new())
+                    stats.Add(new JsonObject { ["name"] = item.Key, ["value"] = item.Value });
+            });
+
+            var bytes = Encoding.UTF8.GetBytes(doc.ToJsonStringUnbuffered(false) ?? string.Empty);
+
+            return new JsonObject
+            {
+                ["stats_data"] = SValue.Create(Convert.ToBase64String(bytes)),
+            };
+        }
     }
 }

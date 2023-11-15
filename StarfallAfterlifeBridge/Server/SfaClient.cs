@@ -129,6 +129,10 @@ namespace StarfallAfterlife.Bridge.Server
                 case SfaServerAction.Chat:
                     ProcessNewChatMessage(JsonHelpers.ParseNodeUnbuffered(text));
                     break;
+
+                case SfaServerAction.AddNewCharacterStats:
+                    ProcessAddNewCharacterStats(JsonHelpers.ParseNodeUnbuffered(text));
+                    break;
             }
         }
 
@@ -946,6 +950,31 @@ namespace StarfallAfterlife.Bridge.Server
                 Game?.GetChannel(channelName) is ChatChannel channel)
             {
                 channel.SendMessage(sender, msg, isPrivate);
+            }
+        }
+
+        private void ProcessAddNewCharacterStats(JNode doc)
+        {
+            if (doc?.DeserializeUnbuffered<Dictionary<string,float>>() is Dictionary<string, float> newStats)
+            {
+                Game?.Profile?.Use(p =>
+                {
+                    if (p.GameProfile?.CurrentCharacter is Character character)
+                    {
+                        var stats = character.Statistic ??= new();
+
+                        foreach (var item in newStats)
+                        {
+                            if (item.Key is null)
+                                continue;
+
+                            var currentValue = stats.GetValueOrDefault(item.Key, 0);
+                            stats[item.Key] = currentValue + item.Value;
+                        }
+                    }
+
+                    p.SaveGameProfile();
+                });
             }
         }
     }

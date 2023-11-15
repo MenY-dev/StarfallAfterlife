@@ -118,7 +118,7 @@ namespace StarfallAfterlife.Bridge.Game
                         break;
 
                     case "get_charact_stats":
-                        response = EmptyMgrResponse;
+                        response = CreateCharacterStatsResponse();
                         break;
 
                     case "set_charact_event_checked":

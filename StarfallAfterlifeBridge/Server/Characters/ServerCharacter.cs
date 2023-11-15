@@ -599,6 +599,8 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                     .Invoke(s => Events?
                     .Broadcast<ICharacterListener>(l => l
                     .OnNewStatsReceived(this, item.Key, item.Value)));
+
+            DiscoveryClient?.Invoke(c => c.AddNewCharacterStats(stats));
         }
 
         public void UseAbility(int abilityId, int systemId, SystemHex hex)

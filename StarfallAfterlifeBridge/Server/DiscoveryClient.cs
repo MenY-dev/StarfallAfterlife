@@ -342,6 +342,13 @@ namespace StarfallAfterlife.Bridge.Server
             }, SfaServerAction.SyncGalaxySessionData);
         }
 
+        public void AddNewCharacterStats(Dictionary<string, float> stats)
+        {
+            Client?.Send(
+                JsonHelpers.ParseNodeUnbuffered(stats ?? new()),
+                SfaServerAction.AddNewCharacterStats);
+        }
+
         public void SendAddCharacterCurrencies(
             int charId,
             int? igc = null,

@@ -126,6 +126,9 @@ namespace StarfallAfterlife.Bridge.Profiles
         [JsonPropertyName("ship_groups")]
         public List<ShipsGroup> ShipGroups { get; set; } = new();
 
+        [JsonPropertyName("statistic")]
+        public Dictionary<string, double> Statistic { get; set; } = new();
+
         [JsonIgnore]
         public int UniqueId { get; set; } = -1;
 
