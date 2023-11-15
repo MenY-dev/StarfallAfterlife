@@ -275,6 +275,12 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                             battle.HandleSecretObjectLooted(e.Data);
                     }
                     break;
+                case "report_ore_taken":
+                    {
+                        if (Battles.FirstOrDefault(b => b.InstanceInfo == e.Instance) is DiscoveryBattle battle)
+                            battle.HandleOreTaken(JsonHelpers.DeserializeUnbuffered<InventoryItem[]>(e.Data) ?? Array.Empty<InventoryItem>()); ;
+                    }
+                    break;
                 default:
                     break;
             }

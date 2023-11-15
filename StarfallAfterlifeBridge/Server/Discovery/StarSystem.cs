@@ -170,6 +170,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
         public virtual void Update()
         {
             UpdateFleets();
+            UpdateRichAsteroids();
             UpdateDefferedActions();
         }
 
@@ -177,6 +178,18 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
         {
             foreach (var fleet in Fleets)
                 fleet?.Update();
+        }
+
+        private void UpdateRichAsteroids()
+        {
+            var time = DateTime.Now;
+
+            foreach (var asteroid in RichAsteroids)
+            {
+                if (asteroid.IsPatrial == true &&
+                    (time - asteroid.LastTake).Minutes > 5)
+                    asteroid.ResetOres();
+            }
         }
 
         public virtual void UpdateNavigationMap()

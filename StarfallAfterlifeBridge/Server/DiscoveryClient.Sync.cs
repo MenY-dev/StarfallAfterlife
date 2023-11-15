@@ -387,15 +387,15 @@ namespace StarfallAfterlife.Bridge.Server
                     {
                         writer.WriteHex(asteroid.Hex); // Position
 
-                        var ores = asteroid.Ores ?? new();
+                        var ores = asteroid.CurrentOres ?? new();
 
                         writer.WriteUInt16((ushort)ores.Count); // Count
 
                         foreach (var item in ores)
                         {
                             writer.WriteByte((byte)InventoryItemType.DiscoveryItem); // ItemType
-                            writer.WriteInt32(item); // Id
-                            writer.WriteInt32(100); // Count
+                            writer.WriteInt32(item.Key); // Id
+                            writer.WriteInt32(item.Value); // Count
                             writer.WriteInt32(1); // IGCPrice
                             writer.WriteInt32(1); // BGCPrice
                             writer.WriteShortString("", -1, true, Encoding.UTF8); // UniqueData

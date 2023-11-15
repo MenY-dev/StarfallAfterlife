@@ -266,14 +266,16 @@ namespace StarfallAfterlife.Bridge.Server
                                 ["phase"] = 1,
                             };
 
-                            foreach (var ore in asteroid.Ores ?? new())
+                            foreach (var ore in asteroid.CurrentOres ?? new())
                             {
-                                switch (ore)
+                                var count = ore.Value;
+
+                                switch (ore.Key)
                                 {
-                                    case 1300860703: asteroidInfo["arkonit"] = 99; break;
-                                    case 1937431386: asteroidInfo["adamantane"] = 99; break;
-                                    case 684682126: asteroidInfo["neitherium"] = 99; break;
-                                    case 1310293910: asteroidInfo["ro"] = 99; break;
+                                    case 1300860703: asteroidInfo["arkonit"] = count; break;
+                                    case 1937431386: asteroidInfo["adamantane"] = count; break;
+                                    case 684682126: asteroidInfo["neitherium"] = count; break;
+                                    case 1310293910: asteroidInfo["ro"] = count; break;
                                     default: break;
                                 }
                             }

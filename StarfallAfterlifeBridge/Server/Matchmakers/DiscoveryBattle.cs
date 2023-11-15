@@ -420,8 +420,8 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                         env.FloatingAsteroidsCount = 0;
                         env.RichAsteroidsId = battle.RichAsteroidField?.Id ?? -1;
 
-                        foreach (var item in battle.RichAsteroidField?.Ores ?? new())
-                            env.AsteroidsContent[item] = rnd.Next(15, 31);
+                        foreach (var item in battle.RichAsteroidField?.CurrentOres ?? new())
+                            env.AsteroidsContent[item.Key] = item.Value;
                     }
                 }
             }
@@ -683,6 +683,23 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 {
                     foreach (var item in Characters)
                         item?.ServerCharacter?.HandleSecretObjectLooted(secretId);
+                }
+            }
+        }
+
+        public virtual void HandleOreTaken(InventoryItem[] ores)
+        {
+            lock (_lockher)
+            {
+                if (ores is not null &&
+                    SystemBattle.RichAsteroidField is StarSystemRichAsteroid field)
+                {
+                    Galaxy?.BeginPreUpdateAction(_ =>
+                    {
+                        field.TakeOres(ores
+                            .DistinctBy(o => o.Id)
+                            .ToDictionary(o => o.Id, o => Math.Max(1, o.Count)));
+                    });
                 }
             }
         }

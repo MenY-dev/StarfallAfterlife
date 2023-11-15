@@ -1,6 +1,8 @@
-﻿using StarfallAfterlife.Bridge.Diagnostics;
+﻿using StarfallAfterlife.Bridge.Database;
+using StarfallAfterlife.Bridge.Diagnostics;
 using StarfallAfterlife.Bridge.IO;
 using StarfallAfterlife.Bridge.Networking.Channels;
+using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Serialization;
 using StarfallAfterlife.Bridge.Server;
 using StarfallAfterlife.Bridge.Server.Discovery;
@@ -64,6 +66,9 @@ namespace StarfallAfterlife.Bridge.Instances
 
                 case DiscoveryClientAction.SecretObjectLooted:
                     HandleSecretObjectLooted(reader, objectType, objectId); break;
+
+                case DiscoveryClientAction.ReportOreTaken:
+                    HandleReportOreTaken(reader, objectType, objectId); break;
             }
         }
 
@@ -239,6 +244,31 @@ namespace StarfallAfterlife.Bridge.Instances
             }.ToJsonStringUnbuffered(false));
 
             SfaDebug.Print($"SecretObjectLooted " +
+                $"(ObjectType = {objectType}, ObjectId = {objectId})");
+        }
+
+        private void HandleReportOreTaken(SfReader reader, DiscoveryObjectType objectType, int objectId)
+        {
+            var ores = new List<InventoryItem>();
+            var count = reader.ReadUInt16();
+
+            for (int i = 0; i < count; i++)
+            {
+                ores.Add(new InventoryItem
+                {
+                    Type = (InventoryItemType)reader.ReadByte(),
+                    Id = reader.ReadInt32(),
+                    Count = reader.ReadInt32(),
+                    IGCPrice = reader.ReadInt32(),
+                    BGCPrice = reader.ReadInt32(),
+                    UniqueData = reader.ReadShortString(Encoding.UTF8)
+                });
+            }
+
+            Owner.SendInstanceAction(Instance?.Auth, "report_ore_taken",
+                JsonHelpers.ParseNodeUnbuffered(ores).ToJsonStringUnbuffered(false));
+
+            SfaDebug.Print($"HandleReportOreTaken " +
                 $"(ObjectType = {objectType}, ObjectId = {objectId})");
         }
 
