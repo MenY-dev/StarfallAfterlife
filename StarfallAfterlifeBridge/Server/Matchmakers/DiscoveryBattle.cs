@@ -497,9 +497,15 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
             {
                 lock (_lockher)
                 {
+                    var isBoss = false;
                     var mob =
-                        Mobs?.FirstOrDefault(m => m?.FleetId == request.FleetId)?.Mob ??
-                        Bosses?.FirstOrDefault(b => b?.FleetId == request.FleetId)?.Mob;
+                        Mobs?.FirstOrDefault(m => m?.FleetId == request.FleetId)?.Mob;
+
+                    if (mob is null)
+                    {
+                        mob = Bosses?.FirstOrDefault(b => b?.FleetId == request.FleetId)?.Mob;
+                        isBoss = mob is not null;
+                    }
 
                     if (mob is not null)
                     {
@@ -510,11 +516,18 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                             if (ship?.Data is null)
                                 continue;
 
+                            var serviceData = JsonHelpers.ParseNodeUnbuffered(ship.ServiceData) ?? new JsonObject();
+
+                            if (isBoss == false &&
+                                (string)serviceData["bt"] is string bt &&
+                                bt.StartsWith("/Game/gameplay/ai/boss/", StringComparison.InvariantCultureIgnoreCase) == true)
+                                serviceData["bt"] = null;
+
                             ships.Add(new JsonObject
                             {
                                 ["id"] = SValue.Create(ship.Data.Id),
                                 ["data"] = SValue.Create(JsonHelpers.ParseNodeUnbuffered(ship.Data).ToJsonString(false)),
-                                ["service_data"] = SValue.Create(JsonHelpers.ParseNodeUnbuffered(ship.ServiceData).ToJsonString(false)),
+                                ["service_data"] = SValue.Create(serviceData.ToJsonString(false)),
                             });
                         }
 
