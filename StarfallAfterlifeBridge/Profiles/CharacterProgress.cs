@@ -36,6 +36,9 @@ namespace StarfallAfterlife.Bridge.Profiles
         public HashSet<int> CompletedQuests { get; set; } = new();
 
         public HashSet<int> TakenRewards { get; set; } = new();
+        
+        public Dictionary<int, int> SeasonsProgress { get; set; } = new();
+        public HashSet<int> SeasonsRewards { get; set; } = new();
 
         public string Path { get; set; }
 
@@ -54,6 +57,14 @@ namespace StarfallAfterlife.Bridge.Profiles
         {
             Systems ??= new();
             Systems[systemId] = progress ?? new();
+        }
+
+        public bool AddSeasonReward(int rewardId) => (SeasonsRewards ??= new()).Add(rewardId);
+
+        public void AddSeasonProgress(int seasonId, int newProgress)
+        {
+            var progress = SeasonsProgress ??= new();
+            progress[seasonId] = progress.GetValueOrDefault(seasonId) + newProgress;
         }
 
         public bool IsExplored(DiscoveryObjectType type, int id) =>
@@ -113,6 +124,8 @@ namespace StarfallAfterlife.Bridge.Profiles
             CompletedQuests = doc["completed_quests"]?.DeserializeUnbuffered<HashSet<int>>() ?? new();
             ActiveQuests = doc["active_quests"]?.DeserializeUnbuffered<Dictionary<int, QuestProgress>>() ?? new();
             TakenRewards = doc["taken_rewards"]?.DeserializeUnbuffered<HashSet<int>>() ?? new();
+            SeasonsProgress = doc["seasons_progress"]?.DeserializeUnbuffered<Dictionary<int, int>>() ?? new();
+            SeasonsRewards = doc["seasons_rewards"]?.DeserializeUnbuffered<HashSet<int>>() ?? new();
         }
 
         public override JsonNode ToJson()
@@ -135,8 +148,10 @@ namespace StarfallAfterlife.Bridge.Profiles
             };
 
             doc["completed_quests"] = JsonHelpers.ParseNodeUnbuffered(CompletedQuests) ?? new JsonArray();
-            doc["active_quests"] = JsonHelpers.ParseNodeUnbuffered(ActiveQuests) ?? new JsonArray();
+            doc["active_quests"] = JsonHelpers.ParseNodeUnbuffered(ActiveQuests) ?? new JsonObject();
             doc["taken_rewards"] = JsonHelpers.ParseNodeUnbuffered(TakenRewards) ?? new JsonArray();
+            doc["seasons_progress"] = JsonHelpers.ParseNodeUnbuffered(SeasonsProgress) ?? new JsonObject();
+            doc["seasons_rewards"] = JsonHelpers.ParseNodeUnbuffered(SeasonsRewards) ?? new JsonArray();
 
             var systems = new JsonArray();
 

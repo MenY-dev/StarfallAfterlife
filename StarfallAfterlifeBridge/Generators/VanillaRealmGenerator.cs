@@ -39,7 +39,8 @@ namespace StarfallAfterlife.Bridge.Generators
                 result = RunChildTasks(
                     new SecretObjectsGenerator(Realm),
                     new MobsMapGenerator(Realm),
-                    new QuestsGenerator(Realm));
+                    new QuestsGenerator(Realm),
+                    new SummarySeasonGenerator(Realm));
             }
             catch
             {

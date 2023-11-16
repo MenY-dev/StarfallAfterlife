@@ -69,6 +69,26 @@ namespace StarfallAfterlife.Bridge.Server
             }, SfaServerAction.SyncProgress);
         }
 
+        public void SyncNewSeasonRewards(params int[] newRewards)
+        {
+            Client?.Send(new JsonObject()
+            {
+                ["new_season_rewards"] = JsonHelpers.ParseNodeUnbuffered(newRewards),
+            }, SfaServerAction.SyncProgress);
+        }
+
+        public void SyncNewSeasonProgress(int id, int xp)
+        {
+            Client?.Send(new JsonObject()
+            {
+                ["new_season_progress"] = new JsonObject
+                {
+                    ["id"] = id,
+                    ["xp"] = xp,
+                },
+            }, SfaServerAction.SyncProgress);
+        }
+
         public void SyncExploration(IEnumerable<int> systems, IEnumerable<IGalaxyMapObject> newObjects = null)
         {
             var newSystemsResponse = new JsonArray();

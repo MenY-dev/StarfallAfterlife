@@ -260,21 +260,32 @@ namespace StarfallAfterlife.Bridge.Server
 
         public void ProcessPlayerData(JNode playerData)
         {
-            var chars = playerData?["chars"]?.AsArraySelf();
-            var profile = Profile.DiscoveryModeProfile;
+            if (playerData is not JObject)
+                return;
 
-            if (chars is not null)
+            Game?.Profile?.Use(p =>
             {
-                foreach (var charData in chars)
+                if (p.GameProfile is SfaGameProfile gameProfile)
                 {
-                    if (profile.GetCharById((int?)charData["id"] ?? -1) is Character c)
+                    gameProfile.Seasons = playerData["seasons"]?.DeserializeUnbuffered<WeeklyQuestsInfo>() ?? new();
+
+                    var chars = playerData["chars"]?.AsArraySelf();
+                    var discoveryProfile = gameProfile.DiscoveryModeProfile;
+
+                    if (chars is not null && discoveryProfile is not null)
                     {
-                        c.Database = Game.Profile.Database;
-                        c.UniqueId = (int?)charData["unique_id"] ?? -1;
-                        c.UniqueName = (string)charData["unique_name"];
+                        foreach (var charData in chars)
+                        {
+                            if (discoveryProfile.GetCharById((int?)charData["id"] ?? -1) is Character character)
+                            {
+                                character.Database = Game.Profile.Database;
+                                character.UniqueId = (int?)charData["unique_id"] ?? -1;
+                                character.UniqueName = (string)charData["unique_name"];
+                            }
+                        }
                     }
                 }
-            }
+            });
         }
 
         public Task<bool> LoadGalaxyMap()
@@ -517,6 +528,22 @@ namespace StarfallAfterlife.Bridge.Server
                         if ((int?)item is int systemId)
                             progress.AddWarpSystem(systemId);
                     }
+                }
+
+                if (doc["new_season_rewards"]?.AsArray() is JArray newSeasonRevards)
+                {
+                    foreach (var item in newSeasonRevards)
+                    {
+                        if ((int?)item is int rewardId)
+                            progress.AddSeasonReward(rewardId);
+                    }
+                }
+
+                if (doc["new_season_progress"] is JObject newSeasonProgress)
+                {
+                    if ((int?)newSeasonProgress["id"] is int id &&
+                        (int?)newSeasonProgress["xp"] is int xp)
+                        progress.AddSeasonProgress(id, xp);
                 }
 
                 profile.SaveCharacterProgress();

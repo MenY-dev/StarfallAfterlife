@@ -504,7 +504,10 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                 BGC += (int)bgc;
 
             if (xp is not null)
+            {
                 Xp += (int)xp;
+                AddXpToSeasons((int)xp);
+            }
 
             if (shipsXp is not null)
             {

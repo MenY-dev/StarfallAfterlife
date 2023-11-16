@@ -331,6 +331,8 @@ namespace StarfallAfterlife.Bridge.Profiles
                             .DistinctBy(s => s.Id)
                             .Select(s => KeyValuePair.Create(s.Id, s.Level))
                             .ToList() ?? new()),
+                        StartSeasonsProgress = new(CurrentProgress?.SeasonsProgress ?? new()),
+                        StartSeasonsRewards = new(CurrentProgress?.SeasonsRewards ?? new()),
                     };
 
                     if (character.Detachments is CharacterDetachments allDetachments &&

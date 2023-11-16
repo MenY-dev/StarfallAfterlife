@@ -62,6 +62,9 @@ namespace StarfallAfterlife.Bridge.Profiles
         public SfaDatabase Database { get; set; } = null;
 
         [JsonIgnore]
+        public WeeklyQuestsInfo Seasons { get; set; } = new();
+
+        [JsonIgnore]
         protected object Locker { get; } = new object();
 
         public void Use(Action<UsageHandler> action)

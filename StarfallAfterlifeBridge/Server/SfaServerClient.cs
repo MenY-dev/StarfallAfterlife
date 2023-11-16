@@ -242,6 +242,7 @@ namespace StarfallAfterlife.Bridge.Server
             request.SendResponce(new JObject
             {
                 ["chars"] = HandleNewChars(doc?["chars"]?.AsArraySelf()),
+                ["seasons"] = JsonHelpers.ParseNodeUnbuffered(Server?.Realm?.Seasons ?? new()),
             }.ToJsonString(), SfaServerAction.RegisterPlayer);
 
             State = SfaClientState.PendingGame;

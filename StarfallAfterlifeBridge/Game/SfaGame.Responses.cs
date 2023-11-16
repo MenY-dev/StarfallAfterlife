@@ -1,10 +1,12 @@
 ﻿using StarfallAfterlife.Bridge.Database;
+using StarfallAfterlife.Bridge.Generators;
 using StarfallAfterlife.Bridge.Launcher;
 using StarfallAfterlife.Bridge.Networking;
 using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Realms;
 using StarfallAfterlife.Bridge.Serialization;
 using StarfallAfterlife.Bridge.Server;
+using StarfallAfterlife.Bridge.Server.Discovery;
 using StarfallAfterlife.Bridge.Server.Galaxy;
 using StarfallAfterlife.Bridge.Server.Matchmakers;
 using System;
@@ -111,7 +113,33 @@ namespace StarfallAfterlife.Bridge.Game
 
             if (flags.HasFlag(UserDataFlag.WeeklyQuests))
             {
+                var info = GameProfile?.Seasons ?? new();
+                doc["weekly_quests_seasons"] = new JsonArray();
+                doc["weekly_quest"] = JsonHelpers.ParseNodeUnbuffered(info.Seasons);
+                doc["weekly_quest_stage"] = JsonHelpers.ParseNodeUnbuffered(info.Stages);
+                doc["weekly_reward"] = JsonHelpers.ParseNodeUnbuffered(info.Rewards);
+            }
 
+            if (progress is not null)
+            {
+                var session = character.HasSessionResults == false ? null : character.LastSession;
+
+                doc["charact_battle_pass_acquired"] = new JsonArray() { new JsonObject { ["battle_pass"] = 4 } };
+
+                doc["charact_weekly_quest_progress"] = new JsonArray(progress.SeasonsProgress?.Select(i => new JsonObject
+                {
+                    ["weekly_quest"] = i.Key,
+                    ["current_xp"] = i.Value,
+                    ["session_start_xp"] = session?.StartSeasonsProgress.GetValueOrDefault(i.Key, i.Value) ?? i.Value,
+                }).ToArray() ?? Array.Empty<JsonObject>());
+
+                doc["charact_weekly_reward"] = new JsonArray(progress.SeasonsRewards?.Select(r => new JsonObject
+                {
+                    ["weekly_reward"] = r,
+                    ["access_level"] = 0,
+                    ["faction"] = (int)Faction.None,
+                    ["available_rewards"] = 0,
+                }).ToArray() ?? Array.Empty<JsonObject>());
             }
 
             if (flags.HasFlag(UserDataFlag.DiscoveryBattleInfo))

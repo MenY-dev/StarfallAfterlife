@@ -46,6 +46,8 @@ namespace StarfallAfterlife.Bridge.Realms
 
         public DiscoveryQuestsDatabase QuestsDatabase { get; set; }
 
+        public WeeklyQuestsInfo Seasons { get; set; } = new();
+
         public SfaServer CreateServer()
         {
             return new SfaServer(this);
@@ -95,6 +97,7 @@ namespace StarfallAfterlife.Bridge.Realms
             string shopsMappPath = Path.Combine(directory, "ShopsMap.json");
             string mobsMapPath = Path.Combine(directory, "MobsMap.json");
             string questsDatabasePath = Path.Combine(directory, "QuestsDatabase.json");
+            string seasonsPath = Path.Combine(directory, "Seasons.json");
 
             static JsonNode ReadJson(string path) =>
                 JsonHelpers.ParseNodeUnbuffered(File.ReadAllText(path));
@@ -136,6 +139,12 @@ namespace StarfallAfterlife.Bridge.Realms
                 QuestsDatabase.LoadFromJson(ReadJson(questsDatabasePath));
             }
 
+            if (File.Exists(seasonsPath) == true)
+            {
+                var text = File.ReadAllText(seasonsPath);
+                Seasons = JsonHelpers.DeserializeUnbuffered<WeeklyQuestsInfo>(text);
+            }
+
             return true;
         }
 
@@ -172,6 +181,7 @@ namespace StarfallAfterlife.Bridge.Realms
             string shopsMappPath = Path.Combine(directory, "ShopsMap.json");
             string mobsMapPath = Path.Combine(directory, "MobsMap.json");
             string questsDatabasePath = Path.Combine(directory, "QuestsDatabase.json");
+            string seasonsPath = Path.Combine(directory, "Seasons.json");
 
             if (GalaxyMap is not null)
                 File.WriteAllText(
@@ -195,6 +205,9 @@ namespace StarfallAfterlife.Bridge.Realms
 
             if (QuestsDatabase is not null)
                 File.WriteAllText(questsDatabasePath, QuestsDatabase.ToJson().ToJsonString(false), Encoding.UTF8);
+
+            if (Seasons is not null)
+                File.WriteAllText(seasonsPath, JsonHelpers.SerializeUnbuffered(Seasons), Encoding.UTF8);
         }
 
         public JsonNode CreateGalaxyMapResponse(bool onlyVariableMap)

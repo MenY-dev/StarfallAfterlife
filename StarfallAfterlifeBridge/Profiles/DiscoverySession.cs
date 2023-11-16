@@ -37,6 +37,10 @@ namespace StarfallAfterlife.Bridge.Profiles
 
         public Dictionary<int, int> StartShipsXps { get; set; } = new();
 
+        public Dictionary<int, int> StartSeasonsProgress { get; set; } = new();
+
+        public HashSet<int> StartSeasonsRewards { get; set; } = new();
+
         public DateTime SessionStartTime { get; set; }
 
         public DateTime LastUpdate { get; set; }
@@ -64,6 +68,8 @@ namespace StarfallAfterlife.Bridge.Profiles
             SessionStartInventory = doc["session_start_inventory"]?.DeserializeUnbuffered<List<InventoryItem>>() ?? new();
             StartHullXps = doc["start_hull_xps"]?.DeserializeUnbuffered<Dictionary<int, int>>() ?? new();
             StartShipsXps = doc["start_ships_xps"]?.DeserializeUnbuffered<Dictionary<int, int>>() ?? new();
+            StartSeasonsProgress = doc["start_seasons_progress"]?.DeserializeUnbuffered<Dictionary<int, int>>() ?? new();
+            StartSeasonsRewards = doc["start_seasons_rewards"]?.DeserializeUnbuffered<HashSet<int>>() ?? new();
 
             (Ships ??= new()).Clear();
 
@@ -90,6 +96,8 @@ namespace StarfallAfterlife.Bridge.Profiles
             doc["session_start_inventory"] = JsonHelpers.ParseNodeUnbuffered(SessionStartInventory);
             doc["start_hull_xps"] = JsonHelpers.ParseNodeUnbuffered(StartHullXps);
             doc["start_ships_xps"] = JsonHelpers.ParseNodeUnbuffered(StartShipsXps);
+            doc["start_seasons_progress"] = JsonHelpers.ParseNodeUnbuffered(StartSeasonsProgress) ?? new JsonObject();
+            doc["start_seasons_rewards"] = JsonHelpers.ParseNodeUnbuffered(StartSeasonsRewards) ?? new JsonArray();
             doc["ships"] = ships;
 
             return doc;
