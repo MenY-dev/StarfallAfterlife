@@ -26,6 +26,7 @@ using StarfallAfterlife.Bridge.Database;
 using System.Net;
 using System.Net.Sockets;
 using System.Xml;
+using System.IO.Compression;
 
 namespace StarfallAfterlife.Bridge.Server
 {
@@ -290,39 +291,49 @@ namespace StarfallAfterlife.Bridge.Server
 
         public Task<bool> LoadGalaxyMap()
         {
-            return SendRequest(SfaServerAction.LoadGalaxyMap).ContinueWith(t =>
+            return SendBinaryRequest(SfaServerAction.LoadGalaxyMap, default).ContinueWith(t =>
             {
                 if (t.Result is SfaClientResponse response &&
                     response.IsSuccess == true &&
                     response.Action == SfaServerAction.LoadGalaxyMap &&
-                    JsonHelpers.ParseNodeUnbuffered(t.Result.Text ?? "") is JObject doc &&
                     Game?.Profile is SfaProfile profile)
                 {
                     var result = true;
 
-                    profile.Use((p, doc) =>
+                    profile.Use((p, data) =>
                     {
-                        var realmInfo = p.CurrentRealm;
+                        try
+                        {
+                            using var input = new ReadOnlyMemoryStream(data);
+                            using var output = new MemoryStream();
+                            using var deflate = new DeflateStream(input, CompressionMode.Decompress, true);
+                            deflate.CopyTo(output);
+                            deflate.Flush();
 
-                        if (realmInfo is null)
+                            var map = Encoding.UTF8.GetString(output.GetBuffer(), 0, (int)output.Length);
+                            var realmInfo = p.CurrentRealm;
+
+                            if (realmInfo is null)
+                            {
+                                result = false;
+                                return;
+                            }
+
+                            if (map is null)
+                            {
+                                result = false;
+                                return;
+                            }
+
+                            p.CurrentRealm.Realm.GalaxyMapCache = map;
+                            p.CurrentRealm.Realm.GalaxyMapHash = GalaxyHash;
+                            p.MapsCache.Save(GalaxyHash, map);
+                        }
+                        catch
                         {
                             result = false;
-                            return;
                         }
-
-                        var cache = (string)doc["map"];
-                        var hash = (string)doc["hash"];
-
-                        if (cache is null || hash is null)
-                        {
-                            result = false;
-                            return;
-                        }
-
-                        p.CurrentRealm.Realm.GalaxyMapCache = cache;
-                        p.CurrentRealm.Realm.GalaxyMapHash = hash;
-                        p.MapsCache.Save(hash, cache);
-                    }, doc);
+                    }, response.Data);
 
                     GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
                     GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);

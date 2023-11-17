@@ -22,6 +22,8 @@ using StarfallAfterlife.Bridge.Server.Characters;
 using System.Net;
 using System.Reflection;
 using System.Text.Json.Nodes;
+using System.IO.Compression;
+using StarfallAfterlife.Bridge.Diagnostics;
 
 namespace StarfallAfterlife.Bridge.Server
 {
@@ -214,25 +216,30 @@ namespace StarfallAfterlife.Bridge.Server
 
         private void ProcessLoadGalaxyMap(SfaClientRequest request)
         {
-            string mapCache;
+            var output = new MemoryStream();
 
-            if (Server.Realm.GalaxyMapCache is null)
+            try
             {
-                mapCache = JsonHelpers.SerializeUnbuffered(Server.Realm.GalaxyMap);
-                GC.Collect(GC.MaxGeneration, GCCollectionMode.Optimized);
+                string mapCache;
+
+                if (Server.Realm.GalaxyMapCache is null)
+                {
+                    mapCache = JsonHelpers.SerializeUnbuffered(Server.Realm.GalaxyMap);
+                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Optimized);
+                }
+                else
+                {
+                    mapCache = Server.Realm.GalaxyMapCache;
+                }
+
+                var data = Encoding.UTF8.GetBytes(mapCache);
+                using var deflate = new DeflateStream(output, CompressionMode.Compress, true);
+                deflate.Write(data, 0, data.Length);
+                deflate.Flush();
             }
-            else
-            {
-                mapCache = Server.Realm.GalaxyMapCache;
-            }
+            catch { }
 
-            var doc = new JObject
-            {
-                ["hash"] = Server.Realm.GalaxyMap.Hash,
-                ["map"] = mapCache,
-            };
-
-            request.SendResponce(doc, SfaServerAction.LoadGalaxyMap);
+            request.SendResponce(new Memory<byte>(output.GetBuffer(), 0, (int)output.Length), SfaServerAction.LoadGalaxyMap);
         }
 
         public void ProcessRegisterPlayer(JNode doc, SfaClientRequest request)
