@@ -16,8 +16,12 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
 
         public int Length { get; set; }
 
+        public Guid RequestId { get; set; }
+
         private static readonly byte[] BinaryMethod = Encoding.ASCII.GetBytes("BYTE");
+        private static readonly byte[] BinaryRequestMethod = Encoding.ASCII.GetBytes("BYTER");
         private static readonly byte[] TextMethod = Encoding.ASCII.GetBytes("TEXT");
+        private static readonly byte[] TextRequestMethod = Encoding.ASCII.GetBytes("TEXTR");
         private static readonly byte[] HttpMethod = Encoding.ASCII.GetBytes("GET");
         private static readonly byte MethodEndCode = Encoding.ASCII.GetBytes(" ")[0];
 
@@ -30,9 +34,21 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
                     stream.WriteByte(MethodEndCode);
                     stream.Write(BitConverter.GetBytes(Length), 0, 4);
                     break;
+                case MessagingMethod.TextRequest:
+                    stream.Write(TextRequestMethod);
+                    stream.WriteByte(MethodEndCode);
+                    stream.Write(RequestId.ToByteArray(), 0, 16);
+                    stream.Write(BitConverter.GetBytes(Length), 0, 4);
+                    break;
                 case MessagingMethod.Text:
                     stream.Write(TextMethod);
                     stream.WriteByte(MethodEndCode);
+                    stream.Write(BitConverter.GetBytes(Length), 0, 4);
+                    break;
+                case MessagingMethod.BinaryRequest:
+                    stream.Write(BinaryRequestMethod);
+                    stream.WriteByte(MethodEndCode);
+                    stream.Write(RequestId.ToByteArray(), 0, 16);
                     stream.Write(BitConverter.GetBytes(Length), 0, 4);
                     break;
                 case MessagingMethod.HTTP:
@@ -55,6 +71,14 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
                 var buffer = new byte[4];
                 stream.Read(buffer, 0, buffer.Length);
                 header.Length = BitConverter.ToInt32(buffer);
+            }
+            else if (header.Method == MessagingMethod.BinaryRequest ||
+                header.Method == MessagingMethod.TextRequest)
+            {
+                var buffer = new byte[20];
+                stream.Read(buffer, 0, buffer.Length);
+                header.RequestId = new Guid(buffer);
+                header.Length = BitConverter.ToInt32(buffer, 16);
             }
 
             ct.ThrowIfCancellationRequested();
@@ -106,7 +130,9 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
         private static MessagingMethod ReadMethod(ReadOnlySpan<byte> bytes)
         {
             if (CheckMethod(BinaryMethod, bytes) == true) return MessagingMethod.Binary;
+            if (CheckMethod(TextRequestMethod, bytes) == true) return MessagingMethod.TextRequest;
             if (CheckMethod(TextMethod, bytes) == true) return MessagingMethod.Text;
+            if (CheckMethod(BinaryRequestMethod, bytes) == true) return MessagingMethod.BinaryRequest;
             if (CheckMethod(HttpMethod, bytes) == true) return MessagingMethod.HTTP;
             return MessagingMethod.Unknown;
         }

@@ -1,5 +1,6 @@
 ﻿using StarfallAfterlife.Bridge.Diagnostics;
 using StarfallAfterlife.Bridge.IO;
+using StarfallAfterlife.Bridge.Serialization;
 using StarfallAfterlife.Bridge.Tasks;
 using System;
 using System.Buffers;
@@ -11,8 +12,10 @@ using System.Net.WebSockets;
 using System.Runtime;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace StarfallAfterlife.Bridge.Networking.Messaging
 {
@@ -30,9 +33,13 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
 
         public DateTime LastInput { get; protected set; }
 
-        protected readonly object locker = new();
+        protected readonly object _locker = new();
 
         protected bool disposed;
+
+        private Dictionary<Guid, MessagingResponse> _responses = new();
+
+        private readonly object _requestsLockher = new();
 
         public MessagingClient() { }
 
@@ -44,7 +51,7 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
             if (disposed == true)
                 throw new ObjectDisposedException(GetType().Name);
 
-            lock (locker)
+            lock (_locker)
             {
                 TcpClient = new TcpClient();
                 TcpClient.BeginConnect(address.Host, address.Port, OnClientConnected, TcpClient);
@@ -72,7 +79,7 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
             if (disposed == true)
                 throw new ObjectDisposedException(GetType().Name);
 
-            lock (locker)
+            lock (_locker)
             {
                 TcpClient = tcpClient;
             }
@@ -83,7 +90,7 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
 
         public virtual void Close()
         {
-            lock (locker)
+            lock (_locker)
             {
                 try
                 {
@@ -200,12 +207,58 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
                 case MessagingMethod.Binary:
                     OnReceiveBinary(reader);
                     break;
+                case MessagingMethod.BinaryRequest:
+                    byte[] data = new byte[Math.Max(0, header.Length)];
+                    buffer.Read(data, 0, data.Length);
+                    OnReceiveBinaryRequestInternal(data, header.RequestId);
+                    break;
                 case MessagingMethod.Text:
                     OnReceiveText(Encoding.UTF8.GetString(buffer.Span));
+                    break;
+                case MessagingMethod.TextRequest:
+                    OnReceiveTextRequestInternal(Encoding.UTF8.GetString(buffer.Span), header.RequestId);
                     break;
             }
         }
 
+        protected virtual void OnReceiveBinaryRequestInternal(byte[] data, Guid requestId)
+        {
+            lock (_requestsLockher)
+            {
+
+                if (_responses.TryGetValue(requestId, out MessagingResponse response) == true)
+                {
+                    response.SetInput(data);
+                    _responses.Remove(requestId);
+                }
+                else
+                {
+                    OnReceiveRequest(new MessagingRequest(requestId, data, this));
+                }
+            }
+        }
+
+        protected virtual void OnReceiveTextRequestInternal(string text, Guid requestId)
+        {
+            lock (_requestsLockher)
+            {
+
+                if (_responses.TryGetValue(requestId, out MessagingResponse response) == true)
+                {
+                    response.SetInput(text);
+                    _responses.Remove(requestId);
+                }
+                else
+                {
+                    OnReceiveRequest(new MessagingRequest(requestId, text, this));
+                }
+            }
+        }
+
+        protected virtual void OnReceiveRequest(MessagingRequest request)
+        {
+
+        }
 
         private void OnReceiveHttpInternal(MessagingHeader header, Stream buffer)
         {
@@ -234,8 +287,6 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
 
         }
 
-        protected virtual void OnReceive(MessagingHeader header, SfReader reader) { }
-
         protected virtual void OnReceiveBinary(SfReader reader) { }
 
         protected virtual void OnReceiveText(string text) { }
@@ -245,7 +296,65 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
             Disconnected?.Invoke(this, EventArgs.Empty);
         }
 
-        public virtual void Send(string text)
+        public virtual MessagingResponse SendRequest(string text)
+        {
+            lock (_requestsLockher)
+            {
+                var requestId = Guid.NewGuid();
+                var response = MessagingResponse.Create(requestId, MessagingMethod.TextRequest);
+                SendInternal(new() { Method = MessagingMethod.TextRequest }, text);
+                return response;
+            }
+        }
+
+        public virtual MessagingResponse SendRequest(JsonNode node)
+        {
+            lock (_requestsLockher)
+            {
+                var requestId = Guid.NewGuid();
+                var response = MessagingResponse.Create(requestId, MessagingMethod.TextRequest);
+                SendInternal(new() { Method = MessagingMethod.TextRequest }, node);
+                return response;
+            }
+        }
+
+        public virtual MessagingResponse SendRequest(byte[] bytes)
+        {
+            lock (_requestsLockher)
+            {
+                var requestId = Guid.NewGuid();
+                var response = MessagingResponse.Create(requestId, MessagingMethod.TextRequest);
+                SendInternal(new() { Method = MessagingMethod.Binary }, bytes);
+                return response;
+            }
+        }
+
+        public virtual void Send(string text) =>
+            SendInternal(new() { Method = MessagingMethod.Text }, text);
+
+        public virtual void Send(JsonNode node) =>
+            SendInternal(new() { Method = MessagingMethod.Text }, node);
+
+        public virtual void Send(byte[] bytes) =>
+            SendInternal(new() { Method = MessagingMethod.Binary }, bytes);
+
+        public void SendResponse(MessagingResponse response)
+        {
+            var header = new MessagingHeader() { RequestId = response.Id, Method = response.Method };
+
+            switch (response.Method)
+            {
+                case MessagingMethod.BinaryRequest:
+                    SendInternal(header, response.Data);
+                    break;
+
+                case MessagingMethod.TextRequest:
+                    SendInternal(header, response.Text);
+                    break;
+            }
+        }
+
+        protected virtual void SendInternal(MessagingHeader header, string text)
         {
             UseStream((s, text) =>
             {
@@ -257,22 +366,16 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
                 if (bytesCount < 0)
                     return;
 
-                new MessagingHeader
-                {
-                    Method = MessagingMethod.Text,
-                    Length = bytesCount,
-                }.Write(s);
+                header.Length = bytesCount;
+                header.Write(s);
                 s.Write(buffer.AsSpan(0, bytesCount));
                 s.Flush();
                 ArrayPool<byte>.Shared.Return(buffer);
             }, text);
         }
 
-        public virtual void Send(System.Text.Json.Nodes.JsonNode node)
+        protected virtual void SendInternal(MessagingHeader header, JsonNode node)
         {
-            if (node is null)
-                return;
-
             UseStream((s, node) =>
             {
                 using var buffer = new MemoryStream();
@@ -280,31 +383,27 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
                 node.WriteTo(writer);
                 writer.Flush();
 
-                new MessagingHeader
-                {
-                    Method = MessagingMethod.Text,
-                    Length = (int)buffer.Length,
-                }.Write(s);
+                header.Length = (int)buffer.Length;
+                header.Write(s);
                 s.Write(buffer.GetBuffer(), 0, (int)buffer.Length);
+                s.Flush();
             }, node);
         }
 
-        public virtual void Send(byte[] bytes)
+        protected virtual void SendInternal(MessagingHeader header, byte[] bytes)
         {
             UseStream((s, bytes) =>
             {
-                new MessagingHeader
-                {
-                    Method = MessagingMethod.Binary,
-                    Length = bytes.Length,
-                }.Write(s);
+                header.Length = bytes.Length;
+                header.Write(s);
                 s.Write(bytes);
+                s.Flush();
             }, bytes);
         }
 
         public virtual void UseStream(UseStreamDelegate action)
         {
-            lock (locker)
+            lock (_locker)
             {
                 if (IsConnected == true)
                     action?.Invoke(TcpClient.GetStream());
@@ -313,7 +412,7 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
 
         public virtual void UseStream<TState>(Action<Stream, TState> action, TState state)
         {
-            lock (locker)
+            lock (_locker)
             {
                 if (IsConnected == true)
                     action?.Invoke(TcpClient.GetStream(), state);
