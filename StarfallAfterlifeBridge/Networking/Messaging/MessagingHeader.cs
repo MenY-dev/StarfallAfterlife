@@ -75,10 +75,11 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
             else if (header.Method == MessagingMethod.BinaryRequest ||
                 header.Method == MessagingMethod.TextRequest)
             {
-                var buffer = new byte[20];
-                stream.Read(buffer, 0, buffer.Length);
+                var buffer = new byte[16];
+                stream.Read(buffer, 0, 16);
                 header.RequestId = new Guid(buffer);
-                header.Length = BitConverter.ToInt32(buffer, 16);
+                stream.Read(buffer, 0, 4);
+                header.Length = BitConverter.ToInt32(buffer);
             }
 
             ct.ThrowIfCancellationRequested();

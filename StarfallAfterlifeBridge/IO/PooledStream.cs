@@ -153,6 +153,31 @@ namespace StarfallAfterlife.Bridge.IO
             _position = newPos;
         }
 
+        public override void Write(ReadOnlySpan<byte> buffer)
+        {
+            int newPos = _position + buffer.Length;
+
+            if (newPos < 0)
+                throw new IOException();
+
+            if (newPos > _length)
+                SetLength(newPos);
+
+            if (buffer.Length <= 8)
+            {
+                int byteCount = buffer.Length;
+
+                while (--byteCount >= 0)
+                    _buffer[_position + byteCount] = buffer[byteCount];
+            }
+            else
+            {
+                buffer.CopyTo(_buffer.AsSpan(_position));
+            }
+
+            _position = newPos;
+        }
+
         public override void SetLength(long value)
         {
             if (value < 0 || value > int.MaxValue)

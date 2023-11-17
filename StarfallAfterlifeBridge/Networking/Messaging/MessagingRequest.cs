@@ -4,20 +4,33 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace StarfallAfterlife.Bridge.Networking.Messaging
 {
     public class MessagingRequest
     {
-        public Guid Id { get; }
+        public Guid Id { get; init; }
 
-        public MessagingMethod Method { get; }
+        public MessagingMethod Method { get; init; }
 
-        public string Text { get; }
+        public string Text { get; init; }
 
-        public byte[] Data { get; }
+        public ReadOnlyMemory<byte> Data { get; init; }
 
-        public MessagingClient Client { get; }
+        public MessagingClient Client { get; init; }
+
+        public MessagingRequest(string text)
+        {
+            Method = MessagingMethod.TextRequest;
+            Text = text;
+        }
+
+        public MessagingRequest(byte[] data)
+        {
+            Method = MessagingMethod.BinaryRequest;
+            Data = data;
+        }
 
         public MessagingRequest(Guid id, string text, MessagingClient client)
         {
@@ -35,14 +48,27 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
             Client = client;
         }
 
+        public MessagingRequest(MessagingRequest request)
+        {
+            Id = request.Id;
+            Method = request.Method;
+            Text = request.Text;
+            Data = request.Data;
+            Client = request.Client;
+        }
+
+        public virtual ReadOnlyMemory<byte> CreateBinaryMessage() => Data;
+
+        public virtual string CreateTextMessage() => Text;
+
         public virtual void SendResponce(string text)
         {
-            Client?.SendResponse(MessagingResponse.Create(Id, text));
+            Client?.SendResponse(this, text);
         }
 
         public virtual void SendResponce(byte[] data)
         {
-            Client?.SendResponse(MessagingResponse.Create(Id, data));
+            Client?.SendResponse(this, data);
         }
     }
 }

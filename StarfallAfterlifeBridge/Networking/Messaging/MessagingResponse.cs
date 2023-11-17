@@ -19,7 +19,7 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
 
         public string Text { get; protected set; }
 
-        public byte[] Data { get; protected set; }
+        public ReadOnlyMemory<byte> Data { get; protected set; }
 
         private HashSet<Action<MessagingResponse>> _continuationActions;
         private AutoResetEvent _completionEvent;
@@ -81,7 +81,7 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
             }
         }
 
-        public void SetInput(string text)
+        public virtual void SetInput(string text)
         {
             lock (_locker)
             {
@@ -90,7 +90,7 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
             }
         }
 
-        public void SetInput(byte[] data)
+        public virtual void SetInput(ReadOnlyMemory<byte> data)
         {
             lock (_locker)
             {

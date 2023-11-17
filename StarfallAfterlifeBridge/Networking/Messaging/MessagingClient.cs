@@ -155,7 +155,9 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
                         buffer.Seek(0, SeekOrigin.Begin);
 
                         if (header.Method == MessagingMethod.Binary ||
-                            header.Method == MessagingMethod.Text)
+                            header.Method == MessagingMethod.Text ||
+                            header.Method == MessagingMethod.BinaryRequest ||
+                            header.Method == MessagingMethod.TextRequest)
                         {
                             CopyToBuffer(stream, header.Length);
                             buffer.SetLength(buffer.Position);
@@ -184,6 +186,7 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
                 catch (Exception e)
                 {
                     SfaDebug.Log(e.Message);
+                    SfaDebug.Log(e.StackTrace);
                 }
                 finally
                 {
@@ -296,37 +299,52 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
             Disconnected?.Invoke(this, EventArgs.Empty);
         }
 
-        public virtual MessagingResponse SendRequest(string text)
+        public virtual MessagingResponse SendRequest(string text) => SendRequestInternal(text);
+
+        public virtual MessagingResponse SendRequest(byte[] bytes) => SendRequestInternal(bytes);
+
+        protected virtual MessagingResponse SendRequestInternal(string text, Func<Guid, MessagingMethod, MessagingResponse> responceCreator = null)
         {
             lock (_requestsLockher)
             {
+                var method = MessagingMethod.TextRequest;
                 var requestId = Guid.NewGuid();
-                var response = MessagingResponse.Create(requestId, MessagingMethod.TextRequest);
-                SendInternal(new() { Method = MessagingMethod.TextRequest }, text);
+                var response =
+                    responceCreator?.Invoke(requestId, method) ??
+                    MessagingResponse.Create(requestId, method);
+
+                _responses.TryAdd(requestId, response);
+                SendInternal(new() { Method = method, RequestId = requestId }, text);
                 return response;
             }
         }
 
-        public virtual MessagingResponse SendRequest(JsonNode node)
+        protected virtual MessagingResponse SendRequestInternal(ReadOnlyMemory<byte> data, Func<Guid, MessagingMethod, MessagingResponse> responceCreator = null)
         {
             lock (_requestsLockher)
             {
+                var method = MessagingMethod.BinaryRequest;
                 var requestId = Guid.NewGuid();
-                var response = MessagingResponse.Create(requestId, MessagingMethod.TextRequest);
-                SendInternal(new() { Method = MessagingMethod.TextRequest }, node);
+                var response =
+                    responceCreator?.Invoke(requestId, method) ??
+                    MessagingResponse.Create(requestId, method);
+
+                _responses.TryAdd(requestId, response);
+                SendInternal(new() { Method = method, RequestId = requestId }, data);
                 return response;
             }
         }
 
-        public virtual MessagingResponse SendRequest(byte[] bytes)
+        public void SendResponse(MessagingRequest request, string text)
         {
-            lock (_requestsLockher)
-            {
-                var requestId = Guid.NewGuid();
-                var response = MessagingResponse.Create(requestId, MessagingMethod.TextRequest);
-                SendInternal(new() { Method = MessagingMethod.Binary }, bytes);
-                return response;
-            }
+            var header = new MessagingHeader() { RequestId = request.Id, Method = MessagingMethod.TextRequest };
+            SendInternal(header, text);
+        }
+
+        public void SendResponse(MessagingRequest request, ReadOnlyMemory<byte> data)
+        {
+            var header = new MessagingHeader() { RequestId = request.Id, Method = MessagingMethod.BinaryRequest };
+            SendInternal(header, data);
         }
 
         public virtual void Send(string text) =>
@@ -337,22 +355,6 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
 
         public virtual void Send(byte[] bytes) =>
             SendInternal(new() { Method = MessagingMethod.Binary }, bytes);
-
-        public void SendResponse(MessagingResponse response)
-        {
-            var header = new MessagingHeader() { RequestId = response.Id, Method = response.Method };
-
-            switch (response.Method)
-            {
-                case MessagingMethod.BinaryRequest:
-                    SendInternal(header, response.Data);
-                    break;
-
-                case MessagingMethod.TextRequest:
-                    SendInternal(header, response.Text);
-                    break;
-            }
-        }
 
         protected virtual void SendInternal(MessagingHeader header, string text)
         {
@@ -390,13 +392,13 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
             }, node);
         }
 
-        protected virtual void SendInternal(MessagingHeader header, byte[] bytes)
+        protected virtual void SendInternal(MessagingHeader header, ReadOnlyMemory<byte> bytes)
         {
             UseStream((s, bytes) =>
             {
                 header.Length = bytes.Length;
                 header.Write(s);
-                s.Write(bytes);
+                s.Write(bytes.Span);
                 s.Flush();
             }, bytes);
         }

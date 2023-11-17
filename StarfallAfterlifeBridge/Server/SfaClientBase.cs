@@ -22,10 +22,6 @@ namespace StarfallAfterlife.Bridge.Server
 {
     public class SfaClientBase : MessagingClient
     {
-        private Dictionary<Guid, Action<string, SfaServerAction>> RequestWaiters { get; } = new();
-
-        private object RequestsLockher { get; } = new();
-
         public override void Send(string text) => Send(text, SfaServerAction.None);
 
         public override void Send(JNode node) => Send(node, SfaServerAction.None);
@@ -59,49 +55,17 @@ namespace StarfallAfterlife.Bridge.Server
 
         public Task<SfaClientResponse> SendRequest(SfaServerAction messageType, string text = null, int timeout = -1)
         {
-            var requestId = Guid.NewGuid();
-            var response = new SfaClientResponse(requestId);
-            var result = response.Wait(timeout);
-
-            result.ContinueWith(t =>
-            {
-                lock (RequestsLockher)
-                    RequestWaiters.Remove(requestId);
-            });
-
-            lock (RequestsLockher)
-            {
-                if (RequestWaiters.TryAdd(requestId, response.CreateHandler()))
-                {
-                    var doc = new JObject
-                    {
-                        ["type"] = JValue.Create(messageType),
-                        ["request_id"] = requestId,
-                        ["message"] = text ?? string.Empty
-                    };
-
-                    base.Send(doc);
-                }
-            }
-
-            return result;
-        }
-
-        public void SendResponse(SfaClientResponse response)
-        {
-            if (response is null)
-                return;
-
             var doc = new JObject
             {
-                ["type"] = JValue.Create(response.Action),
-                ["response_id"] = response.ResponseId,
-                ["message"] = response.Text ?? string.Empty
+                ["type"] = JValue.Create(messageType),
+                ["message"] = text ?? string.Empty
             };
 
-            base.Send(doc);
-            GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
-            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+            return SendRequestInternal
+                (doc.ToJsonStringUnbuffered(true),
+                (id, method) => new SfaClientResponse { Id = id, Method = method, Action = messageType })
+                .Wait(timeout)
+                .ContinueWith(t => t.Result as SfaClientResponse);
         }
 
         protected override void OnReceiveText(string text)
@@ -115,42 +79,14 @@ namespace StarfallAfterlife.Bridge.Server
                 if (doc is not null && Enum.TryParse((string)doc["type"], true, out SfaServerAction messageAction))
                 {
                     string message = (string)doc["message"];
-
-                    if (messageAction != SfaServerAction.None)
-                    {
-                        var responseId = (Guid?)doc["response_id"] ?? Guid.Empty;
-
-                        if (responseId != Guid.Empty)
-                        {
-                            lock (RequestsLockher)
-                            {
-                                if (RequestWaiters.TryGetValue(responseId, out Action<string, SfaServerAction> handler) == true)
-                                {
-                                    RequestWaiters.Remove(responseId);
-                                    handler?.Invoke(message, messageAction);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            var requestId = (Guid?)doc["request_id"] ?? Guid.Empty;
-
-                            if (requestId != Guid.Empty)
-                                OnRequestInput(new SfaClientRequest(this, requestId, messageAction, message));
-                            else
-                                OnTextInput(message ?? "", messageAction);
-                        }
-                    }
+                    OnTextInput(message ?? "", messageAction);
                 }
-
             }
             catch (Exception e)
             {
                 SfaDebug.Print(e, GetType().Name);
             }
         }
-
-
 
         protected override void OnReceiveBinary(SfReader reader)
         {
@@ -165,6 +101,20 @@ namespace StarfallAfterlife.Bridge.Server
 
                 if (binaryAction != SfaServerAction.None)
                     OnBinaryInput(reader, binaryAction);
+            }
+            catch (Exception e)
+            {
+                SfaDebug.Print(e, GetType().Name);
+            }
+        }
+
+        protected override void OnReceiveRequest(MessagingRequest request)
+        {
+            base.OnReceiveRequest(request);
+
+            try
+            {
+                OnRequestInput(new SfaClientRequest(request));
             }
             catch (Exception e)
             {
