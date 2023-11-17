@@ -76,5 +76,10 @@ namespace StarfallAfterlife.Bridge.Server
             responce ??= Array.Empty<byte>();
             Client?.SendResponse(this, new byte[] { (byte)action }, responce);
         }
+
+        public void SendResponce(ReadOnlyMemory<byte> responce, SfaServerAction action)
+        {
+            Client?.SendResponse(this, new byte[] { (byte)action }, responce);
+        }
     }
 }
