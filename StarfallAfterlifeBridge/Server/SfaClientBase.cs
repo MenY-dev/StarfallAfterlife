@@ -68,7 +68,7 @@ namespace StarfallAfterlife.Bridge.Server
                 .ContinueWith(t => t.Result as SfaClientResponse);
         }
 
-        public Task<SfaClientResponse> SendRequest(SfaServerAction messageType, ReadOnlyMemory<byte> data, int timeout = -1)
+        public Task<SfaClientResponse> SendBinaryRequest(SfaServerAction messageType, ReadOnlyMemory<byte> data, int timeout = -1)
         {
             var packet = new byte[data.Length + 1];
             packet[0] = (byte)messageType;
