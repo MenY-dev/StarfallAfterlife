@@ -9,6 +9,7 @@ using JObject = System.Text.Json.Nodes.JsonObject;
 using JArray = System.Text.Json.Nodes.JsonArray;
 using JValue = System.Text.Json.Nodes.JsonValue;
 using StarfallAfterlife.Bridge.Networking.Messaging;
+using System.Net.Sockets;
 
 namespace StarfallAfterlife.Bridge.Server
 {
@@ -37,6 +38,20 @@ namespace StarfallAfterlife.Bridge.Server
                     Text = (string)doc["message"];
                 }
             }
+            else if (request.Method == MessagingMethod.BinaryRequest)
+            {
+                var packet = request.Data;
+
+                if (packet.Length > 0)
+                {
+                    Action = (SfaServerAction)packet.Span[0];
+                    Data = packet[1..];
+                }
+                else
+                {
+                    Data = packet;
+                }
+            }
         }
 
         public void SendResponce(JNode responce, SfaServerAction action)
@@ -54,6 +69,12 @@ namespace StarfallAfterlife.Bridge.Server
             };
 
             Client?.SendResponse(this, doc.ToJsonStringUnbuffered(false));
+        }
+
+        public void SendResponce(byte[] responce, SfaServerAction action)
+        {
+            responce ??= Array.Empty<byte>();
+            Client?.SendResponse(this, new byte[] { (byte)action }, responce);
         }
     }
 }

@@ -68,6 +68,18 @@ namespace StarfallAfterlife.Bridge.Server
                 .ContinueWith(t => t.Result as SfaClientResponse);
         }
 
+        public Task<SfaClientResponse> SendRequest(SfaServerAction messageType, ReadOnlyMemory<byte> data, int timeout = -1)
+        {
+            var packet = new byte[data.Length + 1];
+            packet[0] = (byte)messageType;
+
+            return SendRequestInternal(
+                packet,
+                (id, method) => new SfaClientResponse { Id = id, Method = method, Action = messageType })
+                .Wait(timeout)
+                .ContinueWith(t => t.Result as SfaClientResponse);
+        }
+
         protected override void OnReceiveText(string text)
         {
             base.OnReceiveText(text);

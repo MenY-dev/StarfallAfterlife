@@ -347,6 +347,12 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
             SendInternal(header, data);
         }
 
+        public void SendResponse(MessagingRequest request, params ReadOnlyMemory<byte>[] packets)
+        {
+            var header = new MessagingHeader() { RequestId = request.Id, Method = MessagingMethod.BinaryRequest };
+            SendInternal(header, packets);
+        }
+
         public virtual void Send(string text) =>
             SendInternal(new() { Method = MessagingMethod.Text }, text);
 
@@ -401,6 +407,20 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
                 s.Write(bytes.Span);
                 s.Flush();
             }, bytes);
+        }
+
+        protected virtual void SendInternal(MessagingHeader header, params ReadOnlyMemory<byte>[] packets)
+        {
+            UseStream((s, packets) =>
+            {
+                header.Length = packets.Sum(p => p.Length);
+                header.Write(s);
+
+                for (int i = 0; i < packets.Length; i++)
+                    s.Write(packets[i].Span);
+
+                s.Flush();
+            }, packets);
         }
 
         public virtual void UseStream(UseStreamDelegate action)
