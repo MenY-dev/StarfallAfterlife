@@ -340,7 +340,7 @@ namespace StarfallAfterlife.Bridge.Game
                         .Select(e => character.AddCraftingItem(entity))
                         .ToArray();
 
-                    DistributeProductionPoints();
+                    UpdateProductionPointsIncome(false);
 
                     doc["crafting"] = new JsonArray(newCraftings
                         .Select(e => JsonHelpers.ParseNodeUnbuffered(e))
