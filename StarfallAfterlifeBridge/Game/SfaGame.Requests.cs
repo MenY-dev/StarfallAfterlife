@@ -620,5 +620,36 @@ namespace StarfallAfterlife.Bridge.Game
 
             return doc;
         }
+
+        public JsonNode HandleShipDelete(SfaHttpQuery query)
+        {
+            var doc = new JsonObject{ };
+
+            Profile.Use(p =>
+            {
+                if (p.GameProfile.CurrentCharacter is Character character)
+                {
+                    int id = (int?)query["elid"] ?? -1;
+
+                    if (id < character.IndexSpace)
+                        return;
+
+                    var ship = character.GetShip(id - character.IndexSpace);
+
+                    if (ship is null)
+                        return;
+
+                    character.DeleteShip(ship);
+
+                    if (p.Database?.GetShip(ship.Data?.Hull ?? 0) is ShipBlueprint blueprint)
+                        character.IGC = Math.Max(0, character.IGC + (int)Math.Round(blueprint.IGCToProduce * 0.33333333));
+
+                    p.SaveCharacterProgress();
+                    SfaClient?.SyncCharacterCurrencies(character);
+                }
+            });
+
+            return doc;
+        }
     }
 }

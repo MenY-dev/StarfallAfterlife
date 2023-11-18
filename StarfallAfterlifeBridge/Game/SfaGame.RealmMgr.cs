@@ -169,9 +169,7 @@ namespace StarfallAfterlife.Bridge.Game
                         break;
 
                     case "ship.delete":
-                        response = RealmMgrHandler.ReceiveShipDelete(query);
-                        p.SaveGameProfile();
-                        SfaClient?.SyncCharacterCurrencies(Profile?.GameProfile?.CurrentCharacter);
+                        response = HandleShipDelete(query);
                         break;
 
                     case "buy_battle_ground_shop_item":
