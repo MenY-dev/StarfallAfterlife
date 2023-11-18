@@ -83,7 +83,8 @@ namespace StarfallAfterlife.Bridge.Game
                         break;
 
                     case "discovery_charactgetdata":
-                        UpdateProductionPointsIncome(true);
+                        UpdateProductionPointsIncome(false);
+                        UpdateShipsRepairProgress(true);
                         SyncGalaxySessionData();
                         response = new JsonObject
                         {
@@ -158,6 +159,7 @@ namespace StarfallAfterlife.Bridge.Game
                         break;
 
                     case "ship.delete":
+                        UpdateShipsRepairProgress(false);
                         response = HandleShipDelete(query);
                         break;
 
@@ -166,11 +168,16 @@ namespace StarfallAfterlife.Bridge.Game
                         break;
 
                     case "set_session_reward":
+                        UpdateShipsRepairProgress(false);
                         response = HandleConfirmSessionReward(query);
                         break;
 
                     case "take_charact_reward_from_queue":
                         response = HandleTakeCharactRewardFromQueue(query);
+                        break;
+
+                    case "repair_dest_ship":
+                        response = HandleRepairShips(query);
                         break;
 
                     default:

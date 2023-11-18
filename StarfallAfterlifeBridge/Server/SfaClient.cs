@@ -649,6 +649,7 @@ namespace StarfallAfterlife.Bridge.Server
             {
                 if (p.GameProfile?.CurrentCharacter is Character character)
                 {
+                    Game?.UpdateShipsRepairProgress(true);
                     request.SendResponce(
                         character.CreateDiscoveryCharacterDataResponse((byte?)doc["all_ships"] == 1)?.ToJsonString(),
                         SfaServerAction.RequestCharacterDiscoveryData);
@@ -718,7 +719,7 @@ namespace StarfallAfterlife.Bridge.Server
                     if (doc["ships"]?.DeserializeUnbuffered<List<ShipConstructionInfo>>() is List<ShipConstructionInfo> ships)
                     {
                         if (p.GameProfile.CurrentCharacter is Character character &&
-                            character.IndexSpace > 0)
+                            character.IndexSpace > -1)
                         {
                             foreach (var ship in ships)
                                 if (ship is not null)
@@ -734,6 +735,25 @@ namespace StarfallAfterlife.Bridge.Server
                         {
                             DropSession();
                         }
+                    }
+
+                    if (doc["destroyed_ships"]?.DeserializeUnbuffered<List<int>>() is List<int> destroyedShips)
+                    {
+                        if (p.GameProfile.CurrentCharacter is Character character &&
+                            character.IndexSpace > -1 &&
+                            (p.Database ?? SfaDatabase.Instance) is SfaDatabase database)
+                        {
+                            foreach (var id in destroyedShips)
+                            {
+                                if (character.GetShip(id - character.IndexSpace) is FleetShipInfo ship &&
+                                    database.GetShip(ship.Data?.Hull ?? 0) is ShipBlueprint blueprint)
+                                {
+                                    ship.TimeToRepair = blueprint.TimeToRepair;
+                                }
+                            }
+                        }
+
+                        Game?.UpdateShipsRepairProgress(true);
                     }
 
                     session.Save();

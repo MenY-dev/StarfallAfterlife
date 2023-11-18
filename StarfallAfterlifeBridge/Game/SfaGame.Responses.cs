@@ -55,6 +55,8 @@ namespace StarfallAfterlife.Bridge.Game
 
         public JsonNode CreateCharacterResponse(Character character, UserDataFlag flags = UserDataFlag.All)
         {
+            UpdateShipsRepairProgress(true);
+
             var doc = new JsonObject();
 
             if (character is null)

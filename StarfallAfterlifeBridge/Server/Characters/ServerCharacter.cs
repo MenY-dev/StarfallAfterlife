@@ -399,9 +399,10 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                     isShipdDestroyed != 0)
                 {
                     Ships.RemoveAll(s => s.Id == shipId);
+                    DiscoveryClient?.Invoke(k => k.SynckShipDestroyed(shipId));
 
                     if (Ships.Count < 1)
-                        DiscoveryClient?.FinishGalaxySession();
+                        DiscoveryClient?.Invoke(k => k.FinishGalaxySession());
                 }
                 else
                 {

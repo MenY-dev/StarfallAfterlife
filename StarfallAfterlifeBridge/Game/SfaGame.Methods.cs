@@ -136,5 +136,32 @@ namespace StarfallAfterlife.Bridge.Game
 
             return result;
         }
+
+
+        public void UpdateShipsRepairProgress(bool autosave = true)
+        {
+            Profile?.Use(p =>
+            {
+                if (p.GameProfile.CurrentCharacter is Character character)
+                {
+                    var now = DateTime.Now;
+                    var totalSeconds = (int)(now - character.LastShipsRepairTime).TotalSeconds;
+
+                    foreach (var ship in character.Ships ?? new())
+                    {
+                        if (ship is null)
+                            continue;
+
+                        ship.TimeToRepair = Math.Max(0, ship.TimeToRepair - totalSeconds);
+                    }
+
+                    character.LastShipsRepairTime = now;
+
+                    if (autosave == true)
+                        p.SaveGameProfile();
+                }
+            });
+
+        }
     }
 }

@@ -778,5 +778,59 @@ namespace StarfallAfterlife.Bridge.Game
 
             return doc;
         }
+
+        public JsonNode HandleRepairShips(SfaHttpQuery query)
+        {
+            var doc = new JsonObject { ["ok"] = 1 };
+
+            Profile.Use(p =>
+            {
+                if (p.GameProfile.CurrentCharacter is Character character &&
+                    (int?)query["ship_id"] is int id)
+                {
+                    UpdateShipsRepairProgress(false);
+                    var ships = new List<FleetShipInfo>();
+
+                    if (id == -1)
+                    {
+                        if (character.Detachments?[character.CurrentDetachment] is Detachment detachment)
+                        {
+                            foreach (var item in detachment.Slots.Values ?? Array.Empty<int>())
+                            {
+                                if (item > 0 &&
+                                    character.GetShip(item) is FleetShipInfo ship &&
+                                    ship.TimeToRepair > 0)
+                                {
+                                    ships.Add(ship);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (character.GetShip(id - character.IndexSpace) is FleetShipInfo ship)
+                            ships.Add(ship);
+                    }
+
+                    int igcPerMinute = 60;
+                    int totalCost = 0;
+
+                    foreach (var item in ships)
+                    {
+                        if (item is null)
+                            continue;
+
+                        totalCost += (int)Math.Ceiling(item.TimeToRepair / 60f) * igcPerMinute;
+                        item.TimeToRepair = 0;
+                    }
+
+                    character.IGC = Math.Max(0, character.IGC - totalCost);
+                    p.SaveGameProfile();
+                    SfaClient?.SyncCharacterCurrencies(character);
+                }
+            });
+
+            return doc;
+        }
     }
 }

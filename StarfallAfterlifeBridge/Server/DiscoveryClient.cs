@@ -342,6 +342,14 @@ namespace StarfallAfterlife.Bridge.Server
             }, SfaServerAction.SyncGalaxySessionData);
         }
 
+        public void SynckShipDestroyed(params int[] ships)
+        {
+            Client?.Send(new JsonObject
+            {
+                ["destroyed_ships"] = JsonHelpers.ParseNodeUnbuffered(ships)
+            }, SfaServerAction.SyncGalaxySessionData);
+        }
+
         public void AddNewCharacterStats(Dictionary<string, float> stats)
         {
             Client?.Send(

@@ -101,6 +101,9 @@ namespace StarfallAfterlife.Bridge.Profiles
         [JsonPropertyName("bonus_xp_income_minute_elapsed")]
         public int BonusXpIncomeMinuteElapsed { get; set; } = 0;
 
+        [JsonPropertyName("last_ships_repair_time")]
+        public DateTime LastShipsRepairTime { get; set; }
+
         //[JsonPropertyName("has_session_results")]
         [JsonIgnore]
         public bool HasSessionResults { get; set; } = false;
