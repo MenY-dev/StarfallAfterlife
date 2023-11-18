@@ -68,6 +68,7 @@ namespace StarfallAfterlife.Bridge.Game
                         break;
 
                     case "getcharacterdata":
+                        UpdateProductionPointsIncome(false);
                         if (Enum.TryParse((string)query["data_flags"] ?? string.Empty, out UserDataFlag userDataFlags))
                         {
                             SyncGalaxySessionData();
@@ -82,6 +83,7 @@ namespace StarfallAfterlife.Bridge.Game
                         break;
 
                     case "discovery_charactgetdata":
+                        UpdateProductionPointsIncome(true);
                         SyncGalaxySessionData();
                         response = new JsonObject
                         {
