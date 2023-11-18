@@ -613,7 +613,7 @@ namespace StarfallAfterlife.Bridge.Game
                     igcCost += ShipConstructionInfo.CalculateCost(oldShip, newShip);
                     character.IGC = Math.Max(0, character.IGC - igcCost);
 
-                    p.SaveCharacterProgress();
+                    p.SaveGameProfile();
                     SfaClient?.SyncCharacterCurrencies(character);
                 }
             });
@@ -644,7 +644,7 @@ namespace StarfallAfterlife.Bridge.Game
                     if (p.Database?.GetShip(ship.Data?.Hull ?? 0) is ShipBlueprint blueprint)
                         character.IGC = Math.Max(0, character.IGC + (int)Math.Round(blueprint.IGCToProduce * 0.33333333));
 
-                    p.SaveCharacterProgress();
+                    p.SaveGameProfile();
                     SfaClient?.SyncCharacterCurrencies(character);
                 }
             });
