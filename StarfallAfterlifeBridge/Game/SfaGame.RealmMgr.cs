@@ -180,6 +180,10 @@ namespace StarfallAfterlife.Bridge.Game
                         response = HandleRepairShips(query);
                         break;
 
+                    case "rush_crafting_item":
+                        response = HandleRushCraftingItem(query);
+                        break;
+
                     default:
                         break;
                 }

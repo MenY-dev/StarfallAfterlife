@@ -469,7 +469,7 @@ namespace StarfallAfterlife.Bridge.Game
         {
             UpdateProductionPointsIncome();
 
-            var doc = new JsonObject(){ ["ok"] = 1 };
+            var doc = new JsonObject() { ["ok"] = 1 };
 
             if (query is null)
                 return doc;
@@ -494,6 +494,40 @@ namespace StarfallAfterlife.Bridge.Game
             });
 
             return new JsonObject { };
+        }
+
+        public JsonNode HandleRushCraftingItem(SfaHttpQuery query)
+        {
+            UpdateProductionPointsIncome();
+
+            var doc = new JsonObject(){};
+
+            if (query is null)
+                return doc;
+
+            var newItems = new List<InventoryItem>();
+            var newShips = new List<FleetShipInfo>();
+
+            Profile.Use(p =>
+            {
+                if ((int?)query["craftingid"] is int craftingId &&
+                    (int?)query["currencytype"] == 0 &&
+                    p.GameProfile.CurrentCharacter is Character character &&
+                    character.GetCraftingItem(craftingId) is CraftingInfo craftingItem &&
+                    p.Database?.GetItem(craftingItem.ProjectEntity) is SfaItem itemInfo)
+                {
+                    UpdateProductionPointsIncome(false);
+                    var pp = itemInfo.ProductionPoints - craftingItem.ProductionPointsSpent;
+                    var cost = (int)(p.GameProfile.ProductionPointsCost60IGC / 60f * pp);
+                    craftingItem.ProductionPointsSpent = 0;
+                    character.IGC = Math.Max(0, character.IGC - cost);
+                    Profile.SaveGameProfile();
+                    SfaClient?.SyncCharacterCurrencies(character);
+                    doc["ok"] = 1;
+                }
+            });
+
+            return doc;
         }
 
         public JsonNode HandleConfirmSessionReward(SfaHttpQuery query)
