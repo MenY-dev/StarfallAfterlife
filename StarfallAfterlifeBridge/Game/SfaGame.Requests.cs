@@ -519,7 +519,7 @@ namespace StarfallAfterlife.Bridge.Game
                     UpdateProductionPointsIncome(false);
                     var pp = itemInfo.ProductionPoints - craftingItem.ProductionPointsSpent;
                     var cost = (int)(p.GameProfile.ProductionPointsCost60IGC / 60f * pp);
-                    craftingItem.ProductionPointsSpent = 0;
+                    craftingItem.ProductionPointsSpent = itemInfo.ProductionPoints;
                     character.IGC = Math.Max(0, character.IGC - cost);
                     Profile.SaveGameProfile();
                     SfaClient?.SyncCharacterCurrencies(character);
