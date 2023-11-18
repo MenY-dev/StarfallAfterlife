@@ -5,7 +5,6 @@ using StarfallAfterlife.Bridge.Environment;
 using StarfallAfterlife.Bridge.Instances;
 using StarfallAfterlife.Bridge.Networking;
 using StarfallAfterlife.Bridge.Networking.Channels;
-using StarfallAfterlife.Bridge.Networking.MgrHandlers;
 using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Server;
 using System;
@@ -70,8 +69,6 @@ namespace StarfallAfterlife.Bridge.Game
             //GameProfile.CurrentCharacter.Database = Realm.Database;
 
             GameProfile.Database = Profile.Database;
-
-            RealmMgrHandler = new RealmMgrHandler(GameProfile);
 
             SfMgrChannelManager.Start(new Uri("tcp://127.0.0.1:0"));
             Print($"SfmgrChannelManager Started! ({SfMgrChannelManager.Address})");

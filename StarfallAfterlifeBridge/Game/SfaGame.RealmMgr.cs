@@ -2,7 +2,6 @@
 using StarfallAfterlife.Bridge.Server;
 using StarfallAfterlife.Bridge.Networking;
 using StarfallAfterlife.Bridge.Networking.Channels;
-using StarfallAfterlife.Bridge.Networking.MgrHandlers;
 using StarfallAfterlife.Bridge.Profiles;
 using System;
 using System.Collections.Generic;
@@ -43,8 +42,6 @@ namespace StarfallAfterlife.Bridge.Game
         protected MgrServer RealmMgrServer { get; set; }
 
         protected GameChannelManager RealmMgrChannelManager { get; set; }
-
-        protected RealmMgrHandler RealmMgrHandler { get; set; }
 
         protected virtual void RealmInput(HttpListenerContext context, SfaHttpQuery query)
         {
@@ -97,18 +94,15 @@ namespace StarfallAfterlife.Bridge.Game
                         break;
 
                     case "menucurrentdetachment":
-                        response = RealmMgrHandler.ReceiveMenuCurrentDetachment(query);
-                        p.SaveGameProfile();
+                        response = HandleMenuCurrentDetachment(query);
                         break;
 
                     case "detachmentsave":
-                        response = RealmMgrHandler.ReceiveDetachmentSave(query);
-                        p.SaveGameProfile();
+                        response = HandleDetachmentSave(query);
                         break;
 
                     case "detachmentabilitysave":
-                        response = RealmMgrHandler.ReceiveDetachmentAbilitySave(query);
-                        p.SaveGameProfile();
+                        response = HandleDetachmentAbilitySave(query);
                         break;
 
                     case "galaxymapload":
@@ -131,13 +125,10 @@ namespace StarfallAfterlife.Bridge.Game
 
                     case "ship.save":
                         response = HandleSaveShip(query);
-                        p.SaveGameProfile();
-                        SfaClient?.SyncCharacterCurrencies(Profile?.GameProfile?.CurrentCharacter);
                         break;
 
                     case "favorite_ship":
-                        response = RealmMgrHandler.ReceiveFavoriteShip(query);
-                        p.SaveGameProfile();
+                        response = HandleFavoriteShip(query);
                         break;
 
                     case "disassemble_items":
@@ -150,22 +141,18 @@ namespace StarfallAfterlife.Bridge.Game
 
                     case "startcrafting":
                         response = HandleStartCrafting(query);
-                        p.SaveGameProfile();
                         break;
 
                     case "acquirecrafteditem":
                         response = HandleAcquireCraftedItem(query);
-                        p.SaveGameProfile();
                         break;
 
                     case "acquireallcrafteditems":
                         response = HandleAcquireAllCraftedItems(query);
-                        p.SaveGameProfile();
                         break;
 
                     case "swap_in_queue":
                         response = HandleSwapCraftingQueue(query);
-                        p.SaveGameProfile();
                         break;
 
                     case "ship.delete":
@@ -173,19 +160,15 @@ namespace StarfallAfterlife.Bridge.Game
                         break;
 
                     case "buy_battle_ground_shop_item":
-                        response = RealmMgrHandler.ReceiveBuyBattleGroundShopItem(query);
-                        p.SaveGameProfile();
-                        SfaClient?.SyncCharacterCurrencies(Profile?.GameProfile?.CurrentCharacter);
+                        response = HandleBuyBattleGroundShopItem(query);
                         break;
 
                     case "set_session_reward":
                         response = HandleConfirmSessionReward(query);
-                        p.SaveGameProfile();
                         break;
 
                     case "take_charact_reward_from_queue":
                         response = HandleTakeCharactRewardFromQueue(query);
-                        p.SaveGameProfile();
                         break;
 
                     default:

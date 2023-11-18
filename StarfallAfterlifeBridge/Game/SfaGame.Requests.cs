@@ -109,7 +109,7 @@ namespace StarfallAfterlife.Bridge.Game
 
         protected JsonNode HandleDisassembleItems(SfaHttpQuery query)
         {
-            var doc = new JsonObject();
+            var doc = new JsonObject(){ ["ok"] = 1 };
 
             if (query is null)
                 return doc;
@@ -255,7 +255,7 @@ namespace StarfallAfterlife.Bridge.Game
         {
             UpdateProductionPointsIncome();
 
-            var doc = new JsonObject();
+            var doc = new JsonObject(){ ["ok"] = 1 };
 
             if (query is null)
                 return doc;
@@ -308,7 +308,7 @@ namespace StarfallAfterlife.Bridge.Game
         {
             UpdateProductionPointsIncome();
 
-            var doc = new JsonObject();
+            var doc = new JsonObject(){ ["ok"] = 1 };
 
             if (query is null)
                 return doc;
@@ -361,7 +361,7 @@ namespace StarfallAfterlife.Bridge.Game
         {
             UpdateProductionPointsIncome();
 
-            var doc = new JsonObject();
+            var doc = new JsonObject(){ ["ok"] = 1 };
 
             if (query is null)
                 return doc;
@@ -408,7 +408,7 @@ namespace StarfallAfterlife.Bridge.Game
         {
             UpdateProductionPointsIncome();
 
-            var doc = new JsonObject();
+            var doc = new JsonObject(){ ["ok"] = 1 };
 
             if (query is null)
                 return doc;
@@ -469,7 +469,7 @@ namespace StarfallAfterlife.Bridge.Game
         {
             UpdateProductionPointsIncome();
 
-            var doc = new JsonObject();
+            var doc = new JsonObject(){ ["ok"] = 1 };
 
             if (query is null)
                 return doc;
@@ -498,7 +498,7 @@ namespace StarfallAfterlife.Bridge.Game
 
         public JsonNode HandleConfirmSessionReward(SfaHttpQuery query)
         {
-            var doc = new JsonObject();
+            var doc = new JsonObject(){ ["ok"] = 1 };
 
             Profile.Use(p =>
             {
@@ -517,13 +517,14 @@ namespace StarfallAfterlife.Bridge.Game
 
         public JsonNode HandleTakeCharactRewardFromQueue(SfaHttpQuery query)
         {
-            var doc = new JsonObject();
+            var doc = new JsonObject(){ ["ok"] = 1 };
 
             Profile.Use(p =>
             {
                 if (p.GameProfile.CurrentCharacter is Character character)
                 {
                     SfaClient?.TakeCharactRewardFromQueue(character.UniqueId, (int?)query["reward_id"] ?? -1);
+                    p.SaveGameProfile();
                 }
             });
 
@@ -532,7 +533,7 @@ namespace StarfallAfterlife.Bridge.Game
 
         public JsonNode HandleSaveShip(SfaHttpQuery query)
         {
-            var doc = new JsonObject{ };
+            var doc = new JsonObject{ ["ok"] = 1 };
             JsonNode request = JsonHelpers.ParseNodeUnbuffered((string)query["data"]);
 
             Profile.Use(p =>
@@ -623,7 +624,7 @@ namespace StarfallAfterlife.Bridge.Game
 
         public JsonNode HandleShipDelete(SfaHttpQuery query)
         {
-            var doc = new JsonObject{ };
+            var doc = new JsonObject{ ["ok"] = 1 };
 
             Profile.Use(p =>
             {
@@ -646,6 +647,132 @@ namespace StarfallAfterlife.Bridge.Game
 
                     p.SaveGameProfile();
                     SfaClient?.SyncCharacterCurrencies(character);
+                }
+            });
+
+            return doc;
+        }
+
+        public JsonNode HandleFavoriteShip(SfaHttpQuery query)
+        {
+            var doc = new JsonObject{ ["ok"] = 1 };
+
+            Profile.Use(p =>
+            {
+                if (p.GameProfile.CurrentCharacter is Character character)
+                {
+                    int id = (int?)query["ship_id"] ?? -1;
+
+                    if (id < character.IndexSpace)
+                        return;
+
+                    var ship = character.GetShip(id - character.IndexSpace);
+
+                    if (ship is null)
+                        return;
+
+                    ship.IsFavorite = (int?)query["is_favorite"] == 1 ? 1 : 0;
+                    p.SaveGameProfile();
+                }
+            });
+
+            return doc;
+        }
+
+        public JsonNode HandleBuyBattleGroundShopItem(SfaHttpQuery query)
+        {
+            var doc = new JsonObject{ ["ok"] = 1 };
+
+            Profile.Use(p =>
+            {
+                if (p.GameProfile.CurrentCharacter is Character character)
+                {
+                    int id = (int?)query["item_id"] ?? -1;
+
+                    if (p.Database?.GetItem(id) is SfaItem item)
+                    {
+                        character.AddInventoryItem(item, 1);
+                        character.BGC = Math.Max(0, character.BGC - item.BGC);
+                        p.SaveGameProfile();
+                        SfaClient?.SyncCharacterCurrencies(character);
+                    }
+                }
+            });
+
+            return doc;
+        }
+
+        public JsonNode HandleDetachmentAbilitySave(SfaHttpQuery query)
+        {
+            var doc = new JsonObject { ["ok"] = 1 };
+
+            Profile.Use(p =>
+            {
+                if (p.GameProfile.CurrentCharacter is Character character)
+                {
+                    int id = (int?)query["detachmentid"] ?? -1;
+                    DetachmentAbilities abilities = character.Detachments?[id]?.Abilities;
+
+                    if (abilities is null)
+                        return;
+
+                    abilities.Clear();
+
+                    foreach (var item in query.StartsWith("cell", true, StringComparison.InvariantCultureIgnoreCase))
+                        if (int.TryParse(item.Key, out int cell))
+                            abilities[cell] = (int?)item ?? -1;
+
+                    p.SaveGameProfile();
+                }
+            });
+
+            return doc;
+        }
+
+        public JsonNode HandleDetachmentSave(SfaHttpQuery query)
+        {
+            var doc = new JsonObject { ["ok"] = 1 };
+
+            Profile.Use(p =>
+            {
+                if (p.GameProfile.CurrentCharacter is Character character)
+                {
+                    int id = (int?)query["detachmentid"] ?? -1;
+                    Detachment detachment = character.Detachments?[id];
+
+                    if (detachment is null)
+                        return;
+
+                    detachment.Slots.Clear();
+
+                    foreach (var item in query.StartsWith("slot", true, StringComparison.InvariantCultureIgnoreCase))
+                        if (int.TryParse(item.Key, out int slotNumber))
+                            detachment.Slots[slotNumber] = ((int?)item ?? -1) - character.IndexSpace;
+
+                    p.SaveGameProfile();
+                }
+            });
+
+            return doc;
+        }
+
+        public JsonNode HandleMenuCurrentDetachment(SfaHttpQuery query)
+        {
+            var doc = new JsonObject { ["ok"] = 1 };
+
+            Profile.Use(p =>
+            {
+                if (p.GameProfile.CurrentCharacter is Character character)
+                {
+
+                    int id = (int?)query["detachmentid"] ?? -1;
+                    Detachment detachment = character.Detachments?[id];
+
+                    if (detachment is null)
+                        return;
+
+                    character.CurrentDetachment = id;
+                    p.SaveGameProfile();
                 }
             });
 
