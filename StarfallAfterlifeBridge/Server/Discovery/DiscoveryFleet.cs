@@ -338,20 +338,29 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
         public virtual bool IsVisible(DiscoveryFleet target)
         {
-            if (target is null ||
-                target == this ||
-                target.System != System ||
-                target.Stealth == true)
-                return false;
-
-            if (target.IsInNebula() == true &&
-                IsInNebula() == false)
+            if (MayBeVisible(target) == false)
                 return false;
 
             var vision = (GetCurrentVision() + target.AgroVision);
             var distance = Hex.GetDistanceTo(target.Hex);
 
             return distance < vision;
+        }
+
+        public virtual bool MayBeVisible(DiscoveryFleet target)
+        {
+            if (target is null ||
+                target == this ||
+                target.System != System ||
+                target.Stealth == true ||
+                target.DockObjectType != DiscoveryObjectType.None)
+                return false;
+
+            if (target.IsInNebula() == true &&
+                IsInNebula() == false)
+                return false;
+
+            return true;
         }
 
         public virtual bool CanAttack(DiscoveryFleet target)
