@@ -39,7 +39,8 @@ namespace StarfallAfterlife.Bridge.Server.Discovery.AI
             if (Fleet is null || Target is null ||
                 (AttackDuration != default && TotalTime > AttackDuration) ||
                 (TargetLostDistance > 0 && Fleet.Hex.GetDistanceTo(Target.Hex) > TargetLostDistance) ||
-                (Target is DiscoveryFleet targetFleet && Fleet.CanAttack(targetFleet) == false))
+                (Target is DiscoveryFleet targetFleet &&
+                (Fleet.CanAttack(targetFleet) == false || Fleet.MayBeVisible(targetFleet) == false)))
             {
                 State = AIActionState.Failed;
                 Fleet.Stop();
