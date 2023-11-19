@@ -516,7 +516,6 @@ namespace StarfallAfterlife.Bridge.Server
                 });
         }
 
-
         public void SendConnectToInstance(string address, int port, string auth)
         {
             if (address is null || auth is null || port < 0 || port > ushort.MaxValue)
@@ -576,6 +575,32 @@ namespace StarfallAfterlife.Bridge.Server
                 writer =>
                 {
                     writer.WriteShortString(notification.Text ?? string.Empty, -1, true, Encoding.UTF8); // Id
+
+                    writer.WriteUInt16((ushort)format.Count);
+
+                    foreach (var item in format.Keys)
+                        writer.WriteShortString(item ?? string.Empty, -1, true, Encoding.UTF8); // FormatTag
+
+                    writer.WriteUInt16((ushort)format.Count);
+
+                    foreach (var item in format.Values)
+                        writer.WriteShortString(item ?? string.Empty, -1, true, Encoding.UTF8); // FormatValue
+                });
+        }
+
+
+        public void SendShowAiMessage(DiscoveryObjectType senderType, int senderId, string msg, Dictionary<string, string> format = null)
+        {
+            format ??= new Dictionary<string, string>();
+
+            SendDiscoveryMessage(
+                CurrentCharacter?.Fleet,
+                DiscoveryServerAction.ShowAiMessage,
+                writer =>
+                {
+                    writer.WriteShortString(msg ?? string.Empty, -1, true, Encoding.UTF8); // msg
+                    writer.WriteByte((byte)senderType); // SenderType
+                    writer.WriteInt32(senderId); // SenderId
 
                     writer.WriteUInt16((ushort)format.Count);
 

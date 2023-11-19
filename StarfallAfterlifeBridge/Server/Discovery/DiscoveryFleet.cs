@@ -89,10 +89,14 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
         public virtual void SetAttackTarget(StarSystemObject target)
         {
             if (target is DiscoveryFleet fleet)
+            {
                 SetTargetFleet(fleet);
+                Broadcast<IFleetListener>(l => l.OnFleetAttackTarget(this, target));
+            }
             else if (target is PiratesStation or PiratesOutpost)
             {
                 AttackTarget = target;
+                Broadcast<IFleetListener>(l => l.OnFleetAttackTarget(this, target));
             }
             else if (target is not null)
                 MoveTo(target.Location);

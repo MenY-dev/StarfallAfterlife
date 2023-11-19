@@ -69,6 +69,15 @@ namespace StarfallAfterlife.Bridge.Server
 
         void IFleetListener.OnFleetSharedVisionChanged(DiscoveryFleet fleet) => Invoke(() => SyncSharedVision(fleet));
 
+        public void OnFleetAttackTarget(DiscoveryFleet fleet, StarSystemObject target) => Invoke(c =>
+        {
+            if (fleet is DiscoveryAiFleet aiFleet &&
+                target is UserFleet userFleet)
+            {
+                c.SendShowAiMessage(aiFleet.Type, aiFleet.Id, "ai_attack_userfleet");
+            }
+        });
+
         void IObjectStorageListener.OnObjectStorageAdded(DiscoveryObject obj, ObjectStorage storage) => Invoke(() =>
         {
 
