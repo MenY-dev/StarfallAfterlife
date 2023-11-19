@@ -160,7 +160,24 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                         };
 
                         fleet.SetLocation(SystemHexMap.HexToSystemPoint(mob.SpawnHex), true);
-                        fleet.SetAI(new PatrollingAI());
+                        fleet.SetAI(fleet.Faction switch
+                        {
+                            Faction.Deprived or
+                            Faction.Eclipse or 
+                            Faction.Vanguard or
+                            Faction.Screechers or
+                            Faction.Nebulords or
+                            Faction.Pyramid
+                                => new PatrollingAI(),
+
+                            Faction.Scientists
+                                => new ScientistAI(),
+
+                            Faction.MineworkerUnion
+                                => new MinersAI(),
+
+                            _ => new NeutralFleetAI(),
+                        });
 
                         AddFleet(fleet);
                     }
