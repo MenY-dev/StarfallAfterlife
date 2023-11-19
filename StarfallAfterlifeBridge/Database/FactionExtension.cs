@@ -8,8 +8,13 @@ namespace StarfallAfterlife.Bridge.Database
 {
     public static class FactionExtension
     {
-        public static bool IsEnemy(this Faction firstFaction, Faction secondFaction)
+        public static bool IsEnemy(this Faction firstFaction, Faction secondFaction, bool makeMainFactionsEnemies = true)
         {
+            if (makeMainFactionsEnemies == false &&
+                firstFaction.IsMainFaction() == true &&
+                secondFaction.IsMainFaction() == true)
+                return false;
+
             if ((byte)firstFaction < (byte)Faction.Noxophytes &&
                 (byte)secondFaction < (byte)Faction.Noxophytes)
                 return firstFaction != secondFaction;

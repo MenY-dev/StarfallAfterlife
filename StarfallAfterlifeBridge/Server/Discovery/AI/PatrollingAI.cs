@@ -42,7 +42,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery.AI
                 var enemies = fleet.System?.Fleets.Where(f =>
                     f != fleet &&
                     f.State == FleetState.InGalaxy &&
-                    f.Faction.IsEnemy(faction) &&
+                    f.Faction.IsEnemy(faction, false) &&
                     fleet.CanAttack(f) &&
                     fleet.GetBattle() is null &&
                     fleet.IsVisible(f));
