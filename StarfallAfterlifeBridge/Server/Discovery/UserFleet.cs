@@ -29,6 +29,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             if (State == FleetState.InGalaxy &&
                 Immortal == false &&
                 Stealth == false &&
+                DockObjectType == DiscoveryObjectType.None &&
                 System.GetBattle(Hex) is StarSystemBattle battle &&
                 battle.IsFinished == false &&
                 battle.GetMember(this) is null)
