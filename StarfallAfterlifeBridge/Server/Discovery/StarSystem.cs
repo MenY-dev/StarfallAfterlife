@@ -1,6 +1,7 @@
 ﻿using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Mathematics;
 using StarfallAfterlife.Bridge.Realms;
+using StarfallAfterlife.Bridge.Server.Discovery.AI;
 using StarfallAfterlife.Bridge.Server.Galaxy;
 using System;
 using System.Collections;
@@ -159,7 +160,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                         };
 
                         fleet.SetLocation(SystemHexMap.HexToSystemPoint(mob.SpawnHex), true);
-                        fleet.SetAI(new MobAI());
+                        fleet.SetAI(new PatrollingAI());
 
                         AddFleet(fleet);
                     }

@@ -1,15 +1,14 @@
 ﻿using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Mathematics;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StarfallAfterlife.Bridge.Server.Discovery
+namespace StarfallAfterlife.Bridge.Server.Discovery.AI
 {
-    public class MobAI : FleetAI
+    public class PatrollingAI : FleetAI
     {
         public float WaitingTime { get; set; } = 3;
 
@@ -21,20 +20,12 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
         public int TargetLostDistance { get; set; } = 5;
 
-        public DateTime WaitingStartTime { get; protected set; }
-
-        public DateTime AttackStartTime { get; protected set; }
-
         public DateTime AttackEndTime { get; protected set; }
-
-        public bool IsInWaiting { get; protected set; } = false;
 
         private readonly Random _rnd = new();
 
         public override void Update()
         {
-            base.Update();
-
             var fleet = Fleet;
 
             if (IsConnected == false ||
@@ -61,7 +52,10 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                 {
                     if (enemies.FirstOrDefault(e => _rnd.NextSingle() < AttackChance) is DiscoveryFleet enemy)
                     {
-                        Attack(enemy);
+                        StartAction(new AttackAction(
+                            enemy,
+                            TimeSpan.FromSeconds(AttackTime),
+                            TargetLostDistance));
                     }
                     else
                     {
@@ -69,58 +63,33 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                     }
                 }
             }
-            else if(fleet.Hex.GetDistanceTo(targetFleet.Hex) >= TargetLostDistance ||
-                    fleet.CanAttack(targetFleet) == false ||
-                    fleet.GetBattle() is not null ||
-                    (time - AttackStartTime).TotalSeconds > AttackTime)
-            {
-                AttackEndTime = time;
-                MoveTo(CreateRandowWaypoint());
-            }
 
             targetFleet = fleet.AttackTarget as DiscoveryFleet;
 
-            if (targetFleet is null)
+            if (targetFleet is null &&
+                CurrentAction is null or not { State: AIActionState.Started })
             {
-                if (IsInWaiting == true)
+                StartAction(new AIActionQueue
                 {
-                    if ((time - WaitingStartTime).TotalSeconds > WaitingTime)
-                        MoveTo(CreateRandowWaypoint());
-                }
-                else if (fleet.IsTargetLocationReached)
-                {
-                    Wait();
-                }
+                    CompletionHandling = QueueCompletionHandling.All,
+                    Name = "patrolling",
+                    Queue =
+                    {
+                        new MoveToPointAction(CreateRandowWaypoint()),
+                        new WaitAction(TimeSpan.FromSeconds(WaitingTime))
+                    }
+                });
             }
+
+            base.Update();
         }
 
-        public virtual void Wait()
+        protected override void OnActionFinished(AIAction action)
         {
-            if (Fleet is DiscoveryFleet fleet)
-            {
-                IsInWaiting = true;
-                WaitingStartTime = DateTime.Now;
-                fleet?.Stop();
-            }
-        }
+            base.OnActionFinished(action);
 
-        public virtual void MoveTo(Vector2 location)
-        {
-            if (Fleet is DiscoveryFleet fleet)
-            {
-                IsInWaiting = false;
-                fleet?.MoveTo(location);
-            }
-
-        }
-
-        public virtual void Attack(DiscoveryFleet target)
-        {
-            if (Fleet is DiscoveryFleet fleet)
-            {
-                AttackStartTime = DateTime.Now;
-                fleet.SetAttackTarget(target);
-            }
+            if (action is AttackAction)
+                AttackEndTime = DateTime.Now;
         }
 
         protected Vector2 CreateRandowWaypoint()
