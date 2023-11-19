@@ -643,6 +643,7 @@ namespace StarfallAfterlife.Bridge.Server
             {
                 fleet.DockObjectId = -1;
                 fleet.DockObjectType = DiscoveryObjectType.None;
+                fleet.AddEffect(new() { Logic = GameplayEffectType.Immortal, Duration = 5 });
                 Invoke(() => SyncFleetData(fleet));
             });
         }
