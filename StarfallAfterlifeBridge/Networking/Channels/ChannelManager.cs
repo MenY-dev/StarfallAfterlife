@@ -161,7 +161,8 @@ namespace StarfallAfterlife.Bridge.Networking.Channels
         {
             client?.Use((reader, writer) =>
             {
-                var channel = client?.GetChannelByName(request.ChannelName);
+                var channel = client?.GetChannelByName(request.ChannelName) ??
+                              client?.GetChannelById(request.ChannelId);
                 channel?.Register(client);
                 SfaDebug.Print(
                     $"HandleChannelRegister (Name = {request.ChannelName}, Id = {channel?.Id}, Succes = {channel is not null})",

@@ -39,7 +39,7 @@ namespace StarfallAfterlife.Bridge.Networking.Channels
         {
             lock(ChannelsLocker)
             {
-                if (Channels.Any(c => c.Name == request.ChannelName) == false)
+                if (Channels.Any(c => c.Name == request.ChannelName || c.Id == request.ChannelId) == false)
                 {
                     var id = Enumerable.Range(1, Count + 2).FirstOrDefault(i => this[i] is null);
                     var newChannel = new ChatChannel(request.ChannelName, id, Game);

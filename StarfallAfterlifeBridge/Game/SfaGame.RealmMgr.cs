@@ -67,6 +67,14 @@ namespace StarfallAfterlife.Bridge.Game
                         };
                         break;
 
+                    case "chatmgr":
+                        response = new JsonObject
+                        {
+                            ["ip"] = SValue.Create(RealmMgrChannelManager.Address.Host),
+                            ["port"] = SValue.Create(RealmMgrChannelManager.Address.Port.ToString()),
+                        };
+                        break;
+
                     case "getcharacterdata":
                         UpdateProductionPointsIncome(false);
                         if (Enum.TryParse((string)query["data_flags"] ?? string.Empty, out UserDataFlag userDataFlags))

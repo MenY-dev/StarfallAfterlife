@@ -57,6 +57,14 @@ namespace StarfallAfterlife.Bridge.Game
                         //SfaClient?.SyncCharacterSelectAsync(Profile?.CurrentCharacter).Wait();
                         break;
 
+                    case "chatmgr":
+                        response = new JsonObject
+                        {
+                            ["ip"] = SValue.Create(SfMgrChannelManager.Address.Host),
+                            ["port"] = SValue.Create(SfMgrChannelManager.Address.Port.ToString()),
+                        };
+                        break;
+
                     case "getrealms":
                         response = GameProfile.CreateRealmsResponse();
                         break;
