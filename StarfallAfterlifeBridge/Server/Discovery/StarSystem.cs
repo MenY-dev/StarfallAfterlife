@@ -176,6 +176,9 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                             Faction.MineworkerUnion
                                 => new MinersAI(),
 
+                            Faction.FreeTraders
+                                => new TradersAI(),
+
                             _ => new NeutralFleetAI(),
                         });
 
