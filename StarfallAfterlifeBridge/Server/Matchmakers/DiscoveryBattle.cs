@@ -405,9 +405,11 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                     env.StarType = systemInfo.Type;
                     env.EnviropmentEffects = new()
                     {
-                        //"star_flashes",
-                        //"plasma_storm",
+                        "star_flashes",
                     };
+
+                    if (new Random().Next(0, 10) == 0)
+                        env.EnviropmentEffects.Add("plasma_storm");
                 }
 
                 if (battle.IsDungeon == false)
@@ -422,6 +424,10 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
                         foreach (var item in battle.RichAsteroidField?.CurrentOres ?? new())
                             env.AsteroidsContent[item.Key] = item.Value;
+                    }
+                    else if(rnd.Next(0, 10) == 0)
+                    {
+                        env.EnviropmentEffects.Add("plasma_storm");
                     }
                 }
             }
