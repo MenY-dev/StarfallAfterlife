@@ -9,6 +9,8 @@ namespace StarfallAfterlife.Bridge.Server.Discovery.AI
 {
     public class NeutralFleetAI : FleetAI
     {
+        public float WaitingTime { get; set; } = 3;
+
         public override void Update()
         {
             if (IsConnected == false)
@@ -16,7 +18,16 @@ namespace StarfallAfterlife.Bridge.Server.Discovery.AI
 
             if (CurrentAction is null or not { State: AIActionState.Started })
             {
-                StartAction(new MoveToPointAction(CreateRandowWaypoint()));
+                StartAction(new AIActionQueue
+                {
+                    CompletionHandling = QueueCompletionHandling.All,
+                    Name = "move_and_wait",
+                    Queue =
+                    {
+                        new MoveToPointAction(CreateRandowWaypoint()),
+                        new WaitAction(TimeSpan.FromSeconds(WaitingTime))
+                    }
+                });
             }
 
             base.Update();
