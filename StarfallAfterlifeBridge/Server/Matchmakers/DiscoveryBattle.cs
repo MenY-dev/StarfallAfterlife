@@ -657,6 +657,44 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         protected virtual List<TileInfo> CreateLocationTiles()
         {
+            var rnd = new Random();
+
+            if (rnd.NextSingle() < 0.2f &&
+                SystemBattle is not null and { IsDungeon: false, HasAsteroids: false } &&
+                Characters?.Any(c => c?.Member?.Role == BattleRole.Defense) == true)
+            {
+                if (rnd.Next(0, 2) == 0)
+                {
+                    return new()
+                    {
+                        new()
+                        {
+                            Name = "BP_TG_AutonomousRepairStation",
+                            Remove = 0,
+                            Priority = 200,
+                            NumMin = 1,
+                            NumMax = 1,
+                            Params = new(),
+                        },
+                    };
+                }
+                else
+                {
+                    return new()
+                    {
+                        new()
+                        {
+                            Name = "BP_TG_AutonomObservationStation",
+                            Remove = 0,
+                            Priority = 200,
+                            NumMin = 1,
+                            NumMax = 1,
+                            Params = new(),
+                        },
+                    };
+                }
+            }
+
             return null;
         }
 
