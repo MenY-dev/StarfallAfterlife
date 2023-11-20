@@ -65,6 +65,21 @@ namespace StarfallAfterlife.Bridge.Instances
             }
         }
 
+        protected override void HandleClientDisconnect(InstanceManagerServerClient client)
+        {
+            lock (InstancesLockher)
+            {
+                try
+                {
+                    foreach (var instance in client.GetInstancesSnapshot())
+                        instance.Stop();
+                }
+                catch { }
+            }
+            
+            base.HandleClientDisconnect(client);
+        }
+
         protected virtual void Init()
         {
             InstancesDirectory = Path.Combine(WorkingDirectory, "Instances");
@@ -79,5 +94,6 @@ namespace StarfallAfterlife.Bridge.Instances
         {
             return Guid.NewGuid().ToString("N");
         }
+
     }
 }

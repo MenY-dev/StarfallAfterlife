@@ -366,6 +366,14 @@ namespace StarfallAfterlife.Bridge.Instances
                 return Instances.Values.FirstOrDefault(i => i.InstanceId == id);
         }
 
+        public SfaInstance[] GetInstancesSnapshot()
+        {
+            lock (Lockher)
+            {
+                return Instances?.Values.ToArray() ?? Array.Empty<SfaInstance>();
+            }
+        }
+
         protected SfaInstance GetInstanceWithSyncKey(string syncKey)
         {
             lock (Lockher)
