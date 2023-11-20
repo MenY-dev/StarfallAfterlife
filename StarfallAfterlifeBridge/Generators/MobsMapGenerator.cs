@@ -73,25 +73,8 @@ namespace StarfallAfterlife.Bridge.Generators
             var rnd = new Random(system.Id);
             var influenceInfo = InfluenceMap.GetValueOrDefault(system.Id, new(Faction.None, -1, 0));
 
-            var minCount = influenceInfo.Influence switch
-            {
-                > 3 => 3,
-                3 => 2,
-                2 => 2,
-                1 => 1,
-                _ => 0
-            };
-
-            var maxCount = influenceInfo.Influence switch
-            {
-                > 3 => 6,
-                3 => 5,
-                2 => 3,
-                1 => 2,
-                _ => 0
-            };
-
-            var mobsCount = minCount + (rnd.Next() % (maxCount - minCount + 1));
+            var countRange = GetMobsCount(influenceInfo);
+            var mobsCount = countRange.Min + (rnd.Next() % (countRange.Max - countRange.Min + 1));
             var totalCount = 0;
 
             for (int n = 0; n < mobsCount; n++)
@@ -221,6 +204,49 @@ namespace StarfallAfterlife.Bridge.Generators
 
                 map.AddMob(fleet);
             }
+        }
+
+        protected (int Min, int Max) GetMobsCount(InfluenceInfo influence)
+        {
+            if (influence.Faction.IsMainFaction() == true)
+            {
+                return new(4, 4);
+            }
+
+            if (influence.Faction.IsPirates() == true)
+            {
+                return new(influence.Influence switch
+                {
+                    > 3 => 3,
+                    3 => 2,
+                    2 => 2,
+                    1 => 1,
+                    _ => 0
+                }, influence.Influence switch
+                {
+                    > 3 => 6,
+                    3 => 5,
+                    2 => 3,
+                    1 => 2,
+                    _ => 0
+                });
+            }
+
+            return new(influence.Influence switch
+            {
+                > 3 => 4,
+                3 => 3,
+                2 => 2,
+                1 => 1,
+                _ => 0
+            }, influence.Influence switch
+            {
+                > 3 => 8,
+                3 => 6,
+                2 => 4,
+                1 => 2,
+                _ => 0
+            });
         }
 
         public IEnumerable<DiscoveryMobInfo> GetMobsForCircle(int circle)
