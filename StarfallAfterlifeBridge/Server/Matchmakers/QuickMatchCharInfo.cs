@@ -30,7 +30,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 Auth = Guid.NewGuid().ToString(),
                 Faction = character.Faction,
                 Team = 0,
-                Role = 1,
+                Role = DiscoveryPlayerInstanceStatus.Initiate,
                 Features = new()
                 {
                     DropRules = new()
