@@ -87,7 +87,7 @@ namespace StarfallAfterlife.Bridge.Generators
                         deltaLvl /= -3;
 
                     if ((rnd.Next() % (deltaLvl + 1)) != 0 ||
-                        mob.Faction != influenceInfo.Faction)
+                        IsHabitationPossible(influenceInfo, mob.Faction) == false)
                         continue;
 
                     var variantCount = 1 + rnd.Next() % 4;
@@ -204,6 +204,19 @@ namespace StarfallAfterlife.Bridge.Generators
 
                 map.AddMob(fleet);
             }
+        }
+
+        protected bool IsHabitationPossible(InfluenceInfo influence, Faction mobFaction)
+        {
+            if (influence.Faction is Faction.NeutralPlanets &&
+                mobFaction is (
+                Faction.FreeTraders or
+                Faction.MineworkerUnion or
+                Faction.Scientists or
+                Faction.NeutralPlanets))
+                return true;
+
+            return influence.Faction == mobFaction;
         }
 
         protected (int Min, int Max) GetMobsCount(InfluenceInfo influence)
