@@ -23,6 +23,7 @@ namespace StarfallAfterlife.Bridge.Instances
         public float DistanceFactor { get; set; } = 1;
         public int DistanceFromCenter { get; set; } = 0;
         public int SectorLockSeconds { get; set; } = 0;
+        public string Biome { get; set; }
         public int FloatingAsteroidsCount { get; set; } = 0;
         public int RichAsteroidsId { get; set; } = -1;
         public int RichAsteroidsType { get; set; } = 0;
@@ -48,6 +49,9 @@ namespace StarfallAfterlife.Bridge.Instances
             doc["sector_lock_seconds"] = SectorLockSeconds;
             doc["env_effects"] = EnviropmentEffects?.Select(e => new JsonObject { ["type"] = e }).ToJsonArray();
             doc["floating_asteroids_count"] = FloatingAsteroidsCount;
+
+            if (string.IsNullOrWhiteSpace(Biome) == false)
+                doc["biome"] = Biome;
 
             if (RichAsteroidsId != -1)
             {
@@ -81,6 +85,7 @@ namespace StarfallAfterlife.Bridge.Instances
             HasNebula = (bool?)doc["has_nebula"] ?? false;
             DistanceFactor = (float?)doc["distance_factor"] ?? 1;
             DistanceFromCenter = (int?)doc["distance_from_center"] ?? 0;
+            Biome = (string)doc["biome"];
             SectorLockSeconds = (int?)doc["sector_lock_seconds"] ?? 0;
             FloatingAsteroidsCount = (int?)doc["floating_asteroids_count"] ?? 0;
             RichAsteroidsId = (int?)doc["rich_asteroids_id"] ?? 0;
