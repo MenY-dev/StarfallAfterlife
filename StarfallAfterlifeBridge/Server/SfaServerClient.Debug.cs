@@ -41,10 +41,11 @@ namespace StarfallAfterlife.Bridge.Server
 
                     foreach (var system in Map.GetSystemsArround(currentSystem.Id, exploreRadius).Select(i => i.Key))
                     {
+                        var systemObjects = system.GetAllObjects().ToList();
+                        newObjects.AddRange(systemObjects);
                         newSystems.Add(system.Id);
-                        newObjects.AddRange(system.GetAllObjects());
 
-                        foreach (var item in newObjects)
+                        foreach (var item in systemObjects)
                         {
                             progress.AddObject(item.ObjectType, item.Id);
 
