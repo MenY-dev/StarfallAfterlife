@@ -22,10 +22,16 @@
     <None Update="Database\DefaultMap.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Database\Mobs\academics_669925461.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Database\Mobs\Admiral_1711683567.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Database\Mobs\anatomists_566249309.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\arkonitelions_2000825973.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Database\Mobs\armadillolvl7_1203068101.json">
@@ -40,7 +46,13 @@
     <None Update="Database\Mobs\assaulter_1795462247.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Database\Mobs\asteriologists_1188405010.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Database\Mobs\astrochemists_954849372.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\astrogeologists_1715880138.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Database\Mobs\bashers_1883006417.json">
@@ -50,6 +62,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Database\Mobs\bogeys_1190752055.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\brokers_749073785.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Database\Mobs\carvers_1009454367.json">
@@ -73,10 +88,16 @@
     <None Update="Database\Mobs\cloudbringer_1979546240.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Database\Mobs\collectors_1969321668.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Database\Mobs\conquererlvl4_1150844473.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Database\Mobs\conqueror_2064214117.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\consultants_2109211619.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Database\Mobs\corsairs_117777790.json">
@@ -85,10 +106,16 @@
     <None Update="Database\Mobs\cosmographers_1576770784.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Database\Mobs\couriers_449493256.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Database\Mobs\coyotes_1663159383.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Database\Mobs\crushers_859407919.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\cryologists_389734639.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Database\Mobs\Cuirassiers_119458282.json">
@@ -109,7 +136,16 @@
     <None Update="Database\Mobs\Doctor_1722727265.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Database\Mobs\dpatrol_683020775.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Database\Mobs\dragoons_240764413.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\entrepreneurs_390046621.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\epatrol_1746930848.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Database\Mobs\equites_1972565185.json">
@@ -119,6 +155,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Database\Mobs\executors_566942341.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\explorers_1531005587.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Database\Mobs\exterminator_734014006.json">
@@ -137,6 +176,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Database\Mobs\freaks_1359358682.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\geologists_1157440666.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Database\Mobs\greenterror_45353984.json">
@@ -187,6 +229,9 @@
     <None Update="Database\Mobs\instigators_1847179348.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Database\Mobs\interns_2134381004.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Database\Mobs\ionizer_1727833577.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -223,16 +268,31 @@
     <None Update="Database\Mobs\madman_1083823508.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Database\Mobs\maklers_455022992.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Database\Mobs\manowrath_901535008.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\marketeers_41472681.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Database\Mobs\masters_1630972608.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Database\Mobs\mathematicians_263650354.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Database\Mobs\Meritocrats_333348730.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Database\Mobs\meteorologists_562180450.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Database\Mobs\miners_fleets_2066900355.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\miningfleet_1408836259.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Database\Mobs\mommylvl6_134182426.json">
@@ -259,6 +319,9 @@
     <None Update="Database\Mobs\Optometrist_699167047.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Database\Mobs\peddlers_1876891539.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Database\Mobs\peltasts_428751996.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -266,6 +329,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Database\Mobs\phantom_1601964416.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\physicists_2121138849.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Database\Mobs\plaguebearer_1146539627.json">
@@ -310,10 +376,16 @@
     <None Update="Database\Mobs\researchers_872146472.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Database\Mobs\resellers_1869685040.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Database\Mobs\retailers_1744257986.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Database\Mobs\rhoamphibians_1428551764.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\rhobadgers_236580839.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Database\Mobs\rhosharks_277862176.json">
@@ -409,6 +481,12 @@
     <None Update="Database\Mobs\screechers_fleets_1739828992.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Database\Mobs\seekers_1508680543.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\sellers_1267401451.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Database\Mobs\shieldmaidenlvl6_730478207.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -457,7 +535,16 @@
     <None Update="Database\Mobs\timelord_404756844.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Database\Mobs\traders_1383047802.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Database\Mobs\vanquishers_163029742.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\vendors_178785322.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\vpatrol_506049257.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Database\Mobs\welderlvl6_858069537.json">
