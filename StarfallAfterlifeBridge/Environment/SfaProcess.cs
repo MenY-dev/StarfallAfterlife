@@ -96,6 +96,18 @@ namespace StarfallAfterlife.Bridge.Environment
         {
             SfaDebug.Print($"Process Exited ({(sender as Process)?.Id})", GetType().Name);
             Exited?.Invoke(this, EventArgs.Empty);
+
+#if !INSTANCES_DEBUG
+            try
+            {
+                if (Listen == true && Sandbox?.WorkingDirectory is string workingDirectory &&
+                    Directory.Exists(workingDirectory) == true)
+                {
+                    Directory.Delete(workingDirectory, true);
+                }
+            }
+            catch { }
+#endif
         }
 
         protected virtual string BuildArguments()
