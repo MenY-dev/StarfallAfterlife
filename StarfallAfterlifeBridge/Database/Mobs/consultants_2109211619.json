@@ -1,0 +1,796 @@
+{
+	"Id": 2109211619,
+	"InternalName": "consultants",
+	"Faction": 17,
+	"Level": 63,
+	"VisionRadius": 3,
+	"Speed": 0.7,
+	"BehaviorTreeName": "",
+	"MainShipIndex": 0,
+	"Tags": [],
+	"Ships": [
+		{
+			"Data": {
+	"hull": 1804880538,
+	"ship_skin": 2052479883,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 1280464671,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 1307159283,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontLasers",
+			"eqlist": [
+				{
+					"eq": 19675715,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 19675715,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "LeftLeftLaser",
+			"eqlist": [
+				{
+					"eq": 19675715,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightRightLasers",
+			"eqlist": [
+				{
+					"eq": 19675715,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "LeftBackLasers",
+			"eqlist": [
+				{
+					"eq": 19675715,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightBackLasers",
+			"eqlist": [
+				{
+					"eq": 19675715,
+					"x": 0,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 25000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 238770095,
+	"ship_skin": 1135589232,
+	"hplist": [
+		{
+			"hp": "LeftEngine",
+			"eqlist": [
+				{
+					"eq": 6723219,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightEngine",
+			"eqlist": [
+				{
+					"eq": 6723219,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontCannons",
+			"eqlist": [
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightCannons",
+			"eqlist": [
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "LeftCannons",
+			"eqlist": [
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 1177626061,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 1177626061,
+					"x": 1,
+					"y": 0
+				},
+				{
+					"eq": 204921710,
+					"x": 1,
+					"y": 1
+				},
+				{
+					"eq": 1177626061,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay2",
+			"eqlist": [
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay3",
+			"eqlist": [
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 10000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 238770095,
+	"ship_skin": 1135589232,
+	"hplist": [
+		{
+			"hp": "LeftEngine",
+			"eqlist": [
+				{
+					"eq": 6723219,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightEngine",
+			"eqlist": [
+				{
+					"eq": 6723219,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontCannons",
+			"eqlist": [
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightCannons",
+			"eqlist": [
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "LeftCannons",
+			"eqlist": [
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 1177626061,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 1177626061,
+					"x": 1,
+					"y": 0
+				},
+				{
+					"eq": 204921710,
+					"x": 1,
+					"y": 1
+				},
+				{
+					"eq": 1177626061,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay2",
+			"eqlist": [
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay3",
+			"eqlist": [
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 10000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 238770095,
+	"ship_skin": 1135589232,
+	"hplist": [
+		{
+			"hp": "LeftEngine",
+			"eqlist": [
+				{
+					"eq": 6723219,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightEngine",
+			"eqlist": [
+				{
+					"eq": 6723219,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontCannons",
+			"eqlist": [
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightCannons",
+			"eqlist": [
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "LeftCannons",
+			"eqlist": [
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 1177626061,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 1177626061,
+					"x": 1,
+					"y": 0
+				},
+				{
+					"eq": 204921710,
+					"x": 1,
+					"y": 1
+				},
+				{
+					"eq": 1177626061,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay2",
+			"eqlist": [
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay3",
+			"eqlist": [
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 10000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 238770095,
+	"ship_skin": 1135589232,
+	"hplist": [
+		{
+			"hp": "LeftEngine",
+			"eqlist": [
+				{
+					"eq": 6723219,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightEngine",
+			"eqlist": [
+				{
+					"eq": 6723219,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontCannons",
+			"eqlist": [
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightCannons",
+			"eqlist": [
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "LeftCannons",
+			"eqlist": [
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 1177626061,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 1177626061,
+					"x": 1,
+					"y": 0
+				},
+				{
+					"eq": 204921710,
+					"x": 1,
+					"y": 1
+				},
+				{
+					"eq": 1177626061,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay2",
+			"eqlist": [
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay3",
+			"eqlist": [
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 10000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 238770095,
+	"ship_skin": 1135589232,
+	"hplist": [
+		{
+			"hp": "LeftEngine",
+			"eqlist": [
+				{
+					"eq": 6723219,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightEngine",
+			"eqlist": [
+				{
+					"eq": 6723219,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontCannons",
+			"eqlist": [
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightCannons",
+			"eqlist": [
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "LeftCannons",
+			"eqlist": [
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 538134357,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 1177626061,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 1177626061,
+					"x": 1,
+					"y": 0
+				},
+				{
+					"eq": 204921710,
+					"x": 1,
+					"y": 1
+				},
+				{
+					"eq": 1177626061,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay2",
+			"eqlist": [
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay3",
+			"eqlist": [
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 10000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		}
+	]
+}

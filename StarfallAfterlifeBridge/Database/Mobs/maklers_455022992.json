@@ -1,0 +1,321 @@
+{
+	"Id": 455022992,
+	"InternalName": "maklers",
+	"Faction": 17,
+	"Level": 1,
+	"VisionRadius": 3,
+	"Speed": 0.7,
+	"BehaviorTreeName": "",
+	"MainShipIndex": 0,
+	"Tags": [],
+	"Ships": [
+		{
+			"Data": {
+	"hull": 238770095,
+	"ship_skin": 1135589232,
+	"hplist": [
+		{
+			"hp": "LeftEngine",
+			"eqlist": []
+		},
+		{
+			"hp": "RightEngine",
+			"eqlist": []
+		},
+		{
+			"hp": "FrontCannons",
+			"eqlist": [
+				{
+					"eq": 1676064211,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightCannons",
+			"eqlist": [
+				{
+					"eq": 1676064211,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "LeftCannons",
+			"eqlist": [
+				{
+					"eq": 1676064211,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 1439388296,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay2",
+			"eqlist": [
+				{
+					"eq": 1778316309,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 838934763,
+					"x": 1,
+					"y": 1
+				},
+				{
+					"eq": 232644897,
+					"x": 0,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay3",
+			"eqlist": [
+				{
+					"eq": 1778316309,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 232644897,
+					"x": 1,
+					"y": 1
+				},
+				{
+					"eq": 838934763,
+					"x": 0,
+					"y": 1
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 5000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 166767082,
+	"ship_skin": 1668909019,
+	"hplist": [
+		{
+			"hp": "FrontLeftLasers",
+			"eqlist": [
+				{
+					"eq": 689207276,
+					"x": 0,
+					"y": 2
+				},
+				{
+					"eq": 689207276,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontRightLasers",
+			"eqlist": [
+				{
+					"eq": 689207276,
+					"x": 0,
+					"y": 2
+				},
+				{
+					"eq": 689207276,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightRockets",
+			"eqlist": [
+				{
+					"eq": 1954187423,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "LeftRockets",
+			"eqlist": [
+				{
+					"eq": 1954187423,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightEngine",
+			"eqlist": []
+		},
+		{
+			"hp": "LeftEngine",
+			"eqlist": []
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 1307159283,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 232644897,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 232644897,
+					"x": 2,
+					"y": 2
+				},
+				{
+					"eq": 232644897,
+					"x": 2,
+					"y": 1
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 5000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 166767082,
+	"ship_skin": 1668909019,
+	"hplist": [
+		{
+			"hp": "FrontLeftLasers",
+			"eqlist": [
+				{
+					"eq": 689207276,
+					"x": 0,
+					"y": 2
+				},
+				{
+					"eq": 689207276,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "FrontRightLasers",
+			"eqlist": [
+				{
+					"eq": 689207276,
+					"x": 0,
+					"y": 2
+				},
+				{
+					"eq": 689207276,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightRockets",
+			"eqlist": [
+				{
+					"eq": 1954187423,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "LeftRockets",
+			"eqlist": [
+				{
+					"eq": 1954187423,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightEngine",
+			"eqlist": []
+		},
+		{
+			"hp": "LeftEngine",
+			"eqlist": []
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 1307159283,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 232644897,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 232644897,
+					"x": 2,
+					"y": 2
+				},
+				{
+					"eq": 232644897,
+					"x": 2,
+					"y": 1
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 5000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		}
+	]
+}

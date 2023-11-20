@@ -1,0 +1,327 @@
+{
+	"Id": 1157440666,
+	"InternalName": "geologists",
+	"Faction": 16,
+	"Level": 15,
+	"VisionRadius": 3,
+	"Speed": 0.7,
+	"BehaviorTreeName": "/Game/gameplay/ai/fleets/BT_Fleet_Miners.BT_Fleet_Miners",
+	"MainShipIndex": 0,
+	"Tags": [],
+	"Ships": [
+		{
+			"Data": {
+	"hull": 2098067955,
+	"ship_skin": 1773310973,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": []
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 1439388296,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1177626061,
+					"x": 2,
+					"y": 1
+				},
+				{
+					"eq": 204921710,
+					"x": 0,
+					"y": 2
+				},
+				{
+					"eq": 1177626061,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 204921710,
+					"x": 1,
+					"y": 2
+				},
+				{
+					"eq": 1177626061,
+					"x": 2,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "Beams",
+			"eqlist": [
+				{
+					"eq": 400586024,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 400586024,
+					"x": 0,
+					"y": 2
+				},
+				{
+					"eq": 400586024,
+					"x": 0,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "Beams2",
+			"eqlist": [
+				{
+					"eq": 400586024,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 400586024,
+					"x": 0,
+					"y": 2
+				},
+				{
+					"eq": 400586024,
+					"x": 0,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "Beams3",
+			"eqlist": [
+				{
+					"eq": 346913887,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Beams4",
+			"eqlist": [
+				{
+					"eq": 346913887,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": []
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 7500,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 2098067955,
+	"ship_skin": 1773310973,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": []
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 1439388296,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1177626061,
+					"x": 2,
+					"y": 1
+				},
+				{
+					"eq": 204921710,
+					"x": 0,
+					"y": 2
+				},
+				{
+					"eq": 1177626061,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 204921710,
+					"x": 1,
+					"y": 2
+				},
+				{
+					"eq": 1177626061,
+					"x": 2,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "Beams",
+			"eqlist": [
+				{
+					"eq": 400586024,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 400586024,
+					"x": 0,
+					"y": 2
+				},
+				{
+					"eq": 400586024,
+					"x": 0,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "Beams2",
+			"eqlist": [
+				{
+					"eq": 400586024,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 400586024,
+					"x": 0,
+					"y": 2
+				},
+				{
+					"eq": 400586024,
+					"x": 0,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "Beams3",
+			"eqlist": [
+				{
+					"eq": 346913887,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "Beams4",
+			"eqlist": [
+				{
+					"eq": 346913887,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": []
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 7500,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 1483576455,
+	"ship_skin": 284145981,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": []
+		},
+		{
+			"hp": "SingleTurretHardpoint",
+			"eqlist": [
+				{
+					"eq": 1297130320,
+					"x": 0,
+					"y": 2
+				},
+				{
+					"eq": 1297130320,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 1297130320,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "SingleTurretHardpoint1",
+			"eqlist": [
+				{
+					"eq": 1450128192,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1778316309,
+					"x": 0,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "Hardpoint",
+			"eqlist": [
+				{
+					"eq": 1439388296,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1999524338,
+					"x": 2,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 5000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		}
+	]
+}

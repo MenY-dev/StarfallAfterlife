@@ -1,0 +1,593 @@
+{
+	"Id": 1876891539,
+	"InternalName": "peddlers",
+	"Faction": 17,
+	"Level": 35,
+	"VisionRadius": 3,
+	"Speed": 0.7,
+	"BehaviorTreeName": "",
+	"MainShipIndex": 0,
+	"Tags": [],
+	"Ships": [
+		{
+			"Data": {
+	"hull": 1577246823,
+	"ship_skin": 386543528,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": []
+		},
+		{
+			"hp": "SingleTurretHardpoint",
+			"eqlist": [
+				{
+					"eq": 1205273854,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1205273854,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 1205273854,
+					"x": 1,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "SingleTurretHardpoint1",
+			"eqlist": [
+				{
+					"eq": 1205273854,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1205273854,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 1205273854,
+					"x": 1,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "SingleTurretHardpoint2",
+			"eqlist": [
+				{
+					"eq": 1205273854,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1205273854,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 1205273854,
+					"x": 1,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 2003110376,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 168180536,
+					"x": 0,
+					"y": 2
+				},
+				{
+					"eq": 1310481104,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 838934763,
+					"x": 2,
+					"y": 2
+				},
+				{
+					"eq": 1446036470,
+					"x": 2,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": []
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 10000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 1577246823,
+	"ship_skin": 386543528,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": []
+		},
+		{
+			"hp": "SingleTurretHardpoint",
+			"eqlist": [
+				{
+					"eq": 1205273854,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1205273854,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 1205273854,
+					"x": 1,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "SingleTurretHardpoint1",
+			"eqlist": [
+				{
+					"eq": 1205273854,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1205273854,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 1205273854,
+					"x": 1,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "SingleTurretHardpoint2",
+			"eqlist": [
+				{
+					"eq": 1205273854,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1205273854,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 1205273854,
+					"x": 1,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 2003110376,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 168180536,
+					"x": 0,
+					"y": 2
+				},
+				{
+					"eq": 1310481104,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 838934763,
+					"x": 2,
+					"y": 2
+				},
+				{
+					"eq": 1446036470,
+					"x": 2,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": []
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 10000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 1577246823,
+	"ship_skin": 386543528,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": []
+		},
+		{
+			"hp": "SingleTurretHardpoint",
+			"eqlist": [
+				{
+					"eq": 1205273854,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1205273854,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 1205273854,
+					"x": 1,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "SingleTurretHardpoint1",
+			"eqlist": [
+				{
+					"eq": 1205273854,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1205273854,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 1205273854,
+					"x": 1,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "SingleTurretHardpoint2",
+			"eqlist": [
+				{
+					"eq": 1205273854,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1205273854,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 1205273854,
+					"x": 1,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 2003110376,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 168180536,
+					"x": 0,
+					"y": 2
+				},
+				{
+					"eq": 1310481104,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 838934763,
+					"x": 2,
+					"y": 2
+				},
+				{
+					"eq": 1446036470,
+					"x": 2,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": []
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 10000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 1577246823,
+	"ship_skin": 386543528,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": []
+		},
+		{
+			"hp": "SingleTurretHardpoint",
+			"eqlist": [
+				{
+					"eq": 1205273854,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1205273854,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 1205273854,
+					"x": 1,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "SingleTurretHardpoint1",
+			"eqlist": [
+				{
+					"eq": 1205273854,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1205273854,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 1205273854,
+					"x": 1,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "SingleTurretHardpoint2",
+			"eqlist": [
+				{
+					"eq": 1205273854,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1205273854,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 1205273854,
+					"x": 1,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 2003110376,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 168180536,
+					"x": 0,
+					"y": 2
+				},
+				{
+					"eq": 1310481104,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 838934763,
+					"x": 2,
+					"y": 2
+				},
+				{
+					"eq": 1446036470,
+					"x": 2,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": []
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 10000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 1577246823,
+	"ship_skin": 386543528,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": []
+		},
+		{
+			"hp": "SingleTurretHardpoint",
+			"eqlist": [
+				{
+					"eq": 1205273854,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1205273854,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 1205273854,
+					"x": 1,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "SingleTurretHardpoint1",
+			"eqlist": [
+				{
+					"eq": 1205273854,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1205273854,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 1205273854,
+					"x": 1,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "SingleTurretHardpoint2",
+			"eqlist": [
+				{
+					"eq": 1205273854,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1205273854,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 1205273854,
+					"x": 1,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 2003110376,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 168180536,
+					"x": 0,
+					"y": 2
+				},
+				{
+					"eq": 1310481104,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 838934763,
+					"x": 2,
+					"y": 2
+				},
+				{
+					"eq": 1446036470,
+					"x": 2,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "EngineHardpoint1",
+			"eqlist": []
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 10000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		}
+	]
+}

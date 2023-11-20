@@ -1,0 +1,148 @@
+{
+	"Id": 389734639,
+	"InternalName": "cryologists",
+	"Faction": 20,
+	"Level": 39,
+	"VisionRadius": 3,
+	"Speed": 0.7,
+	"BehaviorTreeName": "",
+	"MainShipIndex": 0,
+	"Tags": [],
+	"Ships": [
+		{
+			"Data": {
+	"hull": 428758516,
+	"ship_skin": 780867071,
+	"skin_color_1": 1167644390,
+	"skin_color_2": 1167644390,
+	"skin_color_3": 44692976,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": []
+		},
+		{
+			"hp": "LeftBattary",
+			"eqlist": [
+				{
+					"eq": 505851063,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 505851063,
+					"x": 2,
+					"y": 1
+				},
+				{
+					"eq": 505851063,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 505851063,
+					"x": 0,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "RightBattary",
+			"eqlist": [
+				{
+					"eq": 505851063,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 505851063,
+					"x": 2,
+					"y": 1
+				},
+				{
+					"eq": 505851063,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 505851063,
+					"x": 0,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "Engineering Bay",
+			"eqlist": [
+				{
+					"eq": 2110970783,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1177626061,
+					"x": 3,
+					"y": 0
+				},
+				{
+					"eq": 1177626061,
+					"x": 3,
+					"y": 1
+				}
+			]
+		},
+		{
+			"hp": "FrontBeams",
+			"eqlist": [
+				{
+					"eq": 1771942144,
+					"x": 4,
+					"y": 0
+				},
+				{
+					"eq": 1771942144,
+					"x": 2,
+					"y": 0
+				},
+				{
+					"eq": 1771942144,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RocketsLeft",
+			"eqlist": [
+				{
+					"eq": 1537473151,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RocketsRight",
+			"eqlist": [
+				{
+					"eq": 1537473151,
+					"x": 0,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 45000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		}
+	]
+}

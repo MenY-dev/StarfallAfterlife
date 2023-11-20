@@ -1,0 +1,623 @@
+{
+	"Id": 390046621,
+	"InternalName": "entrepreneurs",
+	"Faction": 17,
+	"Level": 76,
+	"VisionRadius": 3,
+	"Speed": 0.7,
+	"BehaviorTreeName": "",
+	"MainShipIndex": 0,
+	"Tags": [],
+	"Ships": [
+		{
+			"Data": {
+	"hull": 2143737538,
+	"ship_skin": 777508403,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": [
+				{
+					"eq": 1881686706,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RocketsHardpoint",
+			"eqlist": [
+				{
+					"eq": 973807583,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 1529026193,
+					"x": 0,
+					"y": 2
+				},
+				{
+					"eq": 1847665367,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 1847665367,
+					"x": 1,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay2",
+			"eqlist": [
+				{
+					"eq": 1724954193,
+					"x": 1,
+					"y": 0
+				},
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 3
+				},
+				{
+					"eq": 1724954193,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 2
+				}
+			]
+		},
+		{
+			"hp": "RocketsHardpoint1",
+			"eqlist": [
+				{
+					"eq": 1269581801,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RocketsHardpoint2",
+			"eqlist": [
+				{
+					"eq": 1269581801,
+					"x": 0,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 30000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 1218069133,
+	"ship_skin": 284145981,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": []
+		},
+		{
+			"hp": "SingleTurretHardpoint",
+			"eqlist": [
+				{
+					"eq": 1700230732,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "SingleTurretHardpoint1",
+			"eqlist": [
+				{
+					"eq": 1897477367,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 396456366,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 204921710,
+					"x": 3,
+					"y": 1
+				},
+				{
+					"eq": 1640790496,
+					"x": 3,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "MultiTurretHardpoint",
+			"eqlist": [
+				{
+					"eq": 1352322475,
+					"x": 0,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 20000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 1218069133,
+	"ship_skin": 284145981,
+	"hplist": [
+		{
+			"hp": "EngineHardpoint",
+			"eqlist": []
+		},
+		{
+			"hp": "SingleTurretHardpoint",
+			"eqlist": [
+				{
+					"eq": 1700230732,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "SingleTurretHardpoint1",
+			"eqlist": [
+				{
+					"eq": 1897477367,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 396456366,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"eq": 204921710,
+					"x": 3,
+					"y": 1
+				},
+				{
+					"eq": 1640790496,
+					"x": 3,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "MultiTurretHardpoint",
+			"eqlist": [
+				{
+					"eq": 1352322475,
+					"x": 0,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 20000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 238770095,
+	"ship_skin": 1135589232,
+	"hplist": [
+		{
+			"hp": "LeftEngine",
+			"eqlist": []
+		},
+		{
+			"hp": "RightEngine",
+			"eqlist": []
+		},
+		{
+			"hp": "FrontCannons",
+			"eqlist": [
+				{
+					"eq": 2110308239,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 2110308239,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightCannons",
+			"eqlist": [
+				{
+					"eq": 2110308239,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 2110308239,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "LeftCannons",
+			"eqlist": [
+				{
+					"eq": 2110308239,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 2110308239,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 1177626061,
+					"x": 1,
+					"y": 0
+				},
+				{
+					"eq": 1177626061,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay2",
+			"eqlist": [
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay3",
+			"eqlist": [
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 15000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 238770095,
+	"ship_skin": 1135589232,
+	"hplist": [
+		{
+			"hp": "LeftEngine",
+			"eqlist": []
+		},
+		{
+			"hp": "RightEngine",
+			"eqlist": []
+		},
+		{
+			"hp": "FrontCannons",
+			"eqlist": [
+				{
+					"eq": 2110308239,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 2110308239,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightCannons",
+			"eqlist": [
+				{
+					"eq": 2110308239,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 2110308239,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "LeftCannons",
+			"eqlist": [
+				{
+					"eq": 2110308239,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 2110308239,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 1177626061,
+					"x": 1,
+					"y": 0
+				},
+				{
+					"eq": 1177626061,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay2",
+			"eqlist": [
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay3",
+			"eqlist": [
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 15000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		},
+		{
+			"Data": {
+	"hull": 238770095,
+	"ship_skin": 1135589232,
+	"hplist": [
+		{
+			"hp": "LeftEngine",
+			"eqlist": []
+		},
+		{
+			"hp": "RightEngine",
+			"eqlist": []
+		},
+		{
+			"hp": "FrontCannons",
+			"eqlist": [
+				{
+					"eq": 2110308239,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 2110308239,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "RightCannons",
+			"eqlist": [
+				{
+					"eq": 2110308239,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 2110308239,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "LeftCannons",
+			"eqlist": [
+				{
+					"eq": 2110308239,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 2110308239,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay",
+			"eqlist": [
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 1177626061,
+					"x": 1,
+					"y": 0
+				},
+				{
+					"eq": 1177626061,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay2",
+			"eqlist": [
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 0
+				}
+			]
+		},
+		{
+			"hp": "EngineeringBay3",
+			"eqlist": [
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"eq": 140457349,
+					"x": 0,
+					"y": 0
+				}
+			]
+		}
+	]
+},
+			"ServiceData":
+			{
+				"xp": 15000,
+				"fleet_min": -1,
+				"fleet_max": -1,
+				"drop_state": true,
+				"role": 0,
+				"bt": "",
+				"tags": []
+			}
+		}
+	]
+}
