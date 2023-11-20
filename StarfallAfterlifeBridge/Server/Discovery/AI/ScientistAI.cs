@@ -44,7 +44,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery.AI
             {
                 var target = objects[rnd.Next(0, objects.Length)];
                 var hexes = target.Hex.GetRingEnumerator(1).Where(h => h.GetSize() < 17).ToArray();
-                waypoint = hexes[rnd.Next(0, objects.Length)];
+                waypoint = hexes[rnd.Next(0, hexes.Length)];
             }
             else
             {
