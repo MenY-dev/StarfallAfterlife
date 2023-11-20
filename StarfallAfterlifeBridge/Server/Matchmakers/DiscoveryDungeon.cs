@@ -68,7 +68,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
                 if (systemObject is SecretObject secret)
                 {
-                    data.AsteroidIntensity = 0.999f;
+                    data.AsteroidIntensity = 0.9f;
                 }
             }
 
