@@ -1,724 +1,1562 @@
 {
-	"Id": 2134381004,
-	"InternalName": "interns",
-	"Faction": 20,
-	"Level": 95,
-	"VisionRadius": 3,
-	"Speed": 0.7,
-	"BehaviorTreeName": "",
-	"MainShipIndex": 0,
-	"Tags": [],
-	"Ships": [
-		{
-			"Data": {
-	"hull": 428758516,
-	"ship_skin": 1951413229,
-	"skin_color_1": 587895096,
-	"skin_color_2": 587895096,
-	"skin_color_3": 44692976,
-	"hplist": [
-		{
-			"hp": "EngineHardpoint",
-			"eqlist": []
-		},
-		{
-			"hp": "LeftBattary",
-			"eqlist": [
-				{
-					"eq": 974781291,
-					"x": 0,
-					"y": 1
-				},
-				{
-					"eq": 974781291,
-					"x": 0,
-					"y": 0
-				},
-				{
-					"eq": 204921710,
-					"x": 3,
-					"y": 1
-				},
-				{
-					"eq": 204921710,
-					"x": 3,
-					"y": 0
-				}
-			]
-		},
-		{
-			"hp": "RightBattary",
-			"eqlist": [
-				{
-					"eq": 974781291,
-					"x": 1,
-					"y": 1
-				},
-				{
-					"eq": 974781291,
-					"x": 1,
-					"y": 0
-				},
-				{
-					"eq": 204921710,
-					"x": 0,
-					"y": 1
-				},
-				{
-					"eq": 204921710,
-					"x": 0,
-					"y": 0
-				}
-			]
-		},
-		{
-			"hp": "Engineering Bay",
-			"eqlist": [
-				{
-					"eq": 1724954193,
-					"x": 3,
-					"y": 0
-				},
-				{
-					"eq": 1847665367,
-					"x": 0,
-					"y": 0
-				},
-				{
-					"eq": 1456543784,
-					"x": 1,
-					"y": 0
-				},
-				{
-					"eq": 204921710,
-					"x": 2,
-					"y": 1
-				},
-				{
-					"eq": 204921710,
-					"x": 2,
-					"y": 0
-				}
-			]
-		},
-		{
-			"hp": "FrontBeams",
-			"eqlist": [
-				{
-					"eq": 45901046,
-					"x": 1,
-					"y": 1
-				},
-				{
-					"eq": 45901046,
-					"x": 2,
-					"y": 0
-				},
-				{
-					"eq": 45901046,
-					"x": 5,
-					"y": 0
-				},
-				{
-					"eq": 45901046,
-					"x": 1,
-					"y": 0
-				},
-				{
-					"eq": 45901046,
-					"x": 4,
-					"y": 0
-				},
-				{
-					"eq": 45901046,
-					"x": 3,
-					"y": 0
-				},
-				{
-					"eq": 45901046,
-					"x": 0,
-					"y": 1
-				},
-				{
-					"eq": 45901046,
-					"x": 0,
-					"y": 0
-				},
-				{
-					"eq": 45901046,
-					"x": 2,
-					"y": 1
-				},
-				{
-					"eq": 45901046,
-					"x": 3,
-					"y": 1
-				},
-				{
-					"eq": 45901046,
-					"x": 4,
-					"y": 1
-				},
-				{
-					"eq": 45901046,
-					"x": 5,
-					"y": 1
-				}
-			]
-		},
-		{
-			"hp": "RocketsLeft",
-			"eqlist": [
-				{
-					"eq": 1537473151,
-					"x": 0,
-					"y": 0
-				}
-			]
-		},
-		{
-			"hp": "RocketsRight",
-			"eqlist": [
-				{
-					"eq": 1537473151,
-					"x": 0,
-					"y": 0
-				}
-			]
-		}
-	]
-},
-			"ServiceData":
-			{
-				"xp": 50000,
-				"fleet_min": -1,
-				"fleet_max": -1,
-				"drop_state": true,
-				"role": 0,
-				"bt": "",
-				"tags": []
-			}
-		},
-		{
-			"Data": {
-	"hull": 1711433439,
-	"ship_skin": 1951413229,
-	"skin_color_1": 1167644390,
-	"skin_color_2": 1167644390,
-	"skin_color_3": 267899015,
-	"hplist": [
-		{
-			"hp": "EngineHardpoint",
-			"eqlist": []
-		},
-		{
-			"hp": "LeftBattary",
-			"eqlist": [
-				{
-					"eq": 1342891864,
-					"x": 0,
-					"y": 0
-				},
-				{
-					"eq": 1342891864,
-					"x": 1,
-					"y": 1
-				},
-				{
-					"eq": 1342891864,
-					"x": 2,
-					"y": 0
-				},
-				{
-					"eq": 1342891864,
-					"x": 2,
-					"y": 1
-				},
-				{
-					"eq": 1342891864,
-					"x": 1,
-					"y": 0
-				},
-				{
-					"eq": 1342891864,
-					"x": 0,
-					"y": 1
-				}
-			]
-		},
-		{
-			"hp": "RightBattary",
-			"eqlist": [
-				{
-					"eq": 1342891864,
-					"x": 0,
-					"y": 0
-				},
-				{
-					"eq": 1342891864,
-					"x": 1,
-					"y": 1
-				},
-				{
-					"eq": 1342891864,
-					"x": 2,
-					"y": 0
-				},
-				{
-					"eq": 1342891864,
-					"x": 2,
-					"y": 1
-				},
-				{
-					"eq": 1342891864,
-					"x": 1,
-					"y": 0
-				},
-				{
-					"eq": 1342891864,
-					"x": 0,
-					"y": 1
-				}
-			]
-		},
-		{
-			"hp": "Engineering Bay",
-			"eqlist": [
-				{
-					"eq": 522212149,
-					"x": 0,
-					"y": 0
-				},
-				{
-					"eq": 70194464,
-					"x": 3,
-					"y": 0
-				},
-				{
-					"eq": 1446036470,
-					"x": 4,
-					"y": 2
-				},
-				{
-					"eq": 1310481104,
-					"x": 0,
-					"y": 2
-				},
-				{
-					"eq": 1310481104,
-					"x": 2,
-					"y": 2
-				},
-				{
-					"eq": 1310481104,
-					"x": 1,
-					"y": 2
-				},
-				{
-					"eq": 1446036470,
-					"x": 5,
-					"y": 2
-				},
-				{
-					"eq": 1446036470,
-					"x": 3,
-					"y": 2
-				}
-			]
-		},
-		{
-			"hp": "FrontBeams",
-			"eqlist": [
-				{
-					"eq": 1114781227,
-					"x": 2,
-					"y": 0
-				},
-				{
-					"eq": 1114781227,
-					"x": 1,
-					"y": 1
-				},
-				{
-					"eq": 1114781227,
-					"x": 1,
-					"y": 0
-				},
-				{
-					"eq": 1114781227,
-					"x": 2,
-					"y": 1
-				},
-				{
-					"eq": 1114781227,
-					"x": 3,
-					"y": 0
-				},
-				{
-					"eq": 1114781227,
-					"x": 3,
-					"y": 1
-				},
-				{
-					"eq": 1114781227,
-					"x": 0,
-					"y": 0
-				},
-				{
-					"eq": 1114781227,
-					"x": 0,
-					"y": 1
-				}
-			]
-		}
-	]
-},
-			"ServiceData":
-			{
-				"xp": 50000,
-				"fleet_min": -1,
-				"fleet_max": -1,
-				"drop_state": true,
-				"role": 0,
-				"bt": "",
-				"tags": []
-			}
-		},
-		{
-			"Data": {
-	"hull": 1212373964,
-	"ship_skin": 1951413229,
-	"skin_color_1": 1167644390,
-	"skin_color_2": 1167644390,
-	"skin_color_3": 239675540,
-	"hplist": [
-		{
-			"hp": "EngineHardpoint",
-			"eqlist": [
-				{
-					"eq": 1461734848,
-					"x": 0,
-					"y": 0
-				}
-			]
-		},
-		{
-			"hp": "LeftBattary",
-			"eqlist": [
-				{
-					"eq": 1376667570,
-					"x": 0,
-					"y": 2
-				},
-				{
-					"eq": 1376667570,
-					"x": 1,
-					"y": 0
-				},
-				{
-					"eq": 1376667570,
-					"x": 1,
-					"y": 2
-				},
-				{
-					"eq": 1376667570,
-					"x": 0,
-					"y": 0
-				}
-			]
-		},
-		{
-			"hp": "RightBattary",
-			"eqlist": [
-				{
-					"eq": 1376667570,
-					"x": 0,
-					"y": 2
-				},
-				{
-					"eq": 1376667570,
-					"x": 1,
-					"y": 0
-				},
-				{
-					"eq": 1376667570,
-					"x": 1,
-					"y": 2
-				},
-				{
-					"eq": 1376667570,
-					"x": 0,
-					"y": 0
-				}
-			]
-		},
-		{
-			"hp": "Engineering Bay",
-			"eqlist": [
-				{
-					"eq": 140457349,
-					"x": 0,
-					"y": 3
-				},
-				{
-					"eq": 1456543784,
-					"x": 2,
-					"y": 0
-				},
-				{
-					"eq": 140457349,
-					"x": 1,
-					"y": 2
-				},
-				{
-					"eq": 1456543784,
-					"x": 1,
-					"y": 0
-				},
-				{
-					"eq": 1724954193,
-					"x": 3,
-					"y": 0
-				},
-				{
-					"eq": 1847665367,
-					"x": 0,
-					"y": 0
-				},
-				{
-					"eq": 140457349,
-					"x": 2,
-					"y": 3
-				},
-				{
-					"eq": 1640790496,
-					"x": 0,
-					"y": 2
-				},
-				{
-					"eq": 1640790496,
-					"x": 3,
-					"y": 2
-				}
-			]
-		},
-		{
-			"hp": "FrontBeams",
-			"eqlist": [
-				{
-					"eq": 400586024,
-					"x": 1,
-					"y": 1
-				},
-				{
-					"eq": 400586024,
-					"x": 0,
-					"y": 0
-				},
-				{
-					"eq": 400586024,
-					"x": 0,
-					"y": 2
-				},
-				{
-					"eq": 400586024,
-					"x": 0,
-					"y": 1
-				},
-				{
-					"eq": 400586024,
-					"x": 1,
-					"y": 2
-				},
-				{
-					"eq": 400586024,
-					"x": 1,
-					"y": 0
-				}
-			]
-		},
-		{
-			"hp": "FrontBeams2",
-			"eqlist": [
-				{
-					"eq": 400586024,
-					"x": 0,
-					"y": 2
-				},
-				{
-					"eq": 400586024,
-					"x": 0,
-					"y": 1
-				},
-				{
-					"eq": 400586024,
-					"x": 1,
-					"y": 0
-				},
-				{
-					"eq": 400586024,
-					"x": 1,
-					"y": 1
-				},
-				{
-					"eq": 400586024,
-					"x": 1,
-					"y": 2
-				},
-				{
-					"eq": 400586024,
-					"x": 0,
-					"y": 0
-				}
-			]
-		}
-	]
-},
-			"ServiceData":
-			{
-				"xp": 50000,
-				"fleet_min": -1,
-				"fleet_max": -1,
-				"drop_state": true,
-				"role": 0,
-				"bt": "",
-				"tags": []
-			}
-		},
-		{
-			"Data": {
-	"hull": 640758406,
-	"ship_skin": 1951413229,
-	"skin_color_1": 1167644390,
-	"skin_color_2": 1167644390,
-	"skin_color_3": 331096742,
-	"hplist": [
-		{
-			"hp": "EngineHardpoint",
-			"eqlist": []
-		},
-		{
-			"hp": "LeftBattary",
-			"eqlist": [
-				{
-					"eq": 1319341310,
-					"x": 1,
-					"y": 0
-				},
-				{
-					"eq": 1319341310,
-					"x": 0,
-					"y": 0
-				}
-			]
-		},
-		{
-			"hp": "RightBattary",
-			"eqlist": [
-				{
-					"eq": 1319341310,
-					"x": 1,
-					"y": 0
-				},
-				{
-					"eq": 1319341310,
-					"x": 0,
-					"y": 0
-				}
-			]
-		},
-		{
-			"hp": "Engineering Bay",
-			"eqlist": [
-				{
-					"eq": 1524533717,
-					"x": 0,
-					"y": 0
-				},
-				{
-					"eq": 140457349,
-					"x": 1,
-					"y": 3
-				},
-				{
-					"eq": 1177626061,
-					"x": 3,
-					"y": 0
-				},
-				{
-					"eq": 1446036470,
-					"x": 3,
-					"y": 3
-				},
-				{
-					"eq": 1310481104,
-					"x": 0,
-					"y": 3
-				},
-				{
-					"eq": 1177626061,
-					"x": 3,
-					"y": 1
-				},
-				{
-					"eq": 1177626061,
-					"x": 3,
-					"y": 2
-				}
-			]
-		},
-		{
-			"hp": "FrontBeams",
-			"eqlist": [
-				{
-					"eq": 638127272,
-					"x": 2,
-					"y": 0
-				},
-				{
-					"eq": 638127272,
-					"x": 1,
-					"y": 0
-				},
-				{
-					"eq": 638127272,
-					"x": 0,
-					"y": 0
-				}
-			]
-		},
-		{
-			"hp": "FrontBeams2",
-			"eqlist": [
-				{
-					"eq": 638127272,
-					"x": 2,
-					"y": 0
-				},
-				{
-					"eq": 638127272,
-					"x": 1,
-					"y": 0
-				},
-				{
-					"eq": 638127272,
-					"x": 0,
-					"y": 0
-				}
-			]
-		}
-	]
-},
-			"ServiceData":
-			{
-				"xp": 50000,
-				"fleet_min": -1,
-				"fleet_max": -1,
-				"drop_state": true,
-				"role": 0,
-				"bt": "",
-				"tags": []
-			}
-		}
-	]
+  "Id": 2134381004,
+  "InternalName": "interns",
+  "Faction": 20,
+  "Level": 95,
+  "VisionRadius": 3,
+  "Speed": 0.7,
+  "BehaviorTreeName": "",
+  "MainShipIndex": 0,
+  "Tags": [],
+  "Ships": [
+    {
+      "Data": {
+        "elid": 0,
+        "plid": 0,
+        "hull": 428758516,
+        "xp": 0,
+        "armor": 0,
+        "structure": 0,
+        "detachment": 0,
+        "slot": 0,
+        "ship_skin": 1951413229,
+        "skin_color_1": 587895096,
+        "skin_color_2": 587895096,
+        "skin_color_3": 44692976,
+        "shipdecal": 0,
+        "hplist": [
+          {
+            "hp": "EngineHardpoint",
+            "eqlist": []
+          },
+          {
+            "hp": "LeftBattary",
+            "eqlist": [
+              {
+                "eq": 974781291,
+                "id": 0,
+                "x": 0,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 974781291,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 204921710,
+                "id": 0,
+                "x": 3,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 204921710,
+                "id": 0,
+                "x": 3,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "RightBattary",
+            "eqlist": [
+              {
+                "eq": 974781291,
+                "id": 0,
+                "x": 1,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 974781291,
+                "id": 0,
+                "x": 1,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 204921710,
+                "id": 0,
+                "x": 0,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 204921710,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "Engineering Bay",
+            "eqlist": [
+              {
+                "eq": 1724954193,
+                "id": 0,
+                "x": 3,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 1847665367,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 1456543784,
+                "id": 0,
+                "x": 1,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 204921710,
+                "id": 0,
+                "x": 2,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 204921710,
+                "id": 0,
+                "x": 2,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "FrontBeams",
+            "eqlist": [
+              {
+                "eq": 45901046,
+                "id": 0,
+                "x": 1,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 45901046,
+                "id": 0,
+                "x": 2,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 45901046,
+                "id": 0,
+                "x": 5,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 45901046,
+                "id": 0,
+                "x": 1,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 45901046,
+                "id": 0,
+                "x": 4,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 45901046,
+                "id": 0,
+                "x": 3,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 45901046,
+                "id": 0,
+                "x": 0,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 45901046,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 45901046,
+                "id": 0,
+                "x": 2,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 45901046,
+                "id": 0,
+                "x": 3,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 45901046,
+                "id": 0,
+                "x": 4,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 45901046,
+                "id": 0,
+                "x": 5,
+                "y": 1,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "RocketsLeft",
+            "eqlist": [
+              {
+                "eq": 1537473151,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "RocketsRight",
+            "eqlist": [
+              {
+                "eq": 1537473151,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          }
+        ],
+        "progression": [],
+        "cargo_hold_size": 0,
+        "cargo_list": []
+      },
+      "ServiceData": {
+        "xp": 50000,
+        "fleet_min": -1,
+        "fleet_max": -1,
+        "drop_state": true,
+        "role": 0,
+        "bt": "",
+        "tags": [],
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": [
+            {
+              "type": 2,
+              "chance": 0.120000005,
+              "weight": 1,
+              "item_id": 493470161,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.040000003,
+              "weight": 1,
+              "item_id": 974781291,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 1,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.05333334,
+              "weight": 1,
+              "item_id": 2023232565,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.016666668,
+              "weight": 1,
+              "item_id": 204921710,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.16000001,
+              "weight": 1,
+              "item_id": 613576797,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.05,
+              "weight": 1,
+              "item_id": 1724954193,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.16000001,
+              "weight": 1,
+              "item_id": 695145906,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.05,
+              "weight": 1,
+              "item_id": 1847665367,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.16000001,
+              "weight": 1,
+              "item_id": 762375542,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.05,
+              "weight": 1,
+              "item_id": 1456543784,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.1,
+              "weight": 1,
+              "item_id": 1569649687,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.030000001,
+              "weight": 1,
+              "item_id": 45901046,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 3,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.080000006,
+              "weight": 1,
+              "item_id": 697328967,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.025,
+              "weight": 1,
+              "item_id": 1537473151,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "Data": {
+        "elid": 0,
+        "plid": 0,
+        "hull": 1711433439,
+        "xp": 0,
+        "armor": 0,
+        "structure": 0,
+        "detachment": 0,
+        "slot": 0,
+        "ship_skin": 1951413229,
+        "skin_color_1": 1167644390,
+        "skin_color_2": 1167644390,
+        "skin_color_3": 267899015,
+        "shipdecal": 0,
+        "hplist": [
+          {
+            "hp": "EngineHardpoint",
+            "eqlist": []
+          },
+          {
+            "hp": "LeftBattary",
+            "eqlist": [
+              {
+                "eq": 1342891864,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 1342891864,
+                "id": 0,
+                "x": 1,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 1342891864,
+                "id": 0,
+                "x": 2,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 1342891864,
+                "id": 0,
+                "x": 2,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 1342891864,
+                "id": 0,
+                "x": 1,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 1342891864,
+                "id": 0,
+                "x": 0,
+                "y": 1,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "RightBattary",
+            "eqlist": [
+              {
+                "eq": 1342891864,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 1342891864,
+                "id": 0,
+                "x": 1,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 1342891864,
+                "id": 0,
+                "x": 2,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 1342891864,
+                "id": 0,
+                "x": 2,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 1342891864,
+                "id": 0,
+                "x": 1,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 1342891864,
+                "id": 0,
+                "x": 0,
+                "y": 1,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "Engineering Bay",
+            "eqlist": [
+              {
+                "eq": 522212149,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 70194464,
+                "id": 0,
+                "x": 3,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 1446036470,
+                "id": 0,
+                "x": 4,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 1310481104,
+                "id": 0,
+                "x": 0,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 1310481104,
+                "id": 0,
+                "x": 2,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 1310481104,
+                "id": 0,
+                "x": 1,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 1446036470,
+                "id": 0,
+                "x": 5,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 1446036470,
+                "id": 0,
+                "x": 3,
+                "y": 2,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "FrontBeams",
+            "eqlist": [
+              {
+                "eq": 1114781227,
+                "id": 0,
+                "x": 2,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 1114781227,
+                "id": 0,
+                "x": 1,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 1114781227,
+                "id": 0,
+                "x": 1,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 1114781227,
+                "id": 0,
+                "x": 2,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 1114781227,
+                "id": 0,
+                "x": 3,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 1114781227,
+                "id": 0,
+                "x": 3,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 1114781227,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 1114781227,
+                "id": 0,
+                "x": 0,
+                "y": 1,
+                "destroyed": 0
+              }
+            ]
+          }
+        ],
+        "progression": [],
+        "cargo_hold_size": 0,
+        "cargo_list": []
+      },
+      "ServiceData": {
+        "xp": 50000,
+        "fleet_min": -1,
+        "fleet_max": -1,
+        "drop_state": true,
+        "role": 0,
+        "bt": "",
+        "tags": [],
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": [
+            {
+              "type": 2,
+              "chance": 0.040000003,
+              "weight": 1,
+              "item_id": 1914008072,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.015000001,
+              "weight": 1,
+              "item_id": 1342891864,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 1,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.060000002,
+              "weight": 1,
+              "item_id": 662494832,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.020000001,
+              "weight": 1,
+              "item_id": 522212149,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 1,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.120000005,
+              "weight": 1,
+              "item_id": 564147615,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.040000003,
+              "weight": 1,
+              "item_id": 70194464,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 1,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.06666667,
+              "weight": 1,
+              "item_id": 1600123437,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.020000001,
+              "weight": 1,
+              "item_id": 1446036470,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 3,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.06666667,
+              "weight": 1,
+              "item_id": 954645754,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.020000001,
+              "weight": 1,
+              "item_id": 1310481104,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 3,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.060000002,
+              "weight": 1,
+              "item_id": 1114781227,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 3,
+              "childs": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "Data": {
+        "elid": 0,
+        "plid": 0,
+        "hull": 1212373964,
+        "xp": 0,
+        "armor": 0,
+        "structure": 0,
+        "detachment": 0,
+        "slot": 0,
+        "ship_skin": 1951413229,
+        "skin_color_1": 1167644390,
+        "skin_color_2": 1167644390,
+        "skin_color_3": 239675540,
+        "shipdecal": 0,
+        "hplist": [
+          {
+            "hp": "EngineHardpoint",
+            "eqlist": [
+              {
+                "eq": 1461734848,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "LeftBattary",
+            "eqlist": [
+              {
+                "eq": 1376667570,
+                "id": 0,
+                "x": 0,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 1376667570,
+                "id": 0,
+                "x": 1,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 1376667570,
+                "id": 0,
+                "x": 1,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 1376667570,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "RightBattary",
+            "eqlist": [
+              {
+                "eq": 1376667570,
+                "id": 0,
+                "x": 0,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 1376667570,
+                "id": 0,
+                "x": 1,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 1376667570,
+                "id": 0,
+                "x": 1,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 1376667570,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "Engineering Bay",
+            "eqlist": [
+              {
+                "eq": 140457349,
+                "id": 0,
+                "x": 0,
+                "y": 3,
+                "destroyed": 0
+              },
+              {
+                "eq": 1456543784,
+                "id": 0,
+                "x": 2,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 140457349,
+                "id": 0,
+                "x": 1,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 1456543784,
+                "id": 0,
+                "x": 1,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 1724954193,
+                "id": 0,
+                "x": 3,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 1847665367,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 140457349,
+                "id": 0,
+                "x": 2,
+                "y": 3,
+                "destroyed": 0
+              },
+              {
+                "eq": 1640790496,
+                "id": 0,
+                "x": 0,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 1640790496,
+                "id": 0,
+                "x": 3,
+                "y": 2,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "FrontBeams",
+            "eqlist": [
+              {
+                "eq": 400586024,
+                "id": 0,
+                "x": 1,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 400586024,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 400586024,
+                "id": 0,
+                "x": 0,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 400586024,
+                "id": 0,
+                "x": 0,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 400586024,
+                "id": 0,
+                "x": 1,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 400586024,
+                "id": 0,
+                "x": 1,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "FrontBeams2",
+            "eqlist": [
+              {
+                "eq": 400586024,
+                "id": 0,
+                "x": 0,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 400586024,
+                "id": 0,
+                "x": 0,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 400586024,
+                "id": 0,
+                "x": 1,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 400586024,
+                "id": 0,
+                "x": 1,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 400586024,
+                "id": 0,
+                "x": 1,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 400586024,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          }
+        ],
+        "progression": [],
+        "cargo_hold_size": 0,
+        "cargo_list": []
+      },
+      "ServiceData": {
+        "xp": 50000,
+        "fleet_min": -1,
+        "fleet_max": -1,
+        "drop_state": true,
+        "role": 0,
+        "bt": "",
+        "tags": [],
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": [
+            {
+              "type": 2,
+              "chance": 0.080000006,
+              "weight": 1,
+              "item_id": 1782486572,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.030000001,
+              "weight": 1,
+              "item_id": 1461734848,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 1,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.06666667,
+              "weight": 1,
+              "item_id": 1671813846,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.020000001,
+              "weight": 1,
+              "item_id": 1376667570,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 3,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.080000006,
+              "weight": 1,
+              "item_id": 1313087379,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.025,
+              "weight": 1,
+              "item_id": 140457349,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.16000001,
+              "weight": 1,
+              "item_id": 762375542,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.05,
+              "weight": 1,
+              "item_id": 1456543784,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.16000001,
+              "weight": 1,
+              "item_id": 613576797,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.05,
+              "weight": 1,
+              "item_id": 1724954193,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.16000001,
+              "weight": 1,
+              "item_id": 695145906,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.05,
+              "weight": 1,
+              "item_id": 1847665367,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.16000001,
+              "weight": 1,
+              "item_id": 1149257221,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.05,
+              "weight": 1,
+              "item_id": 1640790496,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.05333334,
+              "weight": 1,
+              "item_id": 1911613297,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.016666668,
+              "weight": 1,
+              "item_id": 400586024,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "Data": {
+        "elid": 0,
+        "plid": 0,
+        "hull": 640758406,
+        "xp": 0,
+        "armor": 0,
+        "structure": 0,
+        "detachment": 0,
+        "slot": 0,
+        "ship_skin": 1951413229,
+        "skin_color_1": 1167644390,
+        "skin_color_2": 1167644390,
+        "skin_color_3": 331096742,
+        "shipdecal": 0,
+        "hplist": [
+          {
+            "hp": "EngineHardpoint",
+            "eqlist": []
+          },
+          {
+            "hp": "LeftBattary",
+            "eqlist": [
+              {
+                "eq": 1319341310,
+                "id": 0,
+                "x": 1,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 1319341310,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "RightBattary",
+            "eqlist": [
+              {
+                "eq": 1319341310,
+                "id": 0,
+                "x": 1,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 1319341310,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "Engineering Bay",
+            "eqlist": [
+              {
+                "eq": 1524533717,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 140457349,
+                "id": 0,
+                "x": 1,
+                "y": 3,
+                "destroyed": 0
+              },
+              {
+                "eq": 1177626061,
+                "id": 0,
+                "x": 3,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 1446036470,
+                "id": 0,
+                "x": 3,
+                "y": 3,
+                "destroyed": 0
+              },
+              {
+                "eq": 1310481104,
+                "id": 0,
+                "x": 0,
+                "y": 3,
+                "destroyed": 0
+              },
+              {
+                "eq": 1177626061,
+                "id": 0,
+                "x": 3,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 1177626061,
+                "id": 0,
+                "x": 3,
+                "y": 2,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "FrontBeams",
+            "eqlist": [
+              {
+                "eq": 638127272,
+                "id": 0,
+                "x": 2,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 638127272,
+                "id": 0,
+                "x": 1,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 638127272,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "FrontBeams2",
+            "eqlist": [
+              {
+                "eq": 638127272,
+                "id": 0,
+                "x": 2,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 638127272,
+                "id": 0,
+                "x": 1,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 638127272,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          }
+        ],
+        "progression": [],
+        "cargo_hold_size": 0,
+        "cargo_list": []
+      },
+      "ServiceData": {
+        "xp": 50000,
+        "fleet_min": -1,
+        "fleet_max": -1,
+        "drop_state": true,
+        "role": 0,
+        "bt": "",
+        "tags": [],
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": [
+            {
+              "type": 2,
+              "chance": 0.080000006,
+              "weight": 1,
+              "item_id": 549942142,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.030000001,
+              "weight": 1,
+              "item_id": 1319341310,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 1,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.080000006,
+              "weight": 1,
+              "item_id": 1974327925,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.030000001,
+              "weight": 1,
+              "item_id": 1524533717,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 1,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.080000006,
+              "weight": 1,
+              "item_id": 1313087379,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.025,
+              "weight": 1,
+              "item_id": 140457349,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.06666667,
+              "weight": 1,
+              "item_id": 1061351966,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.020000001,
+              "weight": 1,
+              "item_id": 1177626061,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 3,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.06666667,
+              "weight": 1,
+              "item_id": 1600123437,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.020000001,
+              "weight": 1,
+              "item_id": 1446036470,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 3,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.06666667,
+              "weight": 1,
+              "item_id": 954645754,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.020000001,
+              "weight": 1,
+              "item_id": 1310481104,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 3,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.080000006,
+              "weight": 1,
+              "item_id": 537057477,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.025,
+              "weight": 1,
+              "item_id": 638127272,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            }
+          ]
+        }
+      }
+    }
+  ]
 }

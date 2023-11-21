@@ -1,75 +1,98 @@
 {
-	"Id": 979071593,
-	"InternalName": "welder",
-	"Faction": 12,
-	"Level": 70,
-	"VisionRadius": 3,
-	"Speed": 0.7,
-	"BehaviorTreeName": "",
-	"MainShipIndex": 0,
-	"Tags": [
-		"Mob.Role.Boss",
-		"Mob.Role.Elite",
-		"Mob.Role.Outpost",
-		"Mob.Role.Station"
-	],
-	"Ships": [
-		{
-			"Data": {
-	"hull": 2084434245,
-	"ship_skin": 510644822,
-	"hplist": [
-		{
-			"hp": "EngineHardpoint1",
-			"eqlist": []
-		},
-		{
-			"hp": "RightCannon",
-			"eqlist": []
-		},
-		{
-			"hp": "LeftCannons",
-			"eqlist": []
-		},
-		{
-			"hp": "EngineHardpoint",
-			"eqlist": []
-		},
-		{
-			"hp": "EngineeringBay",
-			"eqlist": []
-		},
-		{
-			"hp": "RightMissiles01",
-			"eqlist": []
-		},
-		{
-			"hp": "RightMissiles02",
-			"eqlist": []
-		},
-		{
-			"hp": "LeftMissiles01",
-			"eqlist": []
-		},
-		{
-			"hp": "LeftMissiles02",
-			"eqlist": []
-		}
-	]
-},
-			"ServiceData":
-			{
-				"xp": 60000,
-				"fleet_min": -1,
-				"fleet_max": -1,
-				"drop_state": true,
-				"role": 0,
-				"bt": "",
-				"tags": [
-					"mob.specialship.boss",
-					"mob.specialship.elite"
-				]
-			}
-		}
-	]
+  "Id": 979071593,
+  "InternalName": "welder",
+  "Faction": 12,
+  "Level": 70,
+  "VisionRadius": 3,
+  "Speed": 0.7,
+  "BehaviorTreeName": "",
+  "MainShipIndex": 0,
+  "Tags": [
+    "Mob.Role.Boss",
+    "Mob.Role.Elite",
+    "Mob.Role.Outpost",
+    "Mob.Role.Station"
+  ],
+  "Ships": [
+    {
+      "Data": {
+        "elid": 0,
+        "plid": 0,
+        "hull": 2084434245,
+        "xp": 0,
+        "armor": 0,
+        "structure": 0,
+        "detachment": 0,
+        "slot": 0,
+        "ship_skin": 510644822,
+        "skin_color_1": 0,
+        "skin_color_2": 0,
+        "skin_color_3": 0,
+        "shipdecal": 0,
+        "hplist": [
+          {
+            "hp": "EngineHardpoint1",
+            "eqlist": []
+          },
+          {
+            "hp": "RightCannon",
+            "eqlist": []
+          },
+          {
+            "hp": "LeftCannons",
+            "eqlist": []
+          },
+          {
+            "hp": "EngineHardpoint",
+            "eqlist": []
+          },
+          {
+            "hp": "EngineeringBay",
+            "eqlist": []
+          },
+          {
+            "hp": "RightMissiles01",
+            "eqlist": []
+          },
+          {
+            "hp": "RightMissiles02",
+            "eqlist": []
+          },
+          {
+            "hp": "LeftMissiles01",
+            "eqlist": []
+          },
+          {
+            "hp": "LeftMissiles02",
+            "eqlist": []
+          }
+        ],
+        "progression": [],
+        "cargo_hold_size": 0,
+        "cargo_list": []
+      },
+      "ServiceData": {
+        "xp": 60000,
+        "fleet_min": -1,
+        "fleet_max": -1,
+        "drop_state": true,
+        "role": 0,
+        "bt": "",
+        "tags": [
+          "mob.specialship.boss",
+          "mob.specialship.elite"
+        ],
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": []
+        }
+      }
+    }
+  ]
 }

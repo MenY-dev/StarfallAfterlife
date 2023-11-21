@@ -1,160 +1,356 @@
 {
-	"Id": 861113124,
-	"InternalName": "killdoser",
-	"Faction": 11,
-	"Level": 10,
-	"VisionRadius": 3,
-	"Speed": 0.7,
-	"BehaviorTreeName": "/Game/gameplay/ai/fleets/screechers/BT_ScreechersFleet.BT_ScreechersFleet",
-	"MainShipIndex": 0,
-	"Tags": [
-		"Mob.Role.Boss",
-		"Mob.Role.Elite",
-		"Mob.Role.Outpost",
-		"Mob.Role.Station"
-	],
-	"Ships": [
-		{
-			"Data": {
-	"hull": 157720840,
-	"ship_skin": 439357757,
-	"hplist": [
-		{
-			"hp": "EngineHardpoint1",
-			"eqlist": []
-		},
-		{
-			"hp": "RightCannon",
-			"eqlist": [
-				{
-					"eq": 2007189872,
-					"x": 2,
-					"y": 0
-				},
-				{
-					"eq": 2007189872,
-					"x": 2,
-					"y": 1
-				},
-				{
-					"eq": 2007189872,
-					"x": 0,
-					"y": 0
-				}
-			]
-		},
-		{
-			"hp": "LeftCannons",
-			"eqlist": [
-				{
-					"eq": 2007189872,
-					"x": 2,
-					"y": 0
-				},
-				{
-					"eq": 2007189872,
-					"x": 0,
-					"y": 0
-				},
-				{
-					"eq": 2007189872,
-					"x": 0,
-					"y": 1
-				}
-			]
-		},
-		{
-			"hp": "EngineHardpoint",
-			"eqlist": []
-		},
-		{
-			"hp": "EngineeringBay",
-			"eqlist": [
-				{
-					"eq": 1439388296,
-					"x": 3,
-					"y": 0
-				},
-				{
-					"eq": 1778316309,
-					"x": 0,
-					"y": 0
-				},
-				{
-					"eq": 1239432978,
-					"x": 2,
-					"y": 0
-				},
-				{
-					"eq": 838934763,
-					"x": 4,
-					"y": 2
-				},
-				{
-					"eq": 232644897,
-					"x": 5,
-					"y": 0
-				},
-				{
-					"eq": 232644897,
-					"x": 5,
-					"y": 2
-				},
-				{
-					"eq": 232644897,
-					"x": 5,
-					"y": 1
-				},
-				{
-					"eq": 838934763,
-					"x": 3,
-					"y": 2
-				}
-			]
-		},
-		{
-			"hp": "RightMissiles01",
-			"eqlist": [
-				{
-					"eq": 1954187423,
-					"x": 0,
-					"y": 0
-				}
-			]
-		},
-		{
-			"hp": "RightMissiles02",
-			"eqlist": []
-		},
-		{
-			"hp": "LeftMissiles01",
-			"eqlist": [
-				{
-					"eq": 1954187423,
-					"x": 0,
-					"y": 0
-				}
-			]
-		},
-		{
-			"hp": "LeftMissiles02",
-			"eqlist": []
-		}
-	]
-},
-			"ServiceData":
-			{
-				"xp": 30000,
-				"fleet_min": -1,
-				"fleet_max": -1,
-				"drop_state": true,
-				"role": 0,
-				"bt": "/Game/gameplay/ai/boss/BtPenetratorBoss.BtPenetratorBoss",
-				"tags": [
-					"mob.specialship.boss",
-					"mob.specialship.elite"
-				]
-			}
-		}
-	]
+  "Id": 861113124,
+  "InternalName": "killdoser",
+  "Faction": 11,
+  "Level": 10,
+  "VisionRadius": 3,
+  "Speed": 0.7,
+  "BehaviorTreeName": "/Game/gameplay/ai/fleets/screechers/BT_ScreechersFleet.BT_ScreechersFleet",
+  "MainShipIndex": 0,
+  "Tags": [
+    "Mob.Role.Boss",
+    "Mob.Role.Elite",
+    "Mob.Role.Outpost",
+    "Mob.Role.Station"
+  ],
+  "Ships": [
+    {
+      "Data": {
+        "elid": 0,
+        "plid": 0,
+        "hull": 157720840,
+        "xp": 0,
+        "armor": 0,
+        "structure": 0,
+        "detachment": 0,
+        "slot": 0,
+        "ship_skin": 439357757,
+        "skin_color_1": 0,
+        "skin_color_2": 0,
+        "skin_color_3": 0,
+        "shipdecal": 0,
+        "hplist": [
+          {
+            "hp": "EngineHardpoint1",
+            "eqlist": []
+          },
+          {
+            "hp": "RightCannon",
+            "eqlist": [
+              {
+                "eq": 2007189872,
+                "id": 0,
+                "x": 2,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 2007189872,
+                "id": 0,
+                "x": 2,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 2007189872,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "LeftCannons",
+            "eqlist": [
+              {
+                "eq": 2007189872,
+                "id": 0,
+                "x": 2,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 2007189872,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 2007189872,
+                "id": 0,
+                "x": 0,
+                "y": 1,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "EngineHardpoint",
+            "eqlist": []
+          },
+          {
+            "hp": "EngineeringBay",
+            "eqlist": [
+              {
+                "eq": 1439388296,
+                "id": 0,
+                "x": 3,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 1778316309,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 1239432978,
+                "id": 0,
+                "x": 2,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 838934763,
+                "id": 0,
+                "x": 4,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 232644897,
+                "id": 0,
+                "x": 5,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 232644897,
+                "id": 0,
+                "x": 5,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 232644897,
+                "id": 0,
+                "x": 5,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 838934763,
+                "id": 0,
+                "x": 3,
+                "y": 2,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "RightMissiles01",
+            "eqlist": [
+              {
+                "eq": 1954187423,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "RightMissiles02",
+            "eqlist": []
+          },
+          {
+            "hp": "LeftMissiles01",
+            "eqlist": [
+              {
+                "eq": 1954187423,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "LeftMissiles02",
+            "eqlist": []
+          }
+        ],
+        "progression": [],
+        "cargo_hold_size": 0,
+        "cargo_list": []
+      },
+      "ServiceData": {
+        "xp": 30000,
+        "fleet_min": -1,
+        "fleet_max": -1,
+        "drop_state": true,
+        "role": 0,
+        "bt": "/Game/gameplay/ai/boss/BtPenetratorBoss.BtPenetratorBoss",
+        "tags": [
+          "mob.specialship.boss",
+          "mob.specialship.elite"
+        ],
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": [
+            {
+              "type": 2,
+              "chance": 0.36,
+              "weight": 1,
+              "item_id": 1897948392,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.15,
+              "weight": 1,
+              "item_id": 2007189872,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.36,
+              "weight": 1,
+              "item_id": 1601256751,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.15,
+              "weight": 1,
+              "item_id": 1439388296,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.36,
+              "weight": 1,
+              "item_id": 2102663646,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.15,
+              "weight": 1,
+              "item_id": 1778316309,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.24000001,
+              "weight": 1,
+              "item_id": 812786784,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.18,
+              "weight": 1,
+              "item_id": 1239432978,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 3,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.36,
+              "weight": 1,
+              "item_id": 1956428270,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.15,
+              "weight": 1,
+              "item_id": 838934763,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.24000001,
+              "weight": 1,
+              "item_id": 792039895,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.18,
+              "weight": 1,
+              "item_id": 232644897,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 3,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.36,
+              "weight": 1,
+              "item_id": 1687832510,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.15,
+              "weight": 1,
+              "item_id": 1954187423,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            }
+          ]
+        }
+      }
+    }
+  ]
 }

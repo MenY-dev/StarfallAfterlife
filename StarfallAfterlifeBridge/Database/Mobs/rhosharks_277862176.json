@@ -1,457 +1,991 @@
 {
-	"Id": 277862176,
-	"InternalName": "rhosharks",
-	"Faction": 12,
-	"Level": 38,
-	"VisionRadius": 3,
-	"Speed": 0.7,
-	"BehaviorTreeName": "",
-	"MainShipIndex": 0,
-	"Tags": [],
-	"Ships": [
-		{
-			"Data": {
-	"hull": 1065519903,
-	"ship_skin": 601059639,
-	"hplist": [
-		{
-			"hp": "EngineLeftTop",
-			"eqlist": []
-		},
-		{
-			"hp": "EngineeringBay",
-			"eqlist": [
-				{
-					"eq": 1994118675,
-					"x": 8,
-					"y": 0
-				},
-				{
-					"eq": 522212149,
-					"x": 0,
-					"y": 0
-				},
-				{
-					"eq": 2003110376,
-					"x": 3,
-					"y": 0
-				},
-				{
-					"eq": 140457349,
-					"x": 5,
-					"y": 1
-				},
-				{
-					"eq": 168180536,
-					"x": 5,
-					"y": 0
-				}
-			]
-		},
-		{
-			"hp": "RightBeam",
-			"eqlist": [
-				{
-					"eq": 2069539870,
-					"x": 0,
-					"y": 2
-				},
-				{
-					"eq": 2069539870,
-					"x": 1,
-					"y": 0
-				},
-				{
-					"eq": 2069539870,
-					"x": 1,
-					"y": 2
-				},
-				{
-					"eq": 2069539870,
-					"x": 0,
-					"y": 0
-				}
-			]
-		},
-		{
-			"hp": "EngineLeftBottom",
-			"eqlist": []
-		},
-		{
-			"hp": "EngineRightTop",
-			"eqlist": []
-		},
-		{
-			"hp": "EngineRightBottom",
-			"eqlist": []
-		},
-		{
-			"hp": "LeftBeams",
-			"eqlist": [
-				{
-					"eq": 2069539870,
-					"x": 0,
-					"y": 2
-				},
-				{
-					"eq": 2069539870,
-					"x": 1,
-					"y": 0
-				},
-				{
-					"eq": 2069539870,
-					"x": 1,
-					"y": 2
-				},
-				{
-					"eq": 2069539870,
-					"x": 0,
-					"y": 0
-				}
-			]
-		},
-		{
-			"hp": "FrontBeams",
-			"eqlist": []
-		},
-		{
-			"hp": "RightRockets",
-			"eqlist": [
-				{
-					"eq": 1025645055,
-					"x": 0,
-					"y": 1
-				},
-				{
-					"eq": 1025645055,
-					"x": 0,
-					"y": 0
-				}
-			]
-		},
-		{
-			"hp": "LeftRockets",
-			"eqlist": [
-				{
-					"eq": 1025645055,
-					"x": 0,
-					"y": 1
-				},
-				{
-					"eq": 1025645055,
-					"x": 0,
-					"y": 0
-				}
-			]
-		}
-	]
-},
-			"ServiceData":
-			{
-				"xp": 25000,
-				"fleet_min": -1,
-				"fleet_max": -1,
-				"drop_state": true,
-				"role": 0,
-				"bt": "",
-				"tags": []
-			}
-		},
-		{
-			"Data": {
-	"hull": 1065519903,
-	"ship_skin": 601059639,
-	"hplist": [
-		{
-			"hp": "EngineLeftTop",
-			"eqlist": []
-		},
-		{
-			"hp": "EngineeringBay",
-			"eqlist": [
-				{
-					"eq": 1994118675,
-					"x": 8,
-					"y": 0
-				},
-				{
-					"eq": 522212149,
-					"x": 0,
-					"y": 0
-				},
-				{
-					"eq": 2003110376,
-					"x": 3,
-					"y": 0
-				},
-				{
-					"eq": 140457349,
-					"x": 5,
-					"y": 1
-				},
-				{
-					"eq": 168180536,
-					"x": 5,
-					"y": 0
-				}
-			]
-		},
-		{
-			"hp": "RightBeam",
-			"eqlist": [
-				{
-					"eq": 2069539870,
-					"x": 0,
-					"y": 2
-				},
-				{
-					"eq": 2069539870,
-					"x": 1,
-					"y": 0
-				},
-				{
-					"eq": 2069539870,
-					"x": 1,
-					"y": 2
-				},
-				{
-					"eq": 2069539870,
-					"x": 0,
-					"y": 0
-				}
-			]
-		},
-		{
-			"hp": "EngineLeftBottom",
-			"eqlist": []
-		},
-		{
-			"hp": "EngineRightTop",
-			"eqlist": []
-		},
-		{
-			"hp": "EngineRightBottom",
-			"eqlist": []
-		},
-		{
-			"hp": "LeftBeams",
-			"eqlist": [
-				{
-					"eq": 2069539870,
-					"x": 0,
-					"y": 2
-				},
-				{
-					"eq": 2069539870,
-					"x": 1,
-					"y": 0
-				},
-				{
-					"eq": 2069539870,
-					"x": 1,
-					"y": 2
-				},
-				{
-					"eq": 2069539870,
-					"x": 0,
-					"y": 0
-				}
-			]
-		},
-		{
-			"hp": "FrontBeams",
-			"eqlist": []
-		},
-		{
-			"hp": "RightRockets",
-			"eqlist": [
-				{
-					"eq": 1025645055,
-					"x": 0,
-					"y": 1
-				},
-				{
-					"eq": 1025645055,
-					"x": 0,
-					"y": 0
-				}
-			]
-		},
-		{
-			"hp": "LeftRockets",
-			"eqlist": [
-				{
-					"eq": 1025645055,
-					"x": 0,
-					"y": 1
-				},
-				{
-					"eq": 1025645055,
-					"x": 0,
-					"y": 0
-				}
-			]
-		}
-	]
-},
-			"ServiceData":
-			{
-				"xp": 25000,
-				"fleet_min": -1,
-				"fleet_max": -1,
-				"drop_state": true,
-				"role": 0,
-				"bt": "",
-				"tags": []
-			}
-		},
-		{
-			"Data": {
-	"hull": 1065519903,
-	"ship_skin": 601059639,
-	"hplist": [
-		{
-			"hp": "EngineLeftTop",
-			"eqlist": []
-		},
-		{
-			"hp": "EngineeringBay",
-			"eqlist": [
-				{
-					"eq": 1994118675,
-					"x": 8,
-					"y": 0
-				},
-				{
-					"eq": 522212149,
-					"x": 0,
-					"y": 0
-				},
-				{
-					"eq": 2003110376,
-					"x": 3,
-					"y": 0
-				},
-				{
-					"eq": 140457349,
-					"x": 5,
-					"y": 1
-				},
-				{
-					"eq": 168180536,
-					"x": 5,
-					"y": 0
-				}
-			]
-		},
-		{
-			"hp": "RightBeam",
-			"eqlist": [
-				{
-					"eq": 2069539870,
-					"x": 0,
-					"y": 2
-				},
-				{
-					"eq": 2069539870,
-					"x": 1,
-					"y": 0
-				},
-				{
-					"eq": 2069539870,
-					"x": 1,
-					"y": 2
-				},
-				{
-					"eq": 2069539870,
-					"x": 0,
-					"y": 0
-				}
-			]
-		},
-		{
-			"hp": "EngineLeftBottom",
-			"eqlist": []
-		},
-		{
-			"hp": "EngineRightTop",
-			"eqlist": []
-		},
-		{
-			"hp": "EngineRightBottom",
-			"eqlist": []
-		},
-		{
-			"hp": "LeftBeams",
-			"eqlist": [
-				{
-					"eq": 2069539870,
-					"x": 0,
-					"y": 2
-				},
-				{
-					"eq": 2069539870,
-					"x": 1,
-					"y": 0
-				},
-				{
-					"eq": 2069539870,
-					"x": 1,
-					"y": 2
-				},
-				{
-					"eq": 2069539870,
-					"x": 0,
-					"y": 0
-				}
-			]
-		},
-		{
-			"hp": "FrontBeams",
-			"eqlist": []
-		},
-		{
-			"hp": "RightRockets",
-			"eqlist": [
-				{
-					"eq": 1025645055,
-					"x": 0,
-					"y": 1
-				},
-				{
-					"eq": 1025645055,
-					"x": 0,
-					"y": 0
-				}
-			]
-		},
-		{
-			"hp": "LeftRockets",
-			"eqlist": [
-				{
-					"eq": 1025645055,
-					"x": 0,
-					"y": 1
-				},
-				{
-					"eq": 1025645055,
-					"x": 0,
-					"y": 0
-				}
-			]
-		}
-	]
-},
-			"ServiceData":
-			{
-				"xp": 25000,
-				"fleet_min": -1,
-				"fleet_max": -1,
-				"drop_state": true,
-				"role": 0,
-				"bt": "",
-				"tags": []
-			}
-		}
-	]
+  "Id": 277862176,
+  "InternalName": "rhosharks",
+  "Faction": 12,
+  "Level": 38,
+  "VisionRadius": 3,
+  "Speed": 0.7,
+  "BehaviorTreeName": "",
+  "MainShipIndex": 0,
+  "Tags": [],
+  "Ships": [
+    {
+      "Data": {
+        "elid": 0,
+        "plid": 0,
+        "hull": 1065519903,
+        "xp": 0,
+        "armor": 0,
+        "structure": 0,
+        "detachment": 0,
+        "slot": 0,
+        "ship_skin": 601059639,
+        "skin_color_1": 0,
+        "skin_color_2": 0,
+        "skin_color_3": 0,
+        "shipdecal": 0,
+        "hplist": [
+          {
+            "hp": "EngineLeftTop",
+            "eqlist": []
+          },
+          {
+            "hp": "EngineeringBay",
+            "eqlist": [
+              {
+                "eq": 1994118675,
+                "id": 0,
+                "x": 8,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 522212149,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 2003110376,
+                "id": 0,
+                "x": 3,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 140457349,
+                "id": 0,
+                "x": 5,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 168180536,
+                "id": 0,
+                "x": 5,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "RightBeam",
+            "eqlist": [
+              {
+                "eq": 2069539870,
+                "id": 0,
+                "x": 0,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 2069539870,
+                "id": 0,
+                "x": 1,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 2069539870,
+                "id": 0,
+                "x": 1,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 2069539870,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "EngineLeftBottom",
+            "eqlist": []
+          },
+          {
+            "hp": "EngineRightTop",
+            "eqlist": []
+          },
+          {
+            "hp": "EngineRightBottom",
+            "eqlist": []
+          },
+          {
+            "hp": "LeftBeams",
+            "eqlist": [
+              {
+                "eq": 2069539870,
+                "id": 0,
+                "x": 0,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 2069539870,
+                "id": 0,
+                "x": 1,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 2069539870,
+                "id": 0,
+                "x": 1,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 2069539870,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "FrontBeams",
+            "eqlist": []
+          },
+          {
+            "hp": "RightRockets",
+            "eqlist": [
+              {
+                "eq": 1025645055,
+                "id": 0,
+                "x": 0,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 1025645055,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "LeftRockets",
+            "eqlist": [
+              {
+                "eq": 1025645055,
+                "id": 0,
+                "x": 0,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 1025645055,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          }
+        ],
+        "progression": [],
+        "cargo_hold_size": 0,
+        "cargo_list": []
+      },
+      "ServiceData": {
+        "xp": 25000,
+        "fleet_min": -1,
+        "fleet_max": -1,
+        "drop_state": true,
+        "role": 0,
+        "bt": "",
+        "tags": [],
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": [
+            {
+              "type": 2,
+              "chance": 0.032,
+              "weight": 1,
+              "item_id": 1994118675,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 1,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.032,
+              "weight": 1,
+              "item_id": 522212149,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 1,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.128,
+              "weight": 1,
+              "item_id": 1215219468,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.040000003,
+              "weight": 1,
+              "item_id": 2003110376,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.128,
+              "weight": 1,
+              "item_id": 1313087379,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.040000003,
+              "weight": 1,
+              "item_id": 140457349,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.128,
+              "weight": 1,
+              "item_id": 1700787339,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.040000003,
+              "weight": 1,
+              "item_id": 168180536,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.128,
+              "weight": 1,
+              "item_id": 758000851,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.040000003,
+              "weight": 1,
+              "item_id": 2069539870,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.064,
+              "weight": 1,
+              "item_id": 341278780,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.024000002,
+              "weight": 1,
+              "item_id": 1025645055,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 1,
+              "childs": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "Data": {
+        "elid": 0,
+        "plid": 0,
+        "hull": 1065519903,
+        "xp": 0,
+        "armor": 0,
+        "structure": 0,
+        "detachment": 0,
+        "slot": 0,
+        "ship_skin": 601059639,
+        "skin_color_1": 0,
+        "skin_color_2": 0,
+        "skin_color_3": 0,
+        "shipdecal": 0,
+        "hplist": [
+          {
+            "hp": "EngineLeftTop",
+            "eqlist": []
+          },
+          {
+            "hp": "EngineeringBay",
+            "eqlist": [
+              {
+                "eq": 1994118675,
+                "id": 0,
+                "x": 8,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 522212149,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 2003110376,
+                "id": 0,
+                "x": 3,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 140457349,
+                "id": 0,
+                "x": 5,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 168180536,
+                "id": 0,
+                "x": 5,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "RightBeam",
+            "eqlist": [
+              {
+                "eq": 2069539870,
+                "id": 0,
+                "x": 0,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 2069539870,
+                "id": 0,
+                "x": 1,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 2069539870,
+                "id": 0,
+                "x": 1,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 2069539870,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "EngineLeftBottom",
+            "eqlist": []
+          },
+          {
+            "hp": "EngineRightTop",
+            "eqlist": []
+          },
+          {
+            "hp": "EngineRightBottom",
+            "eqlist": []
+          },
+          {
+            "hp": "LeftBeams",
+            "eqlist": [
+              {
+                "eq": 2069539870,
+                "id": 0,
+                "x": 0,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 2069539870,
+                "id": 0,
+                "x": 1,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 2069539870,
+                "id": 0,
+                "x": 1,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 2069539870,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "FrontBeams",
+            "eqlist": []
+          },
+          {
+            "hp": "RightRockets",
+            "eqlist": [
+              {
+                "eq": 1025645055,
+                "id": 0,
+                "x": 0,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 1025645055,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "LeftRockets",
+            "eqlist": [
+              {
+                "eq": 1025645055,
+                "id": 0,
+                "x": 0,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 1025645055,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          }
+        ],
+        "progression": [],
+        "cargo_hold_size": 0,
+        "cargo_list": []
+      },
+      "ServiceData": {
+        "xp": 25000,
+        "fleet_min": -1,
+        "fleet_max": -1,
+        "drop_state": true,
+        "role": 0,
+        "bt": "",
+        "tags": [],
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": [
+            {
+              "type": 2,
+              "chance": 0.032,
+              "weight": 1,
+              "item_id": 1994118675,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 1,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.032,
+              "weight": 1,
+              "item_id": 522212149,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 1,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.128,
+              "weight": 1,
+              "item_id": 1215219468,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.040000003,
+              "weight": 1,
+              "item_id": 2003110376,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.128,
+              "weight": 1,
+              "item_id": 1313087379,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.040000003,
+              "weight": 1,
+              "item_id": 140457349,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.128,
+              "weight": 1,
+              "item_id": 1700787339,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.040000003,
+              "weight": 1,
+              "item_id": 168180536,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.128,
+              "weight": 1,
+              "item_id": 758000851,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.040000003,
+              "weight": 1,
+              "item_id": 2069539870,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.064,
+              "weight": 1,
+              "item_id": 341278780,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.024000002,
+              "weight": 1,
+              "item_id": 1025645055,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 1,
+              "childs": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "Data": {
+        "elid": 0,
+        "plid": 0,
+        "hull": 1065519903,
+        "xp": 0,
+        "armor": 0,
+        "structure": 0,
+        "detachment": 0,
+        "slot": 0,
+        "ship_skin": 601059639,
+        "skin_color_1": 0,
+        "skin_color_2": 0,
+        "skin_color_3": 0,
+        "shipdecal": 0,
+        "hplist": [
+          {
+            "hp": "EngineLeftTop",
+            "eqlist": []
+          },
+          {
+            "hp": "EngineeringBay",
+            "eqlist": [
+              {
+                "eq": 1994118675,
+                "id": 0,
+                "x": 8,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 522212149,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 2003110376,
+                "id": 0,
+                "x": 3,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 140457349,
+                "id": 0,
+                "x": 5,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 168180536,
+                "id": 0,
+                "x": 5,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "RightBeam",
+            "eqlist": [
+              {
+                "eq": 2069539870,
+                "id": 0,
+                "x": 0,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 2069539870,
+                "id": 0,
+                "x": 1,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 2069539870,
+                "id": 0,
+                "x": 1,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 2069539870,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "EngineLeftBottom",
+            "eqlist": []
+          },
+          {
+            "hp": "EngineRightTop",
+            "eqlist": []
+          },
+          {
+            "hp": "EngineRightBottom",
+            "eqlist": []
+          },
+          {
+            "hp": "LeftBeams",
+            "eqlist": [
+              {
+                "eq": 2069539870,
+                "id": 0,
+                "x": 0,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 2069539870,
+                "id": 0,
+                "x": 1,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 2069539870,
+                "id": 0,
+                "x": 1,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 2069539870,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "FrontBeams",
+            "eqlist": []
+          },
+          {
+            "hp": "RightRockets",
+            "eqlist": [
+              {
+                "eq": 1025645055,
+                "id": 0,
+                "x": 0,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 1025645055,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "LeftRockets",
+            "eqlist": [
+              {
+                "eq": 1025645055,
+                "id": 0,
+                "x": 0,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 1025645055,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          }
+        ],
+        "progression": [],
+        "cargo_hold_size": 0,
+        "cargo_list": []
+      },
+      "ServiceData": {
+        "xp": 25000,
+        "fleet_min": -1,
+        "fleet_max": -1,
+        "drop_state": true,
+        "role": 0,
+        "bt": "",
+        "tags": [],
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": [
+            {
+              "type": 2,
+              "chance": 0.032,
+              "weight": 1,
+              "item_id": 1994118675,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 1,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.032,
+              "weight": 1,
+              "item_id": 522212149,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 1,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.128,
+              "weight": 1,
+              "item_id": 1215219468,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.040000003,
+              "weight": 1,
+              "item_id": 2003110376,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.128,
+              "weight": 1,
+              "item_id": 1313087379,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.040000003,
+              "weight": 1,
+              "item_id": 140457349,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.128,
+              "weight": 1,
+              "item_id": 1700787339,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.040000003,
+              "weight": 1,
+              "item_id": 168180536,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.128,
+              "weight": 1,
+              "item_id": 758000851,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.040000003,
+              "weight": 1,
+              "item_id": 2069539870,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.064,
+              "weight": 1,
+              "item_id": 341278780,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.024000002,
+              "weight": 1,
+              "item_id": 1025645055,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 1,
+              "childs": null
+            }
+          ]
+        }
+      }
+    }
+  ]
 }

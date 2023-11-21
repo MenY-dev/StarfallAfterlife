@@ -116,7 +116,16 @@
         "role": 3,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": []
+        }
       }
     },
     {
@@ -207,7 +216,16 @@
         "role": 3,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": []
+        }
       }
     },
     {
@@ -303,7 +321,16 @@
         "role": 3,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": []
+        }
       }
     },
     {
@@ -442,7 +469,16 @@
         "role": 3,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": []
+        }
       }
     },
     {
@@ -589,7 +625,16 @@
         "role": 3,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": []
+        }
       }
     },
     {
@@ -780,7 +825,27 @@
         "role": 7,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": [
+            {
+              "type": 2,
+              "chance": 0.025,
+              "weight": 1,
+              "item_id": 1281308446,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            }
+          ]
+        }
       }
     },
     {
@@ -900,7 +965,16 @@
         "role": 7,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": []
+        }
       }
     },
     {
@@ -998,7 +1072,16 @@
         "role": 3,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": []
+        }
       }
     },
     {
@@ -1094,7 +1177,16 @@
         "role": 3,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": []
+        }
       }
     },
     {
@@ -1264,7 +1356,16 @@
         "role": 3,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": []
+        }
       }
     },
     {
@@ -1387,7 +1488,16 @@
         "role": 7,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": []
+        }
       }
     },
     {
@@ -1591,7 +1701,16 @@
         "role": 7,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": []
+        }
       }
     },
     {
@@ -1724,7 +1843,16 @@
         "role": 3,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": []
+        }
       }
     },
     {
@@ -1848,7 +1976,16 @@
         "role": 3,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": []
+        }
       }
     },
     {
@@ -1951,7 +2088,16 @@
         "role": 3,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": []
+        }
       }
     },
     {
@@ -2112,7 +2258,16 @@
         "role": 7,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": []
+        }
       }
     },
     {
@@ -2237,7 +2392,16 @@
         "role": 7,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": []
+        }
       }
     },
     {
@@ -2353,7 +2517,57 @@
         "role": 3,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": [
+            {
+              "type": 2,
+              "chance": 0.080000006,
+              "weight": 1,
+              "item_id": 2102663646,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.025,
+              "weight": 1,
+              "item_id": 1778316309,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.1,
+              "weight": 1,
+              "item_id": 792039895,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.030000001,
+              "weight": 1,
+              "item_id": 232644897,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 3,
+              "childs": null
+            }
+          ]
+        }
       }
     },
     {
@@ -2551,7 +2765,16 @@
         "role": 3,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": []
+        }
       }
     },
     {
@@ -2657,7 +2880,16 @@
         "role": 3,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": []
+        }
       }
     },
     {
@@ -2861,7 +3093,57 @@
         "role": 7,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": [
+            {
+              "type": 2,
+              "chance": 0.112,
+              "weight": 1,
+              "item_id": 1601256751,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.035,
+              "weight": 1,
+              "item_id": 1439388296,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.14,
+              "weight": 1,
+              "item_id": 1648364144,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.042000003,
+              "weight": 1,
+              "item_id": 251198060,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 3,
+              "childs": null
+            }
+          ]
+        }
       }
     },
     {
@@ -3008,7 +3290,16 @@
         "role": 7,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": []
+        }
       }
     },
     {
@@ -3185,7 +3476,37 @@
         "role": 3,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": [
+            {
+              "type": 2,
+              "chance": 0.080000006,
+              "weight": 1,
+              "item_id": 2102663646,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.025,
+              "weight": 1,
+              "item_id": 1778316309,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            }
+          ]
+        }
       }
     },
     {
@@ -3307,7 +3628,16 @@
         "role": 3,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": []
+        }
       }
     },
     {
@@ -3387,7 +3717,16 @@
         "role": 3,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": []
+        }
       }
     },
     {
@@ -3491,7 +3830,16 @@
         "role": 7,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": []
+        }
       }
     },
     {
@@ -3614,7 +3962,47 @@
         "role": 7,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": [
+            {
+              "type": 2,
+              "chance": 0.040000003,
+              "weight": 1,
+              "item_id": 1307159283,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 1,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.2,
+              "weight": 1,
+              "item_id": 95343853,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.060000002,
+              "weight": 1,
+              "item_id": 308815052,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 3,
+              "childs": null
+            }
+          ]
+        }
       }
     },
     {
@@ -3702,7 +4090,16 @@
         "role": 3,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": []
+        }
       }
     },
     {
@@ -3902,7 +4299,16 @@
         "role": 3,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": []
+        }
       }
     },
     {
@@ -4073,7 +4479,16 @@
         "role": 3,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": []
+        }
       }
     },
     {
@@ -4177,7 +4592,16 @@
         "role": 7,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": []
+        }
       }
     },
     {
@@ -4336,7 +4760,16 @@
         "role": 7,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": []
+        }
       }
     },
     {
@@ -4478,7 +4911,37 @@
         "role": 3,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": [
+            {
+              "type": 2,
+              "chance": 0.080000006,
+              "weight": 1,
+              "item_id": 2102663646,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.025,
+              "weight": 1,
+              "item_id": 1778316309,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            }
+          ]
+        }
       }
     },
     {
@@ -4649,7 +5112,16 @@
         "role": 3,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": []
+        }
       }
     },
     {
@@ -4988,7 +5460,37 @@
         "role": 3,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": [
+            {
+              "type": 2,
+              "chance": 0.2,
+              "weight": 1,
+              "item_id": 792039895,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.060000002,
+              "weight": 1,
+              "item_id": 232644897,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 3,
+              "childs": null
+            }
+          ]
+        }
       }
     },
     {
@@ -5137,7 +5639,16 @@
         "role": 7,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": []
+        }
       }
     },
     {
@@ -5269,7 +5780,16 @@
         "role": 7,
         "bt": "",
         "tags": [],
-        "drop_tree": null
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": []
+        }
       }
     }
   ]

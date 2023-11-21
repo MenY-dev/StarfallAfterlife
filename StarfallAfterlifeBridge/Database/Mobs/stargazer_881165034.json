@@ -1,415 +1,689 @@
 {
-	"Id": 881165034,
-	"InternalName": "stargazer",
-	"Faction": 11,
-	"Level": 86,
-	"VisionRadius": 3,
-	"Speed": 0.7,
-	"BehaviorTreeName": "/Game/gameplay/ai/fleets/screechers/BT_ScreechersFleet.BT_ScreechersFleet",
-	"MainShipIndex": 0,
-	"Tags": [
-		"Mob.Role.Elite"
-	],
-	"Ships": [
-		{
-			"Data": {
-	"hull": 1707638402,
-	"ship_skin": 1570627218,
-	"hplist": [
-		{
-			"hp": "EngineHardpoint",
-			"eqlist": [
-				{
-					"eq": 1461734848,
-					"x": 0,
-					"y": 0
-				}
-			]
-		},
-		{
-			"hp": "EngineHardpoint1",
-			"eqlist": [
-				{
-					"eq": 1461734848,
-					"x": 0,
-					"y": 0
-				}
-			]
-		},
-		{
-			"hp": "CarrierHardpoint",
-			"eqlist": [
-				{
-					"eq": 1221453526,
-					"x": 3,
-					"y": 3
-				},
-				{
-					"eq": 1221453526,
-					"x": 0,
-					"y": 1
-				},
-				{
-					"eq": 1221453526,
-					"x": 3,
-					"y": 2
-				},
-				{
-					"eq": 1221453526,
-					"x": 3,
-					"y": 0
-				},
-				{
-					"eq": 1221453526,
-					"x": 0,
-					"y": 2
-				},
-				{
-					"eq": 1221453526,
-					"x": 3,
-					"y": 1
-				},
-				{
-					"eq": 1221453526,
-					"x": 0,
-					"y": 3
-				},
-				{
-					"eq": 1221453526,
-					"x": 0,
-					"y": 0
-				},
-				{
-					"eq": 1221453526,
-					"x": 0,
-					"y": 4
-				},
-				{
-					"eq": 1221453526,
-					"x": 3,
-					"y": 4
-				},
-				{
-					"eq": 1221453526,
-					"x": 0,
-					"y": 5
-				},
-				{
-					"eq": 1221453526,
-					"x": 3,
-					"y": 5
-				}
-			]
-		},
-		{
-			"hp": "CarrierHardpoint1",
-			"eqlist": [
-				{
-					"eq": 1221453526,
-					"x": 3,
-					"y": 3
-				},
-				{
-					"eq": 1221453526,
-					"x": 0,
-					"y": 1
-				},
-				{
-					"eq": 1221453526,
-					"x": 3,
-					"y": 2
-				},
-				{
-					"eq": 1221453526,
-					"x": 3,
-					"y": 0
-				},
-				{
-					"eq": 1221453526,
-					"x": 0,
-					"y": 2
-				},
-				{
-					"eq": 1221453526,
-					"x": 3,
-					"y": 1
-				},
-				{
-					"eq": 1221453526,
-					"x": 0,
-					"y": 3
-				},
-				{
-					"eq": 1221453526,
-					"x": 0,
-					"y": 0
-				},
-				{
-					"eq": 1221453526,
-					"x": 0,
-					"y": 4
-				},
-				{
-					"eq": 1221453526,
-					"x": 3,
-					"y": 4
-				},
-				{
-					"eq": 1221453526,
-					"x": 0,
-					"y": 5
-				},
-				{
-					"eq": 1221453526,
-					"x": 3,
-					"y": 5
-				}
-			]
-		},
-		{
-			"hp": "SingleTurretHardpoint",
-			"eqlist": [
-				{
-					"eq": 974781291,
-					"x": 0,
-					"y": 2
-				},
-				{
-					"eq": 974781291,
-					"x": 0,
-					"y": 1
-				},
-				{
-					"eq": 974781291,
-					"x": 0,
-					"y": 0
-				}
-			]
-		},
-		{
-			"hp": "SingleTurretHardpoint1",
-			"eqlist": [
-				{
-					"eq": 974781291,
-					"x": 0,
-					"y": 2
-				},
-				{
-					"eq": 974781291,
-					"x": 0,
-					"y": 1
-				},
-				{
-					"eq": 974781291,
-					"x": 0,
-					"y": 0
-				}
-			]
-		},
-		{
-			"hp": "EngineeringBay",
-			"eqlist": [
-				{
-					"eq": 831751331,
-					"x": 0,
-					"y": 0
-				},
-				{
-					"eq": 1382489610,
-					"x": 0,
-					"y": 2
-				},
-				{
-					"eq": 2087853007,
-					"x": 0,
-					"y": 4
-				}
-			]
-		},
-		{
-			"hp": "CarrierHardpoint2",
-			"eqlist": [
-				{
-					"eq": 1221453526,
-					"x": 3,
-					"y": 3
-				},
-				{
-					"eq": 1221453526,
-					"x": 0,
-					"y": 1
-				},
-				{
-					"eq": 1221453526,
-					"x": 3,
-					"y": 2
-				},
-				{
-					"eq": 1221453526,
-					"x": 3,
-					"y": 0
-				},
-				{
-					"eq": 1221453526,
-					"x": 0,
-					"y": 2
-				},
-				{
-					"eq": 1221453526,
-					"x": 3,
-					"y": 1
-				},
-				{
-					"eq": 1221453526,
-					"x": 0,
-					"y": 3
-				},
-				{
-					"eq": 1221453526,
-					"x": 0,
-					"y": 0
-				},
-				{
-					"eq": 1221453526,
-					"x": 0,
-					"y": 4
-				},
-				{
-					"eq": 1221453526,
-					"x": 3,
-					"y": 4
-				},
-				{
-					"eq": 1221453526,
-					"x": 0,
-					"y": 5
-				},
-				{
-					"eq": 1221453526,
-					"x": 3,
-					"y": 5
-				}
-			]
-		},
-		{
-			"hp": "CarrierHardpoint3",
-			"eqlist": [
-				{
-					"eq": 1221453526,
-					"x": 3,
-					"y": 3
-				},
-				{
-					"eq": 1221453526,
-					"x": 0,
-					"y": 1
-				},
-				{
-					"eq": 1221453526,
-					"x": 3,
-					"y": 2
-				},
-				{
-					"eq": 1221453526,
-					"x": 3,
-					"y": 0
-				},
-				{
-					"eq": 1221453526,
-					"x": 0,
-					"y": 2
-				},
-				{
-					"eq": 1221453526,
-					"x": 3,
-					"y": 1
-				},
-				{
-					"eq": 1221453526,
-					"x": 0,
-					"y": 3
-				},
-				{
-					"eq": 1221453526,
-					"x": 0,
-					"y": 0
-				},
-				{
-					"eq": 1221453526,
-					"x": 0,
-					"y": 4
-				},
-				{
-					"eq": 1221453526,
-					"x": 3,
-					"y": 4
-				},
-				{
-					"eq": 1221453526,
-					"x": 0,
-					"y": 5
-				},
-				{
-					"eq": 1221453526,
-					"x": 3,
-					"y": 5
-				}
-			]
-		},
-		{
-			"hp": "SingleTurretHardpoint2",
-			"eqlist": [
-				{
-					"eq": 974781291,
-					"x": 0,
-					"y": 2
-				},
-				{
-					"eq": 974781291,
-					"x": 0,
-					"y": 1
-				},
-				{
-					"eq": 974781291,
-					"x": 0,
-					"y": 0
-				}
-			]
-		},
-		{
-			"hp": "SingleTurretHardpoint3",
-			"eqlist": [
-				{
-					"eq": 974781291,
-					"x": 0,
-					"y": 2
-				},
-				{
-					"eq": 974781291,
-					"x": 0,
-					"y": 1
-				},
-				{
-					"eq": 974781291,
-					"x": 0,
-					"y": 0
-				}
-			]
-		}
-	]
-},
-			"ServiceData":
-			{
-				"xp": 200000,
-				"fleet_min": -1,
-				"fleet_max": -1,
-				"drop_state": true,
-				"role": 0,
-				"bt": "",
-				"tags": [
-					"mob.specialship.elite"
-				]
-			}
-		}
-	]
+  "Id": 881165034,
+  "InternalName": "stargazer",
+  "Faction": 11,
+  "Level": 86,
+  "VisionRadius": 3,
+  "Speed": 0.7,
+  "BehaviorTreeName": "/Game/gameplay/ai/fleets/screechers/BT_ScreechersFleet.BT_ScreechersFleet",
+  "MainShipIndex": 0,
+  "Tags": [
+    "Mob.Role.Elite"
+  ],
+  "Ships": [
+    {
+      "Data": {
+        "elid": 0,
+        "plid": 0,
+        "hull": 1707638402,
+        "xp": 0,
+        "armor": 0,
+        "structure": 0,
+        "detachment": 0,
+        "slot": 0,
+        "ship_skin": 1570627218,
+        "skin_color_1": 0,
+        "skin_color_2": 0,
+        "skin_color_3": 0,
+        "shipdecal": 0,
+        "hplist": [
+          {
+            "hp": "EngineHardpoint",
+            "eqlist": [
+              {
+                "eq": 1461734848,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "EngineHardpoint1",
+            "eqlist": [
+              {
+                "eq": 1461734848,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "CarrierHardpoint",
+            "eqlist": [
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 3,
+                "y": 3,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 0,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 3,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 3,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 0,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 3,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 0,
+                "y": 3,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 0,
+                "y": 4,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 3,
+                "y": 4,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 0,
+                "y": 5,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 3,
+                "y": 5,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "CarrierHardpoint1",
+            "eqlist": [
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 3,
+                "y": 3,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 0,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 3,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 3,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 0,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 3,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 0,
+                "y": 3,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 0,
+                "y": 4,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 3,
+                "y": 4,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 0,
+                "y": 5,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 3,
+                "y": 5,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "SingleTurretHardpoint",
+            "eqlist": [
+              {
+                "eq": 974781291,
+                "id": 0,
+                "x": 0,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 974781291,
+                "id": 0,
+                "x": 0,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 974781291,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "SingleTurretHardpoint1",
+            "eqlist": [
+              {
+                "eq": 974781291,
+                "id": 0,
+                "x": 0,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 974781291,
+                "id": 0,
+                "x": 0,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 974781291,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "EngineeringBay",
+            "eqlist": [
+              {
+                "eq": 831751331,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 1382489610,
+                "id": 0,
+                "x": 0,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 2087853007,
+                "id": 0,
+                "x": 0,
+                "y": 4,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "CarrierHardpoint2",
+            "eqlist": [
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 3,
+                "y": 3,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 0,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 3,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 3,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 0,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 3,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 0,
+                "y": 3,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 0,
+                "y": 4,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 3,
+                "y": 4,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 0,
+                "y": 5,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 3,
+                "y": 5,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "CarrierHardpoint3",
+            "eqlist": [
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 3,
+                "y": 3,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 0,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 3,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 3,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 0,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 3,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 0,
+                "y": 3,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 0,
+                "y": 4,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 3,
+                "y": 4,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 0,
+                "y": 5,
+                "destroyed": 0
+              },
+              {
+                "eq": 1221453526,
+                "id": 0,
+                "x": 3,
+                "y": 5,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "SingleTurretHardpoint2",
+            "eqlist": [
+              {
+                "eq": 974781291,
+                "id": 0,
+                "x": 0,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 974781291,
+                "id": 0,
+                "x": 0,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 974781291,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          },
+          {
+            "hp": "SingleTurretHardpoint3",
+            "eqlist": [
+              {
+                "eq": 974781291,
+                "id": 0,
+                "x": 0,
+                "y": 2,
+                "destroyed": 0
+              },
+              {
+                "eq": 974781291,
+                "id": 0,
+                "x": 0,
+                "y": 1,
+                "destroyed": 0
+              },
+              {
+                "eq": 974781291,
+                "id": 0,
+                "x": 0,
+                "y": 0,
+                "destroyed": 0
+              }
+            ]
+          }
+        ],
+        "progression": [],
+        "cargo_hold_size": 0,
+        "cargo_list": []
+      },
+      "ServiceData": {
+        "xp": 200000,
+        "fleet_min": -1,
+        "fleet_max": -1,
+        "drop_state": true,
+        "role": 0,
+        "bt": "",
+        "tags": [
+          "mob.specialship.elite"
+        ],
+        "drop_tree": {
+          "type": 1,
+          "chance": 1,
+          "weight": 1,
+          "item_id": 0,
+          "item_type": 0,
+          "item_min": 1,
+          "item_max": 1,
+          "childs": [
+            {
+              "type": 2,
+              "chance": 0.6,
+              "weight": 1,
+              "item_id": 1782486572,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.09,
+              "weight": 1,
+              "item_id": 1461734848,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 1,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.6,
+              "weight": 1,
+              "item_id": 535849590,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.09,
+              "weight": 1,
+              "item_id": 1221453526,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 1,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.48000002,
+              "weight": 1,
+              "item_id": 493470161,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.120000005,
+              "weight": 1,
+              "item_id": 974781291,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 1,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.120000005,
+              "weight": 1,
+              "item_id": 1137747723,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.05,
+              "weight": 1,
+              "item_id": 2077929593,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.09,
+              "weight": 1,
+              "item_id": 1601256751,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.0375,
+              "weight": 1,
+              "item_id": 1439388296,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.09,
+              "weight": 1,
+              "item_id": 2102663646,
+              "item_type": 1,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
+              "chance": 0.0375,
+              "weight": 1,
+              "item_id": 1778316309,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            }
+          ]
+        }
+      }
+    }
+  ]
 }
