@@ -1,5 +1,6 @@
 ﻿using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Game;
+using StarfallAfterlife.Bridge.Generators;
 using StarfallAfterlife.Bridge.Realms;
 using System;
 using System.Collections.Generic;
@@ -221,7 +222,7 @@ namespace StarfallAfterlife.Bridge.Profiles
                 faction is not (Faction.Deprived or Faction.Eclipse or Faction.Vanguard))
                 return null;
 
-            var character = new Character() { Name = name, Faction = (byte)faction };
+            var character = new NewCharacterGenerator().CreateCharacter(name, faction);
 
             for (int i = 0; i < profile.Chars.Count + 1; i++)
             {
