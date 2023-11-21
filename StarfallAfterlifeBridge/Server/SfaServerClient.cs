@@ -267,6 +267,7 @@ namespace StarfallAfterlife.Bridge.Server
         {
             if (doc is JObject && (int)doc["char_id"] is int id)
             {
+                Server.UseClients(_ => Server.Characters.RemoveId(id));
                 DiscoveryClient?.Characters?.RemoveAll(c => c.UniqueId == id);
             }
         }
