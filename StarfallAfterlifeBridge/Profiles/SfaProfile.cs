@@ -249,6 +249,15 @@ namespace StarfallAfterlife.Bridge.Profiles
 
                 foreach (var realm in Realms)
                     realm?.RemoveProgress(charId);
+
+                if (Sessions?.FirstOrDefault(s => s.CharacterId == charId) is DiscoverySession session)
+                {
+                    Sessions.Remove(session);
+                    session.RemoveSessionFile();
+
+                    if (CurrentSession ==  session)
+                        CurrentSession = null;
+                }
             }
         }
 
