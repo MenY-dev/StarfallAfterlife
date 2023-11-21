@@ -5,12 +5,12 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace StarfallAfterlife.Bridge.Profiles
+namespace StarfallAfterlife.Bridge.Database
 {
     public class DropTreeNode : ICloneable
     {
         [JsonPropertyName("type")]
-        public int Type { get; set; } = -1;
+        public DropTreeNodeType Type { get; set; } = DropTreeNodeType.And;
 
         [JsonPropertyName("chance")]
         public float Chance { get; set; } = 0;
@@ -22,7 +22,7 @@ namespace StarfallAfterlife.Bridge.Profiles
         public int ItemId { get; set; } = 0;
 
         [JsonPropertyName("item_type")]
-        public int ItemType { get; set; } = 0;
+        public InventoryItemType ItemType { get; set; } = 0;
 
         [JsonPropertyName("item_min")]
         public int ItemMin { get; set; } = 0;
@@ -46,7 +46,7 @@ namespace StarfallAfterlife.Bridge.Profiles
         {
             var items = new HashSet<int>();
 
-            if (Type == 2)
+            if (Type == DropTreeNodeType.Item)
             {
                 items.Add(ItemId);
             }
