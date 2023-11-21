@@ -169,14 +169,6 @@ namespace StarfallAfterlife.Bridge.Game
             {
                 JsonArray inventory = new JsonArray();
 
-                if (character.Inventory.Count == 0)
-                {
-                    foreach (var item in Profile.Database.Equipments.Values)
-                    {
-                        character.AddInventoryItem(item, 999);
-                    }
-                }
-
                 foreach (var item in character.Inventory)
                     inventory.Add(JsonHelpers.ParseNodeUnbuffered(character.CreateInventoryItemResponse(item)?.ToJsonString()));
 
