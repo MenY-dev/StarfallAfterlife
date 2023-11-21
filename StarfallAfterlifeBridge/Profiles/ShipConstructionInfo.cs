@@ -76,6 +76,18 @@ namespace StarfallAfterlife.Bridge.Profiles
             return clone;
         }
 
+        public Dictionary<SfaItem, int> GetAllHardpointsEquipment()
+        {
+            var dtb = SfaDatabase.Instance;
+
+            return HardpointList?
+                .SelectMany(h => h?.EquipmentList ?? new())
+                .Select(e => dtb.GetItem(e?.Equipment ?? 0))
+                .Where(i => i is not null)
+                .GroupBy(i => i)
+                .ToDictionary(i => i.Key, i => i.Count()) ?? new();
+        }
+
         public static int CalculateCost(ShipConstructionInfo from, ShipConstructionInfo to)
         {
             if (from is null || to is null)

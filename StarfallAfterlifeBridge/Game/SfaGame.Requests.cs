@@ -616,6 +616,15 @@ namespace StarfallAfterlife.Bridge.Game
                         }));
                     }
 
+                    var oldItems = oldShip.GetAllHardpointsEquipment();
+                    var newItems = newShip.GetAllHardpointsEquipment();
+
+                    foreach (var item in oldItems)
+                        character.AddInventoryItem(item.Key, item.Value);
+
+                    foreach (var item in newItems)
+                        character.DeleteInventoryItem(item.Key, item.Value);
+
                     var igcCost = 0;
                     var sfcCost = 0;
 
@@ -675,6 +684,12 @@ namespace StarfallAfterlife.Bridge.Game
                         return;
 
                     character.DeleteShip(ship);
+
+                    if (ship.Data is not null)
+                    {
+                        foreach (var item in ship.Data.GetAllHardpointsEquipment())
+                            character.AddInventoryItem(item.Key, item.Value);
+                    }
 
                     if (p.Database?.GetShip(ship.Data?.Hull ?? 0) is ShipBlueprint blueprint)
                         character.IGC = Math.Max(0, character.IGC + (int)Math.Round(blueprint.IGCToProduce * 0.33333333));

@@ -34,30 +34,18 @@ namespace StarfallAfterlife.Bridge.Generators
             character.Detachments[detachment].Slots[167313036] = character.Ships.ElementAtOrDefault(0)?.Id ?? 0;
             character.Detachments[detachment].Slots[167313034] = character.Ships.ElementAtOrDefault(1)?.Id ?? 0;
 
-            ResolveInventory(character);
             ResolveExploration(character);
 
             return character;
         }
 
-        protected void ResolveInventory(Character character)
+        protected void ResolveExploration(Character character)
         {
-            var database = SfaDatabase.Instance;
-            var items = character.Ships
+            character.ProjectResearch = character.Ships
                 .SelectMany(s => s.Data.HardpointList)
                 .SelectMany(h => h.EquipmentList)
                 .GroupBy(eq => eq.Equipment)
-                .ToList();
-
-            foreach (var item in items)
-                if (database.GetItem(item.Key) is SfaItem itemInfo)
-                    character.AddInventoryItem(itemInfo, item.Count());
-        }
-
-        protected void ResolveExploration(Character character)
-        {
-            character.ProjectResearch = character.Inventory
-                .Select(i => new ResearchInfo() { Entity = i.Id, IsOpened = 1, Xp = 100 })
+                .Select(i => new ResearchInfo() { Entity = i.Key, IsOpened = 1, Xp = 100 })
                 .ToList();
         }
 
