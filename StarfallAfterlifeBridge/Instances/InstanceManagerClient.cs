@@ -1,7 +1,9 @@
 ﻿using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Mathematics;
 using StarfallAfterlife.Bridge.Networking.Messaging;
+using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Serialization;
+using StarfallAfterlife.Bridge.Server.Characters;
 using StarfallAfterlife.Bridge.Server.Discovery;
 using StarfallAfterlife.Bridge.Tasks;
 using System;
@@ -173,6 +175,22 @@ namespace StarfallAfterlife.Bridge.Instances
                 ["auth"] = instanceAuth,
                 ["data"] = data?.ToJsonString(false),
             });
+        }
+
+        public virtual void UpdatePartyMembers(InstanceInfo instance, int partyId, List<CharacterPartyMember> members)
+        {
+            lock (Lockher)
+            {
+                if (GetSyncKey(instance) is string syncKey)
+                {
+                    Send("send_update_party_members", new JsonObject
+                    {
+                        ["sync_key"] = syncKey,
+                        ["party_id"] = partyId,
+                        ["party_members"] = JsonHelpers.ParseNodeUnbuffered(members)
+                    });
+                }
+            }
         }
 
         protected void HandleInstanceStateChanged(JsonNode doc)

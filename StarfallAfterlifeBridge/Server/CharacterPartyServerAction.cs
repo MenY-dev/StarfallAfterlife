@@ -13,5 +13,6 @@ namespace StarfallAfterlife.Bridge.Server
         MemberList = 2,
         InviteError = 3,
         LeaveMember = 4,
+        MemberListForServer = 5,
     }
 }

@@ -149,7 +149,7 @@ namespace StarfallAfterlife.Bridge.Server
         {
             SendCharacterPartyMessage(CharacterPartyServerAction.InviteError, writer =>
             {
-                writer.WriteShortString(userName, -1, true, Encoding.UTF8);
+                writer.WriteShortString(userName ?? "", -1, true, Encoding.UTF8);
                 writer.WriteByte((byte)inviteResult);
             });
         }
@@ -158,7 +158,7 @@ namespace StarfallAfterlife.Bridge.Server
         {
             SendCharacterPartyMessage(CharacterPartyServerAction.Invite, writer =>
             {
-                writer.WriteShortString(ownerName, -1, true, Encoding.UTF8);
+                writer.WriteShortString(ownerName ?? "", -1, true, Encoding.UTF8);
             });
         }
 
@@ -166,7 +166,7 @@ namespace StarfallAfterlife.Bridge.Server
         {
             SendCharacterPartyMessage(CharacterPartyServerAction.InviteResponsed, writer =>
             {
-                writer.WriteShortString(userName, -1, true, Encoding.UTF8);
+                writer.WriteShortString(userName ?? "", -1, true, Encoding.UTF8);
                 writer.WriteBoolean(accepted);
             });
         }
@@ -182,7 +182,7 @@ namespace StarfallAfterlife.Bridge.Server
                 foreach (var member in members)
                 {
                     writer.WriteInt32(member.Id);
-                    writer.WriteShortString(member.Name, -1, true, Encoding.UTF8);
+                    writer.WriteShortString(member.Name ?? "", -1, true, Encoding.UTF8);
                     writer.WriteByte((byte)member.Status);
                     writer.WriteInt32(member.CurrentStarSystem);
                 }

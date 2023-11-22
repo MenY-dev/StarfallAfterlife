@@ -1,6 +1,7 @@
 ﻿using StarfallAfterlife.Bridge.Mathematics;
 using StarfallAfterlife.Bridge.Networking.Channels;
 using StarfallAfterlife.Bridge.Serialization;
+using StarfallAfterlife.Bridge.Server.Characters;
 using StarfallAfterlife.Bridge.Server.Discovery;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace StarfallAfterlife.Bridge.Instances
 
         public InstanceDiscoveryChannel DiscoveryChannel { get; protected set; }
 
-        public InstanceChannel CharactPartyChannel { get; protected set; }
+        public InstanceCharacterPartyChannel CharactPartyChannel { get; protected set; }
 
         public override JsonNode CreateInstanceConfig()
         {
@@ -37,10 +38,13 @@ namespace StarfallAfterlife.Bridge.Instances
             Context?.SendFleetLeaves(this, fleetType, fleetId, hex);
         }
 
+        public virtual void UpdatePartyMembers(int partyId, List<CharacterPartyMember> members) =>
+            CharactPartyChannel?.SendPartyMembers(partyId, members);
+
         public override void ConnectChannels(InstanceChannelClient client)
         {
             DiscoveryChannel ??= new InstanceDiscoveryChannel("Discovery", 1, Context, this, client);
-            CharactPartyChannel ??= new InstanceChannel("CharactParty", 2, Context, this, client);
+            CharactPartyChannel ??= new InstanceCharacterPartyChannel("CharactParty", 2, Context, this, client);
 
             client.Add(DiscoveryChannel);
             client.Add(CharactPartyChannel);

@@ -4,6 +4,7 @@ using StarfallAfterlife.Bridge.Networking;
 using StarfallAfterlife.Bridge.Networking.Messaging;
 using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Serialization;
+using StarfallAfterlife.Bridge.Server.Characters;
 using StarfallAfterlife.Bridge.Server.Discovery;
 using System;
 using System.Collections.Generic;
@@ -70,6 +71,9 @@ namespace StarfallAfterlife.Bridge.Instances
 
                 case "send_reward_for_even":
                     HandleRewardForEven(doc); break;
+
+                case "send_update_party_members":
+                    HandleUpdatePartyMembers(doc); break;
 
             }
         }
@@ -306,6 +310,19 @@ namespace StarfallAfterlife.Bridge.Instances
                 (string)doc["auth"] is string auth)
             {
                 RewardForEvenReceived?.Invoke(this, new(auth, reward));
+            }
+        }
+
+        private void HandleUpdatePartyMembers(JsonNode doc)
+        {
+            if ((string)doc?["sync_key"] is string syncKey &&
+                GetInstanceWithSyncKey(syncKey) is DiscoveryBattleInstance instance &&
+                (int?)doc["party_id"] is int partyId)
+            {
+                var members = doc["party_members"]?
+                    .DeserializeUnbuffered<List<CharacterPartyMember>>() ?? new();
+
+                instance.UpdatePartyMembers(partyId, members);
             }
         }
 

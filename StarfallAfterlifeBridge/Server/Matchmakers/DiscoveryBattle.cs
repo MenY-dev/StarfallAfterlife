@@ -760,5 +760,13 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 }
             }
         }
+
+        public virtual void UpdatePartyMembers(int partyId, List<CharacterPartyMember> members)
+        {
+            lock (_lockher)
+            {
+                GameMode.InstanceManager.UpdatePartyMembers(InstanceInfo, partyId, members ?? new());
+            }
+        }
     }
 }

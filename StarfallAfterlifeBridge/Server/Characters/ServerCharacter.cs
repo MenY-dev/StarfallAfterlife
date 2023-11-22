@@ -77,6 +77,8 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
         public List<ShipsGroup> ShipGroups { get; } = new();
 
+        public CharacterParty Party { get; set; }
+
         protected Dictionary<int, DateTime> AbilitiesCooldown { get; } = new();
 
         private readonly object _characterLockher = new();

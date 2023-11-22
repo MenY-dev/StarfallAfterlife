@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StarfallAfterlife.Bridge.Server.Matchmakers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -132,6 +133,39 @@ namespace StarfallAfterlife.Bridge.Server.Characters
             });
 
             return party;
+        }
+
+        public void BroadcastMembers()
+        {
+            Server?.UseClients(_ =>
+            {
+                var server = Server;
+
+                if (server is null)
+                    return;
+
+                var battles = new HashSet<DiscoveryBattle>();
+
+                foreach (var member in Members)
+                {
+                    var character = server.GetCharacter(member.Id);
+
+                    if (character is null)
+                        continue;
+
+                    if (server.Matchmaker?.GetBattles(character) is MatchmakerBattle[] charBattles)
+                        foreach (var battle in charBattles)
+                            battles.Add(battle as DiscoveryBattle);
+
+                    character.DiscoveryClient?.Invoke(c => c.SendPartyMembers());
+                }
+
+                server.Invoke(() =>
+                {
+                    foreach (var battle in battles)
+                        battle?.UpdatePartyMembers(Id, Members.ToList());
+                });
+            });
         }
     }
 }
