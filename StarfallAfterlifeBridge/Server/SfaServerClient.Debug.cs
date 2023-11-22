@@ -96,6 +96,14 @@ namespace StarfallAfterlife.Bridge.Server
             {
                 CurrentCharacter?.AddCharacterCurrencies(bgc: charBgc);
             }
+            else if (msg.StartsWith("add party"))
+            {
+                if (CurrentCharacter is ServerCharacter character)
+                {
+                    var party = CharacterParty.Create(Server, character.UniqueId);
+                    SendToChat(channel, label, $"New party: {party?.Id.ToString() ?? "error"}");
+                }
+            }
             else if (msg.StartsWith("jmp ") &&
                 msg.Length > 4 &&
                 int.TryParse(msg[4..].Trim(), out int system))

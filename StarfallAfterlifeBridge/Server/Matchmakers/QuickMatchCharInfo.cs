@@ -31,6 +31,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 Faction = character.Faction,
                 Team = 0,
                 Role = DiscoveryPlayerInstanceStatus.Initiate,
+                PartyId = character.Party?.Id ?? 0,
                 Features = new()
                 {
                     DropRules = new()

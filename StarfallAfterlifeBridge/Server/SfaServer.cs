@@ -17,6 +17,7 @@ using System.Text.Json.Nodes;
 using StarfallAfterlife.Bridge.Collections;
 using StarfallAfterlife.Bridge.Server.Galaxy;
 using StarfallAfterlife.Bridge.Generators;
+using StarfallAfterlife.Bridge.Profiles;
 
 namespace StarfallAfterlife.Bridge.Server
 {
@@ -33,6 +34,8 @@ namespace StarfallAfterlife.Bridge.Server
         public List<SfaServerClient> Clients { get; } = new();
 
         public IdCollection<ServerCharacter> Characters { get; } = new() { StartId = 1 };
+
+        public IdCollection<CharacterParty> Parties { get; } = new() { StartId = 1 };
 
         public Stack<int> FreePlayersIds { get; } = new();
 
@@ -86,8 +89,13 @@ namespace StarfallAfterlife.Bridge.Server
                     RemoveClient(client);
 
                 foreach (var item in clients)
+                {
+                    if (item.DiscoveryClient?.CurrentCharacter is ServerCharacter character)
+                        character.Party?.RemoveMember(character.UniqueId);
+
                     if ((DateTime.Now - item.LastInput).Hours > 4)
                         RemoveClient(item);
+                }
             });
         }
 
@@ -109,9 +117,16 @@ namespace StarfallAfterlife.Bridge.Server
                     var clientCharacters = client.DiscoveryClient?.Characters;
 
                     if (clientCharacters is not null)
+                    {
                         foreach (var item in clientCharacters)
+                        {
                             if (item is ServerCharacter character)
+                            {
+                                character.Party?.RemoveMember(character.UniqueId);
                                 Characters.RemoveId(character.UniqueId);
+                            }
+                        }
+                    }
 
                     clients.Remove(client);
                     client.Close();

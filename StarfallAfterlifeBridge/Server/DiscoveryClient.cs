@@ -168,6 +168,8 @@ namespace StarfallAfterlife.Bridge.Server
 
             if (CurrentCharacter is ServerCharacter character)
             {
+                character.Party?.SetMemberStarSystem(character.UniqueId, -1);
+
                 if (character.Fleet is UserFleet fleet)
                 {
                     fleet.Listeners?.Clear();
@@ -307,6 +309,7 @@ namespace StarfallAfterlife.Bridge.Server
 
             State = SfaCharacterState.InGalaxy;
             Galaxy?.BeginPreUpdateAction(g => g.EnterToStarSystem(system, character.Fleet, location));
+            character.Party?.SetMemberStarSystem(character.UniqueId, system);
 
             if (Server.Matchmaker is SfaMatchmaker matchmaker &&
                         matchmaker.GetBattle(character) is DiscoveryBattle battle)

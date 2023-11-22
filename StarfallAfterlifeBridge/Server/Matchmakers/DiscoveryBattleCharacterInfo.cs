@@ -43,6 +43,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 Name = ServerCharacter.Name,
                 Auth = Guid.NewGuid().ToString(),
                 Faction = ServerCharacter.Faction,
+                PartyId = ServerCharacter.Party?.Id ?? 0,
                 Role = member.Role == BattleRole.Defense ?
                        DiscoveryPlayerInstanceStatus.None :
                        DiscoveryPlayerInstanceStatus.Initiate,

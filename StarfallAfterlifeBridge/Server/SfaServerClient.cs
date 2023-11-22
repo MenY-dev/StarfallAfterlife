@@ -77,6 +77,9 @@ namespace StarfallAfterlife.Bridge.Server
                 case SfaServerAction.CharacterFriendChannel:
                     InputFromFriendChannel(reader, true);
                     break;
+                case SfaServerAction.CharacterPartyChannel:
+                    DiscoveryClient?.InputFromCharacterPartyChannel(reader);
+                    break;
             }
         }
 
@@ -267,8 +270,12 @@ namespace StarfallAfterlife.Bridge.Server
         {
             if (doc is JObject && (int)doc["char_id"] is int id)
             {
-                Server.UseClients(_ => Server.Characters.RemoveId(id));
-                DiscoveryClient?.Characters?.RemoveAll(c => c.UniqueId == id);
+                if (Server?.GetCharacter(id) is ServerCharacter character)
+                {
+                    character.Party?.RemoveMember(character.Id);
+                    Server.UseClients(_ => Server.Characters.RemoveId(character.UniqueId));
+                    DiscoveryClient?.Characters?.Remove(character);
+                }
             }
         }
 

@@ -53,6 +53,7 @@ namespace StarfallAfterlife.Bridge.Server
         QuickMatchChannel = 195,
         UserFriendChannel = 196,
         CharacterFriendChannel = 197,
+        CharacterPartyChannel = 198,
 
         Chat = 220,
     }

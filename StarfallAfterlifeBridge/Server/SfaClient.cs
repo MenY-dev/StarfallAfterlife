@@ -58,6 +58,8 @@ namespace StarfallAfterlife.Bridge.Server
 
         protected FriendChannel UserFriendsChannel => Game?.UserFriendsChannel;
 
+        protected CharactPartyChannel CharactPartyChannel => Game?.CharactPartyChannel;
+
         public SfaClient(SfaGame game)
         {
             Game = game;
@@ -89,6 +91,9 @@ namespace StarfallAfterlife.Bridge.Server
                     break;
                 case SfaServerAction.UserFriendChannel:
                     UserFriendsChannel?.Send(reader.ReadToEnd());
+                    break;
+                case SfaServerAction.CharacterPartyChannel:
+                    CharactPartyChannel?.Send(reader.ReadToEnd());
                     break;
             }
         }

@@ -34,6 +34,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 Auth = Guid.NewGuid().ToString(),
                 Faction = character.Faction,
                 Team = Team,
+                PartyId = Char.Party?.Id ?? 0,
                 Features = new()
                 {
                     DropRules = new()
