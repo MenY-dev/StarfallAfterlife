@@ -13,12 +13,14 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
     {
         private LinkedList<ServerCharacter> Queue { get; } = new();
 
-        private readonly object _lockher = new();
+        private readonly object _locker = new();
 
         public void AddToQueue(ServerCharacter character)
         {
-            lock (_lockher)
+            lock (_locker)
             {
+                if (character is null)
+                    return;
 
                 if (Queue.Contains(character))
                     return;
@@ -30,16 +32,14 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         public void RemoveFromQueue(ServerCharacter character)
         {
-            lock (_lockher)
+            lock (_locker)
             {
                 Queue.Remove(character);
 
 
-                foreach (var item in Matchmaker.Battles
+                foreach (var item in Matchmaker.GetBattles(character)
                     .Select(b => b as MothershipAssaultBattle)
-                    .Where(b => 
-                        b is not null &&
-                        b.Chars?.FirstOrDefault(c => c.Char == character) is not null))
+                    .Where(b => b is not null))
                 {
                     item.AcceptMatchResult(character, false);
                 }
@@ -48,15 +48,14 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         public void AcceptMatch(ServerCharacter character)
         {
-            lock (_lockher)
+            lock (_locker)
             {
-                Matchmaker.Battles
-                    .Select(b => b as MothershipAssaultBattle)
-                    .Where(b =>
-                        b is not null &&
-                        b.Chars?.FirstOrDefault(c => c.Char == character) is not null)
-                    .FirstOrDefault()?
-                    .AcceptMatchResult(character, true);
+                Matchmaker?
+                   .GetBattles(character)
+                   .Select(b => b as MothershipAssaultBattle)
+                   .Where(b => b is not null and { State: MatchmakerBattleState.Created })
+                   .FirstOrDefault()?
+                   .AcceptMatchResult(character, true);
             }
         }
 
@@ -64,7 +63,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
         {
             base.Init(matchmaker);
 
-            lock (_lockher)
+            lock (_locker)
             {
                 Queue.Clear();
             }
@@ -77,7 +76,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
             if (server is null)
                 return;
 
-            lock (_lockher)
+            lock (_locker)
             {
                 var playersCount = server.GetClientsInDiscovery().Count;
                 var roomSize = Math.Max(Math.Min(6, playersCount - (playersCount % 2)), 1);
@@ -114,6 +113,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                     .GroupBy(p => p.Party)
                     .Select(p => (Party: p.Key, Chars: p.Select(i => i.Char).ToArray()))
                     .Where(p => p.Chars.Length > 1)
+                    .OrderBy(p => -p.Chars.Length)
                     .ToList();
 
                 var queue = new Queue<ServerCharacter>(players.Select(i => i.Char));
@@ -126,6 +126,8 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 if (groups.Count > 1)
                     team2.AddRange(groups[1].Chars.Take(teamSize));
 
+                queue = new(queue.Where(c => (team1.Contains(c) && team2.Contains(c)) == false));
+
                 static void FillTeam(List<ServerCharacter> team, Queue<ServerCharacter> queue, int teamSize)
                 {
                     for (int i = 0; i < queue.Count; i++)
@@ -136,8 +138,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                         if (queue.TryDequeue(out var player) == false)
                             return;
 
-                        if (team.Contains(player) == false)
-                            team.Add(player);
+                        team.Add(player);
                     }
                 }
 

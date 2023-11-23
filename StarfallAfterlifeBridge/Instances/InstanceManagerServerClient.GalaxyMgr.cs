@@ -1,4 +1,5 @@
-﻿using StarfallAfterlife.Bridge.Database;
+﻿using Microsoft.VisualBasic;
+using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Diagnostics;
 using StarfallAfterlife.Bridge.Networking;
 using StarfallAfterlife.Bridge.Profiles;
@@ -258,6 +259,15 @@ namespace StarfallAfterlife.Bridge.Instances
                 instance.State = InstanceState.Finished;
                 instance.StartShutdownTimer(120);
             }
+            
+            var doc = new JsonObject
+            {
+                ["auth"] = auth,
+                ["results"] = results,
+                ["game_mode"] = gameMode,
+            };
+
+            SendInstanceAction(auth, "battle_results", doc.ToJsonString(false));
         }
 
         protected void UpdateCharacterStats(int charId, JsonNode doc, string instanceAuth)

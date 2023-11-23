@@ -281,6 +281,12 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                             battle.HandleOreTaken(JsonHelpers.DeserializeUnbuffered<InventoryItem[]>(e.Data) ?? Array.Empty<InventoryItem>()); ;
                     }
                     break;
+                case "battle_results":
+                    {
+                        if (Battles.FirstOrDefault(b => b.InstanceInfo == e.Instance) is var battle)
+                            battle.HandleBattleResults(JsonHelpers.ParseNodeUnbuffered(e.Data) ?? "");
+                    }
+                    break;
                 default:
                     break;
             }

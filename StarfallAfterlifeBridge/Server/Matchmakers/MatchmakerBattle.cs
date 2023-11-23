@@ -74,7 +74,12 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         public virtual JsonNode GetMobData(MobDataRequest request)
         {
-            throw new NotImplementedException();
+            return null;
+        }
+
+        public virtual void HandleBattleResults(JsonNode doc)
+        {
+
         }
     }
 }

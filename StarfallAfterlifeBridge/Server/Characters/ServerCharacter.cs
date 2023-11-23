@@ -437,6 +437,35 @@ namespace StarfallAfterlife.Bridge.Server.Characters
             }
         }
 
+
+        public void HandleBattleResults(JsonNode doc)
+        {
+            if (doc is not JsonObject)
+                return;
+
+            var xp = (int?)doc["xp_earned"] ?? 0;
+            var ships = doc["ships"]?.AsArraySelf().Select(i => (int?)i?["shipid"] ?? -1).Where(i => i > -1).ToList() ?? new();
+            var shipsXp = new Dictionary<int, int>();
+
+            if (ships.Count > 0)
+            {
+                var oneShipXp = xp / ships.Count;
+
+                foreach (var i in ships)
+                    shipsXp[i] = oneShipXp;
+            }
+
+            foreach (var item in doc["ships"]?.AsArraySelf() ?? new())
+                if ((int?)item["shipid"] is int id)
+                    shipsXp[id] = 0;
+
+            AddCharacterCurrencies(
+                igc: (int?)doc["igc_earned"],
+                bgc: (int?)doc["bgc_earned"],
+                xp: xp,
+                shipsXp: shipsXp);
+        }
+
         public void ReacallShip(int shipId, int slotId)
         {
             DiscoveryClient?.SendFleetRecallStateUpdate(FleetRecallState.Started, 1, slotId);
