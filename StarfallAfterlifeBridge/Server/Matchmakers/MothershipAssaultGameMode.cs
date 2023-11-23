@@ -86,28 +86,86 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 if (Queue.Count < roomSize)
                     return;
 
-                var players = new List<ServerCharacter>();
+                var players = new HashSet<(ServerCharacter Char, CharacterParty Party)>();
 
-                for ( var i = 0; i < roomSize; i++)
+                foreach (var entry in Queue)
                 {
-                    players.Add(Queue.First.Value);
-                    Queue.RemoveFirst();
+                    if (entry.Party is CharacterParty party &&
+                        party.Members.Count > 1)
+                    {
+                        foreach (var member in party.CreateMembersSnapshot())
+                        {
+                            if (server.GetCharacter(member.Id) is ServerCharacter character &&
+                                character.DiscoveryClient?.State is SfaCharacterState.InShipyard or SfaCharacterState.InGalaxy)
+                                players.Add((character, party));
+                        }
+                    }
+                    else if (entry.DiscoveryClient?.State is SfaCharacterState.InShipyard or SfaCharacterState.InGalaxy)
+                    {
+                        players.Add((entry, null));
+                    }
                 }
 
-                players.Sort((x, y) => x.Faction.CompareTo(y.Faction));
+                if (players.Count < roomSize)
+                    return;
 
-                var match = new MothershipAssaultBattle()
+                var groups = players
+                    .Where(p => p.Party is not null)
+                    .GroupBy(p => p.Party)
+                    .Select(p => (Party: p.Key, Chars: p.Select(i => i.Char).ToArray()))
+                    .Where(p => p.Chars.Length > 1)
+                    .ToList();
+
+                var queue = new Queue<ServerCharacter>(players.Select(i => i.Char));
+                var team1 = new List<ServerCharacter>();
+                var team2 = new List<ServerCharacter>();
+
+                if (groups.Count > 0)
+                    team1.AddRange(groups[0].Chars.Take(teamSize));
+
+                if (groups.Count > 1)
+                    team2.AddRange(groups[1].Chars.Take(teamSize));
+
+                static void FillTeam(List<ServerCharacter> team, Queue<ServerCharacter> queue, int teamSize)
+                {
+                    for (int i = 0; i < queue.Count; i++)
+                    {
+                        if (team.Count >= teamSize)
+                            return;
+
+                        if (queue.TryDequeue(out var player) == false)
+                            return;
+
+                        if (team.Contains(player) == false)
+                            team.Add(player);
+                    }
+                }
+
+                FillTeam(team1, queue, teamSize);
+                FillTeam(team2, queue, teamSize);
+
+                if (roomSize > team1.Count + team2.Count)
+                    return;
+
+                var battle = new MothershipAssaultBattle()
                 {
                     GameMode = this
                 };
 
-                for (int i = 0; i < players.Count; i++)
+                foreach (var item in team1)
                 {
-                    match.AddCharacter(players[i], i < teamSize ? 0 : 1);
+                    battle.AddCharacter(item, 0);
+                    Queue.Remove(item);
                 }
 
-                Matchmaker?.AddBattle(match);
-                match.NotifyTheStart();
+                foreach (var item in team2)
+                {
+                    battle.AddCharacter(item, 1);
+                    Queue.Remove(item);
+                }
+
+                Matchmaker?.AddBattle(battle);
+                battle.NotifyTheStart();
             }
         }
     }
