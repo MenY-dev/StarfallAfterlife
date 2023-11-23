@@ -435,6 +435,17 @@ namespace StarfallAfterlife.Bridge.Database
             _ => 1
         };
 
+        public static int AccessLevelToQuestBGReward(int level) => level switch
+        {
+            <= 1 => 2,
+            2 => 4,
+            3 => 6,
+            4 => 10,
+            5 => 15,
+            6 => 20,
+            _ => 25
+        };
+
         public static int GetCircleMinLevel(int circle) => circle switch
         {
             <= 1 => 1,
