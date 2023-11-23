@@ -65,6 +65,9 @@ namespace StarfallAfterlife.Bridge.Profiles
         public WeeklyQuestsInfo Seasons { get; set; } = new();
 
         [JsonIgnore]
+        public List<BGShopItem> BGShop { get; set; } = new();
+
+        [JsonIgnore]
         protected object Locker { get; } = new object();
 
         public void Use(Action<UsageHandler> action)

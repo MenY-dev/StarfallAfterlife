@@ -274,6 +274,7 @@ namespace StarfallAfterlife.Bridge.Server
                 if (p.GameProfile is SfaGameProfile gameProfile)
                 {
                     gameProfile.Seasons = playerData["seasons"]?.DeserializeUnbuffered<WeeklyQuestsInfo>() ?? new();
+                    gameProfile.BGShop = playerData["bg_shop"]?.DeserializeUnbuffered<List<BGShopItem>>() ?? new();
 
                     var chars = playerData["chars"]?.AsArraySelf();
                     var discoveryProfile = gameProfile.DiscoveryModeProfile;

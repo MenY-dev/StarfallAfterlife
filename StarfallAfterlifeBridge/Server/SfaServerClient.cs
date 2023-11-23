@@ -253,6 +253,7 @@ namespace StarfallAfterlife.Bridge.Server
             {
                 ["chars"] = HandleNewChars(doc?["chars"]?.AsArraySelf()),
                 ["seasons"] = JsonHelpers.ParseNodeUnbuffered(Server?.Realm?.Seasons ?? new()),
+                ["bg_shop"] = JsonHelpers.ParseNodeUnbuffered(Server?.Realm?.BGShop ?? new()),
             }.ToJsonString(), SfaServerAction.RegisterPlayer);
 
             State = SfaClientState.PendingGame;

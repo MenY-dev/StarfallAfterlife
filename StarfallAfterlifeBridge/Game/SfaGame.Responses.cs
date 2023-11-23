@@ -324,27 +324,12 @@ namespace StarfallAfterlife.Bridge.Game
 
             if (flags.HasFlag(UserDataFlag.BGShopItems))
             {
-                var shop = new JsonArray()
-                {
-                    new JsonObject
-                    {
-                        ["id"] = 1045281085,
-                        ["type"] = 1,
-                        ["bgc_price"] = 1,
-                        ["access_level"] = 1,
-                        ["faction"] = 2
-                    },
-                    new JsonObject
-                    {
-                        ["id"] = 1517501299,
-                        ["type"] = 1,
-                        ["bgc_price"] = 1,
-                        ["access_level"] = 1,
-                        ["faction"] = 2
-                    },
-                };
+                var shop = Profile?.GameProfile?.BGShop;
 
-                doc["battle_ground_shop"] = shop;
+                if (shop is null or { Count: 0 })
+                    shop = new BGShopGenerator().Build();
+
+                doc["battle_ground_shop"] = JsonHelpers.ParseNodeUnbuffered(shop);
             }
 
             return doc;

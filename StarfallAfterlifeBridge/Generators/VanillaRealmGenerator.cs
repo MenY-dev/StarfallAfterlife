@@ -40,7 +40,8 @@ namespace StarfallAfterlife.Bridge.Generators
                     new SecretObjectsGenerator(Realm),
                     new MobsMapGenerator(Realm),
                     new QuestsGenerator(Realm),
-                    new SummarySeasonGenerator(Realm));
+                    new SummarySeasonGenerator(Realm),
+                    new BGShopGenerator(Realm));
             }
             catch
             {
