@@ -104,6 +104,18 @@ namespace StarfallAfterlife.Bridge.Server
                     SendToChat(channel, label, $"New party: {party?.Id.ToString() ?? "error"}");
                 }
             }
+            else if (msg.StartsWith("toast ") &&
+                    msg.Length > 6 && msg[6..] is string toastMsg)
+            {
+                SendToChat(channel, label, $"Show Toast: {toastMsg}");
+                DiscoveryClient.Invoke(c => c.SendOnScreenNotification(new()
+                {
+                    Id = "test_toast",
+                    Text = toastMsg,
+                    LifeTime = 10,
+                    Type = SfaNotificationType.Info,
+                }));
+            }
             else if (msg.StartsWith("jmp ") &&
                 msg.Length > 4 &&
                 int.TryParse(msg[4..].Trim(), out int system))
