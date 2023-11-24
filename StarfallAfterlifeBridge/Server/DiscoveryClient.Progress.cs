@@ -181,17 +181,24 @@ namespace StarfallAfterlife.Bridge.Server
 
                         if (map.Filling > (SystemHexMap.HexesCount * 0.98f))
                         {
+                            int xp = 10000;
                             map.SetAll(true);
                             needSync |= true;
 
                             CurrentCharacter?.Events?.Broadcast<IExplorationListener>(l => l.OnSystemExplored(systemId));
+                            CurrentCharacter.AddCharacterCurrencies(xp: xp);
 
-                            SendOnScreenNotification(new SfaNotification
+                            Invoke(c => c.SendOnScreenNotification(new SfaNotification
                             {
-                                Id = "Exploration" + new Random().Next(),
-                                Header = "Exploration",
-                                Text = $"{system.Info?.Name} Explored!",
-                            });
+                                Id = "Exploration" + system.Id,
+                                Header = "SystemExplored",
+                                Text = $"SystemExploredXpReaward",
+                                Format = new()
+                                {
+                                    ["SystemName"] = system.Id.ToString(),
+                                    ["ExploreXpReward"] = xp.ToString(),
+                                }
+                            }));
                         }
                     }
 

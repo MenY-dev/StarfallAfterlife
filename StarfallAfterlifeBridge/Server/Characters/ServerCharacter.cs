@@ -262,12 +262,11 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                 if (quest.Info?.Reward is QuestReward reward)
                 {
                     var xpFactor = (quest.Info?.Level ?? 0) < AccessLevel ? 0.1 : 1;
+                    var igc = reward.IGC > 0 ? reward.IGC : default(int?);
+                    var xp = reward.Xp > 0 ? (int)(reward.Xp * xpFactor) : default(int?);
                     var bgc = SfaDatabase.AccessLevelToQuestBGReward(quest.Info?.Level ?? 1);
 
-                    AddCharacterCurrencies(
-                        igc: reward.IGC > 0 ? reward.IGC : null,
-                        bgc: bgc,
-                        xp: reward.Xp > 0 ? (int)(reward.Xp * xpFactor) : null);
+                    AddCharacterCurrencies(igc: igc, bgc: bgc, xp: xp);
 
                     if (reward.Items is not null &&
                         (Database ?? SfaDatabase.Instance) is SfaDatabase database)
@@ -278,6 +277,22 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                                 (Inventory ?? new(this)).AddItem(item.ToInventoryItem());
                         }
                     }
+
+                    var notification = $"+{bgc} BGC";
+
+                    if (igc is not null)
+                        notification += $"\r\n+{igc} IGC";
+
+                    if (xp is not null)
+                        notification += $"\r\n+{xp} XP";
+
+                    DiscoveryClient.Invoke(c => c.SendOnScreenNotification(new SfaNotification
+                    {
+                        Id = "finish_quest" + quest.Id,
+                        Header = "QuestComplete",
+                        Text = notification,
+                        Format = new()
+                    }));
                 }
             }
         }
