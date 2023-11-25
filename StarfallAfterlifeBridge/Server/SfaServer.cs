@@ -86,15 +86,19 @@ namespace StarfallAfterlife.Bridge.Server
             UseClients(clients =>
             {
                 if (client.IsPlayer == false)
-                    RemoveClient(client);
-
-                foreach (var item in clients)
                 {
-                    if (item.DiscoveryClient?.CurrentCharacter is ServerCharacter character)
-                        character.Party?.RemoveMember(character.UniqueId);
+                    RemoveClient(client);
+                }
+                else if (client?.DiscoveryClient?.CurrentCharacter is ServerCharacter character)
+                {
+                    character.Party?.RemoveMember(character.UniqueId);
+                }
 
-                    if ((DateTime.Now - item.LastInput).Hours > 4)
-                        RemoveClient(item);
+                var toRemove = clients.Where(c => (DateTime.Now - c.LastInput).Hours > 4);
+
+                foreach (var item in toRemove)
+                {
+                    RemoveClient(item);
                 }
             });
         }
