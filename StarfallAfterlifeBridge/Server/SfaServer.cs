@@ -94,7 +94,8 @@ namespace StarfallAfterlife.Bridge.Server
                     character.Party?.RemoveMember(character.UniqueId);
                 }
 
-                var toRemove = clients.Where(c => (DateTime.Now - c.LastInput).Hours > 4);
+                var time = DateTime.Now;
+                var toRemove = clients.Where(c => (time - c.LastInput).TotalHours > 4).ToList();
 
                 foreach (var item in toRemove)
                 {
