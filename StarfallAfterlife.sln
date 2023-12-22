@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarfallAfterlifeBridge", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarfallAfterlifeLauncherOId", "StarfallAfterlifeLauncherOld\StarfallAfterlifeLauncherOId.csproj", "{1AC9B12B-C047-4864-8683-A61886A33202}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarfallAfterlifeLauncher", "StarfallAfterlifeLauncher\StarfallAfterlifeLauncher.csproj", "{BD31D221-2264-4467-84A1-DD6AD3FB8A74}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +36,12 @@ Global
 		{1AC9B12B-C047-4864-8683-A61886A33202}.InstancesDebug|Any CPU.Build.0 = InstancesDebug|Any CPU
 		{1AC9B12B-C047-4864-8683-A61886A33202}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1AC9B12B-C047-4864-8683-A61886A33202}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD31D221-2264-4467-84A1-DD6AD3FB8A74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD31D221-2264-4467-84A1-DD6AD3FB8A74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD31D221-2264-4467-84A1-DD6AD3FB8A74}.InstancesDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD31D221-2264-4467-84A1-DD6AD3FB8A74}.InstancesDebug|Any CPU.Build.0 = Debug|Any CPU
+		{BD31D221-2264-4467-84A1-DD6AD3FB8A74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD31D221-2264-4467-84A1-DD6AD3FB8A74}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
