@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarfallAfterlifeTests", "S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarfallAfterlifeBridge", "StarfallAfterlifeBridge\StarfallAfterlifeBridge.csproj", "{C53ED83C-2DB1-4512-92E8-EA5A999CB077}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarfallAfterlifeLauncherOId", "StarfallAfterlifeLauncher\StarfallAfterlifeLauncherOId.csproj", "{1AC9B12B-C047-4864-8683-A61886A33202}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarfallAfterlifeLauncherOId", "StarfallAfterlifeLauncherOld\StarfallAfterlifeLauncherOId.csproj", "{1AC9B12B-C047-4864-8683-A61886A33202}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
