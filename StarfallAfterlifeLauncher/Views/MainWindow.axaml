@@ -37,7 +37,7 @@
 						</StackPanel>
 						
 					</c:SfaButton >
-					<c:Separator DockPanel.Dock="Left" Width="2" Opacity="0.5"/>
+					<c:Separator Classes="vertical" DockPanel.Dock="Left" Width="2" Opacity="0.5"/>
 					<c:SfaButton Classes="clear" MinWidth="40" VerticalAlignment="Stretch" Click="OnCloseBtnClicked" DockPanel.Dock="Right">
 						<Label Content="A" FontSize="10" FontFamily="{StaticResource IconsFont}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 					</c:SfaButton>
@@ -61,15 +61,7 @@
 					<p:SinglePlayerModePage Name="SinglePlayerPage" DataContext="{Binding SinglePlayerPageViewModel}"/>
 					<p:FindServerPage Name="FindServerPage" DataContext="{Binding FindServerPageViewModel}"/>
 					<p:CreateServerPage Name="CreateServerPage" DataContext="{Binding CreateServerPageViewModel}"/>
-					<c:SidebarPage Name="LogPage">
-						<Panel>
-							<StackPanel Orientation="Horizontal" Margin="15 10" Spacing="5" VerticalAlignment="Top">
-								<Label Content="d" FontFamily="{StaticResource IconsFont}" Classes="h3" VerticalContentAlignment="Center"/>
-								<Label Content="LOG" Classes="h3" VerticalAlignment="Top" Margin="0 0 0 2" />
-							</StackPanel>
-							<Label Content="IN DEVELOPING" Foreground="White" Opacity="0.25" FontSize="30" FontWeight="DemiBold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-						</Panel>
-					</c:SidebarPage>
+					<p:LogPage Name="LogPage"/>
 					<c:SidebarPage Name="MobsEditorPage">
 						<Panel>
 							<StackPanel Orientation="Horizontal" Spacing="0">

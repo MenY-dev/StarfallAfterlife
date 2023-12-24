@@ -5,12 +5,7 @@
         x:Class="StarfallAfterlife.Launcher.Controls.SFAWaitingPopup"
         Title="Waiting..."
 		CanResize="False"
-		Background="Transparent"
 		ShowInTaskbar="False"
-		TransparencyLevelHint="Transparent"
-		ExtendClientAreaChromeHints="NoChrome"
-		ExtendClientAreaTitleBarHeightHint="0"
-		ExtendClientAreaToDecorationsHint="True"
 		WindowStartupLocation="CenterOwner"
 		SizeToContent="WidthAndHeight">
 	<Border Background="#EA202225" Margin="20">

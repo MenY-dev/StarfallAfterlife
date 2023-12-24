@@ -10,6 +10,8 @@
 				<ResourceInclude Source="/Styles/SfaComboBoxStyle.axaml"/>
 				<ResourceInclude Source="/Styles/SfaMenuFlyoutPresenterStyle.axaml"/>
 				<ResourceInclude Source="/Styles/SfaMenuItemStyle.axaml"/>
+				<ResourceInclude Source="/Styles/SfaPopupStyle.axaml"/>
+				<ResourceInclude Source="/Styles/SfaEditNamePopupStyle.axaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 
@@ -23,7 +25,6 @@
 	<StyleInclude Source="/Styles/AppHeaderStyle.axaml"/>
 	<StyleInclude Source="/Styles/SfaButtonStyle.axaml"/>
 	<StyleInclude Source="/Styles/SfaPanelStyle.axaml"/>
-	<StyleInclude Source="/Styles/SfaEditNamePopupStyle.axaml"/>
 	<StyleInclude Source="/Styles/SfaButtonStyle.axaml"/>
 	<StyleInclude Source="/Styles/SfaListBoxStyle.axaml"/>
 

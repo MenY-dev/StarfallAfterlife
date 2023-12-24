@@ -1,22 +1,17 @@
-﻿using Avalonia;
+using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data;
-using Avalonia.Styling;
-using StarfallAfterlife.Launcher.Views;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System;
+using System.Linq;
+using System.Collections;
+using System.Collections.Specialized;
 
 namespace StarfallAfterlife.Launcher.Controls
 {
-    public class EditNamePopup : Window, INotifyDataErrorInfo
+    public partial class EditNamePopup : SfaPopup, INotifyDataErrorInfo
     {
         protected override Type StyleKeyOverride => typeof(EditNamePopup);
 
@@ -79,14 +74,8 @@ namespace StarfallAfterlife.Launcher.Controls
 
         public Task<EditNamePopup> ShowDialog(string defaultName = null)
         {
-            var root = (App.Current.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)?.MainWindow as MainWindow;
-
             Text = defaultName;
-
-            if (root is null)
-                return Task.FromResult(this);
-
-            return ShowDialog(root).ContinueWith(t => this);
+            return base.ShowDialog().ContinueWith(t => this);
         }
 
         public IEnumerable GetErrors(string propertyName)

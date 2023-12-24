@@ -1,0 +1,42 @@
+<c:SidebarPage xmlns="https://github.com/avaloniaui"
+			   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			   xmlns:c="using:StarfallAfterlife.Launcher.Controls"
+			   mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			   x:Class="StarfallAfterlife.Launcher.Pages.LogPage"
+			   DataContext="{Binding $self}">
+	
+	<DockPanel LastChildFill="True">
+		<Panel DockPanel.Dock="Top">
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="15 10" Spacing="5">
+				<Label Content="d" FontFamily="{StaticResource IconsFont}" Classes="h3" VerticalContentAlignment="Center"/>
+				<Label Content="LOG" Classes="h3" VerticalAlignment="Top" Margin="0 0 0 2" />
+			</StackPanel>
+			<c:Separator Height="2" Opacity="0.8" VerticalAlignment="Bottom"/>
+		</Panel>
+		<Panel DockPanel.Dock="Bottom" MinHeight="20">
+		</Panel>
+		<Panel>
+			<Rectangle Fill="Black" Opacity="0.8" IsHitTestVisible="False" >
+				<Rectangle.OpacityMask>
+					<LinearGradientBrush StartPoint="0% 0%" EndPoint="0% 100%">
+						<GradientStop Color="#FFFFFFFF" Offset="0"/>
+						<GradientStop Color="#20FFFFFF" Offset="1"/>
+					</LinearGradientBrush>
+				</Rectangle.OpacityMask>
+			</Rectangle>
+			<c:SfaTextBox Name="LogOutput"
+						  Text="Start of the log!&#xD;&#xA;"
+						  IsReadOnly="True"
+						  Background="Transparent"
+						  BorderThickness="0"
+						  BorderBrush=""
+						  AcceptsReturn="True"
+						  TextWrapping="Wrap"
+						  FontFamily="Consolas"
+						  FontSize="14"/>
+			<c:Separator Height="2" Opacity="0.8" VerticalAlignment="Bottom"/>
+		</Panel>
+	</DockPanel>
+</c:SidebarPage>

@@ -1,0 +1,85 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:c="using:StarfallAfterlife.Launcher.Controls">
+
+	<ResourceDictionary.MergedDictionaries>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceInclude Source="/Styles/Colors.axaml"/>
+				<ResourceInclude Source="/Styles/Params.axaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</ResourceDictionary.MergedDictionaries>
+
+	<Design.PreviewWith>
+		<c:SfaPopup>
+			<StackPanel>
+				<c:SfaButton Content="Popup Button 1" Margin="20" Background="Black"/>
+				<c:SfaButton Content="Popup Button 2" Margin="20" Background="Black"/>
+			</StackPanel>
+		</c:SfaPopup>
+	</Design.PreviewWith>
+
+	<ControlTheme x:Key="{x:Type c:SfaPopup}" TargetType="{x:Type c:SfaPopup}">
+
+		<Setter Property="TransparencyLevelHint" Value="Transparent"/>
+		<Setter Property="Background" Value="Transparent"/>
+		<Setter Property="ExtendClientAreaChromeHints" Value="NoChrome"/>
+		<Setter Property="ExtendClientAreaTitleBarHeightHint" Value="0"/>
+		<Setter Property="ExtendClientAreaToDecorationsHint" Value="False"/>
+		<Setter Property="SystemDecorations" Value="None"/>
+		<Setter Property="WindowStartupLocation" Value="CenterOwner"/>
+
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Border Classes="window-wrapper" Margin="20" Background="Transparent">
+					<Border.Effect>
+						<DropShadowEffect OffsetX="0" OffsetY="10" BlurRadius="20" Color="#55000000"/>
+					</Border.Effect>
+
+					<Panel Classes="wrapper" Background="Transparent" Margin="0">
+						<Rectangle Opacity="0.9">
+							<Rectangle.Fill>
+								<RadialGradientBrush GradientOrigin="50% 0%" Center="50% 10%" Radius="1">
+									<GradientStop Offset="0" Color="{StaticResource PageMainColor}"/>
+									<GradientStop Offset="1" Color="{StaticResource PageSecondaryColor}"/>
+								</RadialGradientBrush>
+							</Rectangle.Fill>
+						</Rectangle>
+
+						<ContentPresenter x:Name="PART_ContentPresenter"
+										  Background="{TemplateBinding Background}"
+										  BorderBrush="{TemplateBinding BorderBrush}"
+										  BorderThickness="{TemplateBinding BorderThickness}"
+										  CornerRadius="{TemplateBinding CornerRadius}"
+										  Content="{TemplateBinding Content}"
+										  ContentTemplate="{TemplateBinding ContentTemplate}"
+										  Padding="{TemplateBinding Padding}"
+										  RecognizesAccessKey="True"
+										  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+										  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+
+						<Border BorderBrush="{StaticResource AccentColor}" Opacity="0.5" Background="Transparent" IsHitTestVisible="False" BorderThickness="1" CornerRadius="0"/>
+
+					</Panel>
+				</Border>
+			</ControlTemplate>
+		</Setter>
+		
+		<Style Selector="^:show">
+			<Style Selector="^ /template/ Panel">
+				<Style.Animations>
+					<Animation FillMode="Forward" Duration="0:0:2">
+						<KeyFrame Cue="0">
+							<Setter Property="Opacity" Value="0"/>
+						</KeyFrame>
+						<KeyFrame Cue="1">
+							<Setter Property="Opacity" Value="1"/>
+						</KeyFrame>
+					</Animation>
+				</Style.Animations>
+			</Style>
+		</Style>
+		
+	</ControlTheme>
+</ResourceDictionary>

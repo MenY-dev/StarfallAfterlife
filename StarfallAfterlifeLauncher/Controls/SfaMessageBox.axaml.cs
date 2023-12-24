@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace StarfallAfterlife.Launcher.Controls
 {
-    public partial class SfaMessageBox : Window
+    public partial class SfaMessageBox : SfaPopup
     {
         public static readonly StyledProperty<string> TextProperty =
             AvaloniaProperty.Register<SfaMessageBox, string>(
@@ -76,8 +76,6 @@ namespace StarfallAfterlife.Launcher.Controls
 
         public static Task<MessageBoxButton> ShowDialog(string message, string title = null, MessageBoxButton buttons = MessageBoxButton.Ok)
         {
-            var root = (App.Current.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)?.MainWindow as MainWindow;
-
             var dialog = new SfaMessageBox
             {
                 Text = message,
@@ -85,10 +83,7 @@ namespace StarfallAfterlife.Launcher.Controls
                 Buttons = buttons,
             };
 
-            if (root is null)
-                return Task.FromResult(MessageBoxButton.Undefined);
-
-            return dialog.ShowDialog(root).ContinueWith(t => Dispatcher.UIThread.Invoke(() => dialog.PressedButton));
+            return dialog.ShowDialog().ContinueWith(t => Dispatcher.UIThread.Invoke(() => dialog.PressedButton));
         }
     }
 }

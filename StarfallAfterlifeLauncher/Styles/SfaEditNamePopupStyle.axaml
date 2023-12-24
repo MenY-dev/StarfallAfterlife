@@ -1,31 +1,30 @@
-﻿<Styles xmlns="https://github.com/avaloniaui"
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		xmlns:controls="using:StarfallAfterlife.Launcher.Controls">
+		xmlns:c="using:StarfallAfterlife.Launcher.Controls">
 
-	<Styles.Resources>
+	<ResourceDictionary.MergedDictionaries>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceInclude Source="/Styles/Colors.axaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
-	</Styles.Resources>
+	</ResourceDictionary.MergedDictionaries>
 
 	<Design.PreviewWith>
-		<controls:EditNamePopup/>
+		<c:EditNamePopup/>
 	</Design.PreviewWith>
 
-	<Style Selector="controls|EditNamePopup">
-		<Setter Property="WindowStartupLocation" Value="CenterOwner"/>
+	<ControlTheme x:Key="{x:Type c:EditNamePopup}"
+				  TargetType="{x:Type c:EditNamePopup}"
+				  BasedOn="{StaticResource {x:Type c:SfaPopup}}">
+
 		<Setter Property="Width" Value="360"/>
 		<Setter Property="Height" Value="200"/>
 		<Setter Property="CanResize" Value="False"/>
 		<Setter Property="ShowInTaskbar" Value="False"/>
-		<Setter Property="ExtendClientAreaTitleBarHeightHint" Value="0"/>
-		<Setter Property="ExtendClientAreaChromeHints" Value="NoChrome"/>
-		<Setter Property="ExtendClientAreaToDecorationsHint" Value="True"/>
-
+		
 		<Setter Property="Template">
-			<ControlTemplate TargetType="controls:EditNamePopup">
+			<ControlTemplate TargetType="c:EditNamePopup">
 				<Panel>
 					<Panel Margin="20">
 
@@ -66,14 +65,14 @@
 							<DockPanel LastChildFill="True" Margin="6">
 								<Panel DockPanel.Dock="Bottom">
 									<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="6">
-										<controls:SfaButton Content="OK" IsEnabled="{Binding $parent[Window].IsValid, Mode=OneWay}" Command="{Binding $parent[Window].OkPressed}"/>
-										<controls:SfaButton Content="CANCELL" Command="{Binding $parent[Window].Close}"/>
+										<c:SfaButton Content="OK" IsEnabled="{Binding $parent[Window].IsValid, Mode=OneWay}" Command="{Binding $parent[Window].OkPressed}"/>
+										<c:SfaButton Content="CANCELL" Command="{Binding $parent[Window].Close}"/>
 									</StackPanel>
 								</Panel>
 								<Panel>
 									<StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Spacing="6">
 										<Label Foreground="White" Content="{Binding $parent[Window].Label}"/>
-										<controls:SfaTextBox HorizontalAlignment="Stretch" Text="{Binding $parent[Window].Text} "/>
+										<c:SfaTextBox HorizontalAlignment="Stretch" Text="{Binding $parent[Window].Text}"/>
 									</StackPanel>
 								</Panel>
 							</DockPanel>
@@ -84,5 +83,5 @@
 				</Panel>
 			</ControlTemplate>
 		</Setter>
-	</Style>
-</Styles>
+	</ControlTheme>
+</ResourceDictionary>
