@@ -1,0 +1,32 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:c="using:StarfallAfterlife.Launcher.Controls"
+             mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="450"
+             x:Class="StarfallAfterlife.Launcher.Controls.Separator">
+
+	<UserControl.Styles>
+		<Style Selector="c|Separator">
+			<Setter Property="Background" Value="{DynamicResource HoloColor}"/>
+			<Style Selector="^.vertical">
+				<Setter Property="OpacityMask">
+					<LinearGradientBrush StartPoint="0% 0%" EndPoint="0% 100%">
+						<GradientStop Color="#00FFFFFF" Offset="0"/>
+						<GradientStop Color="#FFFFFFFF" Offset="0.5"/>
+						<GradientStop Color="#00FFFFFF" Offset="1"/>
+					</LinearGradientBrush>
+				</Setter>
+			</Style>
+			<Style Selector="^:not(.vertical)">
+				<Setter Property="OpacityMask">
+					<LinearGradientBrush StartPoint="0% 0%" EndPoint="100% 0%">
+						<GradientStop Color="#00FFFFFF" Offset="0"/>
+						<GradientStop Color="#FFFFFFFF" Offset="0.5"/>
+						<GradientStop Color="#00FFFFFF" Offset="1"/>
+					</LinearGradientBrush>
+				</Setter>
+			</Style>
+		</Style>
+	</UserControl.Styles>
+</UserControl>

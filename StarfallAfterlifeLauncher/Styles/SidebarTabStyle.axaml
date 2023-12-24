@@ -1,0 +1,101 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:c="using:StarfallAfterlife.Launcher.Controls">
+
+	<Styles.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceInclude Source="/Styles/Colors.axaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Styles.Resources>
+
+	<Design.PreviewWith>
+		<Border Padding="20" Background="Gray" Width="200">
+			<c:Sidebar Classes="app-sidebar" DockPanel.Dock="Left">
+				<StackPanel HorizontalAlignment="Stretch" Spacing="0" >
+					<c:SidebarTab HorizontalAlignment="Stretch" >Tab 1 </c:SidebarTab>
+					<c:SidebarTab HorizontalAlignment="Stretch" >Tab 2 </c:SidebarTab>
+					<c:SidebarTab HorizontalAlignment="Stretch" >Tab 3 </c:SidebarTab>
+					<c:SidebarTab HorizontalAlignment="Stretch" >Tab 4 </c:SidebarTab>
+					<c:SidebarTab HorizontalAlignment="Stretch" >Tab 5 </c:SidebarTab>
+					<c:SidebarTab HorizontalAlignment="Stretch" >Tab 6 </c:SidebarTab>
+				</StackPanel>
+			</c:Sidebar>
+		</Border>
+	</Design.PreviewWith>
+
+	<Style Selector="c|SidebarTab">
+		<Setter Property="Template">
+			<ControlTemplate TargetType="c:SidebarTab">
+				<ToggleButton x:Name="InnerToggle" Classes="inner-toggle"
+							  IsChecked="{Binding $parent.IsSelected, Mode=TwoWay}"
+							  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+							  Margin="0" Padding="0">
+					<ContentPresenter x:Name="PART_ContentPresenter"
+                          Background="{TemplateBinding Background}"
+                          BorderBrush="{TemplateBinding BorderBrush}"
+                          BorderThickness="{TemplateBinding BorderThickness}"
+                          CornerRadius="{TemplateBinding CornerRadius}"
+                          Content="{TemplateBinding Content}"
+                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                          Padding="{TemplateBinding Padding}"
+                          RecognizesAccessKey="True"
+                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+				</ToggleButton>
+			</ControlTemplate>
+		</Setter>
+
+		<Style Selector="^ ToggleButton.inner-toggle">
+			<Setter Property="Background" Value="{StaticResource SidebarTabNormalColor}"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="BorderThickness" Value="0"/>
+			<Setter Property="CornerRadius" Value="0"/>
+			<Setter Property="FontSize" Value="16"/>
+			<Setter Property="FontWeight" Value="DemiBold"/>
+
+			<Setter Property="Transitions">
+				<Transitions>
+					<TransformOperationsTransition Property="RenderTransform" Duration="0:0:0" />
+				</Transitions>
+			</Setter>
+
+			<Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+				<Setter Property="Transitions">
+					<Transitions>
+						<BrushTransition Property="Background" Duration="0:0:0.05"/>
+						<DoubleTransition  Property="Opacity" Duration="0:0:0.05"/>
+					</Transitions>
+				</Setter>
+			</Style>
+
+			<Style Selector="^:pressed">
+				<Setter Property="RenderTransform" Value="scale(1)" />
+			</Style>
+
+			<Style Selector="^:pointerover">
+				<Setter Property="TextBlock.Foreground" Value="White"/>
+				<Setter Property="Background" Value="{StaticResource SidebarTabHighlightColor}"/>
+			</Style>
+
+			<Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+				<Setter Property="TextBlock.Foreground" Value="White"/>
+				<Setter Property="Background" Value="{StaticResource SidebarTabHighlightColor}"/>
+			</Style>
+
+			<Style Selector="^:checked:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+				<Setter Property="Opacity" Value="0.8"/>
+			</Style>
+
+			<Style Selector="^:checked /template/ ContentPresenter#PART_ContentPresenter">
+				<Setter Property="Background" Value="{StaticResource AccentColor}"/>
+				<Setter Property="TextBlock.Foreground" Value="White"/>
+			</Style>
+			<Style Selector="^:disabled  /template/ ContentPresenter#PART_ContentPresenter">
+				<Setter Property="Opacity" Value="0.7"/>
+				<Setter Property="Background" Value="{StaticResource SidebarTabNormalColor}"/>
+			</Style>
+		</Style>
+	</Style>
+</Styles>

@@ -1,0 +1,61 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:l="using:StarfallAfterlife.Launcher.MobsEditor"
+        mc:Ignorable="d" d:DesignWidth="400"
+		Width="400"
+        x:Class="StarfallAfterlife.Launcher.MobsEditor.EditShipWindow"
+        Title="Edit Ship"
+		Background="#90000000"
+		TransparencyLevelHint="AcrylicBlur"
+		WindowStartupLocation="CenterOwner"
+		SizeToContent="Height"
+		RequestedThemeVariant="Dark">
+	<DockPanel Margin="10">
+		<Panel DockPanel.Dock="Top">
+			<Label Content="{Binding Name}" FontSize="20" FontWeight="DemiBold" Margin="0 0 0 10"/>
+		</Panel>
+		<Panel DockPanel.Dock="Bottom">
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+				<Button Content="Ok" Command="{Binding $parent[Window].Close}"/>
+			</StackPanel>
+		</Panel>
+		<StackPanel Spacing="3">
+			<DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
+				<Label Content="Xp" Width="100" DockPanel.Dock="Left"/>
+				<TextBox Text="{Binding Xp}" HorizontalAlignment="Stretch"/>
+			</DockPanel>
+			<DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
+				<Label Content="MinLvl" Width="100" DockPanel.Dock="Left"/>
+				<TextBox Text="{Binding MinLvl}" HorizontalAlignment="Stretch"/>
+			</DockPanel>
+			<DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
+				<Label Content="MaxLvl" Width="100" DockPanel.Dock="Left"/>
+				<TextBox Text="{Binding MaxLvl}" HorizontalAlignment="Stretch"/>
+			</DockPanel>
+			<DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
+				<Label Content="Role" Width="100" DockPanel.Dock="Left"/>
+				<ComboBox ItemsSource="{Binding ShipRoleItems}" SelectedItem="{Binding Role}" HorizontalAlignment="Stretch"/>
+			</DockPanel>
+			<DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
+				<Label Content="Behavior Tree" Width="100" DockPanel.Dock="Left"/>
+				<ComboBox SelectedItem="{Binding BT}" ItemsSource="{Binding BTValues}" HorizontalAlignment="Stretch">
+					<ComboBox.ItemTemplate>
+						<DataTemplate>
+							<Label Content="{Binding Converter={x:Static l:MobShipViewModel.BTNames}}"/>
+						</DataTemplate>
+					</ComboBox.ItemTemplate>
+				</ComboBox>
+			</DockPanel>
+			<DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
+				<Label Content="Is Boss" Width="100" DockPanel.Dock="Left"/>
+				<CheckBox IsChecked="{Binding IsBoss}" HorizontalAlignment="Stretch"/>
+			</DockPanel>
+			<DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
+				<Label Content="Is Elite" Width="100" DockPanel.Dock="Left"/>
+				<CheckBox IsChecked="{Binding IsElite}" HorizontalAlignment="Stretch"/>
+			</DockPanel>
+		</StackPanel>
+	</DockPanel>
+</Window>

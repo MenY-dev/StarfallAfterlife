@@ -1,0 +1,117 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:c="using:StarfallAfterlife.Launcher.Controls">
+
+	<Styles.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceInclude Source="/Styles/Colors.axaml"/>
+				<ResourceInclude Source="/Styles/Params.axaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Styles.Resources>
+
+	<Design.PreviewWith>
+        <Border Padding="200 20" Height="400" ClipToBounds="False" Background="Gray">
+			<Border BorderBrush="Red" BorderThickness="1" Width="40">
+				<c:Sidebar>
+					<StackPanel>
+						<c:SidebarTab Padding="10" IsSelected="True">Tab 1</c:SidebarTab>
+						<c:SidebarTab Padding="10">Tab 2</c:SidebarTab>
+						<c:SidebarTab Padding="10">Tab 3</c:SidebarTab>
+						<c:SidebarTab Padding="10">Tab 4</c:SidebarTab>
+						<c:SidebarTab Padding="10">Tab 5</c:SidebarTab>
+						<c:SidebarTab Padding="10">Tab 99999</c:SidebarTab>
+					</StackPanel>
+				</c:Sidebar>
+			</Border>
+        </Border>
+    </Design.PreviewWith>
+
+	<Style Selector="c|Sidebar">
+		<Setter Property="ClipToBounds" Value="false"/>
+		<Setter Property="IsHitTestVisible" Value="True"/>
+		<Setter Property="Template">
+			<ControlTemplate>
+				<c:SidebarContentView Classes="wrapper" ClipToBounds="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+					<Panel ClipToBounds="False">
+						<Rectangle Classes="shadow" IsHitTestVisible="False"/>
+						<Panel ClipToBounds="True">
+							<Grid ColumnDefinitions="Auto">
+								<Rectangle Classes="background" IsHitTestVisible="True"/>
+								<ContentPresenter x:Name="PART_ContentPresenter"
+									  Background="{TemplateBinding Background}"
+									  BorderBrush="{TemplateBinding BorderBrush}"
+									  BorderThickness="{TemplateBinding BorderThickness}"
+									  CornerRadius="{TemplateBinding CornerRadius}"
+									  Content="{TemplateBinding Content}"
+									  ContentTemplate="{TemplateBinding ContentTemplate}"
+									  Padding="{TemplateBinding Padding}"
+									  RecognizesAccessKey="True"
+									  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+									  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+							</Grid>
+						</Panel>
+					</Panel>
+				</c:SidebarContentView>
+			</ControlTemplate>
+		</Setter>
+		
+		<Style Selector="^ /template/ Rectangle.background">
+			<Setter Property="Opacity" Value="0.8"/>
+			<Setter Property="Fill">
+				<LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+					<GradientStop Offset="0" Color="{StaticResource SidebarMainColor}"/>
+					<GradientStop Offset="1" Color="{StaticResource SidebarSecondaryColor}"/>
+				</LinearGradientBrush>
+			</Setter>
+		</Style>
+
+		<Style Selector="^ /template/ Rectangle.shadow">
+			<Setter Property="Width" Value="20"/>
+			<Setter Property="HorizontalAlignment" Value="Right"/>
+			<Setter Property="Fill" Value="Black"/>
+			<Setter Property="Opacity" Value="0.5"/>
+			<Setter Property="Margin" Value="0 0 -20 0"/>
+			<Setter Property="OpacityMask">
+				<LinearGradientBrush StartPoint="100%,0%" EndPoint="0,0">
+					<GradientStop Offset="0" Color="#00FFFFFF"/>
+					<GradientStop Offset="1" Color="#FFFFFFFF"/>
+				</LinearGradientBrush>
+			</Setter>
+		</Style>
+
+		<Style Selector="^:expanded">
+			<Style Selector="^ /template/ c|SidebarContentView.wrapper">
+				<Style.Animations>
+					<Animation Delay="0:0:.5" FillMode="Forward">
+						<KeyFrame Cue="0">
+							<Setter Property="ExpandProgress" Value="1"/>
+						</KeyFrame>
+					</Animation>
+				</Style.Animations>
+			</Style>
+		</Style>
+
+		<Style Selector="^:collapsed">
+			<Style Selector="^ /template/ c|SidebarContentView.wrapper">
+				<Style.Animations>
+					<Animation  FillMode="Forward">
+						<KeyFrame Cue="0">
+							<Setter Property="ExpandProgress" Value="0"/>
+						</KeyFrame>
+					</Animation>
+				</Style.Animations>
+			</Style>
+		</Style>
+		
+		<Style Selector="^ /template/ c|SidebarContentView.wrapper">
+			<Setter Property="Transitions">
+				<Transitions>
+					<DoubleTransition Property="ExpandProgress" Easing="ExponentialEaseOut" Duration="0:0:.5"/>
+				</Transitions>
+			</Setter>
+		</Style>
+	</Style>
+</Styles>
+

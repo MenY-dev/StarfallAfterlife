@@ -1,0 +1,102 @@
+<c:SidebarPage xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:c="using:StarfallAfterlife.Launcher.Controls"
+			 xmlns:sys="using:System"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="StarfallAfterlife.Launcher.Pages.CreateServerPage">
+
+	<DockPanel LastChildFill="True">
+		<Panel DockPanel.Dock="Top">
+			<StackPanel Orientation="Horizontal" Margin="15 10" Spacing="5">
+				<Label Content="a" FontFamily="{StaticResource IconsFont}" Classes="h3" VerticalContentAlignment="Center"/>
+				<Label Content="CREATE SERVER" Classes="h3" VerticalAlignment="Top" Margin="0 0 0 2" />
+			</StackPanel>
+			<StackPanel IsEnabled="{Binding !ServerStarted}" HorizontalAlignment="Right" Orientation="Horizontal" Spacing="10" Margin="0 0 10 0">
+				<c:SfaButton Content="DELETE REALM" Background="Red" Foreground="White" BorderBrush="Red" HorizontalAlignment="Left" Command="{Binding DeleteSelectedRealm}"/>
+				<c:SfaButton Content="CREATE NEW REALM" Foreground="White" HorizontalAlignment="Right" Command="{Binding CreateNewRealm}"/>
+			</StackPanel>
+			<c:Separator Height="2" Opacity="0.8" VerticalAlignment="Bottom"/>
+		</Panel>
+		<Panel DockPanel.Dock="Bottom">
+			<c:Switch Value="{Binding ServerStarted}">
+				<Button Command="{Binding StartServer}" MinWidth="160"  VerticalAlignment="Stretch" HorizontalAlignment="Right" Background="{DynamicResource AccentColor}" DockPanel.Dock="Right" Padding="20 0 20 2" Margin="10 10 10 10">
+					<c:Switch.Case>
+						<sys:Boolean>False</sys:Boolean>
+					</c:Switch.Case>
+					<Label Content="START" Foreground="White" FontSize="30" FontWeight="DemiBold"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+				</Button>
+				<Button Command="{Binding StopServer}" MinWidth="160"  VerticalAlignment="Stretch" HorizontalAlignment="Right" Background="{DynamicResource AccentColor}" DockPanel.Dock="Right" Padding="20 0 20 2" Margin="10 10 10 10" c:Switch.Default="True">
+					<Label Content="STOP" Foreground="White" FontSize="30" FontWeight="DemiBold"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+				</Button>
+			</c:Switch>
+		</Panel>
+		<Panel>
+			<Rectangle Fill="Black" Opacity="0.8" IsHitTestVisible="False" >
+				<Rectangle.OpacityMask>
+					<LinearGradientBrush StartPoint="0% 0%" EndPoint="0% 100%">
+						<GradientStop Color="#FFFFFFFF" Offset="0"/>
+						<GradientStop Color="#20FFFFFF" Offset="1"/>
+					</LinearGradientBrush>
+				</Rectangle.OpacityMask>
+			</Rectangle>
+			<c:Separator Height="2" Opacity="0.8" VerticalAlignment="Bottom"/>
+			<Grid ColumnDefinitions="1* 2 1*">
+				<Panel IsEnabled="{Binding !ServerStarted}" Grid.Column="0">
+					<c:SfaListBox Padding="10 20 10 20" ItemsSource="{Binding AppVM.Realms}" SelectionMode="AlwaysSelected" SelectedItem="{Binding AppVM.SelectedServerRealm}">
+						<c:SfaListBox.ItemTemplate>
+							<DataTemplate>
+								<Panel Margin="0">
+									<Label Content="{Binding Name}" Foreground="White" Margin="6"/>
+								</Panel>
+							</DataTemplate>
+						</c:SfaListBox.ItemTemplate>
+					</c:SfaListBox>
+				</Panel>
+				<Panel Grid.Column="2">
+					<StackPanel IsEnabled="{Binding !ServerStarted}" Margin="10" Spacing="2">
+						<c:Property Text="NETWORK" IsEnabled="True">
+							<c:SfaTextBox Text="{Binding ServerAddress}" HorizontalAlignment="Stretch">
+								<c:SfaTextBox.InnerRightContent>
+									<c:SfaButton Classes="clear"
+												 BorderBrush="Transparent"
+												 BorderThickness="0"
+												 VerticalAlignment="Stretch"
+												 Command="{Binding UpdateInterfaces}">
+										<c:SfaButton.Flyout>
+											<c:SfaMenuFlyout ItemsSource="{Binding Interfaces}"
+															 Placement="BottomEdgeAlignedRight"
+															 ItemSelectCommand="{Binding SelectInterface}">
+												<c:SfaMenuFlyout.ItemTemplate>
+													<DataTemplate>
+														<StackPanel Orientation="Horizontal" >
+															<Label Foreground="White" Content="{Binding Address}"/>
+															<Label Foreground="White" Content="{Binding Name}" Opacity="0.75"/>
+														</StackPanel>
+													</DataTemplate>
+												</c:SfaMenuFlyout.ItemTemplate>
+											</c:SfaMenuFlyout>
+										</c:SfaButton.Flyout>
+										<PathIcon Name="PART_ChevronPath"
+												  Width="12"
+												  Height="12"
+												  HorizontalAlignment="Right"
+												  VerticalAlignment="Center"
+												  Foreground="White"
+												  Data="M1939 486L2029 576L1024 1581L19 576L109 486L1024 1401L1939 486Z"/>
+									</c:SfaButton>
+								</c:SfaTextBox.InnerRightContent>
+							</c:SfaTextBox>
+						</c:Property>
+						<c:Property Text="PORT">
+							<c:SfaTextBox Text="{Binding ServerPort}"  HorizontalAlignment="Stretch"/>
+						</c:Property>
+					</StackPanel>
+				</Panel>
+				<c:Separator Classes="vertical" Opacity="0.5" Grid.Column="1"/>
+			</Grid>
+		</Panel>
+	</DockPanel>
+
+</c:SidebarPage>

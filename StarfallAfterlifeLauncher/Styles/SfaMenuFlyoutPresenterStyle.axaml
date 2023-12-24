@@ -1,0 +1,71 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:controls="using:StarfallAfterlife.Launcher.Controls"
+        xmlns:sys="using:System">
+
+	<ResourceDictionary.MergedDictionaries>
+		<ResourceInclude Source="/Styles/Colors.axaml"/>
+	</ResourceDictionary.MergedDictionaries>
+
+	<Design.PreviewWith>
+		<Border Padding="20" Width="300" Height="400" Background="#404550">
+			<Button Content="Show" VerticalAlignment="Top" HorizontalAlignment="Center">
+				<Button.Flyout>
+					<controls:SfaMenuFlyout>
+						<sys:String>Item 1</sys:String>
+						<sys:String>Item 2</sys:String>
+						<sys:String>Item 3</sys:String>
+						<sys:String>Item 4</sys:String>
+						<sys:String>Item 5</sys:String>
+					</controls:SfaMenuFlyout>
+				</Button.Flyout>
+			</Button>
+		</Border>
+	</Design.PreviewWith>
+
+
+	<ControlTheme x:Key="{x:Type controls:SfaMenuFlyoutPresenter}"
+				  TargetType="controls:SfaMenuFlyoutPresenter"
+				  BasedOn="{StaticResource {x:Type MenuFlyoutPresenter}}">
+		
+		<Setter Property="Background" Value="#303035" />
+		<Setter Property="BorderBrush" Value="{DynamicResource HoloColor}" />
+		<Setter Property="BorderThickness" Value="1" />
+		<Setter Property="Padding" Value="10" />
+		<Setter Property="MaxWidth" Value="{DynamicResource FlyoutThemeMaxWidth}" />
+		<Setter Property="MinHeight" Value="{DynamicResource MenuFlyoutThemeMinHeight}" />
+		<Setter Property="CornerRadius" Value="0" />
+		
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Panel Name="LayoutRoot">
+					<Border x:Name="Background"
+							Opacity="0.8"
+                            Background="{TemplateBinding Background}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}"/>
+
+					<Border x:Name="Border"
+							Opacity="0.6"
+							Background="Transparent"
+							IsHitTestVisible="False"
+							BorderThickness="{TemplateBinding BorderThickness}"
+							BorderBrush="{TemplateBinding BorderBrush}"/>
+
+					<Border Padding="{TemplateBinding BorderThickness}" Background="Transparent">
+						<ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+								  Theme="{StaticResource FluentMenuScrollViewer}"
+								  VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
+							<ItemsPresenter Name="PART_ItemsPresenter"
+											ItemsPanel="{TemplateBinding ItemsPanel}"
+											Margin="{DynamicResource MenuFlyoutScrollerMargin}"
+											KeyboardNavigation.TabNavigation="Continue"
+											Grid.IsSharedSizeScope="True" />
+						</ScrollViewer>
+					</Border>
+				</Panel>
+			</ControlTemplate>
+		</Setter>
+	</ControlTheme>
+	
+</ResourceDictionary>

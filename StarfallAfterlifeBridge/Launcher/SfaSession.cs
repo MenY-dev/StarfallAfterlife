@@ -25,12 +25,8 @@ namespace StarfallAfterlife.Bridge.Launcher
                 Profile = Profile,
             };
 
-            return Task<SfaSession>.Factory.StartNew(() =>
-            {
-                Game.Start();
-                Game.Task?.Wait();
-                return this;
-            }, TaskCreationOptions.LongRunning);
+            Game.Start();
+            return Game.Task.ContinueWith(t => this);
         }
     }
 }

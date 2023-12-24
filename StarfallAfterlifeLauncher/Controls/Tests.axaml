@@ -1,0 +1,28 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="StarfallAfterlife.Launcher.Controls.Tests">
+	<DockPanel LastChildFill="True">
+		<Grid RowDefinitions="*" ColumnDefinitions="*" DockPanel.Dock="Top" Height="80" Background="DarkSlateBlue" ClipToBounds="False">
+			<Canvas>
+				<Grid Width="{Binding $parent[Canvas].Bounds.Width}"
+					  Height="{Binding $parent[Canvas].Bounds.Height}">
+					<Path Fill="OrangeRed" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+						<Path.Data>
+							<PathGeometry>
+								<PathFigure StartPoint="0,0" IsClosed="True">
+									<LineSegment Point="10,10" />
+									<LineSegment Point="190,10" />
+									<LineSegment Point="200,0" />
+								</PathFigure>
+							</PathGeometry>
+						</Path.Data>
+					</Path>
+				</Grid>
+			</Canvas>
+		</Grid>
+		<Panel Background="DarkSlateGray"/>
+	</DockPanel>
+</UserControl>

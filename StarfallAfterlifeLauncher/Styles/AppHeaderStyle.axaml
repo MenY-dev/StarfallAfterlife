@@ -1,0 +1,124 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:c="using:StarfallAfterlife.Launcher.Controls">
+
+	<Styles.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceInclude Source="/Styles/Colors.axaml"/>
+				<ResourceInclude Source="/Styles/Params.axaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Styles.Resources>
+	
+    <Design.PreviewWith>
+        <Border Padding="40" Background="Gray">
+			<c:AppHeader Width="800" Height="50">
+				<DockPanel MinWidth="300" LastChildFill="False">
+					<Button Content="Player"  DockPanel.Dock="Left"/>
+					<Button Content="X"  DockPanel.Dock="Right"/>
+					<Button Content="D"  DockPanel.Dock="Right"/>
+					<Button Content="_"  DockPanel.Dock="Right"/>
+				</DockPanel>
+			</c:AppHeader>
+        </Border>
+    </Design.PreviewWith>
+
+	<Style Selector="c|AppHeader">
+		<Setter Property="ClipToBounds" Value="False"/>
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Panel IsHitTestVisible="True">
+					<Canvas Classes="background">
+						<Path Data="{TemplateBinding BackgroundGeometry}">
+							<Path.Effect>
+								<DropShadowEffect OffsetX="0" OffsetY="6"
+												  BlurRadius="6" Color="Black"
+												  Opacity="0.25"/>
+							</Path.Effect>
+							<Path.Fill>
+								<LinearGradientBrush Opacity="0.8">
+									<GradientStop Offset="0" Color="{DynamicResource HeaderMainColor}"/>
+									<GradientStop Offset="1" Color="{DynamicResource HeaderSecondaryColor}"/>
+								</LinearGradientBrush>
+							</Path.Fill>
+						</Path>
+						<Path Data="{TemplateBinding BackgroundGeometry}" Fill="{DynamicResource AccentColor}">
+							<Path.OpacityMask>
+								<LinearGradientBrush  StartPoint="0% 100%" EndPoint="100% 0%">
+									<GradientStop Offset="0" Color="#00FFFFFF"/>
+									<GradientStop Offset="1" Color="#25FFFFFF"/>
+								</LinearGradientBrush>
+							</Path.OpacityMask>
+						</Path>
+						<Path Data="{TemplateBinding BackgroundGeometry}" Fill="White" Opacity="0.25">
+							<Path.OpacityMask>
+								<LinearGradientBrush StartPoint="0% 0%" EndPoint="100% 0%" SpreadMethod="Repeat">
+									<LinearGradientBrush.Transform>
+										<SkewTransform AngleX="-45"/>
+									</LinearGradientBrush.Transform>
+									<GradientStop Offset="0.000" Color="#0FFF"/>
+									
+									<GradientStop Offset="0.100" Color="#FFFF"/>
+									<GradientStop Offset="0.101" Color="#0FFF"/>
+									
+									<GradientStop Offset="0.250" Color="#FFFF"/>
+									<GradientStop Offset="0.251" Color="#0FFF"/>
+									
+									<GradientStop Offset="0.300" Color="#FFFF"/>
+									<GradientStop Offset="0.301" Color="#0FFF"/>
+									
+									<GradientStop Offset="0.350" Color="#FFFF"/>
+									<GradientStop Offset="0.351" Color="#0FFF"/>
+									
+									<GradientStop Offset="0.500" Color="#FFFF"/>
+									<GradientStop Offset="0.501" Color="#0FFF"/>
+
+									<GradientStop Offset="0.610" Color="#FFFF"/>
+									<GradientStop Offset="0.611" Color="#0FFF"/>
+
+									<GradientStop Offset="0.650" Color="#FFFF"/>
+									<GradientStop Offset="0.651" Color="#0FFF"/>
+
+									<GradientStop Offset="0.700" Color="#FFFF"/>
+									<GradientStop Offset="0.701" Color="#0FFF"/>
+									
+									<GradientStop Offset="0.800" Color="#FFFF"/>
+									<GradientStop Offset="0.801" Color="#0FFF"/>
+									
+									<GradientStop Offset="0.870" Color="#FFFF"/>
+									<GradientStop Offset="0.871" Color="#0FFF"/>
+									
+									<GradientStop Offset="1.000" Color="#FFFF"/>
+								</LinearGradientBrush>
+							</Path.OpacityMask>
+						</Path>
+					</Canvas>
+					<Panel Classes="wrapper">
+						<TextBlock Text="STARFALL AFTERLIFE"
+								   FontSize="20" FontWeight="Bold"
+								   HorizontalAlignment="Center"
+								   VerticalAlignment="Center"/>
+						<Panel Margin="0 0 0 10">
+							<ContentPresenter x:Name="PART_ContentPresenter"
+										  Background="{TemplateBinding Background}"
+										  BorderBrush="{TemplateBinding BorderBrush}"
+										  BorderThickness="{TemplateBinding BorderThickness}"
+										  CornerRadius="{TemplateBinding CornerRadius}"
+										  Content="{TemplateBinding Content}"
+										  ContentTemplate="{TemplateBinding ContentTemplate}"
+										  Padding="{TemplateBinding Padding}"
+										  RecognizesAccessKey="True"
+										  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+										  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+						</Panel>
+					</Panel>
+					<Canvas Classes="underline">
+						<Path Stroke="{DynamicResource AccentColor}" StrokeThickness="2" Data="{TemplateBinding UnderlineGeometry}"/>
+					</Canvas>
+				</Panel>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+	
+</Styles>

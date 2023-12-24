@@ -2,10 +2,170 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:views="using:StarfallAfterlife.Launcher.Views"
+        xmlns:c="using:StarfallAfterlife.Launcher.Controls"
+        xmlns:p="using:StarfallAfterlife.Launcher.Pages"
+        xmlns:vm="using:StarfallAfterlife.Launcher.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="StarfallAfterlife.Launcher.Views.MainWindow"
-        Icon="/Assets/avalonia-logo.ico"
-        Title="StarfallAfterlifeLauncher">
-        <views:MainView />
+        Title="Starfall Afterlife"
+		Width="1000"
+		Height="600">
+	
+	<Window.DataContext>
+		<vm:AppViewModel/>
+	</Window.DataContext>
+
+	<Window.Effect>
+		<DropShadowEffect OffsetX="0" OffsetY="10" BlurRadius="20" Color="#55000000"/>
+	</Window.Effect>
+
+	<DockPanel Classes="root" LastChildFill="True">
+		<Panel Classes="header"  DockPanel.Dock="Top" ZIndex="1">
+			<c:AppHeader Height="40" Name="Header" Margin="0 0 0 -9" PointerPressed="OnWindowDragStarted">
+				<DockPanel LastChildFill="False">
+					<c:SfaButton Classes="clear"
+								 Command="{Binding ShowProfileSelector}" 
+								 IsEnabled="{Binding !IsGameStarted}"
+								 Padding="0" Margin="0 0 0 0"
+								 BorderThickness="0" MinWidth="40"
+								 VerticalAlignment="Stretch" DockPanel.Dock="Left">
+						
+						<StackPanel Orientation="Horizontal" Spacing="0" Margin="10 0 10 0">
+							<Label Content="g" Opacity="75" FontSize="12" FontFamily="{StaticResource IconsFont}" VerticalContentAlignment="Center" Margin="2 2 0 0"/>
+							<Label Content="{Binding CurrentProfileName, TargetNullValue='SELECT PROFILE'}" FontSize="16" FontWeight="DemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+							<Label Content="L" FontSize="10"  HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="{StaticResource IconsFont}" Margin="0 1 2 0"/>
+						</StackPanel>
+						
+					</c:SfaButton >
+					<c:Separator DockPanel.Dock="Left" Width="2" Opacity="0.5"/>
+					<c:SfaButton Classes="clear" MinWidth="40" VerticalAlignment="Stretch" Click="OnCloseBtnClicked" DockPanel.Dock="Right">
+						<Label Content="A" FontSize="10" FontFamily="{StaticResource IconsFont}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+					</c:SfaButton>
+					<c:SfaButton Classes="clear" MinWidth="40" VerticalAlignment="Stretch" Click="OnMaxMinBtnClicked" DockPanel.Dock="Right">
+						<c:Switch Value="{Binding $parent[Window].WindowState}">
+							<Label Content="C" FontSize="10" FontFamily="{StaticResource IconsFont}" HorizontalAlignment="Center" VerticalAlignment="Center" c:Switch.Case="{x:Static WindowState.Maximized}"/>
+							<Label Content="B" FontSize="10" FontFamily="{StaticResource IconsFont}" HorizontalAlignment="Center" VerticalAlignment="Center" c:Switch.Default="True"/>
+						</c:Switch>
+					</c:SfaButton>
+					<c:SfaButton Classes="clear" MinWidth="40" VerticalAlignment="Stretch" Click="OnHideBtnClicked" DockPanel.Dock="Right">
+						<Label Content="D" FontSize="10" FontFamily="{StaticResource IconsFont}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+					</c:SfaButton>
+				</DockPanel>
+			</c:AppHeader>
+		</Panel>
+
+		<c:AppHeaderMask Classes="app-body" Header="{Binding #Header}" DockPanel.Dock="Top">
+			<Grid ColumnDefinitions="Auto *">
+
+				<c:SidebarPageContainer Grid.Column="1" Name="Pages" Classes="page-wrapper" DockPanel.Dock="Left">
+					<p:SinglePlayerModePage Name="SinglePlayerPage" DataContext="{Binding SinglePlayerPageViewModel}"/>
+					<p:FindServerPage Name="FindServerPage" DataContext="{Binding FindServerPageViewModel}"/>
+					<p:CreateServerPage Name="CreateServerPage" DataContext="{Binding CreateServerPageViewModel}"/>
+					<c:SidebarPage Name="LogPage">
+						<Panel>
+							<StackPanel Orientation="Horizontal" Margin="15 10" Spacing="5" VerticalAlignment="Top">
+								<Label Content="d" FontFamily="{StaticResource IconsFont}" Classes="h3" VerticalContentAlignment="Center"/>
+								<Label Content="LOG" Classes="h3" VerticalAlignment="Top" Margin="0 0 0 2" />
+							</StackPanel>
+							<Label Content="IN DEVELOPING" Foreground="White" Opacity="0.25" FontSize="30" FontWeight="DemiBold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+						</Panel>
+					</c:SidebarPage>
+					<c:SidebarPage Name="MobsEditorPage">
+						<Panel>
+							<StackPanel Orientation="Horizontal" Spacing="0">
+								<StackPanel Orientation="Horizontal" Margin="15 10" Spacing="5" VerticalAlignment="Top">
+									<Label Content="e" FontFamily="{StaticResource IconsFont}" Classes="h3" VerticalContentAlignment="Center"/>
+									<Label Content="MOBS EDITOR" Classes="h3" VerticalAlignment="Top" Margin="0 0 0 2" />
+								</StackPanel>
+								<c:SfaButton Content="OPEN EDITOR" Command="{Binding ShowMobsEditor}" VerticalAlignment="Top" Margin="14"/>
+							</StackPanel>
+						</Panel>
+					</c:SidebarPage>
+					<c:SidebarPage Name="SettingsPage">
+						<Panel>
+							<StackPanel Orientation="Vertical" Spacing="10" Margin="20 5">
+								<StackPanel Orientation="Horizontal" Margin="15 10" Spacing="5" VerticalAlignment="Top">
+									<Label Content="f" FontFamily="{StaticResource IconsFont}" Classes="h3" VerticalContentAlignment="Center"/>
+									<Label Content="SETTINGS" Classes="h3" VerticalAlignment="Top" Margin="0 0 0 2" />
+								</StackPanel>
+								<StackPanel Spacing="10" Orientation="Horizontal" HorizontalAlignment="Stretch">
+									<Label Content="GAME DIRECTORY" VerticalContentAlignment="Center" FontSize="16" FontWeight="DemiBold" Foreground="White" Width="160"/>
+									<c:SfaButton Content="SELECT" Command="{Binding ShowGameDirSelector}" />
+									<Label ClipToBounds="True" VerticalContentAlignment="Center" Content="{Binding GameDirectory}" Foreground="White" Opacity="0.75" />
+								</StackPanel>
+								<c:SfaButton Content="OPEN MAP EDITOR" Command="{Binding ShowMapEditor}" HorizontalAlignment="Left"/>
+							</StackPanel>
+						</Panel>
+					</c:SidebarPage>
+				</c:SidebarPageContainer>
+
+				<c:Sidebar Grid.Column="0" Width="50" PageContainer="{Binding #Pages}">
+					<Panel Margin="0">
+						<StackPanel HorizontalAlignment="Stretch">
+							<c:SidebarTab PageName="SinglePlayerPage" HorizontalAlignment="Stretch" IsSelected="true">
+								<StackPanel Orientation="Horizontal">
+									<Label Content="c" FontSize="25" FontFamily="{StaticResource IconsFont}"
+										   HorizontalContentAlignment="Center"
+										   VerticalContentAlignment="Center"
+										   Width="50" Height="50"/>
+									<Label Content="SINGLE PLAYER" VerticalAlignment="Center" Margin="0, 0, 40, 0"/>
+								</StackPanel>
+							</c:SidebarTab>
+							<c:SidebarTab PageName="FindServerPage" HorizontalAlignment="Stretch">
+								<StackPanel Orientation="Horizontal">
+									<Label Content="b" FontSize="25" FontFamily="{StaticResource IconsFont}"
+										   HorizontalContentAlignment="Center"
+										   VerticalContentAlignment="Center"
+										   Width="50" Height="50"/>
+									<Label Content="FIND SERVER" VerticalAlignment="Center"/>
+								</StackPanel>
+							</c:SidebarTab>
+							<c:SidebarTab PageName="CreateServerPage" HorizontalAlignment="Stretch">
+								<StackPanel Orientation="Horizontal">
+									<Label Content="a" FontSize="25" FontFamily="{StaticResource IconsFont}"
+										   HorizontalContentAlignment="Center"
+										   VerticalContentAlignment="Center"
+										   Width="50" Height="50"/>
+									<Label Content="CREATE SERVER" VerticalAlignment="Center"/>
+								</StackPanel>
+							</c:SidebarTab>
+						</StackPanel>
+
+						<StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Spacing="0">
+							<c:SidebarTab PageName="LogPage" HorizontalAlignment="Stretch">
+								<StackPanel Orientation="Horizontal">
+									<Label Content="d"  FontSize="25" FontFamily="{StaticResource IconsFont}"
+										   HorizontalContentAlignment="Center"
+										   VerticalContentAlignment="Center"
+										   Width="50" Height="50"/>
+									<Label Content="LOG" VerticalAlignment="Center"/>
+								</StackPanel>
+							</c:SidebarTab>
+							<c:SidebarTab PageName="MobsEditorPage" HorizontalAlignment="Stretch">
+								<StackPanel Orientation="Horizontal">
+									<Label Content="e"  FontSize="25" FontFamily="{StaticResource IconsFont}"
+										   HorizontalContentAlignment="Center"
+										   VerticalContentAlignment="Center"
+										   Width="50" Height="50"/>
+									<Label Content="MOBS EDITOR" VerticalAlignment="Center"/>
+								</StackPanel>
+							</c:SidebarTab>
+							<c:SidebarTab PageName="SettingsPage" HorizontalAlignment="Stretch">
+								<StackPanel Orientation="Horizontal">
+									<Label Content="f"  FontSize="25" FontFamily="{StaticResource IconsFont}"
+										   HorizontalContentAlignment="Center"
+										   VerticalContentAlignment="Center"
+										   Width="50" Height="50"/>
+									<Label Content="SETTINGS" VerticalAlignment="Center"/>
+								</StackPanel>
+							</c:SidebarTab>
+						</StackPanel>
+					</Panel>
+				</c:Sidebar>
+
+			</Grid>
+			<c:SfaProfilesEditor DataContext="{Binding ProfilesEditorViewModel}"/>
+		</c:AppHeaderMask>
+	</DockPanel>
+	
 </Window>

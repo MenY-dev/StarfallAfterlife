@@ -72,6 +72,8 @@ namespace StarfallAfterlife.Bridge.Launcher
                     server.Stop();
                     SfaDebug.Print($"Game stopped!");
                 });
+
+                return session;
             }
 
             return null;

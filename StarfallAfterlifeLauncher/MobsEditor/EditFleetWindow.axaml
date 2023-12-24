@@ -1,0 +1,182 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sys="using:System"
+        xmlns:c="using:StarfallAfterlife.Launcher.Controls"
+        xmlns:l="using:StarfallAfterlife.Launcher.MobsEditor"
+        mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="640"
+		Width="1000" Height="640"
+        x:Class="StarfallAfterlife.Launcher.MobsEditor.EditFleetWindow"
+        Title="Edit Fleet"
+		Background="#90000000"
+		TransparencyLevelHint="AcrylicBlur"
+		WindowStartupLocation="CenterOwner"
+		RequestedThemeVariant="Dark">
+
+	<Window.Resources>
+		<sys:Boolean x:Key="True">True</sys:Boolean>
+		<sys:Boolean x:Key="False">False</sys:Boolean>
+	</Window.Resources>
+
+	<DockPanel LastChildFill="True" Margin="10">
+		<Panel DockPanel.Dock="Top" Margin="0 0 0 10">
+			<StackPanel Orientation="Horizontal">
+				<Label Content="{Binding Name}" FontSize="20" FontWeight="DemiBold"/>
+				<Label Content="{Binding Id, StringFormat='({0})'}" FontSize="20" Opacity="0.75"/>
+			</StackPanel>
+			<StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Spacing="5">
+				<Button Content="Add Ship" Command="{Binding $parent[Window].AddShip}"/>
+				<Button Content="Save" Command="{Binding $parent[Window].SaveFleet}"/>
+			</StackPanel>
+		</Panel>
+		<Grid RowDefinitions="*" ColumnDefinitions="Auto * Auto">
+			<Panel Grid.Column="0">
+				<StackPanel Width="300" Margin="10" Spacing="3">
+					<DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
+						<Label Content="Faction" Width="100" DockPanel.Dock="Left"/>
+						<ComboBox SelectedItem="{Binding Faction}" ItemsSource="{Binding FactionItems}" HorizontalAlignment="Stretch"/>
+					</DockPanel>
+					<DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
+						<Label Content="Level" Width="100" DockPanel.Dock="Left"/>
+						<TextBox Text="{Binding Level}" HorizontalAlignment="Stretch"/>
+					</DockPanel>
+					<DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
+						<Label Content="Vision" Width="100" DockPanel.Dock="Left"/>
+						<TextBox Text="{Binding Vision}" HorizontalAlignment="Stretch"/>
+					</DockPanel>
+					<DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
+						<Label Content="Speed" Width="100" DockPanel.Dock="Left"/>
+						<TextBox Text="{Binding Speed}" HorizontalAlignment="Stretch"/>
+					</DockPanel>
+					<DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
+						<Label Content="Behavior Tree" Width="100" DockPanel.Dock="Left"/>
+						<ComboBox SelectedItem="{Binding BehaviorTreeName}" ItemsSource="{Binding BTValues}" HorizontalAlignment="Stretch">
+							<ComboBox.ItemTemplate>
+								<DataTemplate>
+									<Label Content="{Binding Converter={x:Static l:MobFleetViewModel.BTNames}}"/>
+								</DataTemplate>
+							</ComboBox.ItemTemplate>
+						</ComboBox>
+					</DockPanel>
+					<DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
+						<Label Content="Tags" Width="100" DockPanel.Dock="Left"/>
+						<Grid RowDefinitions="Auto Auto">
+							<Button Grid.Row="0" Content="Edit" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center">
+								<Button.Flyout>
+									<Flyout>
+										<ScrollViewer MinWidth="240" MaxHeight="400">
+											<TreeView SelectionMode="AlwaysSelected" ItemsSource="{Binding AllMobTags}">
+												<TreeView.ItemTemplate>
+													<TreeDataTemplate ItemsSource="{Binding ChildTags}">
+														<StackPanel Orientation="Horizontal">
+															<CheckBox IsChecked="{Binding Added}" VerticalAlignment="Center"/>
+															<TextBlock Text="{Binding Tag.Name}" VerticalAlignment="Center"/>
+														</StackPanel>
+													</TreeDataTemplate>
+												</TreeView.ItemTemplate>
+											</TreeView>
+										</ScrollViewer>
+									</Flyout>
+								</Button.Flyout>
+							</Button>
+							<ItemsControl Grid.Row="1" ItemsSource="{Binding Tags}">
+								
+							</ItemsControl>
+						</Grid>
+					</DockPanel>
+				</StackPanel>
+			</Panel>
+			<Panel Grid.Column="2" MinWidth="600">
+				<ScrollViewer>
+					<ItemsControl ItemsSource="{Binding Ships}"  >
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<Button Margin="3 1 0 1" Padding="0" Command="{Binding $parent[Window].ShipPressed}" CommandParameter="{Binding}" HorizontalAlignment="Stretch">
+									<Grid RowDefinitions="Auto" ColumnDefinitions="Auto *" HorizontalAlignment="Stretch">
+										<l:ShipLayoutView Width="120" Height="120" Grid.Column="0" CellSize="8" ShowText="False" Foreground="White" VerticalAlignment="Center" Hardpoints="{Binding Hardpoints}"/>
+										<StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Center" Spacing="5" Grid.Column="1">
+											
+											<Panel>
+												<StackPanel Orientation="Horizontal">
+													<TextBlock Text="{Binding Name}" FontSize="20" FontWeight="DemiBold"/>
+													<TextBlock Text="{Binding Class, StringFormat=' ({0})'}" FontSize="12" FontWeight="DemiBold" Opacity="0.5" VerticalAlignment="Center"/>
+												</StackPanel>
+
+												<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Spacing="2" Margin="2 2 20 2">
+													<Button FontSize="12" Padding="6 2" Content="Delete" FontWeight="DemiBold" Background="#90CC0000" Command="{Binding $parent[Window].DataContext.DeleteShip}" CommandParameter="{Binding}"/>
+													<Button FontSize="12" Padding="6 2" Content="Copy" FontWeight="DemiBold" Background="#900060CC" Command="{Binding $parent[Window].DataContext.CopyShip}" CommandParameter="{Binding}"/>
+													<Button FontSize="12" Padding="6 2" Command="{Binding $parent[Window].DataContext.SetMainShip}" CommandParameter="{Binding}">
+														<c:Switch Margin="0">
+															<c:Switch.Value>
+																<MultiBinding Converter="{x:Static l:MobFleetViewModel.IsMainShipConverter}">
+																	<Binding/>
+																	<Binding Path="$parent[Window].DataContext"/>
+																</MultiBinding>
+															</c:Switch.Value>
+															<ContentControl Content="&#x2605;" Foreground="#FFFF7000" FontWeight="Bold" c:Switch.Case="{StaticResource True}"/>
+															<ContentControl Content="&#x2606;" Foreground="#70FFFFFF" FontWeight="Bold" c:Switch.Default="True"/>
+														</c:Switch>
+													</Button>
+													<Button FontSize="12" Padding="6 2" Content="&#x1F845;" FontWeight="DemiBold" Command="{Binding $parent[Window].DataContext.MoveUpShip}" CommandParameter="{Binding}"/>
+													<Button FontSize="12" Padding="6 2" Content="&#x1F847;" FontWeight="DemiBold" Command="{Binding $parent[Window].DataContext.MoveDownShip}" CommandParameter="{Binding}"/>
+												</StackPanel>
+											</Panel>
+
+											<StackPanel Orientation="Horizontal" Spacing="5" VerticalAlignment="Center">
+												<ItemsRepeater ItemsSource="{Binding Hardpoints, Converter={x:Static c:SfaUtils.HardpointsToShipSpecConverter}}">
+													<ItemsRepeater.Layout>
+														<StackLayout Orientation="Horizontal" Spacing="5"/>
+													</ItemsRepeater.Layout>
+													<ItemsRepeater.ItemTemplate>
+														<DataTemplate>
+															<Panel>
+																<Border BorderBrush="White" BorderThickness="1"/>
+																<TextBlock FontSize="12" FontWeight="Normal" Text="{Binding}" Margin="5 2" Foreground="White"/>
+															</Panel>
+														</DataTemplate>
+													</ItemsRepeater.ItemTemplate>
+												</ItemsRepeater>
+												<ItemsRepeater ItemsSource="{Binding Tags}">
+													<ItemsRepeater.Layout>
+														<StackLayout Orientation="Horizontal" Spacing="5"/>
+													</ItemsRepeater.Layout>
+													<ItemsRepeater.ItemTemplate>
+														<DataTemplate>
+															<Panel>
+																<Border BorderBrush="#FFFF8020" BorderThickness="1"/>
+																<TextBlock FontSize="12" FontWeight="Normal" Text="{Binding Converter={x:Static l:MobShipViewModel.TagNameConverter}}" Margin="5 2" Foreground="#FFFF8020"/>
+															</Panel>
+														</DataTemplate>
+													</ItemsRepeater.ItemTemplate>
+												</ItemsRepeater>
+											</StackPanel>
+
+											<StackPanel Orientation="Horizontal">
+												<Label Content="{Binding Xp, StringFormat='Xp: {0}'}" FontWeight="DemiBold" Width="100" Padding="0"/>
+												<Label Content="{Binding Role, StringFormat='Role: {0}'}" FontWeight="DemiBold" Padding="0"/>
+											</StackPanel>
+											
+											<StackPanel Orientation="Horizontal">
+												<Label FontWeight="DemiBold" Width="100" Padding="0">
+													<Label.Content>
+														<MultiBinding StringFormat="Lvl: [{0}..{1}]">
+															<Binding Path="MinLvl"/>
+															<Binding Path="MaxLvl"/>
+														</MultiBinding>
+													</Label.Content>
+												</Label>
+												<Label Content="{Binding BT, StringFormat='BT: {0}', Converter={x:Static l:MobShipViewModel.BTNames}}" FontWeight="DemiBold" Padding="0"/>
+											</StackPanel>
+											
+										</StackPanel>
+									</Grid>
+								</Button>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</ScrollViewer>
+			</Panel>
+		</Grid>
+	</DockPanel>
+</Window>
