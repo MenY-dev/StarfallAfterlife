@@ -3,11 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33402.96
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarfallAfterlifeTests", "StarfallAfterlifeTests\StarfallAfterlifeTests.csproj", "{A8D58AB4-9C04-4DA1-9460-E88FBABA7373}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarfallAfterlifeBridge", "StarfallAfterlifeBridge\StarfallAfterlifeBridge.csproj", "{C53ED83C-2DB1-4512-92E8-EA5A999CB077}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarfallAfterlifeLauncherOId", "StarfallAfterlifeLauncherOld\StarfallAfterlifeLauncherOId.csproj", "{1AC9B12B-C047-4864-8683-A61886A33202}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarfallAfterlifeLauncher", "StarfallAfterlifeLauncher\StarfallAfterlifeLauncher.csproj", "{BD31D221-2264-4467-84A1-DD6AD3FB8A74}"
 EndProject
@@ -18,24 +14,12 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A8D58AB4-9C04-4DA1-9460-E88FBABA7373}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A8D58AB4-9C04-4DA1-9460-E88FBABA7373}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A8D58AB4-9C04-4DA1-9460-E88FBABA7373}.InstancesDebug|Any CPU.ActiveCfg = InstancesDebug|Any CPU
-		{A8D58AB4-9C04-4DA1-9460-E88FBABA7373}.InstancesDebug|Any CPU.Build.0 = InstancesDebug|Any CPU
-		{A8D58AB4-9C04-4DA1-9460-E88FBABA7373}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A8D58AB4-9C04-4DA1-9460-E88FBABA7373}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C53ED83C-2DB1-4512-92E8-EA5A999CB077}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C53ED83C-2DB1-4512-92E8-EA5A999CB077}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C53ED83C-2DB1-4512-92E8-EA5A999CB077}.InstancesDebug|Any CPU.ActiveCfg = InstancesDebug|Any CPU
 		{C53ED83C-2DB1-4512-92E8-EA5A999CB077}.InstancesDebug|Any CPU.Build.0 = InstancesDebug|Any CPU
 		{C53ED83C-2DB1-4512-92E8-EA5A999CB077}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C53ED83C-2DB1-4512-92E8-EA5A999CB077}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1AC9B12B-C047-4864-8683-A61886A33202}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1AC9B12B-C047-4864-8683-A61886A33202}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1AC9B12B-C047-4864-8683-A61886A33202}.InstancesDebug|Any CPU.ActiveCfg = InstancesDebug|Any CPU
-		{1AC9B12B-C047-4864-8683-A61886A33202}.InstancesDebug|Any CPU.Build.0 = InstancesDebug|Any CPU
-		{1AC9B12B-C047-4864-8683-A61886A33202}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1AC9B12B-C047-4864-8683-A61886A33202}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BD31D221-2264-4467-84A1-DD6AD3FB8A74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BD31D221-2264-4467-84A1-DD6AD3FB8A74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD31D221-2264-4467-84A1-DD6AD3FB8A74}.InstancesDebug|Any CPU.ActiveCfg = Debug|Any CPU
