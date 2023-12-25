@@ -9,7 +9,7 @@ namespace StarfallAfterlife.Launcher.ViewModels
 {
     public class ProfileInfoViewModel : ViewModelBase
     {
-        public string Name => Profile.GameProfile.Nickname;
+        public string Name => Profile.GameProfile?.Nickname;
 
         public SfaProfile Profile { get; set; }
 

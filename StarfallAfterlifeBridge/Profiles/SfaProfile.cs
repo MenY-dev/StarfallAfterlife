@@ -2,6 +2,7 @@
 using StarfallAfterlife.Bridge.Game;
 using StarfallAfterlife.Bridge.Generators;
 using StarfallAfterlife.Bridge.Realms;
+using StarfallAfterlife.Bridge.Serialization;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,6 +11,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace StarfallAfterlife.Bridge.Profiles
 {
@@ -28,6 +30,10 @@ namespace StarfallAfterlife.Bridge.Profiles
         public DiscoverySession CurrentSession { get; set; }
 
         public SfaDatabase Database { get; set; }
+
+        public SfaProfileInfo Info { get; set; }
+
+        public bool IsSupported { get; set; } = true;
 
         public GalaxyMapCache MapsCache
         {
@@ -56,9 +62,12 @@ namespace StarfallAfterlife.Bridge.Profiles
 
         public string GameProfileLocation => Path.Combine(ProfileDirectory, "Profile.json");
 
+        public string InfoLocation => Path.Combine(ProfileDirectory, "Info.json");
+
         public string RealmsDirectory => Path.Combine(ProfileDirectory, "Realms");
 
         public string SessionsDirectory => Path.Combine(ProfileDirectory, "Sessions");
+
 
         protected object Locker { get; } = new object();
 
@@ -73,39 +82,76 @@ namespace StarfallAfterlife.Bridge.Profiles
             {
                 Realms.Clear();
                 Sessions.Clear();
+                Info = null;
 
-                string text = File.ReadAllText(GameProfileLocation);
-                GameProfile = JsonSerializer.Deserialize<SfaGameProfile>(text);
-
-                if (Directory.Exists(RealmsDirectory))
+                try
                 {
-                    var realmsPaths = Directory.GetDirectories(RealmsDirectory);
+                    if (File.Exists(InfoLocation) &&
+                        File.ReadAllText(InfoLocation) is string infoJson &&
+                        JsonSerializer.Deserialize<SfaProfileInfo>(infoJson) is SfaProfileInfo info)
+                        Info = info;
+                }
+                catch { }
 
-                    foreach (var path in realmsPaths)
-                    {
-                        var realm = new SfaRealm();
-                        realm.LoadInfo(path);
-                        Realms.Add(new SfaRealmInfo() { Realm = realm, RealmDirectory = path });
-                    }
+                if (Info is null)
+                {
+                    Info = new();
+                    SaveInfo();
                 }
 
-                if (Directory.Exists(SessionsDirectory))
+                if (Info.Version > SfaProfileInfo.CurrentVersion)
                 {
-                    var sessionsPaths = Directory.GetFiles(SessionsDirectory);
-
-                    foreach (var path in sessionsPaths)
-                    {
-                        var session = new DiscoverySession() { Path = path };
-
-                        if (session.Load() == true)
-                            Sessions.Add(session);
-                    }
+                    IsSupported = false;
+                    return false;
                 }
 
+                IsSupported = true;
+
+                try
+                {
+                    string text = File.ReadAllText(GameProfileLocation);
+                    GameProfile = JsonSerializer.Deserialize<SfaGameProfile>(text);
+                }
+                catch { }
+
+                try
+                {
+                    if (Directory.Exists(RealmsDirectory))
+                    {
+                        var realmsPaths = Directory.GetDirectories(RealmsDirectory);
+
+                        foreach (var path in realmsPaths)
+                        {
+                            var realm = new SfaRealm();
+                            realm.LoadInfo(path);
+                            Realms.Add(new SfaRealmInfo() { Realm = realm, RealmDirectory = path });
+                        }
+                    }
+                }
+                catch { }
+
+                try
+                {
+                    if (Directory.Exists(SessionsDirectory))
+                    {
+                        var sessionsPaths = Directory.GetFiles(SessionsDirectory);
+
+                        foreach (var path in sessionsPaths)
+                        {
+                            var session = new DiscoverySession() { Path = path };
+
+                            if (session.Load() == true)
+                                Sessions.Add(session);
+                        }
+                    }
+                }
+                catch { }
+
+                return true;
             }
             catch {}
 
-            return true;
+            return false;
         }
 
         public SfaRealmInfo AddNewRealm(SfaRealm realm)
@@ -152,6 +198,8 @@ namespace StarfallAfterlife.Bridge.Profiles
                     var gameProfileText = JsonSerializer.Serialize(GameProfile);
                     File.WriteAllText(GameProfileLocation, gameProfileText);
                 }
+
+                SaveInfo();
             }
             catch {}
         }
@@ -159,6 +207,28 @@ namespace StarfallAfterlife.Bridge.Profiles
         public void SaveCharacterProgress()
         {
             CurrentProgress?.Save();
+            SaveInfo();
+        }
+
+        public void SaveInfo(bool writeNewVersion = true)
+        {
+            try
+            {
+                var info = Info ??= new();
+
+                if (writeNewVersion == true)
+                    info.Version = SfaProfileInfo.CurrentVersion;
+
+                var path = InfoLocation;
+
+                if (Path.GetDirectoryName(path) is string dir &&
+                    Directory.Exists(dir) == false)
+                    Directory.CreateDirectory(dir);
+
+                var text = JsonHelpers.SerializeUnbuffered(Info);
+                File.WriteAllText(path, text);
+            }
+            catch { }
         }
 
         public void Save()

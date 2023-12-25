@@ -37,8 +37,11 @@ namespace StarfallAfterlife.Bridge.Launcher
             Realms.Clear();
             Realms.AddRange(LoadRealmsInfo());
 
-            CurrentProfile ??= Profiles.FirstOrDefault(p => p?.GameProfile?.Id == LastSelectedProfileId);
-            CurrentProfile ??= Profiles.FirstOrDefault();
+            CurrentProfile ??= Profiles.FirstOrDefault(
+                p => p?.IsSupported == true && p.GameProfile?.Id == LastSelectedProfileId);
+
+            CurrentProfile ??= Profiles.FirstOrDefault(
+                p => p?.IsSupported == true);
 
             CurrentLocalRealm ??= Realms.FirstOrDefault(r => r?.Realm?.Id == LastSelectedLocalRealmId);
             CurrentLocalRealm ??= Realms.FirstOrDefault();

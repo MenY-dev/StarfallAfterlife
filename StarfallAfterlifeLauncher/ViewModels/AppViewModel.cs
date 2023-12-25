@@ -118,7 +118,8 @@ namespace StarfallAfterlife.Launcher.ViewModels
         public void SelectProfile(SfaProfile profile)
         {
             if (Launcher is not null &&
-                Launcher.Profiles?.Contains(profile) == true)
+                Launcher.Profiles?.Contains(profile) == true &&
+                profile.IsSupported == true)
             {
                 Launcher.CurrentProfile = profile;
                 CurrentProfileName = Launcher?.CurrentProfile?.GameProfile?.Nickname;
@@ -235,7 +236,7 @@ namespace StarfallAfterlife.Launcher.ViewModels
                 launcher.DeleteProfile(profile);
 
                 if (launcher.CurrentProfile is null)
-                    SelectProfile(launcher.Profiles.FirstOrDefault());
+                    SelectProfile(launcher.Profiles.FirstOrDefault(p => p?.IsSupported == true));
             }
         }
 
