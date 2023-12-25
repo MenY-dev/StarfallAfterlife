@@ -8,10 +8,7 @@
 		ShowInTaskbar="False"
 		WindowStartupLocation="CenterOwner"
 		SizeToContent="WidthAndHeight">
-	<Border Background="#EA202225" Margin="20">
-		<Border.Effect>
-			<DropShadowEffect OffsetX="0" OffsetY="10" BlurRadius="20" Color="#55000000"/>
-		</Border.Effect>
+	<Border >
 		<Label Foreground="White" FontWeight="DemiBold" FontSize="16" Margin="60 40" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding $parent[Window].Title}"/>
 	</Border>
 </Window>
