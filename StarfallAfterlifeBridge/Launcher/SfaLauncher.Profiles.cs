@@ -32,7 +32,10 @@ namespace StarfallAfterlife.Bridge.Launcher
         {
             try
             {
-                var dir = FileHelpers.CreateUniqueDirectory(ProfilesDirectory, "profile{0}");
+                profileName ??= "profile";
+
+                var dir = FileHelpers.CreateUniqueDirectory(ProfilesDirectory,
+                    FileHelpers.ReplaceInvalidFileNameChars(profileName, '_'));
 
                 if (dir is null)
                     return null;

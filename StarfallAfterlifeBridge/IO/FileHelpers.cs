@@ -9,7 +9,15 @@ namespace StarfallAfterlife.Bridge.IO
 {
     public static class FileHelpers
     {
-        public static DirectoryInfo CreateUniqueDirectory(string root, string format = "{0}")
+        public static string ReplaceInvalidFileNameChars(string name, char newChar)
+        {
+            foreach (char c in Path.GetInvalidFileNameChars())
+                name = name.Replace(c, newChar);
+
+            return name;
+        }
+
+        public static DirectoryInfo CreateUniqueDirectory(string root, string baseName = "dir")
         {
             try
             {
@@ -17,10 +25,14 @@ namespace StarfallAfterlife.Bridge.IO
                     Directory.CreateDirectory(root);
 
                 var dirs = Directory.GetDirectories(root);
+                var newDir = Path.Combine(root, baseName);
 
-                for (int i = 0; i < dirs.Length + 1; i++)
+                if (Directory.Exists(newDir) == false)
+                    return Directory.CreateDirectory(newDir);
+
+                for (int i = 1; i < dirs.Length + 2; i++)
                 {
-                    var newDir = Path.Combine(root, string.Format(format, i));
+                    newDir = Path.Combine(root, string.Format("{0}({1})", baseName, i));
 
                     if (Directory.Exists(newDir) == false)
                         return Directory.CreateDirectory(newDir);

@@ -198,6 +198,8 @@ namespace StarfallAfterlife.Bridge.Server
                 {
                     ServerAuth = (string)doc["auth"];
                     var realmId = RealmId = (string)doc["realm_id"];
+                    var realmName = (string)doc["realm_name"];
+                    var realmDescription = (string)doc["realm_description"];
 
                     if (realmId is null)
                         return false;
@@ -211,6 +213,8 @@ namespace StarfallAfterlife.Bridge.Server
                             realmInfo = p.AddNewRealm(new SfaRealm
                             {
                                 Id = realmId,
+                                Name = realmName,
+                                Description = realmDescription,
                                 Database = p.Database
                             });
 

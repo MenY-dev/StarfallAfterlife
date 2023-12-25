@@ -59,7 +59,10 @@ namespace StarfallAfterlife.Bridge.Launcher
         {
             try
             {
-                var dir = FileHelpers.CreateUniqueDirectory(RealmsDirectory, "realm{0}");
+                realmName ??= "realm";
+
+                var dir = FileHelpers.CreateUniqueDirectory(RealmsDirectory,
+                    FileHelpers.ReplaceInvalidFileNameChars(realmName, '_'));
 
                 if (dir is null)
                     return null;

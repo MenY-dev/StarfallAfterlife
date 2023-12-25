@@ -192,6 +192,8 @@ namespace StarfallAfterlife.Bridge.Server
                     ["auth_success"] = true,
                     ["auth"] = Auth ??= Guid.NewGuid().ToString("N"),
                     ["realm_id"] = Server.Realm.Id,
+                    ["realm_name"] = Server.Realm.Name,
+                    ["realm_description"] = Server.Realm.Description,
                     ["galaxy_hash"] = Server.Realm.GalaxyMapHash,
                     ["mobs_map_hash"] = Server.Realm.MobsMap?.Hash,
                     ["asteroids_map_hash"] = Server.Realm.RichAsteroidsMap?.Hash,

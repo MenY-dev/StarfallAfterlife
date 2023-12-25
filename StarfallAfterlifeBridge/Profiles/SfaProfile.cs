@@ -1,6 +1,7 @@
 ﻿using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Game;
 using StarfallAfterlife.Bridge.Generators;
+using StarfallAfterlife.Bridge.IO;
 using StarfallAfterlife.Bridge.Realms;
 using StarfallAfterlife.Bridge.Serialization;
 using System;
@@ -156,7 +157,7 @@ namespace StarfallAfterlife.Bridge.Profiles
 
         public SfaRealmInfo AddNewRealm(SfaRealm realm)
         {
-            string directory = CreateNewRealmDirectory();
+            string directory = CreateNewRealmDirectory(realm?.Name);
 
             if (directory is null)
                 return null;
@@ -263,22 +264,14 @@ namespace StarfallAfterlife.Bridge.Profiles
             }
         }
 
-        protected string CreateNewRealmDirectory()
+        protected string CreateNewRealmDirectory(string realmName)
         {
-            string root = RealmsDirectory;
+            realmName ??= "realm";
 
-            if (Directory.Exists(root) == false)
-                Directory.CreateDirectory(root);
+            var dir = FileHelpers.CreateUniqueDirectory(RealmsDirectory,
+                FileHelpers.ReplaceInvalidFileNameChars(realmName, '_'));
 
-            for (int i = 0; i < short.MaxValue; i++)
-            {
-                string newDir = Path.Combine(root, $"realm{i}");
-
-                if (Directory.Exists(newDir) == false)
-                    return newDir;
-            }
-
-            return null;
+            return dir.FullName;
         }
 
         public Character CreateNewCharacter(string name, Faction faction)
