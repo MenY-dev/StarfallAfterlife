@@ -32,7 +32,7 @@ namespace StarfallAfterlife.Bridge.Launcher
 
                 foreach (var dir in directories)
                 {
-                    var realm = new SfaRealmInfo()
+                    var info = new SfaRealmInfo()
                     {
                         RealmDirectory = dir.FullName,
                         Realm = new SfaRealm
@@ -42,9 +42,10 @@ namespace StarfallAfterlife.Bridge.Launcher
                         }
                     };
 
-                    if (realm.LoadInfo() == true)
+                    if (info.LoadInfo() == true &&
+                        info.Realm.Version <= SfaRealm.CurrentVersion)
                     {
-                        result.Add(realm);
+                        result.Add(info);
                     }
                 }
 
