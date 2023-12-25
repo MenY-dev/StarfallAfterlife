@@ -52,25 +52,34 @@ namespace StarfallAfterlife.Launcher.ViewModels
 
         public void StartGame()
         {
+            var appVM = AppVM;
             var launcher = Launcher;
 
-            if (launcher is null)
+            if (appVM is null || launcher is null)
+                return;
+
+            var realmInfo = launcher.CurrentLocalRealm;
+
+            if (realmInfo is null)
                 return;
 
             Task.Run(() =>
             {
                 if (launcher.Profiles.Count < 1)
-                    AppVM?.CreateNewProfile().Wait();
+                    appVM.CreateNewProfile().Wait();
 
                 if (launcher.Realms.Count < 1)
                     CreateNewRealm().Wait();
 
                 if (launcher.TestGameDirectory() == false)
-                    AppVM?.ShowGameDirSelector().Wait();
+                    appVM.ShowGameDirSelector().Wait();
 
                 if (launcher.Profiles.Count < 1 ||
                     launcher.Realms.Count < 1 ||
                     launcher.TestGameDirectory() == false)
+                    return false;
+
+                if (appVM.ProcessSessionsCancellationBeforePlay(realmInfo.Realm?.Id).Result == false)
                     return false;
 
                 return true;
@@ -79,7 +88,7 @@ namespace StarfallAfterlife.Launcher.ViewModels
                 if (t.Result != true)
                     return;
 
-                AppVM?.StartLocalGame();
+                appVM.StartLocalGame();
             });
         }
     }

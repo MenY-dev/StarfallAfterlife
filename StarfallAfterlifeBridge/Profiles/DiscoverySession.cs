@@ -47,6 +47,8 @@ namespace StarfallAfterlife.Bridge.Profiles
 
         public string Path { get; set; }
 
+        public DiscoverySession() { }
+
         public override void LoadFromJson(JsonNode doc)
         {
             base.LoadFromJson(doc);

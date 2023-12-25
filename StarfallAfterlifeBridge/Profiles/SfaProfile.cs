@@ -271,6 +271,12 @@ namespace StarfallAfterlife.Bridge.Profiles
             catch { }
         }
 
+        public Character GetCharacter(int id)
+        {
+            return GameProfile?.DiscoveryModeProfile?.Chars?.FirstOrDefault(
+                c => c.Id == id);
+        }
+
         public void SelectCharacter(Character character)
         {
             if (GameProfile is SfaGameProfile profile &&
@@ -372,6 +378,61 @@ namespace StarfallAfterlife.Bridge.Profiles
             }
 
             return null;
+        }
+
+        public DiscoverySession GetSession(string realmId)
+        {
+            if (realmId == null)
+                return null;
+
+            return Sessions?.FirstOrDefault(
+                s =>s.RealmId is not null && s.RealmId == realmId);
+
+        }
+
+        public void FinishSession(DiscoverySession session, bool dropSession = false)
+        {
+            if (Sessions.Contains(session) == false)
+                return;
+
+            if (GetCharacter(session.CharacterId) is Character character)
+            {
+                if (CurrentSession == session)
+                    CurrentSession = null;
+
+                Sessions?.Remove(session);
+                session.RemoveSessionFile();
+
+                character.LastSession = session;
+                character.HasSessionResults = true;
+                
+                if (dropSession == true)
+                {
+                    var database = Database ?? SfaDatabase.Instance;
+
+                    foreach (var info in session.Ships)
+                    {
+                        if (character.GetShip(info?.Id ?? -1) is FleetShipInfo fleetShip &&
+                            database.GetShip(fleetShip.Data?.Hull ?? -1) is ShipBlueprint blueprint)
+                            fleetShip.TimeToRepair = blueprint.TimeToRepair;
+                    }
+                }
+                else
+                {
+                    var newItems = session.Ships?
+                        .Where(s => s?.Cargo is not null)
+                        .SelectMany(s => s.Cargo)
+                        .Where(i => i.IsEmpty == false)
+                        .ToList() ?? new();
+
+                    foreach (var item in newItems)
+                    {
+                        character.AddInventoryItem(item, item.Count);
+                    }
+                }
+
+                SaveGameProfile();
+            }
         }
     }
 }

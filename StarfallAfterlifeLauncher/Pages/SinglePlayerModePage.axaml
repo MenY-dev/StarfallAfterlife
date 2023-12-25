@@ -71,9 +71,21 @@
 				
 				<c:SfaListBox.ItemTemplate>
 					<DataTemplate>
-						<Panel Margin="0">
-							<Label Content="{Binding Name}" Foreground="White" Margin="6"/>
-						</Panel>
+						<Grid ColumnDefinitions="* *" Margin="6 6">
+							<StackPanel Orientation="Horizontal" Spacing="6">
+								<Label Grid.Column="0" Content="{Binding Name}"
+									   FontSize="14"
+									   Foreground="White" Margin="0"
+									   VerticalAlignment="Center"/>
+								<Label Grid.Column="0" Content="◈"
+									   FontSize="14"
+									   Foreground="{DynamicResource AccentColor}"
+									   IsVisible="{Binding IsActiveSession}"
+									   VerticalAlignment="Center"
+									   RenderTransform="scaleX(2) scaleY(2)"
+									   ToolTip.Tip="Active Session"/>
+							</StackPanel>
+						</Grid>
 					</DataTemplate>
 				</c:SfaListBox.ItemTemplate>
 				

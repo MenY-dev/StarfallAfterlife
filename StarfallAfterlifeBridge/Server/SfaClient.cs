@@ -776,17 +776,7 @@ namespace StarfallAfterlife.Bridge.Server
         {
             Game?.Profile.Use(p =>
             {
-                if (p.CurrentSession is DiscoverySession session &&
-                    p.GameProfile.CurrentCharacter is Character character)
-                {
-                    p.CurrentSession = null;
-                    p.Sessions?.Remove(session);
-                    session.RemoveSessionFile();
-                    character.LastSession = session;
-                    character.HasSessionResults = true;
-                }
-
-                p.SaveGameProfile();
+                p.FinishSession(p.CurrentSession, true);
             });
         }
 
@@ -794,29 +784,7 @@ namespace StarfallAfterlife.Bridge.Server
         {
             Game?.Profile.Use(p =>
             {
-                if (p.CurrentSession is DiscoverySession session &&
-                    p.GameProfile.CurrentCharacter is Character character)
-                {
-                    p.CurrentSession = null;
-                    p.Sessions?.Remove(session);
-                    session.RemoveSessionFile();
-
-                    var newItems = session.Ships?
-                        .Where(s => s?.Cargo is not null)
-                        .SelectMany(s => s.Cargo)
-                        .Where(i => i.IsEmpty == false)
-                        .ToList() ?? new();
-
-                    foreach (var item in newItems)
-                    {
-                        character.AddInventoryItem(item, item.Count);
-                    }
-
-                    character.LastSession = session;
-                    character.HasSessionResults = true;
-                }
-
-                p.SaveGameProfile();
+                p.FinishSession(p.CurrentSession, false);
             });
         }
 

@@ -1,4 +1,5 @@
 ﻿using StarfallAfterlife.Bridge.Database;
+using StarfallAfterlife.Bridge.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -104,10 +105,6 @@ namespace StarfallAfterlife.Bridge.Profiles
         [JsonPropertyName("last_ships_repair_time")]
         public DateTime LastShipsRepairTime { get; set; }
 
-        //[JsonPropertyName("has_session_results")]
-        [JsonIgnore]
-        public bool HasSessionResults { get; set; } = false;
-
         [JsonPropertyName("indiscoverybattle")]
         public int InDiscoveryBattle { get; set; } = 0;
 
@@ -132,6 +129,13 @@ namespace StarfallAfterlife.Bridge.Profiles
         [JsonPropertyName("statistic")]
         public Dictionary<string, double> Statistic { get; set; } = new();
 
+        [JsonPropertyName("has_session_results")]
+        public bool HasSessionResults { get; set; } = false;
+
+        [JsonPropertyName("last_session")]
+        [JsonConverter(typeof(SfaObjectJsonConverter<DiscoverySession>))]
+        public DiscoverySession LastSession { get; set; }
+
         [JsonIgnore]
         public int UniqueId { get; set; } = -1;
 
@@ -152,9 +156,6 @@ namespace StarfallAfterlife.Bridge.Profiles
 
         [JsonIgnore]
         public bool HasActiveSession { get; set; } = false;
-
-        [JsonIgnore]
-        public DiscoverySession LastSession { get; set; }
 
         [JsonIgnore]
         public JsonNode ActiveShips { get; set; }

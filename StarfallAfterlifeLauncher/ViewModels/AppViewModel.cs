@@ -122,6 +122,7 @@ namespace StarfallAfterlife.Launcher.ViewModels
             {
                 Launcher.CurrentProfile = profile;
                 CurrentProfileName = Launcher?.CurrentProfile?.GameProfile?.Nickname;
+                UpdateRealms();
             }
         }
 
@@ -178,6 +179,53 @@ namespace StarfallAfterlife.Launcher.ViewModels
                     });
                 }
             }));
+        }
+
+        public bool IsSessionsCancellationRequired(string newRealmId) =>
+            Launcher.CurrentProfile is SfaProfile profile &&
+            profile.Sessions?.All(s => s?.RealmId is null || s.RealmId == newRealmId) == false;
+
+        public Task<bool> CheckSessionsCancellation(string newRealmId)
+        {
+            return Dispatcher.UIThread.Invoke(
+                () => SfaMessageBox.ShowDialog(
+                    "Active sessions have been found in other realms. " +
+                    "These sessions must be dropped to continue. " +
+                    "The ships will be sent for repairs, and the contents of their holds will be lost. " +
+                    "\r\n\r\nDrop sessions?",
+                    "Drop active sessions?",
+                    MessageBoxButton.Yes | MessageBoxButton.Cancell)
+                .ContinueWith(t => t.Result == MessageBoxButton.Yes));
+        }
+
+        public Task<bool> ProcessSessionsCancellationBeforePlay(string realmId)
+        {
+            if (IsSessionsCancellationRequired(realmId) == false)
+                return Task.FromResult(true);
+
+            return Task.Factory.StartNew(() =>
+            {
+                if (CheckSessionsCancellation(realmId).Result == false)
+                    return false;
+
+                if (Launcher.CurrentProfile is SfaProfile profile)
+                {
+                    var sessions = profile.Sessions?.ToList() ?? new();
+
+                    foreach (var item in sessions)
+                    {
+                        if (item.RealmId != realmId)
+                            profile.FinishSession(item, true);
+                    }
+                }
+
+                Dispatcher.UIThread.Invoke(() =>
+                {
+                    UpdateRealms();
+                });
+
+                return true;
+            });
         }
 
         public void DeleteProfile(SfaProfile profile)
@@ -251,7 +299,9 @@ namespace StarfallAfterlife.Launcher.ViewModels
                 Realms?.Clear();
 
                 foreach (var item in launcher.Realms ?? new())
-                    Realms.Add(new(item));
+                {
+                    Realms.Add(new(this, item));
+                }
 
                 SelectedLocalRealm =
                     Realms.FirstOrDefault(r => r.RealmInfo == selectedLocalRealm) ??
@@ -276,6 +326,7 @@ namespace StarfallAfterlife.Launcher.ViewModels
                 {
                     Sessions.Remove(session);
                     IsGameStarted = Sessions.Count > 0;
+                    UpdateRealms();
                 }));
 
                 return session;
