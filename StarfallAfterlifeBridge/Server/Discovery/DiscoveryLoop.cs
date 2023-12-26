@@ -84,7 +84,8 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                         }
                     }
 
-                    cts.Token.ThrowIfCancellationRequested();
+                    if (cts.Token.IsCancellationRequested)
+                        return;
                 }
             }, cts.Token);
         }
