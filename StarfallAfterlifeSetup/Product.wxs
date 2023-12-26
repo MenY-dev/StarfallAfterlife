@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?define var.AppVersion = "0.1.0" ?>
+<?define var.AppProductCode="e0d4f199-5aa2-4fd7-a240-623949b09395" ?>
+
+<?define var.AppName = "Starfall Afterlife" ?>
+<?define var.AppManufacturer = "Eduard Shein (MenY)" ?>
+<?define var.AppDir = "StarfallAfterlife" ?>
+<?define var.AppExe = "StarfallAfterlifeLauncher.exe" ?>
+
+<!--***********************   Don't touch!  **********************-->
+<?define var.AppUpgradeCode="94a71ad1-4bf2-4e19-9810-80a7ab78250a" ?>
+<!--**************************************************************-->
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="$(var.AppProductCode)"
+			 Name="$(var.AppName)"
+			 Language="1033"
+			 Version="$(var.AppVersion)"
+			 Manufacturer="$(var.AppManufacturer)"
+			 UpgradeCode="$(var.AppUpgradeCode)">
+		
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+		<Media Id="1" Cabinet="media.cab" EmbedCab="yes" DiskPrompt="CD-ROM #1" />
+		<Property Id="DiskPrompt" Value="$(var.AppName) Installer" />
+		<MajorUpgrade Schedule="afterInstallInitialize" AllowDowngrades="yes"  />
+
+		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" ></Property>
+		<UIRef Id="WixUI_InstallDir"/>
+
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFiles64Folder">
+				<Directory Id="INSTALLFOLDER" Name="$(var.AppDir)" />
+			</Directory>
+			<Directory Id="ProgramMenuFolder">
+				<Directory Id="ApplicationProgramsFolder" Name="$(var.AppName)"/>
+			</Directory>
+		</Directory>
+
+		<DirectoryRef Id="ApplicationProgramsFolder">
+			<Component Id="ApplicationShortcut" Guid="5a618118-3659-4d6a-b17a-c9786a019648">
+				<Shortcut Id="ApplicationStartMenuShortcut"
+						  Name="$(var.AppName)"
+						  Description="$(var.AppName)"
+						  Target="[INSTALLFOLDER]$(var.AppExe)"
+						  WorkingDirectory="INSTALLFOLDER"/>
+				<RemoveFolder Id="CleanUpShortCut" Directory="ApplicationProgramsFolder" On="uninstall"/>
+				<RegistryValue Root="HKCU" Key="Software\$(var.AppDir)" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+			</Component>
+		</DirectoryRef>
+		
+		<Feature Id="SFAFeature" Title="$(var.AppDir)" Level="1" ConfigurableDirectory="INSTALLFOLDER">
+			<ComponentGroupRef Id="ProductComponents" />
+			<ComponentRef Id="ApplicationShortcut" />
+		</Feature>
+
+		<Icon Id="icon.ico" SourceFile="icon_128.ico"/>
+		<Property Id="ARPPRODUCTICON" Value="icon.ico" />
+		<WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
+		
+	</Product>
+</Wix>
