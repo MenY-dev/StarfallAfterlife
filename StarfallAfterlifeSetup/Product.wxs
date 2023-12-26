@@ -20,14 +20,17 @@
 			 Manufacturer="$(var.AppManufacturer)"
 			 UpgradeCode="$(var.AppUpgradeCode)">
 		
-		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perUser" InstallPrivileges="limited"/>
 		<Media Id="1" Cabinet="media.cab" EmbedCab="yes" DiskPrompt="CD-ROM #1" />
-		<Property Id="DiskPrompt" Value="$(var.AppName) Installer" />
+		<Property Id="DiskPrompt" Value="$(var.AppName) Installer" />	
 		<MajorUpgrade Schedule="afterInstallInitialize" AllowDowngrades="yes"  />
 
 		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" ></Property>
 		<UIRef Id="WixUI_InstallDir"/>
 
+		<Property Id="ALLUSERS" Secure="yes" Value="2"/>
+		<Property Id="MSIINSTALLPERUSER" Secure="yes" Value="1" />
+		
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Directory Id="ProgramFiles64Folder">
 				<Directory Id="INSTALLFOLDER" Name="$(var.AppDir)" />
