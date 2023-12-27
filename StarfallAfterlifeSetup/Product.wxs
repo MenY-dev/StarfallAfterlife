@@ -25,9 +25,6 @@
 		<Property Id="DiskPrompt" Value="$(var.AppName) Installer" />	
 		<MajorUpgrade Schedule="afterInstallInitialize" AllowDowngrades="yes"  />
 
-		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" ></Property>
-		<UIRef Id="WixUI_InstallDir"/>
-
 		<Property Id="ALLUSERS" Secure="yes" Value="2"/>
 		<Property Id="MSIINSTALLPERUSER" Secure="yes" Value="1" />
 		
@@ -60,6 +57,28 @@
 		<Icon Id="icon.ico" SourceFile="icon_128.ico"/>
 		<Property Id="ARPPRODUCTICON" Value="icon.ico" />
 		<WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
+
+		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" ></Property>
+
+		<UI>
+			<UIRef Id="WixUI_Minimal" />
+			<Publish Dialog="ExitDialog"
+					 Control="Finish"
+					 Event="DoAction"
+					 Value="LaunchApplication">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed</Publish>
+			
+		</UI>
 		
+		<Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch $(var.AppName)"/>
+		<SetProperty Id="WixShellExecTarget" Value="[INSTALLFOLDER]$(var.AppExe)" After="CostFinalize" />
+		
+		<CustomAction Id="LaunchApplication"
+					  BinaryKey="WixCA"
+					  DllEntry="WixShellExec"
+					  Impersonate="yes" />
+
+		<InstallExecuteSequence>
+			<Custom Action="LaunchApplication" OnExit="success"><![CDATA[ UILevel < 4 ]]></Custom>
+		</InstallExecuteSequence>
 	</Product>
 </Wix>
