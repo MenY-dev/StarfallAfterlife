@@ -13,10 +13,12 @@
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
     <DefineConstants>Debug</DefineConstants>
+    <SuppressIces>ICE61</SuppressIces>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <SuppressIces>ICE61</SuppressIces>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\StarfallAfterlifeLauncher\StarfallAfterlifeLauncher.csproj">
@@ -45,14 +47,14 @@
     </HarvestDirectory>
   </ItemGroup>
   <ItemGroup>
-	  <WixExtension Include="WixUIExtension">
-		  <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
-		  <Name>WixUIExtension</Name>
-	  </WixExtension>
-	  <WixExtension Include="WixUtilExtension">
-		  <HintPath>$(WixExtDir)\WixUtilExtension.dll</HintPath>
-		  <Name>WixUtilExtension</Name>
-	  </WixExtension>
+    <WixExtension Include="WixUIExtension">
+      <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
+      <Name>WixUIExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixUtilExtension">
+      <HintPath>$(WixExtDir)\WixUtilExtension.dll</HintPath>
+      <Name>WixUtilExtension</Name>
+    </WixExtension>
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon_128.ico" />
