@@ -145,6 +145,20 @@ namespace StarfallAfterlife.Bridge.Server
             {
                 var comparsion = StringComparison.InvariantCultureIgnoreCase;
 
+                if ((string)authData["version"] is string versionText &&
+                    Version.TryParse(versionText, out var version) == true &&
+                    (version.Major != SfaServer.Version.Major ||
+                    version.Minor != SfaServer.Version.Minor))
+                {
+                    request.SendResponce(new JObject
+                    {
+                        ["auth_success"] = false,
+                        ["reason"] = "bad_version"
+                    }.ToJsonString(), SfaServerAction.Auth);
+
+                    return;
+                }
+
                 if ("restore_session".Equals(action, comparsion) == true)
                 {
                     if ((string)authData["auth"] is string lastAuth &&
@@ -230,7 +244,7 @@ namespace StarfallAfterlife.Bridge.Server
 
             request.SendResponce(new JObject
             {
-                ["version"] = Server?.Version.ToString(3),
+                ["version"] = SfaServer.Version.ToString(3),
                 ["realm_id"] = realm.Id,
                 ["realm_name"] = realm.Name,
                 ["realm_description"] = realm.Description,

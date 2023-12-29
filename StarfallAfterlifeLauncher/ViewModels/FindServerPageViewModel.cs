@@ -232,6 +232,19 @@ namespace StarfallAfterlife.Launcher.ViewModels
                         appVM.ProcessSessionsCancellationBeforePlay(server.Id).Result == false)
                         return false;
 
+                    if (server.Version is Version serverVersion &&
+                        SfaServer.Version is Version currentVersion &&
+                        (serverVersion.Major != currentVersion.Major ||
+                        serverVersion.Minor != currentVersion.Minor))
+                    {
+
+                        Dispatcher.UIThread.Invoke(() =>
+                            SfaMessageBox.ShowDialog(
+                                "The launcher version does not match the server version.", "Error"));
+
+                        return false;
+                    }
+
                     return true;
                 });
 

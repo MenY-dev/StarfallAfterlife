@@ -57,7 +57,7 @@ namespace StarfallAfterlife.Bridge.Server
 
         protected object ClientsLockher { get; } = new();
 
-        public Version Version => AssemblyVersion.Value;
+        public static Version Version => AssemblyVersion.Value;
 
         private static Lazy<Version> AssemblyVersion { get; } = new(
             () => Assembly.GetAssembly(typeof(SfaServer)).GetName().Version);

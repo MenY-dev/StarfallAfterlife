@@ -204,12 +204,14 @@ namespace StarfallAfterlife.Bridge.Server
         public Task<(bool IsSucces, string Reason)> Auth(SfaGameProfile profile, string password = null, string lastAuth = null)
         {
             var request = new JObject();
+            var version = SfaServer.Version;
 
             if (lastAuth is not null)
             {
                 request["action"] = "restore_session";
                 request["password"] = password;
                 request["auth"] = lastAuth;
+                request["version"] = version.ToString(3);
             }
             else
             {
@@ -217,6 +219,7 @@ namespace StarfallAfterlife.Bridge.Server
                 request["password"] = password;
                 request["profile_id"] = Profile?.Id ?? Guid.Empty;
                 request["profile_name"] = profile.Nickname;
+                request["version"] = version.ToString(3);
             }
 
             return SendRequest(SfaServerAction.Auth, request).ContinueWith(t =>
