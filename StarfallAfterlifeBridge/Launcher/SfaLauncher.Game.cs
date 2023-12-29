@@ -31,14 +31,15 @@ namespace StarfallAfterlife.Bridge.Launcher
 
         protected string GameExeLocation => Path.Combine(GameDirectory, "Msk", "starfall_game", "Starfall", "Binaries", "Win64", "Starfall.exe");
 
-        public SfaSession StartGame(SfaProfile profile, string serverAddress) =>
-            StartGame(profile, new Uri($"tcp://{serverAddress}"));
+        public SfaSession StartGame(SfaProfile profile, string serverAddress, Func<string> passwordRequest = null) =>
+            StartGame(profile, new Uri($"tcp://{serverAddress}"), passwordRequest);
 
-        public SfaSession StartGame(SfaProfile profile, Uri serverAddress)
+        public SfaSession StartGame(SfaProfile profile, Uri serverAddress, Func<string> passwordRequest = null)
         {
             var session = new SfaSession()
             {
                 Profile = profile,
+                PasswordRequested = passwordRequest,
             };
 
             session.StartGame(GameDirectory, serverAddress);

@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		xmlns:controls="using:StarfallAfterlife.Launcher.Controls"
+		xmlns:c="using:StarfallAfterlife.Launcher.Controls"
         xmlns:sys="using:System">
 
 	<ResourceDictionary.MergedDictionaries>
@@ -11,21 +11,21 @@
 		<Border Padding="20" Width="300" Height="400" Background="#404550">
 			<Button Content="Show" VerticalAlignment="Top" HorizontalAlignment="Center">
 				<Button.Flyout>
-					<controls:SfaMenuFlyout>
+					<c:SfaMenuFlyout SelectedItem="Item 2">
 						<sys:String>Item 1</sys:String>
 						<sys:String>Item 2</sys:String>
 						<sys:String>Item 3</sys:String>
 						<sys:String>Item 4</sys:String>
 						<sys:String>Item 5</sys:String>
-					</controls:SfaMenuFlyout>
+					</c:SfaMenuFlyout>
 				</Button.Flyout>
 			</Button>
 		</Border>
 	</Design.PreviewWith>
 
 
-	<ControlTheme x:Key="{x:Type controls:SfaMenuItem}"
-				  TargetType="controls:SfaMenuItem"
+	<ControlTheme x:Key="{x:Type c:SfaMenuItem}"
+				  TargetType="c:SfaMenuItem"
 				  BasedOn="{StaticResource {x:Type MenuItem}}">
 		<Setter Property="Background" Value="Transparent" />
 		<Setter Property="Foreground" Value="White" />
@@ -41,6 +41,9 @@
 							BorderBrush="{TemplateBinding BorderBrush}"
 							BorderThickness="{TemplateBinding BorderThickness}"
 							Opacity="0.75"/>
+
+					<Rectangle Name="bgselected" IsVisible="{TemplateBinding IsChecked}"/>
+					
 					<Border Background="Transparent" Padding="{TemplateBinding Padding}">
 						<Grid>
 							<Grid.ColumnDefinitions>
@@ -114,7 +117,7 @@
 				</Panel>
 			</ControlTemplate>
 		</Setter>
-
+		
 		<!--  PointerOver state  -->
 		<Style Selector="^:selected">
 			<Setter Property="Background" Value="Black"/>
@@ -142,5 +145,11 @@
 				<Setter Property="Opacity" Value="0.2" />
 			</Style>
 		</Style>
+
+		<Style Selector="^ /template/ Rectangle#bgselected">
+			<Setter Property="Fill" Value="{DynamicResource AccentColor}"/>
+			<Setter Property="Opacity" Value="0.25"/>
+		</Style>
+		
 	</ControlTheme>
 </ResourceDictionary>

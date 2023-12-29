@@ -27,6 +27,15 @@ namespace StarfallAfterlife.Launcher.ViewModels
             return true;
         }
 
+        protected bool SetAndRaise<T>(T oldValue, T newValue, Action<T> setter, [CallerMemberName] string name = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(oldValue, newValue) == true)
+                return false;
+
+            setter?.Invoke(newValue);
+            RaisePropertyChanged(oldValue, newValue, name);
+            return true;
+        }
 
         protected void RaisePropertyChanged(object value, [CallerMemberName] string name = null) =>
             RaisePropertyChanged(value, value, name);

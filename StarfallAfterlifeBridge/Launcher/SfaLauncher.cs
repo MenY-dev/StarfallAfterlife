@@ -37,6 +37,8 @@ namespace StarfallAfterlife.Bridge.Launcher
             Realms.Clear();
             Realms.AddRange(LoadRealmsInfo());
 
+            LoadeServerSettings();
+
             CurrentProfile ??= Profiles.FirstOrDefault(
                 p => p?.IsSupported == true && p.GameProfile?.Id == LastSelectedProfileId);
 
@@ -46,8 +48,6 @@ namespace StarfallAfterlife.Bridge.Launcher
             CurrentLocalRealm ??= Realms.FirstOrDefault(r => r?.Realm?.Id == LastSelectedLocalRealmId);
             CurrentLocalRealm ??= Realms.FirstOrDefault();
 
-            CurrentServerRealm ??= Realms.FirstOrDefault(r => r?.Realm?.Id == LastSelectedServerRealmId);
-            CurrentServerRealm ??= Realms.FirstOrDefault();
         }
 
         public static DirectoryInfo GetOrCreateDirectory(string directory)

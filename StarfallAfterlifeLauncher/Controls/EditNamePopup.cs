@@ -15,13 +15,22 @@ namespace StarfallAfterlife.Launcher.Controls
     {
         protected override Type StyleKeyOverride => typeof(EditNamePopup);
 
-        public static AvaloniaProperty IsValidProperty = AvaloniaProperty.Register<CreateProfilePopup, bool>(
+        public static AvaloniaProperty IsValidProperty = AvaloniaProperty.Register<EditNamePopup, bool>(
             nameof(IsValid), false, true, BindingMode.TwoWay);
 
-        public static AvaloniaProperty LabelProperty = AvaloniaProperty.Register<CreateProfilePopup, string>(
+        public static AvaloniaProperty LabelProperty = AvaloniaProperty.Register<EditNamePopup, string>(
             nameof(Label), null, true, BindingMode.TwoWay);
 
+        public static StyledProperty<string> TextFilterProperty = AvaloniaProperty.Register<EditNamePopup, string>(
+            nameof(Label), @"[A-Za-z0-9\-_]*$", true, BindingMode.TwoWay);
+
         public bool IsDone { get; protected set; }
+
+        public string TextFilter
+        {
+            get => GetValue(TextFilterProperty);
+            set => SetValue(TextFilterProperty, value);
+        }
 
         public string Text
         {
@@ -35,7 +44,7 @@ namespace StarfallAfterlife.Launcher.Controls
                     IsValid = false;
                     HasErrors = false;
                 }
-                else if (new Regex(@"[A-Za-z0-9\-_]*$").Matches(value) is MatchCollection matches &&
+                else if (new Regex(TextFilter).Matches(value) is MatchCollection matches &&
                     matches.FirstOrDefault(m => m.Index == 0 && m.Length == value.Length) is null)
                 {
                     IsValid = false;

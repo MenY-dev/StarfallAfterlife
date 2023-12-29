@@ -1,4 +1,7 @@
-﻿using StarfallAfterlife.Bridge.Launcher;
+﻿using Avalonia.Threading;
+using StarfallAfterlife.Bridge.Launcher;
+using StarfallAfterlife.Bridge.Server;
+using StarfallAfterlife.Launcher.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,7 +41,30 @@ namespace StarfallAfterlife.Launcher.ViewModels
 
                 if (Launcher is SfaLauncher launcher)
                 {
-                    launcher.StartGame(launcher.CurrentProfile, address);
+                    var writePasswordDialog = new Func<string>(() =>
+                    {
+                        var completionSource = new TaskCompletionSource<string>();
+
+                        Dispatcher.UIThread.InvokeAsync(() =>
+                        {
+                            var dialog = new EnterPasswordDialog();
+
+                            dialog.ShowDialog().ContinueWith(t => Dispatcher.UIThread.InvokeAsync(() =>
+                            {
+                                if (dialog.IsDone == true &&
+                                    string.IsNullOrWhiteSpace(dialog.Text) == false &&
+                                    SfaServer.CreatePasswordHash(dialog.Text) is string hash)
+                                    completionSource.SetResult(hash);
+                                else
+                                    completionSource.SetResult(null);
+                            }));
+
+                        });
+
+                        return completionSource.Task.Result;
+                    });
+
+                    launcher.StartGame(launcher.CurrentProfile, address, writePasswordDialog);
                 }
             }
             catch { }

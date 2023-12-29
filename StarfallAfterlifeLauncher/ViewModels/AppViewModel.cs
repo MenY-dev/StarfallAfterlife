@@ -56,7 +56,7 @@ namespace StarfallAfterlife.Launcher.ViewModels
             set
             {
                 SetAndRaise(ref _selectedServerRealm, value);
-                Launcher.CurrentServerRealm = value?.RealmInfo;
+                Launcher.ServerRealm = value?.RealmInfo;
             }
         }
 
@@ -296,7 +296,7 @@ namespace StarfallAfterlife.Launcher.ViewModels
             if (Launcher is SfaLauncher launcher)
             {
                 var selectedLocalRealm = launcher.CurrentLocalRealm;
-                var selectedServerRealm = launcher.CurrentServerRealm;
+                var selectedServerRealm = launcher.ServerRealm;
                 Realms?.Clear();
 
                 foreach (var item in launcher.Realms ?? new())
@@ -323,7 +323,7 @@ namespace StarfallAfterlife.Launcher.ViewModels
             {
                 Sessions.Add(session);
 
-                session.Game?.Task?.ContinueWith(t => Dispatcher.UIThread.Invoke(() =>
+                session.Game?.StartingTask?.ContinueWith(t => Dispatcher.UIThread.Invoke(() =>
                 {
                     Sessions.Remove(session);
                     IsGameStarted = Sessions.Count > 0;

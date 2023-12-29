@@ -16,7 +16,6 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using static StarfallAfterlife.Bridge.Diagnostics.SfaDebug;
 using System.Net.Http;
 using StarfallAfterlife.Bridge.Generators;
 using StarfallAfterlife.Bridge.Realms;
@@ -30,6 +29,10 @@ namespace StarfallAfterlife.Bridge.Game
         public string Location { get; set; }
 
         public Uri ServerAddress { get; set; }
+
+        public string ServerPassword { get; set; }
+
+        public Func<string> PasswordRequested { get; set; }
 
         public SfaProfile Profile { get; set; }
 
@@ -47,22 +50,16 @@ namespace StarfallAfterlife.Bridge.Game
 
         public SfaProcess Process { get; protected set; }
 
-        public Task Task => CompletionSource?.Task ?? Task.CompletedTask;
+        public Task<StartResult> StartingTask => CompletionSource?.Task ?? Task.FromResult<StartResult>(new(false, null));
 
-        protected TaskCompletionSource CompletionSource { get; set; }
+        protected TaskCompletionSource<StartResult> CompletionSource { get; set; }
 
-        public class LogReceivedEventArgs : EventArgs
+        public record struct StartResult(bool IsSucces, string Reason);
+
+        public Task<StartResult> Start(IProgress<string> progress = null)
         {
-            public string Message { get;}
+            progress?.Report("init");
 
-            public LogReceivedEventArgs(string message)
-            {
-                Message = message;
-            }
-        }
-
-        public Task<bool> Start()
-        {
             Stop();
             Init();
 
@@ -70,17 +67,21 @@ namespace StarfallAfterlife.Bridge.Game
 
             GameProfile.Database = Profile.Database;
 
+            progress?.Report("start_sfmgr");
+
             SfMgrChannelManager.Start(new Uri("tcp://127.0.0.1:0"));
-            Print($"SfmgrChannelManager Started! ({SfMgrChannelManager.Address})");
+            SfaDebug.Print($"SfmgrChannelManager Started! ({SfMgrChannelManager.Address})");
 
             SfMgrServer.Start(new Uri("http://127.0.0.1:0/sfmgr/"));
-            Print($"SfMgrServer Started! ({SfMgrServer.Address})");
+            SfaDebug.Print($"SfMgrServer Started! ({SfMgrServer.Address})");
+
+            progress?.Report("start_realmmgr");
 
             RealmMgrChannelManager.Start(new Uri("tcp://127.0.0.1:0"));
-            Print($"RealmMgrChannelManager Started! ({RealmMgrChannelManager.Address})");
+            SfaDebug.Print($"RealmMgrChannelManager Started! ({RealmMgrChannelManager.Address})");
 
             RealmMgrServer.Start(new Uri("http://127.0.0.1:0/realmmgr/"));
-            Print($"RealmMgrServer Started! ({RealmMgrServer.Address})");
+            SfaDebug.Print($"RealmMgrServer Started! ({RealmMgrServer.Address})");
 
             Process = new SfaProcess
             {
@@ -97,24 +98,50 @@ namespace StarfallAfterlife.Bridge.Game
             Process.Exited += OnProcessExited;
 
             SfaClient = new SfaClient(this);
-            CompletionSource = new TaskCompletionSource();
+            CompletionSource = new TaskCompletionSource<StartResult>();
 
-            var startingTask = new Task<bool>(() =>
+            (bool IsSucces, string Reason) Auth(string lastAuth = null)
             {
+                var result = SfaClient.Auth(GameProfile, ServerPassword, lastAuth).Result;
+
+                if (result.IsSucces == true)
+                    return (true, null);
+
+                if (result.Reason is "bad_password")
+                {
+                    ServerPassword = PasswordRequested?.Invoke();
+
+                    if (ServerPassword == null)
+                        return new(false, "auth_cancelled");
+
+                    return SfaClient.Auth(GameProfile, ServerPassword).Result;
+                }
+
+                return result;
+            }
+
+            var startingTask = new Task<StartResult>(() =>
+            {
+                progress?.Report("connecting");
+
                 SfaDebug.Print($"Connecting... ({ServerAddress})", GetType().Name);
                 SfaClient.ConnectAsync(ServerAddress).Wait();
                 SfaDebug.Print("Connected to server!", GetType().Name);
 
+                progress?.Report("auth");
+
                 if (Realm?.LastAuth is string lastAuth &&
-                    SfaClient.Auth(GameProfile, lastAuth: lastAuth).Result == true)
+                    Auth(lastAuth).IsSucces == true)
                 {
                     SfaDebug.Print("Restore Session: Done!", GetType().Name);
                 }
-                else if (SfaClient.Auth(GameProfile).Result == false)
+                else if (Auth() is var result && result.IsSucces == false)
                 {
                     SfaDebug.Print("Auth Error", GetType().Name);
-                    return false;
+                    return new(result.IsSucces, result.Reason);
                 }
+
+                progress?.Report("load_galaxy");
 
                 if (SfaClient.GalaxyHash is string galaxyHash &&
                     Profile.MapsCache.LoadText(galaxyHash) is string galaxyCache)
@@ -125,24 +152,27 @@ namespace StarfallAfterlife.Bridge.Game
                 else if (SfaClient.LoadGalaxyMap().Result == false)
                 {
                     SfaDebug.Print("LoadGalaxyMap Error", GetType().Name);
-                    return false;
+                    return new(false, "load_map_error");
                 }
+
+                progress?.Report("sync_player_data");
 
                 if (SfaClient.SyncPlayerData().Result == false)
                 {
-
                     SfaDebug.Print("SyncPlayerData Error", GetType().Name);
-                    return false;
+                    return new(false, "sync_player_data_error");
                 }
 
+
+                progress?.Report("start_game");
                 Process.Start();
-                return true;
+                return new(true, null);
             }, TaskCreationOptions.LongRunning);
 
             startingTask.ContinueWith(t =>
             {
-                if (t.Result == false)
-                    CompletionSource?.TrySetResult();
+                if (t.Result.IsSucces == false)
+                    CompletionSource?.TrySetResult(new(false, t.Result.Reason));
             });
 
             startingTask.Start();
@@ -162,7 +192,7 @@ namespace StarfallAfterlife.Bridge.Game
             }
             catch { }
 
-            CompletionSource?.TrySetResult();
+            CompletionSource?.TrySetResult(new(true, null));
         }
 
         public GameChannel GetChannel(string name)

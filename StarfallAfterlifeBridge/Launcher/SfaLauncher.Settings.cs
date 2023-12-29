@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace StarfallAfterlife.Bridge.Launcher
 {
@@ -14,11 +15,13 @@ namespace StarfallAfterlife.Bridge.Launcher
     {
         public string SettingsFile => Path.Combine(WorkingDirectory, "Launcher", "Settings.json");
 
+        public string ServerSettingsFile => Path.Combine(WorkingDirectory, "Launcher", "ServerSettings.json");
+
+        public ServerSettings ServerSettings { get; set; } = new ServerSettings();
+
         public Guid LastSelectedProfileId { get; set; }
 
         public string LastSelectedLocalRealmId { get; set; }
-
-        public string LastSelectedServerRealmId { get; set; }
 
         public void SaveSettings()
         {
@@ -29,9 +32,6 @@ namespace StarfallAfterlife.Bridge.Launcher
                     ["game_dir"] = GameDirectory,
                     ["last_selected_profile_id"] = LastSelectedProfileId,
                     ["last_selected_local_realm_id"] = LastSelectedLocalRealmId,
-                    ["last_selected_server_realm_id"] = LastSelectedServerRealmId,
-                    ["server_address"] = ServerAddress,
-                    ["server_port"] = ServerPort,
                 };
 
                 if (SettingsFile is string path &&
@@ -39,6 +39,23 @@ namespace StarfallAfterlife.Bridge.Launcher
                 {
                     if (Path.GetDirectoryName(path) is string dir &&
                         Directory.Exists(dir) == false)
+                        Directory.CreateDirectory(dir);
+
+                    File.WriteAllText(path, text);
+                }
+            }
+            catch { }
+        }
+
+        public void SaveServerSettings()
+        {
+            try
+            {
+                if (ServerSettingsFile is string path &&
+                    JsonHelpers.SerializeUnbuffered(ServerSettings ??= new(), new() { WriteIndented = true}) is string text)
+                {
+                    if (Path.GetDirectoryName(path) is string dir &&
+                            Directory.Exists(dir) == false)
                         Directory.CreateDirectory(dir);
 
                     File.WriteAllText(path, text);
@@ -58,10 +75,23 @@ namespace StarfallAfterlife.Bridge.Launcher
                 {
                     GameDirectory = (string)doc["game_dir"];
                     LastSelectedProfileId = (Guid?)doc["last_selected_profile_id"] ?? Guid.Empty;
-                    LastSelectedLocalRealmId = (string)doc["last_selected_local_realm_id"];
-                    LastSelectedServerRealmId = (string)doc["last_selected_server_realm_id"];
-                    ServerAddress = (string)doc["server_address"] ?? ServerAddress;
-                    ServerPort = (ushort?)doc["server_port"] ?? ServerPort;
+                }
+            }
+            catch { }
+        }
+
+
+        public void LoadeServerSettings()
+        {
+            try
+            {
+                if (ServerSettingsFile is string path &&
+                    File.Exists(path) == true &&
+                    File.ReadAllText(path) is string text &&
+                    JsonHelpers.DeserializeUnbuffered<ServerSettings>(text) is ServerSettings settings)
+                {
+                    ServerSettings = settings;
+                    _isServerRealmValueValid = false;
                 }
             }
             catch { }

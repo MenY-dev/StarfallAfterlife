@@ -17,7 +17,7 @@
 					<controls:SfaButton Content="Button 1"/>
 					<controls:SfaButton Classes="clear" Content="Button 2"/>
 					<controls:SfaButton Content="Button 3"/>
-					<controls:SfaButton Content="Button 4"/>
+					<controls:SfaButton Content="Button 4" IsEnabled="False"/>
 					<controls:SfaButton Content="Button 5"/>
 					<controls:SfaButton Content="Button 6"/>
 				</StackPanel>
@@ -57,7 +57,13 @@
 									  RecognizesAccessKey="True"
 									  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
 									  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
-					<Border Classes="border" Opacity="0.4" Background="Transparent" IsHitTestVisible="False" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" />
+					<Border Classes="border"
+							Opacity="0.4"
+							Background="Transparent"
+							IsHitTestVisible="False"
+							BorderThickness="{TemplateBinding BorderThickness}"
+							BorderBrush="{TemplateBinding BorderBrush}"
+							UseLayoutRounding="False"/>
 				</Panel>
 			</ControlTemplate>
 		</Setter>
@@ -93,6 +99,9 @@
 		
 		<Style Selector="^:disabled">
 			<Setter Property="Opacity" Value="0.75"/>
+			<Style Selector="^/template/ ContentPresenter#PART_ContentPresenter">
+				<Setter Property="Opacity" Value="0.3"/>
+			</Style>
 		</Style>
 		
 		

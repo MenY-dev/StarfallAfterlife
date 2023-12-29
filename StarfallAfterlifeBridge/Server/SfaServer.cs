@@ -18,6 +18,8 @@ using StarfallAfterlife.Bridge.Collections;
 using StarfallAfterlife.Bridge.Server.Galaxy;
 using StarfallAfterlife.Bridge.Generators;
 using StarfallAfterlife.Bridge.Profiles;
+using System.Reflection;
+using System.Security.Cryptography;
 
 namespace StarfallAfterlife.Bridge.Server
 {
@@ -26,6 +28,8 @@ namespace StarfallAfterlife.Bridge.Server
         //public string RealmId { get; set; } = "3af8cc9c641f452fbf69b9c99d6f2569";
 
         public SfaRealm Realm { get; set; }
+
+        public string Password { get; set; }
 
         public DiscoveryGalaxy Galaxy { get; set; }
 
@@ -37,13 +41,7 @@ namespace StarfallAfterlife.Bridge.Server
 
         public IdCollection<CharacterParty> Parties { get; } = new() { StartId = 1 };
 
-        public Stack<int> FreePlayersIds { get; } = new();
-
         public Uri InstanceManagerAddress { get; set; }
-
-        public bool UseExternalInstanceManager { get; set; }
-
-        public InstanceManager InstanceManager { get; set; }
 
         public Task Task => CompletionSource?.Task ?? Task.CompletedTask;
 
@@ -58,6 +56,11 @@ namespace StarfallAfterlife.Bridge.Server
         protected ActionBuffer ActionBuffer { get; } = new();
 
         protected object ClientsLockher { get; } = new();
+
+        public Version Version => AssemblyVersion.Value;
+
+        private static Lazy<Version> AssemblyVersion { get; } = new(
+            () => Assembly.GetAssembly(typeof(SfaServer)).GetName().Version);
 
         public SfaServer()
         {
@@ -77,6 +80,20 @@ namespace StarfallAfterlife.Bridge.Server
             client.State = SfaClientState.PendingLogin;
             UseClients(clients => clients.Add(client));
             return client;
+        }
+
+        public bool CheckPassword(string inputPassword)
+        {
+            var serverPassword = Password;
+
+            if (string.IsNullOrWhiteSpace(serverPassword) == true)
+                return true;
+
+            if (inputPassword is not null &&
+                serverPassword == inputPassword)
+                return true;
+
+            return false;
         }
 
         protected override void HandleClientDisconnect(SfaServerClient client)
@@ -293,6 +310,20 @@ namespace StarfallAfterlife.Bridge.Server
             string configPath = Path.Combine(directory, "Config.json");
             LoadFromJson(JsonNode.Parse(File.ReadAllText(configPath)));
             (Realm ??= new()).Load(Path.Combine(directory, "Realm"));
+        }
+
+        public static string CreatePasswordHash(string password)
+        {
+            try
+            {
+                var bytes = Encoding.Unicode.GetBytes(password);
+                var salt = SHA384.HashData(bytes);
+                var hash = Rfc2898DeriveBytes.Pbkdf2(password, salt, 12735, HashAlgorithmName.SHA256, 25);
+                return Convert.ToHexString(hash);
+            }
+            catch { }
+
+            return null;
         }
     }
 }

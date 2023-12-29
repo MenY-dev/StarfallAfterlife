@@ -19,48 +19,76 @@ namespace StarfallAfterlife.Bridge.Launcher
 {
     public partial class SfaLauncher
     {
-        public SfaRealmInfo CurrentServerRealm
+        public SfaServer Server { get; protected set; }
+
+        public SfaRealmInfo ServerRealm
         {
-            get => _currentServerRealm;
+            get
+            {
+                if (_isServerRealmValueValid == true)
+                    return _serverRealm;
+
+                var id = (ServerSettings ??= new ServerSettings()).RealmId;
+                _isServerRealmValueValid = true;
+                return _serverRealm = Realms.ToArray().FirstOrDefault(r => r?.Realm?.Id == id);
+            }
             set
             {
-                _currentServerRealm = value;
-                LastSelectedServerRealmId = value?.Realm?.Id;
-                SaveSettings();
+                _serverRealm = value;
+                (ServerSettings ??= new ServerSettings()).RealmId = value?.Realm?.Id;
+                SaveServerSettings();
             }
         }
 
-        public SfaServer Server { get; protected set; }
+        private SfaRealmInfo _serverRealm = null;
+
+        private bool _isServerRealmValueValid = false;
 
         public string ServerAddress
         {
-            get => _serverAddress;
+            get => (ServerSettings ??= new ServerSettings()).Address;
             set
             {
-                _serverAddress = value;
-                SaveSettings();
+                (ServerSettings ??= new ServerSettings()).Address = value;
+                SaveServerSettings();
             }
         }
 
         public ushort ServerPort
         {
-            get => _serverPort;
+            get => (ushort)(ServerSettings ??= new ServerSettings()).Port;
             set
             {
-                _serverPort = value;
-                SaveSettings();
+                (ServerSettings ??= new ServerSettings()).Port = value;
+                SaveServerSettings();
             }
         }
 
-        private SfaRealmInfo _currentServerRealm;
-        private ushort _serverPort = 50200;
-        private string _serverAddress = "0.0.0.0";
+        public bool ServerUsePassword
+        {
+            get => (ServerSettings ??= new ServerSettings()).UsePassword;
+            set
+            {
+                (ServerSettings ??= new ServerSettings()).UsePassword = value;
+                SaveServerSettings();
+            }
+        }
+
+        public string ServerPassword
+        {
+            get => (ServerSettings ??= new ServerSettings()).Password;
+            set
+            {
+                (ServerSettings ??= new ServerSettings()).Password = value;
+                SaveServerSettings();
+            }
+        }
 
         public SfaServer StartServer()
         {
             StopServer();
 
-            if (CurrentServerRealm is SfaRealmInfo realm &&
+            if (ServerRealm is SfaRealmInfo realm &&
                 realm.Realm.CreateServer() is SfaServer server &&
                 IPAddress.TryParse(ServerAddress, out IPAddress address) == true)
             {
@@ -70,6 +98,12 @@ namespace StarfallAfterlife.Bridge.Launcher
                 realm.LoadDatabase();
                 server.InstanceManagerAddress = ActiveInstanceManager.Address;
                 server.Address = new Uri($"tcp://{address}:{ServerPort}");
+
+                if (ServerUsePassword == true &&
+                    ServerPassword is string password &&
+                    string.IsNullOrWhiteSpace(password) == false)
+                    server.Password = password;
+
                 server.Start();
                 Server = server;
 

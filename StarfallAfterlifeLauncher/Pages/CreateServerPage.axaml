@@ -14,8 +14,6 @@
 				<Label Content="CREATE SERVER" Classes="h3" VerticalAlignment="Top" Margin="0 0 0 2" />
 			</StackPanel>
 			<StackPanel IsEnabled="{Binding !ServerStarted}" HorizontalAlignment="Right" Orientation="Horizontal" Spacing="10" Margin="0 0 10 0">
-				<c:SfaButton Content="DELETE REALM" Background="Red" Foreground="White" BorderBrush="Red" HorizontalAlignment="Left" Command="{Binding DeleteSelectedRealm}"/>
-				<c:SfaButton Content="CREATE NEW REALM" Foreground="White" HorizontalAlignment="Right" Command="{Binding CreateNewRealm}"/>
 			</StackPanel>
 			<c:Separator Height="2" Opacity="0.8" VerticalAlignment="Bottom"/>
 		</Panel>
@@ -42,59 +40,86 @@
 				</Rectangle.OpacityMask>
 			</Rectangle>
 			<c:Separator Height="2" Opacity="0.8" VerticalAlignment="Bottom"/>
-			<Grid ColumnDefinitions="1* 2 1*">
-				<Panel IsEnabled="{Binding !ServerStarted}" Grid.Column="0">
-					<c:SfaListBox Padding="10 20 10 20" ItemsSource="{Binding AppVM.Realms}" SelectionMode="AlwaysSelected" SelectedItem="{Binding AppVM.SelectedServerRealm}">
-						<c:SfaListBox.ItemTemplate>
-							<DataTemplate>
-								<Panel Margin="0">
-									<Label Content="{Binding Name}" Foreground="White" Margin="6"/>
-								</Panel>
-							</DataTemplate>
-						</c:SfaListBox.ItemTemplate>
-					</c:SfaListBox>
-				</Panel>
-				<Panel Grid.Column="2">
-					<StackPanel IsEnabled="{Binding !ServerStarted}" Margin="10" Spacing="2">
-						<c:Property Text="NETWORK" IsEnabled="True">
-							<c:SfaTextBox Text="{Binding ServerAddress}" HorizontalAlignment="Stretch">
-								<c:SfaTextBox.InnerRightContent>
-									<c:SfaButton Classes="clear"
-												 BorderBrush="Transparent"
-												 BorderThickness="0"
-												 VerticalAlignment="Stretch"
-												 Command="{Binding UpdateInterfaces}">
-										<c:SfaButton.Flyout>
-											<c:SfaMenuFlyout ItemsSource="{Binding Interfaces}"
-															 Placement="BottomEdgeAlignedRight"
-															 ItemSelectCommand="{Binding SelectInterface}">
-												<c:SfaMenuFlyout.ItemTemplate>
-													<DataTemplate>
-														<StackPanel Orientation="Horizontal" >
-															<Label Foreground="White" Content="{Binding Address}"/>
-															<Label Foreground="White" Content="{Binding Name}" Opacity="0.75"/>
-														</StackPanel>
-													</DataTemplate>
-												</c:SfaMenuFlyout.ItemTemplate>
-											</c:SfaMenuFlyout>
-										</c:SfaButton.Flyout>
-										<PathIcon Name="PART_ChevronPath"
-												  Width="12"
-												  Height="12"
-												  HorizontalAlignment="Right"
-												  VerticalAlignment="Center"
-												  Foreground="White"
-												  Data="M1939 486L2029 576L1024 1581L19 576L109 486L1024 1401L1939 486Z"/>
-									</c:SfaButton>
-								</c:SfaTextBox.InnerRightContent>
-							</c:SfaTextBox>
-						</c:Property>
-						<c:Property Text="PORT">
-							<c:SfaTextBox Text="{Binding ServerPort}"  HorizontalAlignment="Stretch"/>
-						</c:Property>
-					</StackPanel>
-				</Panel>
-				<c:Separator Classes="vertical" Opacity="0.5" Grid.Column="1"/>
+			<Grid RowDefinitions="2* 0 1*" ColumnDefinitions="1* 2 1*">
+				<c:SfaPanel Grid.Row="0" Grid.Column="0" HeaderText="SETTINGS" ShowHeader="True" Margin="10 10 5 5">
+					<ScrollViewer>
+						<StackPanel IsEnabled="{Binding !ServerStarted}" Margin="10" Spacing="3">
+							<c:Property Text="REALM">
+								<c:SfaButton Height="30"  HorizontalAlignment="Stretch">
+									<c:SfaButton.Flyout>
+										<c:SfaMenuFlyout ItemsSource="{Binding AppVM.Realms}"
+														 Placement="BottomEdgeAlignedRight"
+														 SelectedItem="{Binding AppVM.SelectedServerRealm}">
+											<c:SfaMenuFlyout.ItemTemplate>
+												<DataTemplate>
+													<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" >
+														<Label Foreground="White" Content="{Binding Name}" Opacity="0.75"/>
+													</StackPanel>
+												</DataTemplate>
+											</c:SfaMenuFlyout.ItemTemplate>
+										</c:SfaMenuFlyout>
+									</c:SfaButton.Flyout>
+									<Panel>
+										<TextBlock Text="{Binding AppVM.SelectedServerRealm.Name}" />
+										<c:DropdownIcon HorizontalAlignment="Right"/>
+									</Panel>
+								</c:SfaButton>
+							</c:Property>
+							<c:Property Text="NETWORK" IsEnabled="True">
+								<c:SfaTextBox Text="{Binding ServerAddress}" HorizontalAlignment="Stretch">
+									<c:SfaTextBox.InnerRightContent>
+										<c:SfaButton Classes="clear"
+													 BorderBrush="Transparent"
+													 BorderThickness="0"
+													 VerticalAlignment="Stretch"
+													 Command="{Binding UpdateInterfaces}">
+											<c:SfaButton.Flyout>
+												<c:SfaMenuFlyout ItemsSource="{Binding Interfaces}"
+																 Placement="BottomEdgeAlignedRight"
+																 ItemSelectCommand="{Binding SelectInterface}">
+													<c:SfaMenuFlyout.ItemTemplate>
+														<DataTemplate>
+															<StackPanel Orientation="Horizontal" >
+																<Label Foreground="White" Content="{Binding Address}"/>
+																<Label Foreground="White" Content="{Binding Name}" Opacity="0.75"/>
+															</StackPanel>
+														</DataTemplate>
+													</c:SfaMenuFlyout.ItemTemplate>
+												</c:SfaMenuFlyout>
+											</c:SfaButton.Flyout>
+											<c:DropdownIcon/>
+										</c:SfaButton>
+									</c:SfaTextBox.InnerRightContent>
+								</c:SfaTextBox>
+							</c:Property>
+							<c:Property Text="PORT">
+								<c:SfaTextBox Text="{Binding ServerPort}"  HorizontalAlignment="Stretch"/>
+							</c:Property>
+
+							<c:Property Text="PASSWORD">
+								<Grid ColumnDefinitions="Auto 6 *">
+									<c:SfaCheckBox Grid.Column="0" Content="ENABLE" IsChecked="{Binding UsePassword}"/>
+									<c:SfaButton Grid.Column="2" Content="SET" Height="30"
+												 IsEnabled="{Binding UsePassword}" Command="{Binding ShowPasswordDialog}"
+												 HorizontalContentAlignment="Center" HorizontalAlignment="Stretch"/>
+								</Grid>
+							</c:Property>
+						</StackPanel>
+					</ScrollViewer>
+				</c:SfaPanel>
+				<c:SfaPanel Grid.Row="2" Grid.Column="0" HeaderText="CONTROLS" ShowHeader="True"
+							Margin="10 5 5 10">
+					<ScrollViewer Padding="5">
+						<WrapPanel>
+							<Button Content="OPEN BATTLEGROUNFS EDITOR"/>
+						</WrapPanel>
+					</ScrollViewer>
+				</c:SfaPanel>
+				<c:SfaPanel Grid.Row="0" Grid.RowSpan="3" Grid.Column="2" HeaderText="PLAYERS" ShowHeader="True"
+							Margin="5 10 10 10">
+					<ScrollViewer Padding="5">
+					</ScrollViewer>
+				</c:SfaPanel>
 			</Grid>
 		</Panel>
 	</DockPanel>

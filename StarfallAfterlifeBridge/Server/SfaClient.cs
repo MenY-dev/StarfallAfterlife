@@ -170,7 +170,7 @@ namespace StarfallAfterlife.Bridge.Server
             }
         }
 
-        public Task<bool> Auth(SfaGameProfile profile, string password = null, string lastAuth = null)
+        public Task<(bool IsSucces, string Reason)> Auth(SfaGameProfile profile, string password = null, string lastAuth = null)
         {
             var request = new JObject();
 
@@ -193,16 +193,18 @@ namespace StarfallAfterlife.Bridge.Server
                 if (t.Result is SfaClientResponse response &&
                     response.IsSuccess == true &&
                     response.Action == SfaServerAction.Auth &&
-                    JsonHelpers.ParseNodeUnbuffered(response.Text) is JObject doc &&
-                    (bool?)doc["auth_success"] == true)
+                    JsonHelpers.ParseNodeUnbuffered(response.Text) is JObject doc)
                 {
+                    if ((bool?)doc["auth_success"] is not true)
+                        return (false, (string)doc["reason"]);
+
                     ServerAuth = (string)doc["auth"];
                     var realmId = RealmId = (string)doc["realm_id"];
                     var realmName = (string)doc["realm_name"];
                     var realmDescription = (string)doc["realm_description"];
 
                     if (realmId is null)
-                        return false;
+                        return (false, "realm_id_not_found");
 
                     Game.Profile.Use(p =>
                     {
@@ -233,10 +235,10 @@ namespace StarfallAfterlife.Bridge.Server
                         p.CurrentRealm.LoadProgress();
                     });
 
-                    return true;
+                    return (true, null);
                 }
 
-                return false;
+                return (false, "error");
             });
         }
 

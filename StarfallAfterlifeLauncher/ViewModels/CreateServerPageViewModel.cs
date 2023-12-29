@@ -1,6 +1,7 @@
 ﻿using Avalonia.OpenGL;
 using Avalonia.Threading;
 using StarfallAfterlife.Bridge.Launcher;
+using StarfallAfterlife.Bridge.Server;
 using StarfallAfterlife.Launcher.Controls;
 using System;
 using System.Collections.Generic;
@@ -29,35 +30,41 @@ namespace StarfallAfterlife.Launcher.ViewModels
 
         public string ServerAddress
         {
-            get => _serverAddress;
+            get => Launcher?.ServerAddress;
             set
             {
-                SetAndRaise(ref _serverAddress, value);
-                Launcher.ServerAddress = value;
+                if (Launcher is SfaLauncher launcher)
+                    SetAndRaise(launcher.ServerAddress, value, v => launcher.ServerAddress = v);
             }
         }
 
         public ushort ServerPort
         {
-            get => _serverPort;
+            get => Launcher?.ServerPort ?? 0;
             set
             {
-                SetAndRaise(ref _serverPort, value);
-                Launcher.ServerPort = value;
+                if (Launcher is SfaLauncher launcher)
+                    SetAndRaise(launcher.ServerPort, value, v => launcher.ServerPort = v);
+            }
+        }
+
+        public bool UsePassword
+        {
+            get => Launcher?.ServerUsePassword ?? false;
+            set
+            {
+                if (Launcher is SfaLauncher launcher)
+                    SetAndRaise(launcher.ServerUsePassword, value, v => launcher.ServerUsePassword = v);
             }
         }
 
         public ObservableCollection<InterfaceInfo> Interfaces { get; } = new();
 
-        private string _serverAddress;
-        private ushort _serverPort;
         private bool _serverStarted;
 
         public CreateServerPageViewModel(AppViewModel mainWindowViewModel)
         {
             AppVM = mainWindowViewModel;
-            _serverAddress = Launcher?.ServerAddress;
-            _serverPort = Launcher?.ServerPort ?? 0;
             UpdateInterfaces();
         }
 
@@ -104,6 +111,24 @@ namespace StarfallAfterlife.Launcher.ViewModels
             if (info is InterfaceInfo interfaceInfo)
             {
                 ServerAddress = interfaceInfo.Address?.ToString();
+            }
+        }
+
+        public void ShowPasswordDialog(object info)
+        {
+            if (Launcher is SfaLauncher launcher)
+            {
+                var dialog = new EnterPasswordDialog();
+
+                dialog.ShowDialog().ContinueWith(t => Dispatcher.UIThread.Invoke(() =>
+                {
+                    if (dialog.IsDone == true &&
+                        dialog.Text is string password &&
+                        string.IsNullOrWhiteSpace(password) == false)
+                    {
+                        launcher.ServerPassword = SfaServer.CreatePasswordHash(password);
+                    }
+                }));
             }
         }
 

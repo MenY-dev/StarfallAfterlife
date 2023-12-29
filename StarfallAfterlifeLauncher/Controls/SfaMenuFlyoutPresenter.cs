@@ -1,5 +1,9 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.Platform;
+using Avalonia.LogicalTree;
+using Avalonia.VisualTree;
+using System;
+using System.Linq;
 
 namespace StarfallAfterlife.Launcher.Controls
 {
@@ -9,7 +13,19 @@ namespace StarfallAfterlife.Launcher.Controls
 
         protected override Control CreateContainerForItemOverride(object item, int index, object recycleKey)
         {
-            return new SfaMenuItem() { Flyout = Flyout };
+            return new SfaMenuItem()
+            {
+                Flyout = Flyout,
+            };
+        }
+
+        public virtual void UpdateSelection(object selectedItem)
+        {
+            foreach (var item in this.GetVisualDescendants()
+                                     .OfType<SfaMenuItem>())
+            {
+                item.IsChecked = item.DataContext == selectedItem;
+            }
         }
     }
 }

@@ -16,17 +16,33 @@ namespace StarfallAfterlife.Bridge.Launcher
 
         public SfaGame Game { get; protected set; }
 
-        public Task<SfaSession> StartGame(string gameLocation, Uri serverAddress)
+        public bool IsSuccess { get; protected set; }
+
+        public string Reason { get; protected set; }
+
+        public Func<string> PasswordRequested { get; set; }
+
+
+        public Task<SfaSession> StartGame(string gameLocation, Uri serverAddress, IProgress<string> progress = null)
         {
             Game = new SfaGame()
             {
                 Location = gameLocation,
                 ServerAddress = serverAddress,
                 Profile = Profile,
+                PasswordRequested = PasswordRequested,
             };
 
-            Game.Start();
-            return Game.Task.ContinueWith(t => this);
+            Game.Start(progress);
+
+            return Game.StartingTask.ContinueWith(t =>
+            {
+                var result = t.Result;
+                IsSuccess = result.IsSucces;
+                Reason = result.Reason;
+                progress?.Report("stopped");
+                return this;
+            });
         }
     }
 }

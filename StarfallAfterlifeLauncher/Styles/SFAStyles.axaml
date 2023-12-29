@@ -12,6 +12,7 @@
 				<ResourceInclude Source="/Styles/SfaMenuItemStyle.axaml"/>
 				<ResourceInclude Source="/Styles/SfaPopupStyle.axaml"/>
 				<ResourceInclude Source="/Styles/SfaEditNamePopupStyle.axaml"/>
+				<ResourceInclude Source="/Styles/SfaCheckBoxStyle.axaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 

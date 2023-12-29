@@ -177,11 +177,30 @@ namespace StarfallAfterlife.Bridge.Server
                 }
                 else if ("server_auth".Equals(action, comparsion) == true)
                 {
-                    Name = (string)authData["profile_name"] ?? "RenamedUser";
-                    ProfileId = (Guid?)authData["profile_id"] ?? Guid.Empty;
-                    IsPlayer = true;
-                    DiscoveryClient ??= new DiscoveryClient(this);
-                    SendSuccessAuth();
+                    if (Server?.CheckPassword((string)authData["password"]) == true)
+                    {
+                        Name = (string)authData["profile_name"] ?? "RenamedUser";
+                        ProfileId = (Guid?)authData["profile_id"] ?? Guid.Empty;
+                        IsPlayer = true;
+                        DiscoveryClient ??= new DiscoveryClient(this);
+                        SendSuccessAuth();
+                    }
+                    else
+                    {
+                        request.SendResponce(new JObject
+                        {
+                            ["auth_success"] = false,
+                            ["reason"] = "bad_password"
+                        }.ToJsonString(), SfaServerAction.Auth);
+                    }
+                }
+                else
+                {
+                    request.SendResponce(new JObject
+                    {
+                        ["auth_success"] = false,
+                        ["reason"] = "unexpected_action"
+                    }.ToJsonString(), SfaServerAction.Auth);
                 }
             }
 
@@ -211,11 +230,11 @@ namespace StarfallAfterlife.Bridge.Server
 
             request.SendResponce(new JObject
             {
-                ["version"] = GetType().Assembly.GetName().Version.ToString(),
+                ["version"] = Server?.Version.ToString(3),
                 ["realm_id"] = realm.Id,
                 ["realm_name"] = realm.Name,
-                ["realm_description"] = "",
-                ["need_password"] = false,
+                ["realm_description"] = realm.Description,
+                ["need_password"] = string.IsNullOrEmpty(Server?.Password) == false,
             }.ToJsonString(), SfaServerAction.GetServerInfo);
         }
 
