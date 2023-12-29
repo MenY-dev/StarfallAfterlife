@@ -29,19 +29,21 @@ namespace StarfallAfterlife.Bridge.Server
 {
     public partial class SfaServerClient : SfaClientBase
     {
-        public string Name { get; protected set; }
+        public string Name { get; set; }
 
-        public string Auth { get; protected set; }
+        public string UniqueName { get; set; }
+
+        public string Auth { get; set; }
 
         public int PlayerId { get; set; } = -1;
 
         public int IndexSpace => PlayerId < 0 ? 0 : PlayerId * 2000;
 
-        public Guid ProfileId { get; protected set; }
+        public Guid ProfileId { get; set; }
 
         public SfaClientState State { get; set; } = SfaClientState.PendingLogin;
 
-        public bool IsPlayer { get; protected set; }
+        public bool IsPlayer { get; set; }
 
         public SfaServer Server { get; set; }
 
@@ -51,7 +53,7 @@ namespace StarfallAfterlife.Bridge.Server
 
         public ServerCharacter CurrentCharacter => DiscoveryClient?.CurrentCharacter;
 
-        public DiscoveryClient DiscoveryClient { get; protected set; }
+        public DiscoveryClient DiscoveryClient { get; set; }
 
         protected override void OnBinaryInput(SfReader reader, SfaServerAction action)
         {
@@ -194,9 +196,11 @@ namespace StarfallAfterlife.Bridge.Server
                     if (Server?.CheckPassword((string)authData["password"]) == true)
                     {
                         Name = (string)authData["profile_name"] ?? "RenamedUser";
+                        UniqueName = Server?.CreateUnicuePlayerName(Name);
                         ProfileId = (Guid?)authData["profile_id"] ?? Guid.Empty;
                         IsPlayer = true;
                         DiscoveryClient ??= new DiscoveryClient(this);
+                        Server?.RegisterPlayer(this);
                         SendSuccessAuth();
                     }
                     else
@@ -396,6 +400,7 @@ namespace StarfallAfterlife.Bridge.Server
                 return;
 
             client.Name = Name;
+            client.UniqueName = UniqueName;
             client.Auth = Auth;
             client.PlayerId = PlayerId;
             client.ProfileId = ProfileId;

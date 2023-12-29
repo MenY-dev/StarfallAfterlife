@@ -201,7 +201,7 @@ namespace StarfallAfterlife.Bridge.Server
                 var isPrivate = (bool?)doc["is_private"];
                 var receiver = (string)doc["receiver"];
                 var sender = channel == "GeneralTextChat" ?
-                    Client.Name ?? "" :
+                    Client.UniqueName ?? "" :
                     CurrentCharacter?.UniqueName ?? "";
 
                 if (msg?.StartsWith('\\') == true)

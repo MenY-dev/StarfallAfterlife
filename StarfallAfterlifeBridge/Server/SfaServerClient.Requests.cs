@@ -35,7 +35,7 @@ namespace StarfallAfterlife.Bridge.Server
         private void HandleUserStatus(bool isCharChannel, SfReader reader)
         {
             var status = (UserInGameStatus)reader.ReadByte();
-            Server?.Matchmaker?.OnUserStatusChanged(this, status);
+            Server?.OnUserStatusChanged(this, status);
         }
     }
 }

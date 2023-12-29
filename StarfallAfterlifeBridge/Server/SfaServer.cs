@@ -37,6 +37,8 @@ namespace StarfallAfterlife.Bridge.Server
 
         public List<SfaServerClient> Clients { get; } = new();
 
+        public IdCollection<SfaServerClient> Players { get; } = new() { StartId = 1 };
+
         public IdCollection<ServerCharacter> Characters { get; } = new() { StartId = 1 };
 
         public IdCollection<CharacterParty> Parties { get; } = new() { StartId = 1 };
@@ -44,6 +46,8 @@ namespace StarfallAfterlife.Bridge.Server
         public Uri InstanceManagerAddress { get; set; }
 
         public Task Task => CompletionSource?.Task ?? Task.CompletedTask;
+
+        public event EventHandler<PlayerStatusInfoEventArgs> PlayerStatusUpdated;
 
         public int ShopsMapSeed { get; set; } = 1;
 
@@ -151,6 +155,7 @@ namespace StarfallAfterlife.Bridge.Server
                     }
 
                     clients.Remove(client);
+                    Players.Remove(client);
                     client.Close();
                     client.Dispose();
                 });
@@ -162,6 +167,54 @@ namespace StarfallAfterlife.Bridge.Server
         {
             lock (ClientsLockher)
                 handler?.Invoke(Clients);
+        }
+
+        public virtual int RegisterPlayer(SfaServerClient player)
+        {
+            lock (ClientsLockher)
+            {
+                if (player is null || player.PlayerId > -1 ||
+                    Players.ContainsId(player.PlayerId) == true)
+                    return -1;
+
+                player.UniqueName = CreateUnicuePlayerName(player.Name);
+                return player.PlayerId = Players.Add(player);
+            }
+        }
+
+        public SfaServerClient GetPlayer(int id)
+        {
+            SfaServerClient player = null;
+            UseClients(c => player = c.FirstOrDefault(p => p?.IsPlayer == true && p.PlayerId == id));
+            return player;
+        }
+
+        public SfaServerClient GetPlayer(Guid id)
+        {
+            SfaServerClient player = null;
+            UseClients(c => player = c.FirstOrDefault(p => p?.IsPlayer == true && p.ProfileId == id));
+            return player;
+        }
+
+        public SfaServerClient GetPlayer(string name)
+        {
+            SfaServerClient player = null;
+            UseClients(c => player = c.FirstOrDefault(p => p?.IsPlayer == true && p.UniqueName == name));
+            return player;
+        }
+
+        public string CreateUnicuePlayerName(string baseName)
+        {
+            string name = baseName ?? "RenamedPlayer";
+            int index = 0;
+
+            while (GetPlayer(name) != null)
+            {
+                index++;
+                name = $"{baseName}_{index}";
+            }
+
+            return name;
         }
 
         public virtual int RegisterCharacter(ServerCharacter character)
@@ -221,6 +274,28 @@ namespace StarfallAfterlife.Bridge.Server
                     .Where(c => c.State == SfaClientState.InDiscoveryMod)
                     .ToList();
             }
+        }
+
+        public void OnUserStatusChanged(SfaServerClient client, UserInGameStatus status)
+        {
+            if (client is null)
+                return;
+
+            Matchmaker?.OnUserStatusChanged(client, status);
+
+            UseClients(_ =>
+            {
+                var character = client.CurrentCharacter;
+
+                PlayerStatusUpdated?.Invoke(this, new(new()
+                {
+                    Auth = client.Auth,
+                    Name = client.UniqueName,
+                    CharacterId = character?.Id ?? -1,
+                    CharacterName = character?.Name,
+                    Status = status
+                }));
+            });
         }
 
         public ObjectShops GetObjectShops(int objectId, GalaxyMapObjectType objectType)
