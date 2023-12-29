@@ -1,0 +1,44 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:bl="using:StarfallAfterlife.Bridge.Launcher"
+             mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="100"
+             x:Class="StarfallAfterlife.Launcher.Controls.RemoteServerEntry">
+	<Design.DataContext>
+		<bl:RemoteServerInfo Address="127.0.0.1"
+							 Name="528"
+							 IsOnline="True"
+							 Version="1.3.5"
+							 NeedPassword="True"/>
+	</Design.DataContext>
+
+	<Panel>
+		<StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Left" VerticalAlignment="Center">
+			
+			<Rectangle Width="4" Height="30" RadiusX="2" RadiusY="2" Fill="#FF2000" IsVisible="{Binding !IsOnline}"/>
+			<Rectangle Width="4" Height="30" RadiusX="2" RadiusY="2" Fill="#00FF50" IsVisible="{Binding IsOnline}"/>
+			
+			<TextBlock Text="{Binding Name}" VerticalAlignment="Center" IsVisible="{Binding !!Name}"/>
+
+			
+			<TextBlock Text="{Binding Address, StringFormat='({0})'}" VerticalAlignment="Center" Opacity="0.5" FontSize="10" Padding="0 1 0 0"
+					   IsVisible="{Binding Name, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+
+			<TextBlock Text="{Binding Address}" VerticalAlignment="Center" Opacity="1"
+					   IsVisible="{Binding Name, Converter={x:Static ObjectConverters.IsNull}}"/>
+			
+		</StackPanel>
+		<StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Right" VerticalAlignment="Center">
+			<TextBlock Text="🔒" VerticalAlignment="Center" IsVisible="{Binding NeedPassword}"/>
+			<TextBlock VerticalAlignment="Center" Opacity="0.5" IsVisible="{Binding !!Version}">
+				<TextBlock.Text>
+					<MultiBinding StringFormat="v{0}.{1}">
+						<Binding Path="Version.Major"/>
+						<Binding Path="Version.Minor"/>
+					</MultiBinding>
+				</TextBlock.Text>
+			</TextBlock>
+		</StackPanel>
+	</Panel>
+</UserControl>

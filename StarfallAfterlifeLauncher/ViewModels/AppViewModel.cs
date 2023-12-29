@@ -314,9 +314,35 @@ namespace StarfallAfterlife.Launcher.ViewModels
             }
         }
 
+        public void UpdateServers()
+        {
+            FindServerPageViewModel?.UpdateStatuses();
+        }
+
         public SfaSession StartLocalGame()
         {
             IsGameStarted = true;
+
+            var gameLoadingPopup = Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                var popup = new SfaMessageBox()
+                {
+                    Title = "Game starting..",
+                    Text = "Game starting..",
+                    Buttons = MessageBoxButton.Undefined,
+                };
+
+                popup.ShowDialog();
+                return popup;
+            }).Result;
+
+            var progress = new Progress<string>(s =>
+            {
+                Dispatcher.UIThread.Invoke(() =>
+                {
+                    gameLoadingPopup.Text = s;
+                });
+            });
 
             if (Launcher is SfaLauncher launcher &&
                 launcher.StartLocalGame() is SfaSession session)
@@ -328,6 +354,15 @@ namespace StarfallAfterlife.Launcher.ViewModels
                     Sessions.Remove(session);
                     IsGameStarted = Sessions.Count > 0;
                     UpdateRealms();
+                    UpdateServers();
+                }));
+
+                if (session.StartingTask is null)
+                    gameLoadingPopup.Close();
+
+                session.StartingTask.ContinueWith(t => Dispatcher.UIThread.Invoke(() =>
+                {
+                    gameLoadingPopup.Close();
                 }));
 
                 return session;
@@ -335,6 +370,61 @@ namespace StarfallAfterlife.Launcher.ViewModels
 
             IsGameStarted = Sessions.Count > 0;
             return null;
+        }
+
+
+        public Task<SfaSession> StartGame(SfaProfile currentProfile, string address, Func<string> writePasswordDialog)
+        {
+            IsGameStarted = true;
+
+            var gameLoadingPopup = Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                var popup = new SfaMessageBox()
+                {
+                    Title = "Game starting..",
+                    Text = "Game starting..",
+                    Buttons = MessageBoxButton.Undefined,
+                };
+
+                popup.ShowDialog();
+                return popup;
+            }).Result;
+
+            var progress = new Progress<string>(s =>
+            {
+                Dispatcher.UIThread.Invoke(() =>
+                {
+                    gameLoadingPopup.Text = s;
+                });
+            });
+
+            if (Launcher is SfaLauncher launcher &&
+                launcher.CreateGame(currentProfile, writePasswordDialog) is SfaSession session)
+            {
+                Sessions.Add(session);
+
+                var task = session.StartGame(address, progress)?.ContinueWith(t => Dispatcher.UIThread.Invoke(() =>
+                {
+                    Sessions.Remove(session);
+                    IsGameStarted = Sessions.Count > 0;
+                    UpdateRealms();
+                    UpdateServers();
+                    return session;
+                }));
+
+                if (session.StartingTask is null)
+                    gameLoadingPopup.Close();
+
+                session.StartingTask.ContinueWith(t => Dispatcher.UIThread.Invoke(() =>
+                {
+                    gameLoadingPopup.Close();
+                }));
+
+                return task;
+            }
+
+            IsGameStarted = Sessions.Count > 0;
+            return Task.FromResult<SfaSession>(null);
         }
 
         public void ShowMobsEditor()

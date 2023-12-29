@@ -60,12 +60,14 @@ namespace StarfallAfterlife.Bridge.Server
 
         protected CharactPartyChannel CharactPartyChannel => Game?.CharactPartyChannel;
 
+        public SfaClient()
+        {
+
+        }
+
         public SfaClient(SfaGame game)
         {
             Game = game;
-
-            if (Game is null)
-                return;
         }
 
         protected override void OnBinaryInput(SfReader reader, SfaServerAction action)
@@ -168,6 +170,35 @@ namespace StarfallAfterlife.Bridge.Server
                     ProcessRequestItemResearch(JsonHelpers.ParseNodeUnbuffered(request.Text), request);
                     break;
             }
+        }
+
+        public static Task<JNode> GetServerInfo(string address, int timeout = -1)
+        {
+            return Task<JNode>.Factory.StartNew(() =>
+            {
+                try
+                {
+                    var client = new SfaClient();
+
+                    return client.ConnectAsync(new Uri($"tcp://{address}")).ContinueWith(_ =>
+                    {
+                        return client.SendRequest(SfaServerAction.GetServerInfo, timeout).ContinueWith(t =>
+                        {
+                            if (t.Result is SfaClientResponse response &&
+                                response.IsSuccess == true &&
+                                response.Text is string text &&
+                                JsonHelpers.ParseNodeUnbuffered(text) is JNode node)
+                                return node;
+
+                            return null;
+                        }).Result;
+                    }).Result;
+                }
+                catch
+                {
+                    return null;
+                }
+            }, TaskCreationOptions.LongRunning);
         }
 
         public Task<(bool IsSucces, string Reason)> Auth(SfaGameProfile profile, string password = null, string lastAuth = null)

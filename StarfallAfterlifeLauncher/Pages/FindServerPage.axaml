@@ -13,6 +13,8 @@
 				<Label Content="FIND SERVER" Classes="h3" VerticalAlignment="Top" Margin="0 0 0 2" />
 			</StackPanel>
 			<StackPanel IsEnabled="{Binding !ServerStarted}" HorizontalAlignment="Right" Orientation="Horizontal" Spacing="10" Margin="0 0 10 0">
+				<c:SfaButton Content="UPDATE ALL" Command="{Binding UpdateStatuses}"/>
+				<c:SfaButton Content="ADD SERVER" Command="{Binding ShowAddServerDialog}"/>
 			</StackPanel>
 			<c:Separator Height="2" Opacity="0.8" VerticalAlignment="Bottom"/>
 		</Panel>
@@ -37,24 +39,50 @@
 			<Grid ColumnDefinitions="1* 2 1*">
 				<Panel Grid.Column="0">
 					<c:SfaListBox Padding="10 20 10 20"
-								  ItemsSource="{Binding AppVM.Realms}"
+								  ItemsSource="{Binding Servers}"
 								  SelectionMode="AlwaysSelected"
-								  SelectedItem="{Binding AppVM.SelectedServerRealm}">
+								  SelectedItem="{Binding SelectedServer}">
 						<c:SfaListBox.ItemTemplate>
 							<DataTemplate>
-								<Panel Margin="0">
-									<Label Content="{Binding Name}" Foreground="White" Margin="6"/>
-								</Panel>
+								<Grid Margin="3 3 12 3">
+									<c:RemoteServerEntry DataContext="{Binding}" HorizontalAlignment="Stretch"/>
+								</Grid>
 							</DataTemplate>
 						</c:SfaListBox.ItemTemplate>
 					</c:SfaListBox>
 				</Panel>
 				<Panel Grid.Column="2">
-					<StackPanel Margin="10" Spacing="2">
-						<c:Property Text="ADDRESS">
-							<c:SfaTextBox Text="{Binding ServerAddress}"  HorizontalAlignment="Stretch"/>
-						</c:Property>
-					</StackPanel>
+					<ScrollViewer>
+						<StackPanel Margin="10" Spacing="3">
+							<c:Property Text="Name" HorizontalAlignment="Stretch">
+								<SelectableTextBlock Text="{Binding SelectedServer.Name}" FontSize="16" VerticalAlignment="Center"/>
+							</c:Property>
+							<c:Property Text="Address" HorizontalAlignment="Stretch">
+								<SelectableTextBlock Text="{Binding SelectedServer.Address}" FontSize="16" VerticalAlignment="Center"/>
+							</c:Property>
+							<c:Property Text="Status" HorizontalAlignment="Stretch">
+								<c:Switch Value="{Binding SelectedServer.IsOnline}">
+									<SelectableTextBlock c:Switch.Case="{x:True}" Text="Online" Foreground="#00FF50" FontSize="16" VerticalAlignment="Center"/>
+									<SelectableTextBlock c:Switch.Case="{x:False}" Text="Offline" Foreground="#FF2000" FontSize="16" VerticalAlignment="Center"/>
+								</c:Switch>
+							</c:Property>
+							<c:Property Text="Server Version" HorizontalAlignment="Stretch">
+								<SelectableTextBlock Text="{Binding SelectedServer.Version}" FontSize="16" VerticalAlignment="Center"/>
+							</c:Property>
+							<c:Property Text="Need Password" HorizontalAlignment="Stretch">
+								<SelectableTextBlock Text="{Binding SelectedServer.NeedPassword}" FontSize="16" VerticalAlignment="Center"/>
+							</c:Property>
+							<c:Property Text="Description" HorizontalAlignment="Stretch">
+								<SelectableTextBlock Text="{Binding SelectedServer.Description}" FontSize="16" VerticalAlignment="Center"/>
+							</c:Property>
+							<c:Property Text="" HorizontalAlignment="Stretch" IsVisible="{Binding !!SelectedServer}">
+								<StackPanel Spacing="6" Orientation="Horizontal" HorizontalAlignment="Right">
+									<c:SfaButton Content="UPDATE" Command="{Binding SelectedServer.Update}" HorizontalAlignment="Right"/>
+									<c:SfaButton Content="REMOVE" Command="{Binding RemoveSelectedServer}" HorizontalAlignment="Right" Background="Red" BorderBrush="Red"/>
+								</StackPanel>
+							</c:Property>
+						</StackPanel>
+					</ScrollViewer>
 				</Panel>
 				<c:Separator Classes="vertical" Opacity="0.5" Grid.Column="1"/>
 			</Grid>

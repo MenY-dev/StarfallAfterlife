@@ -9,8 +9,8 @@
         x:Class="StarfallAfterlife.Launcher.Views.MainWindow"
         Title="Starfall Afterlife"
 		Icon="/Assets/Icons/icon_128.ico"
-		Width="1000"
-		Height="600">
+		Width="1000" Height="600"
+		MinWidth="640" MinHeight="360">
 	
 	<Window.DataContext>
 		<vm:AppViewModel/>

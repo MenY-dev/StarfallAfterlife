@@ -27,6 +27,7 @@ namespace StarfallAfterlife.Bridge.Launcher
         public void Load()
         {
             LoadSettings();
+            LoadServerList();
 
             MapsCache ??= new() { Location = MapsCacheDirectory };
             MapsCache.Init();
