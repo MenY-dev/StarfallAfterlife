@@ -75,6 +75,7 @@ namespace StarfallAfterlife.Bridge.Launcher
                 {
                     GameDirectory = (string)doc["game_dir"];
                     LastSelectedProfileId = (Guid?)doc["last_selected_profile_id"] ?? Guid.Empty;
+                    LastSelectedLocalRealmId = (string)doc["last_selected_local_realm_id"];
                 }
             }
             catch { }
