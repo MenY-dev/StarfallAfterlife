@@ -286,16 +286,15 @@ namespace StarfallAfterlife.Bridge.Profiles
                 return null;
 
             var character = new NewCharacterGenerator().CreateCharacter(name, faction);
+            var rnd = new Random();
+            int newId;
 
-            for (int i = 0; i < profile.Chars.Count + 1; i++)
+            do
             {
-                if (profile.Chars.Any(c => c.Id == i) == false)
-                {
-                    character.Id = i;
-                    break;
-                }
-            }
+                newId = rnd.Next() + 1;
+            } while (profile.Chars.Any(c => c.Id == newId));
 
+            character.Id = newId;
             profile.Chars.Add(character);
             return character;
         }
