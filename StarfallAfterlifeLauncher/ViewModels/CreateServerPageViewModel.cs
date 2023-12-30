@@ -1,8 +1,11 @@
-﻿using Avalonia.OpenGL;
+﻿using Avalonia.Controls;
+using Avalonia.OpenGL;
 using Avalonia.Threading;
 using StarfallAfterlife.Bridge.Launcher;
 using StarfallAfterlife.Bridge.Server;
+using StarfallAfterlife.Bridge.Server.Characters;
 using StarfallAfterlife.Launcher.Controls;
+using StarfallAfterlife.Launcher.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -65,6 +68,8 @@ namespace StarfallAfterlife.Launcher.ViewModels
         public ObservableCollection<InterfaceInfo> Interfaces { get; } = new();
 
         private bool _serverStarted;
+
+        private BattlegroundsEditorWindow _battlegroundsEditor;
 
         public CreateServerPageViewModel(AppViewModel mainWindowViewModel)
         {
@@ -195,5 +200,36 @@ namespace StarfallAfterlife.Launcher.ViewModels
 
         public Task<bool> DeleteSelectedRealm() =>
             AppVM?.ShowDeleteRealm(AppVM?.SelectedServerRealm) ?? Task.FromResult(false);
+
+        public void ShowBattlegroundsEditor()
+        {
+            if (Server is null)
+                return;
+
+            if (_battlegroundsEditor is not null &&
+                _battlegroundsEditor.IsVisible == true)
+            {
+                if (_battlegroundsEditor.WindowState == WindowState.Minimized)
+                    _battlegroundsEditor.WindowState = WindowState.Normal;
+
+                _battlegroundsEditor.Activate();
+                return;
+            }
+
+            _battlegroundsEditor = new BattlegroundsEditorWindow()
+            {
+                DataContext = new BGEditorViewModel(this),
+            };
+
+            _battlegroundsEditor.Show(App.MainWindow);
+        }
+
+        public PlayerStatusInfoViewModel GetCharacterVM(ServerCharacter character) =>
+            character is null ? null : GetCharacterVM(character.UniqueId);
+
+        public PlayerStatusInfoViewModel GetCharacterVM(int id)
+        {
+            return Players.FirstOrDefault(p => p.CharacterId == id);
+        }
     }
 }

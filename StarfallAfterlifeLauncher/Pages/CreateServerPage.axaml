@@ -109,9 +109,11 @@
 				</c:SfaPanel>
 				<c:SfaPanel Grid.Row="2" Grid.Column="0" HeaderText="CONTROLS" ShowHeader="True"
 							Margin="10 5 5 10">
-					<ScrollViewer Padding="5">
+					<ScrollViewer Padding="10">
 						<WrapPanel>
-							<Button Content="OPEN BATTLEGROUNFS EDITOR"/>
+							<c:SfaButton Content="OPEN BATTLEGROUNDS EDITOR"
+										 Command="{Binding ShowBattlegroundsEditor}"
+										 IsEnabled="{Binding ServerStarted}"/>
 						</WrapPanel>
 					</ScrollViewer>
 				</c:SfaPanel>

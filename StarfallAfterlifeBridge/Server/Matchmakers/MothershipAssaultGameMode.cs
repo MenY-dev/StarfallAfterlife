@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace StarfallAfterlife.Bridge.Server.Matchmakers
 {
-    public class MothershipAssaultGameMode : MatchmakerGameMode
+    public partial class MothershipAssaultGameMode : MatchmakerGameMode
     {
         private LinkedList<ServerCharacter> Queue { get; } = new();
 

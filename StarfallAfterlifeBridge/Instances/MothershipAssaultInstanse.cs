@@ -23,17 +23,29 @@ namespace StarfallAfterlife.Bridge.Instances
             }
 
             base.Init(context);
-        }
 
+            if (Info is InstanceInfo info)
+            {
+                float fSpawnTime = info.FreighterSpawnPeriod < 0 ? 90 : info.FreighterSpawnPeriod;
+                float snSpawnTime = info.ShieldNeutralizerSpawnPeriod < 0 ? 90 : info.ShieldNeutralizerSpawnPeriod;
+
+                Process?.MapArguments.AddRange(new string[]
+                {
+                    $"FSpawnTime={Math.Max(5, fSpawnTime)}",
+                    $"SNSpawnTime={Math.Max(5, snSpawnTime)}",
+                });
+            }
+        }
 
         public override JsonNode CreateInstanceConfig()
         {
             var doc = base.CreateInstanceConfig();
+            var income = Info.MothershipIncomeOverride;
 
             doc["game_mode"] = "battlegrounds";
 
             if (Info.MothershipIncomeOverride > -1)
-                doc["mothership_income_override"] = Info.MothershipIncomeOverride;
+                doc["mothership_income_override"] = income < 0 ? 80 : income;
 
             return doc;
         }

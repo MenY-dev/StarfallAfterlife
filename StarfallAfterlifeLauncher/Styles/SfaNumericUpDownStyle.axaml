@@ -1,0 +1,76 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:c="using:StarfallAfterlife.Launcher.Controls">
+
+	<ResourceDictionary.MergedDictionaries>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceInclude Source="/Styles/Colors.axaml"/>
+				<ResourceInclude Source="/Styles/Params.axaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</ResourceDictionary.MergedDictionaries>
+
+	<Design.PreviewWith>
+		<Border Padding="20">
+			<StackPanel Spacing="20">
+				<c:SfaNumericUpDown Minimum="0"
+								    Maximum="10"
+								    Increment="0.5"
+								    Watermark="Enter text" />
+				<c:SfaNumericUpDown Minimum="0"
+								    Maximum="10"
+								    Increment="0.5"
+								    VerticalContentAlignment="Center"
+								    HorizontalContentAlignment="Center"
+								    ButtonSpinnerLocation="Left"
+								    Watermark="Enter text" />
+			</StackPanel>
+		</Border>
+	</Design.PreviewWith>
+
+	<ControlTheme x:Key="{x:Type c:SfaNumericUpDown}"
+				  TargetType="{x:Type c:SfaNumericUpDown}"
+				  BasedOn="{StaticResource {x:Type NumericUpDown}}">
+		
+		<Setter Property="Foreground" Value="White" />
+		<Setter Property="CornerRadius" Value="0" />
+		<Setter Property="VerticalContentAlignment" Value="Center" />
+		<Setter Property="Background" Value="{DynamicResource HoloColor}" />
+		<Setter Property="BorderBrush" Value="{DynamicResource HoloColor}" />
+		
+		<Setter Property="Template">
+			<ControlTemplate>
+				<c:SfaButtonSpinner Name="PART_Spinner"
+								    Background="{TemplateBinding Background}"
+								    BorderThickness="{TemplateBinding BorderThickness}"
+								    BorderBrush="{TemplateBinding BorderBrush}"
+								    CornerRadius="{TemplateBinding CornerRadius}"
+								    Padding="0"
+								    MinWidth="0"
+								    HorizontalContentAlignment="Stretch"
+								    VerticalContentAlignment="Stretch"
+								    AllowSpin="{TemplateBinding AllowSpin}"
+								    ShowButtonSpinner="{TemplateBinding ShowButtonSpinner}"
+								    DataValidationErrors.Errors="{TemplateBinding (DataValidationErrors.Errors)}"
+								    ButtonSpinnerLocation="{TemplateBinding ButtonSpinnerLocation}">
+					<c:SfaTextBox Classes="clear"
+								  Name="PART_TextBox"
+								  Margin="-1"
+								  Padding="{TemplateBinding Padding}"
+								  MinWidth="0"
+								  Foreground="{TemplateBinding Foreground}"
+								  FontSize="{TemplateBinding FontSize}"
+								  Watermark="{TemplateBinding Watermark}"
+								  IsReadOnly="{TemplateBinding IsReadOnly}"
+								  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+								  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+								  Text="{TemplateBinding Text}"
+								  TextAlignment="{TemplateBinding TextAlignment}"
+								  AcceptsReturn="False"
+								  TextWrapping="NoWrap" />
+				</c:SfaButtonSpinner>
+			</ControlTemplate>
+		</Setter>
+	</ControlTheme>
+</ResourceDictionary>

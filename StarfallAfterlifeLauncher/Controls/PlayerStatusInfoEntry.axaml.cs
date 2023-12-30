@@ -29,7 +29,7 @@ namespace StarfallAfterlife.Launcher.Controls
         public static readonly IValueConverter InGameStatusConverter =
             new FuncValueConverter<UserInGameStatus, string>(v => v switch
             {
-                UserInGameStatus.CharMainMenu => "In Spaceport",
+                UserInGameStatus.CharMainMenu => "In Shipyard",
                 UserInGameStatus.CharSearchingForGame => "Search BG",
                 UserInGameStatus.CharInBattle => "In Battle",
                 UserInGameStatus.CharInDiscovery => "In Discovery",

@@ -1,0 +1,306 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:c="using:StarfallAfterlife.Launcher.Controls"
+        xmlns:vm="using:StarfallAfterlife.Launcher.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="560"
+        Width="480" Height="560"
+		WindowStartupLocation="CenterOwner"
+        x:Class="StarfallAfterlife.Launcher.Views.BattlegroundsEditorWindow"
+        Title="Battlegrounds Editor">
+	
+	<Design.DataContext>
+	</Design.DataContext>
+	<Panel Background="{DynamicResource AccentColor}">
+		
+		<Rectangle Opacity="0.9">
+			<Rectangle.Fill>
+				<RadialGradientBrush GradientOrigin="50% 0%" Center="50% 10%" Radius="1">
+					<GradientStop Offset="0" Color="{StaticResource PageMainColor}"/>
+					<GradientStop Offset="1" Color="{StaticResource PageSecondaryColor}"/>
+				</RadialGradientBrush>
+			</Rectangle.Fill>
+		</Rectangle>
+		<Grid RowDefinitions="Auto * Auto" VerticalAlignment="Stretch">
+			<Panel Grid.Row="0">
+				<StackPanel Spacing="10" Margin="10"
+							Orientation="Horizontal"
+							HorizontalAlignment="Right"
+							VerticalAlignment="Center">
+
+					<c:SfaButton Content="NEW ROOM"
+								 Foreground="White"
+								 HorizontalAlignment="Right"
+								 Command="{Binding AddRoom}"/>
+					
+				</StackPanel>
+				<c:Separator VerticalAlignment="Bottom" Height="2" Opacity="0.5"/>
+			</Panel>
+			<Panel Grid.Row="1">
+				<Rectangle Fill="Black" Opacity="0.8" IsHitTestVisible="False" >
+					<Rectangle.OpacityMask>
+						<LinearGradientBrush StartPoint="0% 0%" EndPoint="0% 100%">
+							<GradientStop Color="#FFFFFFFF" Offset="0"/>
+							<GradientStop Color="#20FFFFFF" Offset="1"/>
+						</LinearGradientBrush>
+					</Rectangle.OpacityMask>
+				</Rectangle>
+				<ScrollViewer>
+					<ItemsControl Padding="10 20 10 20" ItemsSource="{Binding Rooms}">
+						<ItemsControl.Styles>
+							<Style Selector="ItemsControl ContentPresenter:nth-child(2n+1) Grid.item">
+								<Setter Property="Background" Value="#20FFFFFF"/>
+							</Style>
+						</ItemsControl.Styles>
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<Grid Classes="item" ColumnDefinitions="* Auto" Margin="5 3">
+									<c:SfaButton Classes="clear"
+												 BorderThickness="0"
+												 BorderBrush="{x:Null}"
+												 HorizontalAlignment="Stretch"
+												 Padding="0"
+												 Command="{Binding $parent[Window].DataContext.EditRoom}"
+												 CommandParameter="{Binding}">
+
+										<c:SfaButton.Styles>
+											<Style Selector="c|SfaButton c|SfaButton.delete">
+												<Setter Property="IsVisible" Value="False"/>
+											</Style>
+											<Style Selector="c|SfaButton:pointerover c|SfaButton.delete">
+												<Setter Property="IsVisible" Value="True"/>
+											</Style>
+										</c:SfaButton.Styles>
+
+										<Panel>
+											<TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="6"/>
+											<c:SfaButton Classes="clear delete" Content="×" Foreground="Red" FontSize="16" FontWeight="ExtraBold"
+														 HorizontalAlignment="Right"
+														 VerticalAlignment="Stretch"
+														 HorizontalContentAlignment="Center"
+														 VerticalContentAlignment="Center"
+														 Padding="0" Width="30"
+														 Command="{Binding $parent[Window].DataContext.DeleteRoom}"
+														 CommandParameter="{Binding}"/>
+										</Panel>
+									</c:SfaButton>
+								</Grid>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</ScrollViewer>
+			</Panel>
+			<Panel Grid.Row="2" Height="20">
+				<c:Separator VerticalAlignment="Top" Height="2" Opacity="0.5"/>
+			</Panel>
+		</Grid>
+
+		<Panel IsVisible="{Binding !!SelectedRoom}" Background="{DynamicResource AccentColor}">
+			<Rectangle Opacity="0.9">
+				<Rectangle.Fill>
+					<RadialGradientBrush GradientOrigin="50% 0%" Center="50% 10%" Radius="1">
+						<GradientStop Offset="0" Color="{StaticResource PageMainColor}"/>
+						<GradientStop Offset="1" Color="{StaticResource PageSecondaryColor}"/>
+					</RadialGradientBrush>
+				</Rectangle.Fill>
+			</Rectangle>
+			<Grid  RowDefinitions="Auto * Auto" VerticalAlignment="Stretch">
+				<Panel Grid.Row="0">
+
+					<TextBlock FontSize="20"
+									   Foreground="{DynamicResource HoloColor}"
+									   Opacity="0.75"
+							   HorizontalAlignment="Center"
+							   VerticalAlignment="Center"
+							   Text="{Binding SelectedRoom.Name}"/>
+
+					<StackPanel Spacing="10" Margin="10"
+								Orientation="Horizontal"
+								HorizontalAlignment="Left"
+								VerticalAlignment="Center">
+
+						<c:SfaButton Content="BACK"
+									 Foreground="White"
+									 HorizontalAlignment="Left"
+									 Command="{Binding CloseEditor}"/>
+
+					</StackPanel>
+
+					<StackPanel Spacing="10" Margin="10"
+								Orientation="Horizontal"
+								HorizontalAlignment="Right"
+								VerticalAlignment="Center">
+
+						<c:SfaButton Content="ADD Character"
+									 Foreground="White"
+									 HorizontalAlignment="Right"
+									 Command="{Binding ShowPlayerSelector}"/>
+
+					</StackPanel>
+
+					<c:Separator VerticalAlignment="Bottom" Height="2" Opacity="0.5"/>
+				</Panel>
+				<Panel Grid.Row="1">
+					<Rectangle Fill="Black" Opacity="0.8" IsHitTestVisible="False" >
+						<Rectangle.OpacityMask>
+							<LinearGradientBrush StartPoint="0% 0%" EndPoint="0% 100%">
+								<GradientStop Color="#FFFFFFFF" Offset="0"/>
+								<GradientStop Color="#20FFFFFF" Offset="1"/>
+							</LinearGradientBrush>
+						</Rectangle.OpacityMask>
+					</Rectangle>
+					<ScrollViewer>
+						<ItemsControl Padding="10 20 10 20" ItemsSource="{Binding SelectedRoom.Characters}">
+							<ItemsControl.Styles>
+								<Style Selector="ItemsControl ContentPresenter:nth-child(2n+1) Grid.item">
+									<Setter Property="Background" Value="#20FFFFFF"/>
+								</Style>
+							</ItemsControl.Styles>
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Grid Classes="item" ColumnDefinitions="* Auto" Margin="5 3">
+										<Grid ColumnDefinitions="* Auto Auto" HorizontalAlignment="Stretch">
+											<c:PlayerStatusInfoEntry Grid.Column="0" DataContext="{Binding Info}" Margin="2 2 6 2"/>
+											
+											<c:SfaButton Grid.Column="1">
+												<c:SfaButton.Flyout>
+													<c:SfaMenuFlyout ItemsSource="{Binding TeamVariants}"
+																	 Placement="BottomEdgeAlignedRight"
+																	 ItemSelectCommand="{Binding TeamSelected}">
+													</c:SfaMenuFlyout>
+												</c:SfaButton.Flyout>
+												<Grid ColumnDefinitions="* Auto">
+													<TextBlock Grid.Column="0" Text="{Binding Team}" />
+													<c:DropdownIcon Grid.Column="1" HorizontalAlignment="Right" Margin="6 0 0 0"/>
+												</Grid>
+											</c:SfaButton>
+											
+											<c:SfaButton Classes="clear delete" Grid.Column="2" Content="×"
+														 Foreground="Red" FontSize="16" FontWeight="ExtraBold"
+														 HorizontalAlignment="Right"
+														 VerticalAlignment="Stretch"
+														 HorizontalContentAlignment="Center"
+														 VerticalContentAlignment="Center"
+														 Padding="0" Width="32"
+														 Command="{Binding $parent[Window].DataContext.RemovePlayer}"
+														 CommandParameter="{Binding Info}"/>
+										</Grid>
+									</Grid>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</ScrollViewer>
+				</Panel>
+				<Panel Grid.Row="2" >
+					<Grid RowDefinitions="Auto Auto" Margin="10">
+						<Grid Grid.Row="0" ColumnDefinitions="3* 2*" RowDefinitions="Auto Auto Auto Auto" HorizontalAlignment="Stretch">
+							<TextBlock Grid.Row="0" Grid.Column="0" Text="Map" VerticalAlignment="Center"/>
+							<c:SfaButton Grid.Row="0" Grid.Column="1" Margin="0 3" Height="32" HorizontalAlignment="Stretch">
+								<c:SfaButton.Flyout>
+									<c:SfaMenuFlyout ItemsSource="{Binding SelectedRoom.MapVariants}"
+													 Placement="BottomEdgeAlignedRight"
+													 SelectedItem="{Binding SelectedRoom.Map}">
+									</c:SfaMenuFlyout>
+								</c:SfaButton.Flyout>
+								<Grid ColumnDefinitions="* Auto">
+									<TextBlock Grid.Column="0" Text="{Binding SelectedRoom.Map}" />
+									<c:DropdownIcon Grid.Column="1" HorizontalAlignment="Right" Margin="6 0 0 0"/>
+								</Grid>
+							</c:SfaButton>
+
+							<TextBlock Grid.Row="1" Grid.Column="0" Text="Mothership Income" VerticalAlignment="Center"/>
+							<c:SfaNumericUpDown Grid.Row="1" Grid.Column="1" Margin="0 3"
+										   Value="{Binding SelectedRoom.MothershipIncome}"/>
+
+							<TextBlock Grid.Row="2" Grid.Column="0" Text="Freighter Period (s)" VerticalAlignment="Center"/>
+							<c:SfaNumericUpDown Grid.Row="2" Grid.Column="1" Margin="0 3"
+										   Value="{Binding SelectedRoom.FreighterSpawnPeriod}"/>
+
+							<TextBlock Grid.Row="3" Grid.Column="0" Text="Neutralizer Period (s)" VerticalAlignment="Center"/>
+							<c:SfaNumericUpDown  Grid.Row="3" Grid.Column="1" Margin="0 3"
+											Value="{Binding SelectedRoom.ShieldNeutralizerSpawnPeriod}"/>
+						</Grid>
+						<Panel Grid.Row="1">
+							<c:SfaButton Content="START BATTLEGROUND"
+										 Command="{Binding SelectedRoom.Start}"
+										 FontSize="20"
+										 Foreground="{DynamicResource HoloColor}"
+										 HorizontalAlignment="Stretch"
+										 HorizontalContentAlignment="Center"
+										 VerticalContentAlignment="Center"
+										 Margin="0 10 0 0" />
+						</Panel>
+					</Grid>
+					<c:Separator VerticalAlignment="Top" Height="2" Opacity="0.5"/>
+				</Panel>
+			</Grid>
+		</Panel>
+		
+		<Panel IsVisible="{Binding PlayerSelecterVisible}" Background="#AA000000" IsHitTestVisible="True">
+			<Border Margin="20">
+				<Panel>
+					<Rectangle Opacity="0.9">
+						<Rectangle.Fill>
+							<RadialGradientBrush GradientOrigin="50% 0%" Center="50% 10%" Radius="1">
+								<GradientStop Offset="0" Color="{StaticResource PageMainColor}"/>
+								<GradientStop Offset="1" Color="{StaticResource PageSecondaryColor}"/>
+							</RadialGradientBrush>
+						</Rectangle.Fill>
+					</Rectangle>
+					<Grid RowDefinitions="Auto * Auto" VerticalAlignment="Stretch">
+						<Panel Grid.Row="0">
+
+							<TextBlock FontSize="20"
+									   Foreground="{DynamicResource HoloColor}"
+									   Opacity="0.75"
+									   HorizontalAlignment="Center"
+									   VerticalAlignment="Center"
+									   Text="ADD CHARACTER"/>
+
+							<StackPanel Spacing="10" Margin="10"
+										Orientation="Horizontal"
+										HorizontalAlignment="Left"
+										VerticalAlignment="Center">
+
+								<c:SfaButton Content="BACK"
+											 Foreground="White"
+											 HorizontalAlignment="Left"
+											 Command="{Binding ClosePlayerSelector}"/>
+
+							</StackPanel>
+
+							<c:Separator VerticalAlignment="Bottom" Height="2" Opacity="0.5"/>
+						</Panel>
+						<Panel Grid.Row="1">
+							<Rectangle Fill="Black" Opacity="0.8" IsHitTestVisible="False" >
+								<Rectangle.OpacityMask>
+									<LinearGradientBrush StartPoint="0% 0%" EndPoint="0% 100%">
+										<GradientStop Color="#FFFFFFFF" Offset="0"/>
+										<GradientStop Color="#20FFFFFF" Offset="1"/>
+									</LinearGradientBrush>
+								</Rectangle.OpacityMask>
+							</Rectangle>
+							<ScrollViewer>
+								<c:SfaListBox ItemsSource="{Binding Characters}" SelectedItem="">
+									<c:SfaListBox.ItemTemplate>
+										<DataTemplate>
+											<c:SfaButton Classes="clear" Padding="10 3" Margin="0" 
+													HorizontalAlignment="Stretch"
+													Command="{Binding $parent[Window].DataContext.AddPlayer}"
+													CommandParameter="{Binding}">
+												<c:PlayerStatusInfoEntry DataContext="{Binding}" HorizontalAlignment="Stretch" Padding="2 2 6 2"/>
+											</c:SfaButton>
+										</DataTemplate>
+									</c:SfaListBox.ItemTemplate>
+								</c:SfaListBox>
+
+							</ScrollViewer>
+						</Panel>
+					</Grid>
+					<Border BorderBrush="{DynamicResource AccentColor}" BorderThickness="1" Opacity="0.5" IsHitTestVisible="False"/>
+				</Panel>
+			</Border>
+		</Panel>
+	</Panel>
+</Window>

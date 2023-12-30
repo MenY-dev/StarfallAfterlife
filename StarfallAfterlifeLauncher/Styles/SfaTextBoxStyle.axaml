@@ -100,6 +100,14 @@
 			<Setter Property="Opacity" Value="0.1"/>
 		</Style>
 
+		<Style Selector="^.clear /template/ Rectangle.background">
+			<Setter Property="Opacity" Value="0"/>
+		</Style>
+		
+		<Style Selector="^.clear /template/ Border.border">
+			<Setter Property="Opacity" Value="0"/>
+		</Style>
+
 		<!-- PointerOver State-->
 		<Style Selector="^:pointerover">
 			<Setter Property="Foreground" Value="White" />

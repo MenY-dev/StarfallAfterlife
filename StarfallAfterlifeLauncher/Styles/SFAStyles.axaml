@@ -13,6 +13,8 @@
 				<ResourceInclude Source="/Styles/SfaPopupStyle.axaml"/>
 				<ResourceInclude Source="/Styles/SfaEditNamePopupStyle.axaml"/>
 				<ResourceInclude Source="/Styles/SfaCheckBoxStyle.axaml"/>
+				<ResourceInclude Source="/Styles/SfaButtonSpinnerStyle.axaml"/>
+				<ResourceInclude Source="/Styles/SfaNumericUpDownStyle.axaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 

@@ -22,6 +22,12 @@ namespace StarfallAfterlife.Bridge.Instances
         [JsonPropertyName("mothership_income_override")]
         public int MothershipIncomeOverride { get; set; } = -1;
 
+        [JsonPropertyName("freighter_spawn_period")]
+        public float FreighterSpawnPeriod { get; set; } = -1;
+
+        [JsonPropertyName("shield_neutralizer_spawn_period")]
+        public float ShieldNeutralizerSpawnPeriod { get; set; } = -1;
+
         [JsonPropertyName("characters")]
         public List<InstanceCharacter> Characters { get; set; } = new();
 

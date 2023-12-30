@@ -18,6 +18,10 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         public List<MothershipAssaultCharInfo> Chars { get; } = new();
 
+        public MothershipAssaultRoom Room { get; set; }
+
+        public int CancellationReasonChar { get; protected set; } = -1;
+
         private readonly object _locker = new();
 
         public override void Init()
@@ -44,21 +48,46 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
                 State = MatchmakerBattleState.PendingMatch;
                 InstanceInfo.Type = InstanceType.MothershipAssault;
-                InstanceInfo.MothershipIncomeOverride = 80;
+                InstanceInfo.MothershipIncomeOverride = Room?.MothershipIncome ?? 80;
+                InstanceInfo.FreighterSpawnPeriod = Room?.FreighterSpawnPeriod ?? 90;
+                InstanceInfo.ShieldNeutralizerSpawnPeriod = Room?.ShieldNeutralizerSpawnPeriod ?? 90;
                 InstanceInfo.Characters.AddRange(Chars.Select(c => c.InstanceCharacter));
+                InstanceInfo.Map = CreateMap();
                 GameMode.InstanceManager.StartInstance(InstanceInfo);
+                Room?.OnBattleStarted(this);
             }
+        }
+
+        protected string CreateMap()
+        {
+            if (Room is MothershipAssaultRoom room &&
+                room.Map != MothershipAssaultMap.Random)
+            {
+                return room.Map switch
+                {
+                    MothershipAssaultMap.Large => "bg_MothershipAssault",
+                    MothershipAssaultMap.Small => "bg_MothershipAssault_2",
+                    _ => null,
+                };
+            }
+
+            return Random.Shared.Next() % 3 < 2 ?
+                "bg_MothershipAssault" :
+                "bg_MothershipAssault_2";
         }
 
         public override void Stop()
         {
             base.Stop();
+
             lock (_locker)
             {
                 if (State is MatchmakerBattleState.PendingMatch or MatchmakerBattleState.Started)
                     GameMode?.InstanceManager?.StopInstance(InstanceInfo);
 
                 State = MatchmakerBattleState.Finished;
+                Matchmaker?.RemoveBattle(this);
+                Room?.OnBattleFinished(this);
             }
         }
 
@@ -68,7 +97,18 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
             lock (_locker)
             {
-                if (GameMode is MothershipAssaultGameMode gameMode)
+                if (Room is MothershipAssaultRoom room)
+                {
+                    foreach (var item in Chars)
+                    {
+                        if (item?.IsReady != true)
+                            continue;
+
+                        item.Char?.DiscoveryClient
+                            .SendBattleGroundState(resetReason: MatchMakingResetReason.LostMember);
+                    }
+                }
+                else if (GameMode is MothershipAssaultGameMode gameMode)
                 {
                     foreach (var item in Chars)
                     {
@@ -80,9 +120,12 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                         item.Char?.DiscoveryClient
                             .SendBattleGroundState(resetReason: MatchMakingResetReason.LostMember);
                     }
-
-                    Chars.Clear();
                 }
+
+
+                Chars.Clear();
+                Matchmaker?.InstanceManager?.StopInstance(InstanceInfo);
+                Room?.OnBattleCancelled(this);
             }
         }
 
@@ -137,6 +180,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 {
                     if (isReady == false)
                     {
+                        CancellationReasonChar = info.Char?.UniqueId ?? -1;
                         Chars.Remove(info);
                         CancelMatch();
                         return;
