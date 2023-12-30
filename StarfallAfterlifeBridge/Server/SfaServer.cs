@@ -294,7 +294,7 @@ namespace StarfallAfterlife.Bridge.Server
                 {
                     Auth = client.Auth,
                     Name = client.UniqueName,
-                    CharacterId = character?.Id ?? -1,
+                    CharacterId = character?.UniqueId ?? -1,
                     CharacterName = character?.UniqueName,
                     CharacterFaction = character?.Faction ?? Faction.None,
                     Status = status
