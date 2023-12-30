@@ -20,6 +20,7 @@ using StarfallAfterlife.Bridge.Generators;
 using StarfallAfterlife.Bridge.Profiles;
 using System.Reflection;
 using System.Security.Cryptography;
+using StarfallAfterlife.Bridge.Database;
 
 namespace StarfallAfterlife.Bridge.Server
 {
@@ -122,6 +123,8 @@ namespace StarfallAfterlife.Bridge.Server
                 {
                     RemoveClient(item);
                 }
+
+                OnUserStatusChanged(client, UserInGameStatus.None);
             });
         }
 
@@ -185,21 +188,21 @@ namespace StarfallAfterlife.Bridge.Server
         public SfaServerClient GetPlayer(int id)
         {
             SfaServerClient player = null;
-            UseClients(c => player = c.FirstOrDefault(p => p?.IsPlayer == true && p.PlayerId == id));
+            UseClients(c => player = Players.FirstOrDefault(p => p?.IsPlayer == true && p.PlayerId == id));
             return player;
         }
 
         public SfaServerClient GetPlayer(Guid id)
         {
             SfaServerClient player = null;
-            UseClients(c => player = c.FirstOrDefault(p => p?.IsPlayer == true && p.ProfileId == id));
+            UseClients(c => player = Players.FirstOrDefault(p => p?.IsPlayer == true && p.ProfileId == id));
             return player;
         }
 
         public SfaServerClient GetPlayer(string name)
         {
             SfaServerClient player = null;
-            UseClients(c => player = c.FirstOrDefault(p => p?.IsPlayer == true && p.UniqueName == name));
+            UseClients(c => player = Players.FirstOrDefault(p => p?.IsPlayer == true && p.UniqueName == name));
             return player;
         }
 
@@ -292,7 +295,8 @@ namespace StarfallAfterlife.Bridge.Server
                     Auth = client.Auth,
                     Name = client.UniqueName,
                     CharacterId = character?.Id ?? -1,
-                    CharacterName = character?.Name,
+                    CharacterName = character?.UniqueName,
+                    CharacterFaction = character?.Faction ?? Faction.None,
                     Status = status
                 }));
             });

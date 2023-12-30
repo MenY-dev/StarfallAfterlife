@@ -1,4 +1,5 @@
-﻿using StarfallAfterlife.Bridge.Server.Characters;
+﻿using StarfallAfterlife.Bridge.Database;
+using StarfallAfterlife.Bridge.Server.Characters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace StarfallAfterlife.Bridge.Server
         public string Name;
         public int CharacterId;
         public string CharacterName;
+        public Faction CharacterFaction;
         public UserInGameStatus Status;
     }
 }
