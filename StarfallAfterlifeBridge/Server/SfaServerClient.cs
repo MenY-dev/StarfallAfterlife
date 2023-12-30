@@ -164,8 +164,7 @@ namespace StarfallAfterlife.Bridge.Server
                 if ("restore_session".Equals(action, comparsion) == true)
                 {
                     if ((string)authData["auth"] is string lastAuth &&
-                        Server.GetClient(lastAuth) is SfaServerClient currentClient &&
-                        currentClient.IsConnected == false)
+                        Server.GetClient(lastAuth) is SfaServerClient currentClient)
                     {
                         if (currentClient.IsConnected == false)
                         {
@@ -286,8 +285,6 @@ namespace StarfallAfterlife.Bridge.Server
 
         public void ProcessRegisterPlayer(JNode doc, SfaClientRequest request)
         {
-            DiscoveryClient.Characters?.Clear();
-
             request.SendResponce(new JObject
             {
                 ["chars"] = HandleNewChars(doc?["chars"]?.AsArraySelf()),
@@ -345,7 +342,7 @@ namespace StarfallAfterlife.Bridge.Server
         {
             var doc = new JArray();
 
-            if (chars is null)
+            if (chars is not JArray)
                 return doc;
 
             if (DiscoveryClient is not null)
@@ -368,6 +365,10 @@ namespace StarfallAfterlife.Bridge.Server
 
                             DiscoveryClient.Characters.Add(character);
                             Server.RegisterCharacter(character);
+                        }
+                        else
+                        {
+                            character.Faction = (Faction?)(byte?)item["faction"] ?? Faction.None;
                         }
 
                         doc.Add(new JObject
