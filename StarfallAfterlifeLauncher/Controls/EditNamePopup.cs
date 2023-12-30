@@ -15,13 +15,13 @@ namespace StarfallAfterlife.Launcher.Controls
     {
         protected override Type StyleKeyOverride => typeof(EditNamePopup);
 
-        public static AvaloniaProperty IsValidProperty = AvaloniaProperty.Register<EditNamePopup, bool>(
+        public static readonly StyledProperty<bool> IsValidProperty = AvaloniaProperty.Register<EditNamePopup, bool>(
             nameof(IsValid), false, true, BindingMode.TwoWay);
 
-        public static AvaloniaProperty LabelProperty = AvaloniaProperty.Register<EditNamePopup, string>(
+        public static readonly StyledProperty<string> LabelProperty = AvaloniaProperty.Register<EditNamePopup, string>(
             nameof(Label), null, true, BindingMode.TwoWay);
 
-        public static StyledProperty<string> TextFilterProperty = AvaloniaProperty.Register<EditNamePopup, string>(
+        public static readonly StyledProperty<string> TextFilterProperty = AvaloniaProperty.Register<EditNamePopup, string>(
             nameof(Label), @"[A-Za-z0-9\-_]*$", true, BindingMode.TwoWay);
 
         public bool IsDone { get; protected set; }
