@@ -44,7 +44,7 @@
 				<c:SfaPanel Grid.Row="0" Grid.Column="0" HeaderText="SETTINGS" ShowHeader="True" Margin="10 10 5 5">
 					<ScrollViewer>
 						<StackPanel IsEnabled="{Binding !ServerStarted}" Margin="10" Spacing="3">
-							<c:Property Text="REALM">
+							<c:Property Text="Realm">
 								<c:SfaButton Height="30"  HorizontalAlignment="Stretch">
 									<c:SfaButton.Flyout>
 										<c:SfaMenuFlyout ItemsSource="{Binding AppVM.Realms}"
@@ -65,7 +65,7 @@
 									</Panel>
 								</c:SfaButton>
 							</c:Property>
-							<c:Property Text="NETWORK" IsEnabled="True">
+							<c:Property Text="Network" IsEnabled="True">
 								<c:SfaTextBox Text="{Binding ServerAddress}" HorizontalAlignment="Stretch">
 									<c:SfaTextBox.InnerRightContent>
 										<c:SfaButton Classes="clear"
@@ -92,11 +92,11 @@
 									</c:SfaTextBox.InnerRightContent>
 								</c:SfaTextBox>
 							</c:Property>
-							<c:Property Text="PORT">
+							<c:Property Text="Port">
 								<c:SfaTextBox Text="{Binding ServerPort}"  HorizontalAlignment="Stretch"/>
 							</c:Property>
 
-							<c:Property Text="PASSWORD">
+							<c:Property Text="Password">
 								<Grid ColumnDefinitions="Auto 6 *">
 									<c:SfaCheckBox Grid.Column="0" Content="ENABLE" IsChecked="{Binding UsePassword}"/>
 									<c:SfaButton Grid.Column="2" Content="SET" Height="30"
@@ -117,8 +117,17 @@
 				</c:SfaPanel>
 				<c:SfaPanel Grid.Row="0" Grid.RowSpan="3" Grid.Column="2" HeaderText="PLAYERS" ShowHeader="True"
 							Margin="5 10 10 10">
-					<ScrollViewer Padding="5">
-					</ScrollViewer>
+					<c:SfaListBox Padding="10 20 10 20"
+								  ItemsSource="{Binding Players}"
+								  SelectionMode="Single">
+						<c:SfaListBox.ItemTemplate>
+							<DataTemplate>
+								<Panel>
+									<c:PlayerStatusInfoEntry DataContext="{Binding}" Padding="0 0 6 0"/>
+								</Panel>
+							</DataTemplate>
+						</c:SfaListBox.ItemTemplate>
+					</c:SfaListBox>
 				</c:SfaPanel>
 			</Grid>
 		</Panel>

@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:bs="using:StarfallAfterlife.Bridge.Server"
+             xmlns:vm="using:StarfallAfterlife.Launcher.ViewModels"
+             xmlns:c="using:StarfallAfterlife.Launcher.Controls"
+             mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="100"
+             x:Class="StarfallAfterlife.Launcher.Controls.PlayerStatusInfoEntry">
+	<Panel>
+		<StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Left" VerticalAlignment="Center">
+
+			<Rectangle Width="4" Height="30" RadiusX="2" RadiusY="2" Fill="#FF2000" IsVisible="{Binding !IsOnline}"/>
+			<Rectangle Width="4" Height="30" RadiusX="2" RadiusY="2" Fill="#00FF50" IsVisible="{Binding IsOnline}"/>
+
+			<TextBlock Text="{Binding Name}" VerticalAlignment="Center" IsVisible="{Binding !!Name}"/>
+
+			<TextBlock Text="{Binding CharacterName, StringFormat='({0})'}" VerticalAlignment="Center"
+					   IsVisible="{Binding !!CharacterName}" FontWeight="DemiBold"
+					   Foreground="{Binding CharacterFaction, Converter={x:Static c:SfaUtils.FactionToBrushConverter}}"/>
+
+
+		</StackPanel>
+		<StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Right" VerticalAlignment="Center">
+			<TextBlock Text="{Binding Status, Converter={x:Static c:PlayerStatusInfoEntry.InGameStatusConverter}}"
+					   VerticalAlignment="Center" IsVisible="{Binding IsOnline}"/>
+		</StackPanel>
+	</Panel>
+</UserControl>

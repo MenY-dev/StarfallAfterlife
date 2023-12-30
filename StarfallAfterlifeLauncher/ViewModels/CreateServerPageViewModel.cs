@@ -22,6 +22,10 @@ namespace StarfallAfterlife.Launcher.ViewModels
 
         public SfaLauncher Launcher => AppVM?.Launcher;
 
+        public SfaServer Server { get; protected set; }
+
+        public ObservableCollection<PlayerStatusInfoViewModel> Players { get; } = new();
+
         public bool ServerStarted
         {
             get => _serverStarted;
@@ -137,10 +141,13 @@ namespace StarfallAfterlife.Launcher.ViewModels
         {
             if (Launcher is SfaLauncher launcher)
             {
-                var server = launcher.StartServer();
+                Players.Clear();
+
+                var server = Server = launcher.StartServer();
 
                 if (server is not null)
                 {
+                    server.PlayerStatusUpdated += PlayerStatusUpdated;
                     ServerStarted = true;
 
                     server.Task.ContinueWith(t => Dispatcher.UIThread.Invoke(() =>
@@ -151,9 +158,29 @@ namespace StarfallAfterlife.Launcher.ViewModels
             }
         }
 
+        private void PlayerStatusUpdated(object sender, PlayerStatusInfoEventArgs e)
+        {
+            Dispatcher.UIThread.Invoke(() =>
+            {
+                var newInfo = e.Info;
+                var vm = Players.FirstOrDefault(p => p.Info.Auth == newInfo.Auth);
+
+                if (vm is null)
+                    Players.Add(new(newInfo));
+                else
+                    vm.Info = newInfo;
+            });
+        }
+
         public void StopServer()
         {
+            var server = Server;
+
+            if (server is not null)
+                server.PlayerStatusUpdated -= PlayerStatusUpdated;
+
             Launcher?.StopServer();
+            Players.Clear();
         }
 
         public Task CreateNewRealm()
