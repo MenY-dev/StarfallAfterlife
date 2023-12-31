@@ -158,7 +158,10 @@ namespace StarfallAfterlife.Launcher.ViewModels
                 Task.Factory.StartNew(() =>
                 {
                     if (appVM.MakeBaseTests(true, false).Result == false)
+                    {
+                        Dispatcher.UIThread?.InvokeAsync(() => startingPopup.Close());
                         return;
+                    }
 
                     Dispatcher.UIThread?.InvokeAsync(() => Players.Clear()).Wait();
 
