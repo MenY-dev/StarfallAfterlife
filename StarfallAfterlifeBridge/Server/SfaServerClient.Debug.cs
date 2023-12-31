@@ -23,6 +23,12 @@ namespace StarfallAfterlife.Bridge.Server
                 msg.Length > 7 &&
                 int.TryParse(msg[7..].Trim(), out int jumps))
             {
+                if (jumps > 6)
+                {
+                    jumps = 6;
+                    SendToChat(channel, label, "Max radius: 6");
+                }
+
                 foreach (var system in Map.GetSystemsArround(CurrentCharacter?.Fleet?.System?.Id ?? -1, jumps))
                 {
                     SendToChat(channel, label, $"{system.Key?.Id}: {system.Value}");
@@ -32,6 +38,12 @@ namespace StarfallAfterlife.Bridge.Server
                 msg.Length > 7 &&
                 int.TryParse(msg[7..].Trim(), out int exploreRadius))
             {
+                if (exploreRadius > 6)
+                {
+                    exploreRadius = 6;
+                    SendToChat(channel, label, "Max radius: 6");
+                }
+
                 if (CurrentCharacter is ServerCharacter character &&
                     character.Progress is CharacterProgress progress &&
                     character.Fleet?.System is StarSystem currentSystem)
@@ -61,6 +73,7 @@ namespace StarfallAfterlife.Bridge.Server
                     SendToChat(channel, label, $"Exploration result:");
                     SendToChat(channel, label, $"Systems:{newSystems.Count}");
                     SendToChat(channel, label, $"Objects:{newObjects.Count}");
+                    SendToChat(channel, label, "For the exploration to be displayed, re-enter to the galaxy.");
                 }
             }
             else if (msg.StartsWith("add sxp ") &&
@@ -122,6 +135,20 @@ namespace StarfallAfterlife.Bridge.Server
             {
                 CurrentCharacter?.DiscoveryClient?.SendFleetWarpedMothership();
                 CurrentCharacter?.DiscoveryClient?.EnterToStarSystem(system);
+                SendToChat(channel, label, "To complete the jump, exit to the main menu, then return to the galaxy.");
+            }
+            else if (msg.StartsWith("done quest ") &&
+                msg.Length > 11 &&
+                msg[11..].Trim() is string questInfo)
+            {
+                if (questInfo == "all")
+                {
+                    CurrentCharacter.CompleteAllQuests();
+                }
+                else if (int.TryParse(questInfo, out int questId) == true)
+                {
+                    CurrentCharacter.CompleteQuest(questId);
+                }
             }
         }
     }

@@ -36,7 +36,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
         public void AddXpToSeasons(int newXp)
         {
-            lock (_characterLockher)
+            lock (_characterLocker)
             {
                 if (Realm.Seasons is WeeklyQuestsInfo seasonsInfo &&
                     seasonsInfo.Seasons.FirstOrDefault(s => s.IsActive > 0) is WeeklyQuest currentSeason &&

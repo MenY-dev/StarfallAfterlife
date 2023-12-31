@@ -81,7 +81,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
         protected Dictionary<int, DateTime> AbilitiesCooldown { get; } = new();
 
-        private readonly object _characterLockher = new();
+        private readonly object _characterLocker = new();
 
         public void LoadFromCharacterData(JsonNode doc)
         {
@@ -297,16 +297,45 @@ namespace StarfallAfterlife.Bridge.Server.Characters
             }
         }
 
+        public void CompleteAllQuests()
+        {
+            lock (_characterLocker)
+            {
+                foreach (var item in ActiveQuests.ToArray() ?? Array.Empty<QuestListener>())
+                    CompleteQuest(item?.Id ?? -1);
+            }
+        }
+
+        public void CompleteQuest(int questId)
+        {
+            lock (_characterLocker)
+            {
+                Progress.ActiveQuests ??= new();
+
+                if (ActiveQuests.FirstOrDefault(q => q?.Id == questId) is QuestListener quest)
+                {
+                    try
+                    {
+                        foreach (var condition in quest.Conditions ?? new())
+                        {
+                            condition.Progress = condition.ProgressRequire;
+                        }
+                    }
+                    catch { }
+                }
+            }
+        }
+
         public bool CheckReward(int rewardId)
         {
-            lock (_characterLockher)
+            lock (_characterLocker)
                 return Progress.TakenRewards.Contains(rewardId);
 
         }
 
         public bool AddReward(int rewardId)
         {
-            lock (_characterLockher)
+            lock (_characterLocker)
             {
                 if (CheckReward(rewardId) == false &&
                     Realm?.CharacterRewardDatabase?.GetReward(rewardId) is CharacterReward reward &&
@@ -657,7 +686,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
         public void UseAbility(int abilityId, int systemId, SystemHex hex)
         {
-            lock (_characterLockher)
+            lock (_characterLocker)
             {
                 var dtb = SfaDatabase.Instance;
                 AbilitiesCooldown[abilityId] = DateTime.Now.AddSeconds(dtb.GetAbility(abilityId)?.Cooldown ?? 0);
@@ -670,7 +699,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
         {
             var now = DateTime.Now;
 
-            lock (_characterLockher)
+            lock (_characterLocker)
                 return AbilitiesCooldown.Select(a => KeyValuePair.Create(
                     a.Key, Math.Max(0, (float)(a.Value - now).TotalSeconds))).ToArray();
         }
