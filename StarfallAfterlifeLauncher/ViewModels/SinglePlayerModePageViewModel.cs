@@ -58,11 +58,6 @@ namespace StarfallAfterlife.Launcher.ViewModels
             if (appVM is null || launcher is null)
                 return;
 
-            var realmInfo = launcher.CurrentLocalRealm;
-
-            if (realmInfo is null)
-                return;
-
             Task.Run(() =>
             {
                 if (appVM.MakeBaseTests(true, true).Result == false)
@@ -72,6 +67,11 @@ namespace StarfallAfterlife.Launcher.ViewModels
                     CreateNewRealm().Wait();
 
                 if (launcher.Realms.Count < 1)
+                    return false;
+
+                var realmInfo = launcher.CurrentLocalRealm ??= launcher.Realms.FirstOrDefault();
+
+                if (realmInfo is null)
                     return false;
 
                 if (appVM.ProcessSessionsCancellationBeforePlay(realmInfo.Realm?.Id).Result == false)
