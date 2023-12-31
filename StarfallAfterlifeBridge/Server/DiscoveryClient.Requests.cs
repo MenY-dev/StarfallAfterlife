@@ -282,7 +282,7 @@ namespace StarfallAfterlife.Bridge.Server
                     }
                 }
             });
-
+#if DEBUG
             if (Galaxy?.Map.GetSystem(systemId) is GalaxyMapStarSystem systemInfo)
             {
                 string text = $"Factiom: {(Faction)systemInfo.Faction}\n";
@@ -363,6 +363,7 @@ namespace StarfallAfterlife.Bridge.Server
                     LifeTime = 6000
                 });
             }
+#endif
         }
 
         protected virtual void HandleAbilitySync()

@@ -1,8 +1,12 @@
-﻿using Avalonia;
+﻿using StarfallAfterlife.Launcher.Controls;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform;
+using StarfallAfterlife.Launcher.ViewModels;
+using StarfallAfterlife.Launcher.MapEditor;
+using StarfallAfterlife.Launcher.MobsEditor;
 
 namespace StarfallAfterlife.Launcher.Views;
 
@@ -16,6 +20,23 @@ public partial class MainWindow : Window
         Background = null;
 
         InitializeComponent();
+
+#if DEBUG
+        DebugUtilsView?.Children.Add(new SfaButton()
+        {
+            Content = "OPEN MAP EDITOR",
+            Command = new Command(() => new MapEditorWindow().Show()),
+            Margin = new Thickness(3),
+        });
+
+        DebugUtilsView?.Children.Add(new SfaButton()
+        {
+            Content = "OPEN MOBS EDITOR",
+            Command = new Command(() => new MobsEditorWindow().Show()),
+            Margin = new Thickness(3),
+        });
+#endif
+
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)

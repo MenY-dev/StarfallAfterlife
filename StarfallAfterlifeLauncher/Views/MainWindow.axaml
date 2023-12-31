@@ -63,17 +63,6 @@
 					<p:FindServerPage Name="FindServerPage" DataContext="{Binding FindServerPageViewModel}"/>
 					<p:CreateServerPage Name="CreateServerPage" DataContext="{Binding CreateServerPageViewModel}"/>
 					<p:LogPage Name="LogPage"/>
-					<c:SidebarPage Name="MobsEditorPage">
-						<Panel>
-							<StackPanel Orientation="Horizontal" Spacing="0">
-								<StackPanel Orientation="Horizontal" Margin="15 10" Spacing="5" VerticalAlignment="Top">
-									<Label Content="e" FontFamily="{StaticResource IconsFont}" Classes="h3" VerticalContentAlignment="Center"/>
-									<Label Content="MOBS EDITOR" Classes="h3" VerticalAlignment="Top" Margin="0 0 0 2" />
-								</StackPanel>
-								<c:SfaButton Content="OPEN EDITOR" Command="{Binding ShowMobsEditor}" VerticalAlignment="Top" Margin="14"/>
-							</StackPanel>
-						</Panel>
-					</c:SidebarPage>
 					<c:SidebarPage Name="SettingsPage">
 						<Panel>
 							<StackPanel Orientation="Vertical" Spacing="10" Margin="20 5">
@@ -86,7 +75,9 @@
 									<c:SfaButton Content="SELECT" Command="{Binding ShowGameDirSelector}" />
 									<Label ClipToBounds="True" VerticalContentAlignment="Center" Content="{Binding GameDirectory}" Foreground="White" Opacity="0.75" />
 								</StackPanel>
-								<c:SfaButton Content="OPEN MAP EDITOR" Command="{Binding ShowMapEditor}" HorizontalAlignment="Left"/>
+								<WrapPanel Name="DebugUtilsView">
+									
+								</WrapPanel>
 							</StackPanel>
 						</Panel>
 					</c:SidebarPage>
@@ -132,15 +123,6 @@
 										   VerticalContentAlignment="Center"
 										   Width="50" Height="50"/>
 									<Label Content="LOG" VerticalAlignment="Center"/>
-								</StackPanel>
-							</c:SidebarTab>
-							<c:SidebarTab PageName="MobsEditorPage" HorizontalAlignment="Stretch">
-								<StackPanel Orientation="Horizontal">
-									<Label Content="e"  FontSize="25" FontFamily="{StaticResource IconsFont}"
-										   HorizontalContentAlignment="Center"
-										   VerticalContentAlignment="Center"
-										   Width="50" Height="50"/>
-									<Label Content="MOBS EDITOR" VerticalAlignment="Center"/>
 								</StackPanel>
 							</c:SidebarTab>
 							<c:SidebarTab PageName="SettingsPage" HorizontalAlignment="Stretch">

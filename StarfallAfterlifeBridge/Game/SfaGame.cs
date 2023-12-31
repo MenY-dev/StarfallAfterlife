@@ -89,10 +89,12 @@ namespace StarfallAfterlife.Bridge.Game
                 MgrUrl = SfMgrServer.Address.ToString(),
                 Username = GameProfile.Nickname,
                 Auth = GameProfile.TemporaryPass,
+#if DEBUG
                 EnableLog = true,
                 Windowed = true,
                 DisableSplashScreen = true,
                 DisableLoadingScreen = true
+#endif
             };
 
             Process.Exited += OnProcessExited;
