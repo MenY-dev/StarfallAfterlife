@@ -1,0 +1,45 @@
+<c:SfaPopup xmlns="https://github.com/avaloniaui"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+            xmlns:c="using:StarfallAfterlife.Launcher.Controls"
+            mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="200"
+            Width="400" Height="200"
+			Title="Downloading..."
+            x:Class="StarfallAfterlife.Launcher.Controls.InstallReleasePopup">
+	
+	<Grid RowDefinitions="Auto 2 * 2 Auto">
+		<Panel Grid.Row="0">
+			<TextBlock Text="Downloading..." Foreground="White"
+					   FontWeight="DemiBold" FontSize="16" Margin="10"/>
+		</Panel>
+		<c:Separator Grid.Row="1" Opacity="0.5"/>
+		<Panel Grid.Row="2">
+			<Rectangle Fill="Black" Opacity="0.75">
+				<Rectangle.OpacityMask>
+					<LinearGradientBrush StartPoint="0% 0%" EndPoint="0% 100%">
+						<GradientStop Offset="0" Color="#FFFFFFFF"/>
+						<GradientStop Offset="1" Color="#20FFFFFF"/>
+					</LinearGradientBrush>
+				</Rectangle.OpacityMask>
+			</Rectangle>
+			
+			<ProgressBar  Margin="20 10" Height="20"
+						  HorizontalAlignment="Stretch"
+						  VerticalAlignment="Center"
+						  CornerRadius="0"
+						  Foreground="{DynamicResource AccentColor}"
+						  Background="#30FFFFFF"
+						  ProgressTextFormat=" {0}/{3}KB ({1:0}%) "
+						  Minimum="0" Maximum="{Binding FileSize}"
+						  Value="{Binding FileProgress}"
+						  ShowProgressText="True"/>
+		</Panel>
+		<c:Separator Grid.Row="3" Opacity="0.5"/>
+		<Panel Grid.Row="4">
+			<c:SfaButton Content="CANCELL" Command="{Binding Cancell}"
+						 Margin="10" HorizontalAlignment="Right"/>
+		</Panel>
+	</Grid>
+	
+</c:SfaPopup>

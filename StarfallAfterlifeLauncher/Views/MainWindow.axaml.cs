@@ -78,4 +78,10 @@ public partial class MainWindow : Window
 
         BeginMoveDrag(e);
     }
+
+    public override void Show()
+    {
+        base.Show();
+        (DataContext as AppViewModel)?.CheckUpdates();
+    }
 }

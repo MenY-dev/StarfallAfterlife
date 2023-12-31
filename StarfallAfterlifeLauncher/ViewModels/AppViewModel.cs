@@ -9,10 +9,12 @@ using StarfallAfterlife.Bridge.Generators;
 using StarfallAfterlife.Bridge.Launcher;
 using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Realms;
+using StarfallAfterlife.Bridge.Server;
 using StarfallAfterlife.Bridge.Server.Galaxy;
 using StarfallAfterlife.Launcher.Controls;
 using StarfallAfterlife.Launcher.MapEditor;
 using StarfallAfterlife.Launcher.MobsEditor;
+using StarfallAfterlife.Launcher.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -60,9 +62,59 @@ namespace StarfallAfterlife.Launcher.ViewModels
             }
         }
 
+        public bool IsUpdatePanelVisible
+        {
+            get => _isUpdatePanelVisible;
+            set
+            {
+                SetAndRaise(ref _isUpdatePanelVisible, value);
+            }
+        }
+
+        public bool IsUpdateAvailable
+        {
+            get => _isUpdateAvailable;
+            set
+            {
+                SetAndRaise(ref _isUpdateAvailable, value);
+            }
+        }
+
+        public string CurrentFullVersion
+        {
+            get => $"v {SfaServer.Version.ToString(3)} (alpha)";
+        }
+
+        public string CurrentVersion
+        {
+            get => $"v {SfaServer.Version.ToString(2)} (alpha)";
+        }
+
+        public string CurrentBuild
+        {
+            get => SfaServer.Version.Build.ToString();
+        }
+
+        public Updater.Relese LatestRelese
+        {
+            get => _latestRelese;
+            set
+            {
+                var relese = value;
+                SetAndRaise(ref _latestRelese, value);
+
+                IsUpdateAvailable = relese is not null &&
+                                    relese.Version is not null &&
+                                    SfaServer.Version < relese.Version;
+            }
+        }
+
         private RealmInfoViewModel _selectedLocalRealm;
         private RealmInfoViewModel _selectedServerRealm;
         private bool _isGameStarted;
+        private bool _isUpdatePanelVisible = false;
+        private bool _isUpdateAvailable = false;
+        private Updater.Relese _latestRelese;
 
 
         public string CurrentProfileName { get => currentProfileName; protected set => SetAndRaise(ref currentProfileName, value); }
@@ -355,6 +407,7 @@ namespace StarfallAfterlife.Launcher.ViewModels
                     IsGameStarted = Sessions.Count > 0;
                     UpdateRealms();
                     UpdateServers();
+                    CheckUpdates();
                 }));
 
                 if (session.StartingTask is null)
@@ -409,6 +462,7 @@ namespace StarfallAfterlife.Launcher.ViewModels
                     IsGameStarted = Sessions.Count > 0;
                     UpdateRealms();
                     UpdateServers();
+                    CheckUpdates();
                     return session;
                 }));
 
@@ -483,6 +537,32 @@ namespace StarfallAfterlife.Launcher.ViewModels
         public void ShowMapEditor()
         {
             new MapEditorWindow().ShowDialog(App.MainWindow);
+        }
+
+        public void ToggleUpdatePanel()
+        {
+            if (IsUpdatePanelVisible == false)
+            {
+                CheckUpdates();
+            }
+
+            IsUpdatePanelVisible = !IsUpdatePanelVisible;
+        }
+
+        public void CheckUpdates()
+        {
+            if (Design.IsDesignMode == true)
+                return;
+
+            Updater.GetLatestRelese().ContinueWith(t => Dispatcher.UIThread.Invoke(() =>
+            {
+                LatestRelese = t.Result;
+            }));
+        }
+
+        public void InstallLatestRelese()
+        {
+            InstallReleasePopup.InstallRelese(LatestRelese);
         }
     }
 }

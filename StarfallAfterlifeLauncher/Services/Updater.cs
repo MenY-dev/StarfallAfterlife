@@ -22,7 +22,7 @@ namespace StarfallAfterlife.Launcher.Services
         {
             try
             {
-                Task.Factory.StartNew(() =>
+                return Task.Factory.StartNew(() =>
                 {
                     var requests = new Task<Relese>[]
                     {
@@ -43,7 +43,7 @@ namespace StarfallAfterlife.Launcher.Services
             }
             catch { }
 
-            return null;
+            return Task.FromResult<Relese>(null);
         }
 
         public record Relese(
@@ -105,12 +105,12 @@ namespace StarfallAfterlife.Launcher.Services
                     }
                     catch
                     {
-                        return true;
+                        return false;
                     }
 
                     _updateLocation = file;
                     IsDownloaded = true;
-                    return false;
+                    return true;
                 });
             }
 
