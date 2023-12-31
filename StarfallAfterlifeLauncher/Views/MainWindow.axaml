@@ -88,22 +88,49 @@
 					<p:CreateServerPage Name="CreateServerPage" DataContext="{Binding CreateServerPageViewModel}"/>
 					<p:LogPage Name="LogPage"/>
 					<c:SidebarPage Name="SettingsPage">
-						<Panel>
-							<StackPanel Orientation="Vertical" Spacing="10" Margin="20 5">
-								<StackPanel Orientation="Horizontal" Margin="15 10" Spacing="5" VerticalAlignment="Top">
+						<DockPanel LastChildFill="True">
+							<Panel DockPanel.Dock="Top">
+								<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="15 10" Spacing="5">
 									<Label Content="f" FontFamily="{StaticResource IconsFont}" Classes="h3" VerticalContentAlignment="Center"/>
 									<Label Content="SETTINGS" Classes="h3" VerticalAlignment="Top" Margin="0 0 0 2" />
 								</StackPanel>
-								<StackPanel Spacing="10" Orientation="Horizontal" HorizontalAlignment="Stretch">
-									<Label Content="GAME DIRECTORY" VerticalContentAlignment="Center" FontSize="16" FontWeight="DemiBold" Foreground="White" Width="160"/>
-									<c:SfaButton Content="SELECT" Command="{Binding ShowGameDirSelector}" />
-									<Label ClipToBounds="True" VerticalContentAlignment="Center" Content="{Binding GameDirectory}" Foreground="White" Opacity="0.75" />
+								<c:Separator Height="2" Opacity="0.8" VerticalAlignment="Bottom"/>
+							</Panel>
+							<Panel DockPanel.Dock="Bottom" MinHeight="20">
+							</Panel>
+							<Panel>
+								<Rectangle Fill="Black" Opacity="0.8" IsHitTestVisible="False" >
+									<Rectangle.OpacityMask>
+										<LinearGradientBrush StartPoint="0% 0%" EndPoint="0% 100%">
+											<GradientStop Color="#FFFFFFFF" Offset="0"/>
+											<GradientStop Color="#20FFFFFF" Offset="1"/>
+										</LinearGradientBrush>
+									</Rectangle.OpacityMask>
+								</Rectangle>
+								<StackPanel Margin="10" Spacing="10">
+									<StackPanel Spacing="10" Orientation="Horizontal" HorizontalAlignment="Stretch">
+										<Label Content="GAME DIRECTORY" VerticalContentAlignment="Center" FontSize="16" FontWeight="DemiBold" Foreground="White" Width="160"/>
+										<c:SfaButton Content="SELECT" Command="{Binding ShowGameDirSelector}" />
+										<Label ClipToBounds="True" VerticalContentAlignment="Center" Content="{Binding GameDirectory}" Foreground="White" Opacity="0.75" />
+									</StackPanel>
+									<WrapPanel Name="DebugUtilsView">
+
+									</WrapPanel>
 								</StackPanel>
-								<WrapPanel Name="DebugUtilsView">
-									
-								</WrapPanel>
-							</StackPanel>
-						</Panel>
+								
+								<TextBlock Text="Made with Avalonia UI" FontSize="16" Opacity="0.5"
+										   Margin="10"
+										   HorizontalAlignment="Right"
+										   VerticalAlignment="Bottom"/>
+								
+								<TextBlock Text="{Binding CurrentFullVersion}" FontSize="16" Opacity="0.5"
+										   Margin="10"
+										   HorizontalAlignment="Left"
+										   VerticalAlignment="Bottom"/>
+								
+								<c:Separator Height="2" Opacity="0.8" VerticalAlignment="Bottom"/>
+							</Panel>
+						</DockPanel>
 					</c:SidebarPage>
 				</c:SidebarPageContainer>
 

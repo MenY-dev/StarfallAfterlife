@@ -2,6 +2,7 @@
 using Avalonia.OpenGL;
 using Avalonia.Threading;
 using StarfallAfterlife.Bridge.Launcher;
+using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Server;
 using StarfallAfterlife.Bridge.Server.Characters;
 using StarfallAfterlife.Launcher.Controls;
@@ -16,6 +17,7 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace StarfallAfterlife.Launcher.ViewModels
 {
@@ -144,22 +146,59 @@ namespace StarfallAfterlife.Launcher.ViewModels
 
         public void StartServer()
         {
-            if (Launcher is SfaLauncher launcher)
+            if (Launcher is SfaLauncher launcher &&
+                AppVM is AppViewModel appVM)
             {
-                Players.Clear();
+                if (Server?.IsStarted == true)
+                    return;
 
-                var server = Server = launcher.StartServer();
+                var startingPopup = new SFAWaitingPopup() { Title = "Starting the server..." };
+                startingPopup.ShowDialog();
 
-                if (server is not null)
+                Task.Factory.StartNew(() =>
                 {
-                    server.PlayerStatusUpdated += PlayerStatusUpdated;
-                    ServerStarted = true;
+                    if (appVM.MakeBaseTests(true, false).Result == false)
+                        return;
 
-                    server.Task.ContinueWith(t => Dispatcher.UIThread.Invoke(() =>
+                    Dispatcher.UIThread?.InvokeAsync(() => Players.Clear()).Wait();
+
+                    var server = Server = launcher.StartServer();
+
+                    Dispatcher.UIThread?.InvokeAsync(() => startingPopup.Close());
+
+                    if (server is not null)
                     {
-                        ServerStarted = false;
-                    }));
-                }
+                        server.PlayerStatusUpdated += PlayerStatusUpdated;
+                        Dispatcher.UIThread?.InvokeAsync(() => ServerStarted = true).Wait();
+
+                        server.Task.ContinueWith(t => Dispatcher.UIThread.Invoke(() =>
+                        {
+                            ServerStarted = false;
+                        }));
+                    }
+                });
+            }
+        }
+
+        public void ConnectToServer()
+        {
+            if (ServerStarted == true &&
+                Launcher is SfaLauncher launcher &&
+                Server is SfaServer server &&
+                AppVM is AppViewModel appVM &&
+                launcher.CurrentProfile is SfaProfile profile)
+            {
+                Task.Factory.StartNew(() =>
+                {
+                    if (appVM.MakeBaseTests(true, true).Result == false)
+                        return;
+
+                    try
+                    {
+                        appVM.StartGame(profile, ServerAddress + ":" + ServerPort, () => server.Password);
+                    }
+                    catch { }
+                });
             }
         }
 

@@ -128,7 +128,7 @@ namespace StarfallAfterlife.Launcher.ViewModels
                 {
                     var oldValue = launcher.GameDirectory;
                     launcher.GameDirectory = value;
-                    RaisePropertyChanged(oldValue, value);
+                    RaisePropertyChanged(oldValue, value, nameof(GameDirectory));
                 }
             }
         }
@@ -208,6 +208,44 @@ namespace StarfallAfterlife.Launcher.ViewModels
                     GameDirectory = gameDir;
                     Launcher?.SaveSettings();
                 }
+            });
+        }
+
+        public Task<bool> MakeBaseTests(bool gameDirTest, bool profileTest)
+        {
+            return Task.Factory.StartNew(() =>
+            {
+                try
+                {
+                    var launcher = Launcher;
+
+                    if (launcher is null)
+                        return false;
+
+                    if (gameDirTest == true)
+                    {
+                        if (launcher.TestGameDirectory() == false)
+                            ShowGameDirSelector().Wait();
+
+                        if (launcher.TestGameDirectory() == false)
+                            return false;
+                    }
+
+                    if (profileTest == true)
+                    {
+                        if (launcher.Profiles.Count < 1)
+                            CreateNewProfile().Wait();
+
+                        if (launcher.Profiles.Count < 1)
+                            return false;
+                    }
+                }
+                catch
+                {
+                    return false;
+                }
+                
+                return true;
             });
         }
 

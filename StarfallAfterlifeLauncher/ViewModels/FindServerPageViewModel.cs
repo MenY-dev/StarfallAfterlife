@@ -189,8 +189,9 @@ namespace StarfallAfterlife.Launcher.ViewModels
             {
                 var launcher = Launcher;
                 var server = SelectedServer;
+                var appVM = AppVM;
 
-                if (server is null || server.Info is null)
+                if (server is null || server.Info is null || appVM is null)
                     SfaMessageBox.ShowDialog("Server not selected!", "Error");
 
                 var serverName = server.Name ?? server.Address ?? "server";
@@ -202,99 +203,106 @@ namespace StarfallAfterlife.Launcher.ViewModels
                     Buttons = MessageBoxButton.Cancell
                 };
 
-                connectingDialog.ShowDialog().ContinueWith(t =>
+                appVM.MakeBaseTests(true, true)
+                    .ContinueWith(t => Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    Dispatcher.UIThread.InvokeAsync(() =>
-                    {
-                        if (connectingDialog.PressedButton == MessageBoxButton.Cancell)
-                            connectionCancellation.Cancel();
-
-                    });
-                });
-
-                var stateRequest = server.Update(connectionCancellation.Token).ContinueWith(t =>
-                {
-                    Dispatcher.UIThread.InvokeAsync(() => connectingDialog.Close());
-
-                    if (connectionCancellation.IsCancellationRequested == true)
-                        return false;
-
-                    if (t.IsCanceled == true ||
-                        t.Result == false)
-                    {
-                        Dispatcher.UIThread.Invoke(() =>
-                            SfaMessageBox.ShowDialog("Server offline!", "Error"));
-
-                        return false;
-                    }
-
-                    if (AppVM is AppViewModel appVM &&
-                        appVM.ProcessSessionsCancellationBeforePlay(server.Id).Result == false)
-                        return false;
-
-                    if (server.Version is Version serverVersion &&
-                        SfaServer.Version is Version currentVersion &&
-                        (serverVersion.Major != currentVersion.Major ||
-                        serverVersion.Minor != currentVersion.Minor))
-                    {
-
-                        Dispatcher.UIThread.Invoke(() =>
-                            SfaMessageBox.ShowDialog(
-                                "The launcher version does not match the server version.", "Error"));
-
-                        return false;
-                    }
-
-                    return true;
-                });
-
-                stateRequest.ContinueWith(t =>
-                {
-                    if (t?.Result is not true)
+                    if (t.Result == false)
                         return;
 
-                    string address = IPEndPoint.Parse(SelectedServer?.Address).ToString();
-
-                    if (Launcher is SfaLauncher launcher)
+                    connectingDialog.ShowDialog().ContinueWith(t =>
                     {
-                        var writePasswordDialog = new Func<string>(() =>
+                        Dispatcher.UIThread.InvokeAsync(() =>
                         {
-                            var completionSource = new TaskCompletionSource<string>();
+                            if (connectingDialog.PressedButton == MessageBoxButton.Cancell)
+                                connectionCancellation.Cancel();
 
-                            Dispatcher.UIThread.InvokeAsync(() =>
+                        });
+                    });
+
+                    var stateRequest = server.Update(connectionCancellation.Token).ContinueWith(t =>
+                    {
+                        Dispatcher.UIThread.InvokeAsync(() => connectingDialog.Close());
+
+                        if (connectionCancellation.IsCancellationRequested == true)
+                            return false;
+
+                        if (t.IsCanceled == true ||
+                            t.Result == false)
+                        {
+                            Dispatcher.UIThread.Invoke(() =>
+                                SfaMessageBox.ShowDialog("Server offline!", "Error"));
+
+                            return false;
+                        }
+
+                        if (AppVM is AppViewModel appVM &&
+                            appVM.ProcessSessionsCancellationBeforePlay(server.Id).Result == false)
+                            return false;
+
+                        if (server.Version is Version serverVersion &&
+                            SfaServer.Version is Version currentVersion &&
+                            (serverVersion.Major != currentVersion.Major ||
+                            serverVersion.Minor != currentVersion.Minor))
+                        {
+
+                            Dispatcher.UIThread.Invoke(() =>
+                                SfaMessageBox.ShowDialog(
+                                    "The launcher version does not match the server version.", "Error"));
+
+                            return false;
+                        }
+
+                        return true;
+                    });
+
+                    stateRequest.ContinueWith(t =>
+                    {
+                        if (t?.Result is not true)
+                            return;
+
+                        string address = IPEndPoint.Parse(SelectedServer?.Address).ToString();
+
+                        if (Launcher is SfaLauncher launcher)
+                        {
+                            var writePasswordDialog = new Func<string>(() =>
                             {
-                                var dialog = new EnterPasswordDialog();
+                                var completionSource = new TaskCompletionSource<string>();
 
-                                dialog.ShowDialog().ContinueWith(t => Dispatcher.UIThread.InvokeAsync(() =>
+                                Dispatcher.UIThread.InvokeAsync(() =>
                                 {
-                                    if (dialog.IsDone == true &&
-                                        string.IsNullOrWhiteSpace(dialog.Text) == false &&
-                                        SfaServer.CreatePasswordHash(dialog.Text) is string hash)
-                                        completionSource.SetResult(hash);
-                                    else
-                                        completionSource.SetResult(null);
-                                }));
+                                    var dialog = new EnterPasswordDialog();
 
+                                    dialog.ShowDialog().ContinueWith(t => Dispatcher.UIThread.InvokeAsync(() =>
+                                    {
+                                        if (dialog.IsDone == true &&
+                                            string.IsNullOrWhiteSpace(dialog.Text) == false &&
+                                            SfaServer.CreatePasswordHash(dialog.Text) is string hash)
+                                            completionSource.SetResult(hash);
+                                        else
+                                            completionSource.SetResult(null);
+                                    }));
+
+                                });
+
+                                return completionSource.Task.Result;
                             });
 
-                            return completionSource.Task.Result;
-                        });
-
-                        AppVM.StartGame(launcher.CurrentProfile, address, writePasswordDialog)
-                            .ContinueWith(t => Dispatcher.UIThread.Invoke(() =>
-                            {
-                                var session = t.Result;
-                                if (session.IsSuccess == false &&
-                                    session.Reason is string reason &&
-                                    reason != "auth_cancelled")
-                                    SfaMessageBox.ShowDialog(reason switch
-                                    {
-                                        "bad_password" => "Invalid password!",
-                                        _ => reason,
-                                    }, "Error");
-                            }));
-                    }
-                });
+                            AppVM.StartGame(launcher.CurrentProfile, address, writePasswordDialog)
+                                .ContinueWith(t => Dispatcher.UIThread.Invoke(() =>
+                                {
+                                    var session = t.Result;
+                                    if (session.IsSuccess == false &&
+                                        session.Reason is string reason &&
+                                        reason != "auth_cancelled")
+                                        SfaMessageBox.ShowDialog(reason switch
+                                        {
+                                            "bad_password" => "Invalid password!",
+                                            _ => reason,
+                                        }, "Error");
+                                }));
+                        }
+                    });
+                }));
             }
             catch (Exception e)
             {

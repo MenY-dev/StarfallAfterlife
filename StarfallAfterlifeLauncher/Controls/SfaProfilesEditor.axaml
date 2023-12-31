@@ -17,7 +17,7 @@
 
 	<Panel>
 		<Rectangle Classes="background" Fill="Black" Opacity="0.5" />
-		<Panel Classes="contentwrapper" Margin="100 10">
+		<Panel Classes="contentwrapper" Margin="100 50">
 
 			<Panel.Effect>
 				<DropShadowEffect OffsetX="0" OffsetY="10" BlurRadius="20" Color="#55000000"/>
@@ -49,7 +49,7 @@
 					</Panel>
 				</Panel>
 				<Panel Classes="profiles">
-					<Grid RowDefinitions="*" ColumnDefinitions="1*, 1*" HorizontalAlignment="Stretch">
+					<Grid RowDefinitions="*" ColumnDefinitions="1*" HorizontalAlignment="Stretch">
 						<c:SfaPanel ShowHeader="True" HeaderText="PROFILES" Grid.Column="0" Margin="20, 0, 10, 0">
 							<c:SfaListBox Padding="10 20 10 20" ItemsSource="{Binding Profiles}" SelectionMode="AlwaysSelected" SelectedItem="{Binding SelectedProfile}">
 								<c:SfaListBox.ItemTemplate>
@@ -60,10 +60,6 @@
 									</DataTemplate>
 								</c:SfaListBox.ItemTemplate>
 							</c:SfaListBox>
-						</c:SfaPanel>
-
-						<c:SfaPanel ShowHeader="True" HeaderText="PROFILE INFO" Grid.Column="1" Margin="10, 0, 20, 0">
-
 						</c:SfaPanel>
 					</Grid>
 				</Panel>

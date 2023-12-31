@@ -65,18 +65,13 @@ namespace StarfallAfterlife.Launcher.ViewModels
 
             Task.Run(() =>
             {
-                if (launcher.Profiles.Count < 1)
-                    appVM.CreateNewProfile().Wait();
+                if (appVM.MakeBaseTests(true, true).Result == false)
+                    return false;
 
                 if (launcher.Realms.Count < 1)
                     CreateNewRealm().Wait();
 
-                if (launcher.TestGameDirectory() == false)
-                    appVM.ShowGameDirSelector().Wait();
-
-                if (launcher.Profiles.Count < 1 ||
-                    launcher.Realms.Count < 1 ||
-                    launcher.TestGameDirectory() == false)
+                if (launcher.Realms.Count < 1)
                     return false;
 
                 if (appVM.ProcessSessionsCancellationBeforePlay(realmInfo.Realm?.Id).Result == false)
