@@ -13,7 +13,7 @@
 	
     <Design.PreviewWith>
         <Border Padding="40" Background="Gray">
-			<c:AppHeader Width="800" Height="50">
+			<c:AppHeader Width="800" Height="40">
 				<DockPanel MinWidth="300" LastChildFill="False">
 					<Button Content="Player"  DockPanel.Dock="Left"/>
 					<Button Content="X"  DockPanel.Dock="Right"/>
@@ -95,10 +95,11 @@
 						</Path>
 					</Canvas>
 					<Panel Classes="wrapper">
-						<TextBlock Text="STARFALL AFTERLIFE"
-								   FontSize="20" FontWeight="Bold"
-								   HorizontalAlignment="Center"
-								   VerticalAlignment="Center"/>
+						<Panel Margin="2">
+							<Panel.Background>
+								<ImageBrush Stretch="Uniform" Source="/Assets/Images/logo_header_256.png"/>
+							</Panel.Background>
+						</Panel>
 						<Panel Margin="0 0 0 10">
 							<ContentPresenter x:Name="PART_ContentPresenter"
 										  Background="{TemplateBinding Background}"

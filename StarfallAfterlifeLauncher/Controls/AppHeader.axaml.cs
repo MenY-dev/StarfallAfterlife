@@ -10,6 +10,9 @@ namespace StarfallAfterlife.Launcher.Controls
 {
     public partial class AppHeader : UserControl
     {
+        private const double _barWidth = 340d;
+        private const double _barHeight = 10d;
+
         public static readonly StyledProperty<PathGeometry> BackgroundGeometryProperty =
             AvaloniaProperty.Register<AppHeader, PathGeometry>(
                 name: nameof(BackgroundGeometry),
@@ -43,8 +46,8 @@ namespace StarfallAfterlife.Launcher.Controls
         public virtual void UpdateGeometry()
         {
             var rect = new Rect(Bounds.Size);
-            var barWidth = 300d;
-            var barHeight = 10d;
+            var barWidth = _barWidth;
+            var barHeight = _barHeight;
 
             BackgroundGeometry = new PathGeometry()
             {
@@ -119,7 +122,7 @@ namespace StarfallAfterlife.Launcher.Controls
                             new LineSegment(){ Point = new Point(0, size.Height) },
                         }
                     },
-                    CreateBackgroundFigure(new Rect(Bounds.Size), 300, 10, matrix)
+                    CreateBackgroundFigure(new Rect(Bounds.Size), _barWidth, _barHeight, matrix)
                 }
             };
         }

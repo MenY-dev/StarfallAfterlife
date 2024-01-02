@@ -17,6 +17,7 @@
     <None Remove="Assets\Icons\logo_512.png" />
     <None Remove="Assets\Icons\SfaIconsFont.ttf" />
     <None Remove="Assets\Images\H0P3_2K_16x9.png" />
+    <None Remove="Assets\Images\logo_header_256.png" />
   </ItemGroup>
   <ItemGroup>
     <AvaloniaResource Include="Assets\avalonia-logo.ico" />
@@ -24,6 +25,7 @@
     <AvaloniaResource Include="Assets\Icons\logo_512.png" />
     <AvaloniaResource Include="Assets\Icons\SfaIconsFont.ttf" />
     <AvaloniaResource Include="Assets\Images\H0P3_2K_16x9.png" />
+    <AvaloniaResource Include="Assets\Images\logo_header_256.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\avalonia-logo.ico" />
