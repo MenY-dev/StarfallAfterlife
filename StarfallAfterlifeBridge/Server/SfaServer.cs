@@ -21,6 +21,7 @@ using StarfallAfterlife.Bridge.Profiles;
 using System.Reflection;
 using System.Security.Cryptography;
 using StarfallAfterlife.Bridge.Database;
+using StarfallAfterlife.Bridge.Networking;
 
 namespace StarfallAfterlife.Bridge.Server
 {
@@ -45,6 +46,8 @@ namespace StarfallAfterlife.Bridge.Server
         public IdCollection<CharacterParty> Parties { get; } = new() { StartId = 1 };
 
         public Uri InstanceManagerAddress { get; set; }
+
+        public bool UsePortForwarding { get; set; } = false;
 
         public Task Task => CompletionSource?.Task ?? Task.CompletedTask;
 
@@ -337,6 +340,13 @@ namespace StarfallAfterlife.Bridge.Server
                 Matchmaker.Start();
                 base.Start();
                 CompletionSource = new TaskCompletionSource();
+
+                if (UsePortForwarding == true &&
+                    Address?.Port is int port &&
+                    port > 0 && port <= ushort.MaxValue)
+                {
+                    NatPuncher.Create(System.Net.Sockets.ProtocolType.Tcp, port, port, 0);
+                }
             }
             catch
             {

@@ -102,10 +102,31 @@
 							<c:Property Text="Port">
 								<c:SfaTextBox Text="{Binding ServerPort}"  HorizontalAlignment="Stretch"/>
 							</c:Property>
+							
+							<c:Property Text="Port Forwarding">
+								<c:SfaButton Height="30" HorizontalAlignment="Stretch">
+									<c:SfaButton.Flyout>
+										<c:SfaMenuFlyout Placement="BottomEdgeAlignedRight"
+														 SelectedItem="{Binding UsePortForwarding}">
+											<c:SfaMenuFlyout.ItemTemplate>
+												<DataTemplate>
+													<Label Foreground="White" Content="{Binding}" Width="{Binding $parent[Button].Bounds.Width}"/>
+												</DataTemplate>
+											</c:SfaMenuFlyout.ItemTemplate>
+											<x:True/>
+											<x:False/>
+										</c:SfaMenuFlyout>
+									</c:SfaButton.Flyout>
+									<Panel>
+										<TextBlock Text="{Binding UsePortForwarding}" />
+										<c:DropdownIcon HorizontalAlignment="Right"/>
+									</Panel>
+								</c:SfaButton>
+							</c:Property>
 
 							<c:Property Text="Password">
 								<Grid ColumnDefinitions="Auto 6 *">
-									<c:SfaCheckBox Grid.Column="0" Content="ENABLE" IsChecked="{Binding UsePassword}"/>
+									<c:SfaCheckBox Grid.Column="0" Content="Enable" IsChecked="{Binding UsePassword}"/>
 									<c:SfaButton Grid.Column="2" Content="SET" Height="30"
 												 IsEnabled="{Binding UsePassword}" Command="{Binding ShowPasswordDialog}"
 												 HorizontalContentAlignment="Center" HorizontalAlignment="Stretch"/>

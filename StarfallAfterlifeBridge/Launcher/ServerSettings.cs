@@ -26,5 +26,8 @@ namespace StarfallAfterlife.Bridge.Launcher
 
         [JsonPropertyName("password")]
         public string Password { get; set; } = null;
+
+        [JsonPropertyName("use_port_forwarding")]
+        public bool UsePortForwarding { get; set; } = true;
     }
 }

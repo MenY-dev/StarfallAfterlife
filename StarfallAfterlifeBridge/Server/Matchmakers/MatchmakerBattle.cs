@@ -24,7 +24,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         public virtual void Init()
         {
-
+            InstanceInfo.UsePortForwarding = Server?.UsePortForwarding ?? false;
         }
 
         public virtual void Start()

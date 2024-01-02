@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using StarfallAfterlife.Bridge.Diagnostics;
 using System.Threading;
 using System.Text.Json.Nodes;
+using System.Net.Sockets;
 
 namespace StarfallAfterlife.Bridge.Instances
 {
@@ -144,6 +145,12 @@ namespace StarfallAfterlife.Bridge.Instances
         public virtual void SetInstanceReady()
         {
             Port = Process?.GetServerListeningPort() ?? -1;
+
+            if (Info?.UsePortForwarding == true)
+                NatPuncher
+                    .Create(ProtocolType.Udp, Port, Port, 7200)
+                    .Wait(1000);
+
             State = InstanceState.Started;
         }
 

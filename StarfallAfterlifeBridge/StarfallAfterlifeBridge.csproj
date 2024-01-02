@@ -17,6 +17,10 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugInstances|AnyCPU'" />
 
   <ItemGroup>
+    <PackageReference Include="Mono.Nat" Version="3.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Database\database.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

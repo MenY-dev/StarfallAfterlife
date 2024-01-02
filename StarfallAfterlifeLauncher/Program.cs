@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using Avalonia;
+using StarfallAfterlife.Bridge.Networking;
 
 namespace StarfallAfterlife.Launcher;
 
@@ -20,6 +21,8 @@ class Program
 
         BuildAvaloniaApp()
             .StartWithClassicDesktopLifetime(args);
+
+        NatPuncher.CloseAll().Wait(1000);
     } 
 
     // Avalonia configuration, don't remove; also used by visual designer.

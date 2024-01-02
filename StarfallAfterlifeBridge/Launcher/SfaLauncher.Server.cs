@@ -84,6 +84,16 @@ namespace StarfallAfterlife.Bridge.Launcher
             }
         }
 
+        public bool ServerUsePortForwarding
+        {
+            get => (ServerSettings ??= new ServerSettings()).UsePortForwarding;
+            set
+            {
+                (ServerSettings ??= new ServerSettings()).UsePortForwarding = value;
+                SaveServerSettings();
+            }
+        }
+
         public SfaServer StartServer()
         {
             StopServer();
@@ -98,6 +108,11 @@ namespace StarfallAfterlife.Bridge.Launcher
                 realm.LoadDatabase();
                 server.InstanceManagerAddress = ActiveInstanceManager.Address;
                 server.Address = new Uri($"tcp://{address}:{ServerPort}");
+
+                if (ServerPort > 0 &&
+                    address.Equals(IPAddress.Loopback) == false &&
+                    address.Equals(IPAddress.IPv6Loopback) == false)
+                    server.UsePortForwarding = ServerUsePortForwarding;
 
                 if (ServerUsePassword == true &&
                     ServerPassword is string password &&

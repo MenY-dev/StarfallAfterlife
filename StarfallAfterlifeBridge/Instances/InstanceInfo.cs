@@ -37,6 +37,9 @@ namespace StarfallAfterlife.Bridge.Instances
         [JsonPropertyName("map")]
         public string Map { get; set; }
 
+        [JsonPropertyName("use_port_forwarding")]
+        public bool UsePortForwarding { get; set; } = false;
+
         [JsonIgnore]
         public string Auth { get; set; }
 

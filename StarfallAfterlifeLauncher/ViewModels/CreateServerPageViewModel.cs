@@ -67,6 +67,16 @@ namespace StarfallAfterlife.Launcher.ViewModels
             }
         }
 
+        public bool UsePortForwarding
+        {
+            get => Launcher?.ServerUsePortForwarding ?? false;
+            set
+            {
+                if (Launcher is SfaLauncher launcher)
+                    SetAndRaise(launcher.ServerUsePortForwarding, value, v => launcher.ServerUsePortForwarding = v);
+            }
+        }
+
         public ObservableCollection<InterfaceInfo> Interfaces { get; } = new();
 
         private bool _serverStarted;

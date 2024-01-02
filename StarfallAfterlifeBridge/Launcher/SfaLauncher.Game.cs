@@ -64,6 +64,7 @@ namespace StarfallAfterlife.Bridge.Launcher
 
                 realm.LoadDatabase();
                 server.InstanceManagerAddress = ActiveInstanceManager.Address;
+                server.UsePortForwarding = false;
                 server.Start();
 
                 SfaDebug.Print($"DiscoveryServer Started! ({server.Address})");
