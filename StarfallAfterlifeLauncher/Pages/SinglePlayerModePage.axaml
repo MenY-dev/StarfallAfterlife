@@ -36,22 +36,14 @@
 			<c:Separator Height="2" Opacity="0.8" VerticalAlignment="Bottom"/>
 		</Panel>
 		<Panel DockPanel.Dock="Bottom">
-			
-			<Button VerticalAlignment="Stretch"
-					Command="{Binding StartGame}"
-					IsEnabled="{Binding !AppVM.IsGameStarted}"
-					Padding="20 0 20 2" Margin="10 10 10 10"
-					MinWidth="160" HorizontalAlignment="Right"
-					Background="{DynamicResource AccentColor}"
-					DockPanel.Dock="Right">
-				
-				<Label Content="PLAY" Foreground="White"
-					   FontSize="30" FontWeight="DemiBold"
-					   HorizontalContentAlignment="Center"
-					   HorizontalAlignment="Center"
-					   VerticalAlignment="Center"/>
-			</Button>
-			
+			<c:SfaStartButton Command="{Binding StartGame}"
+							  Content="PLAY"
+							  IsEnabled="{Binding !AppVM.IsGameStarted}"
+							  VerticalAlignment="Stretch"
+							  HorizontalAlignment="Right"
+							  DockPanel.Dock="Right"
+							  Margin="10 10 10 10"
+							  MinWidth="160"/>
 		</Panel>
 		<Panel>
 			<Rectangle Fill="Black" Opacity="0.8" IsHitTestVisible="False" >

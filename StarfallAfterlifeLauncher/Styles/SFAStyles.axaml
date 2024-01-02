@@ -15,6 +15,7 @@
 				<ResourceInclude Source="/Styles/SfaCheckBoxStyle.axaml"/>
 				<ResourceInclude Source="/Styles/SfaButtonSpinnerStyle.axaml"/>
 				<ResourceInclude Source="/Styles/SfaNumericUpDownStyle.axaml"/>
+				<ResourceInclude Source="/Styles/SfaStartButtonStyle.axaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 

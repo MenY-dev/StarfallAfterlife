@@ -19,22 +19,34 @@
 		</Panel>
 		<StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right">
 
-			<Button Command="{Binding ConnectToServer}"
-					IsVisible="{Binding ServerStarted}"
-					IsEnabled="{Binding !AppVM.IsGameStarted}" MinWidth="160"  VerticalAlignment="Stretch" HorizontalAlignment="Right" Background="{DynamicResource AccentColor}" DockPanel.Dock="Right" Padding="20 0 20 2" Margin="10 10 10 10">
-				<Label Content="CONNECT" Foreground="White" FontSize="30" FontWeight="DemiBold"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
-			</Button>
+			<c:SfaStartButton Command="{Binding ConnectToServer}"
+							  Content="CONNECT"
+							  IsVisible="{Binding ServerStarted}"
+							  IsEnabled="{Binding !AppVM.IsGameStarted}"
+							  VerticalAlignment="Stretch"
+							  HorizontalAlignment="Right"
+							  DockPanel.Dock="Right"
+							  Margin="10 10 10 10"
+							  MinWidth="160"/>
 			
 			<c:Switch Value="{Binding ServerStarted}">
-				<Button Command="{Binding StartServer}" MinWidth="160"  VerticalAlignment="Stretch" HorizontalAlignment="Right" Background="{DynamicResource AccentColor}" DockPanel.Dock="Right" Padding="20 0 20 2" Margin="10 10 10 10">
-					<c:Switch.Case>
-						<sys:Boolean>False</sys:Boolean>
-					</c:Switch.Case>
-					<Label Content="START" Foreground="White" FontSize="30" FontWeight="DemiBold"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
-				</Button>
-				<Button Command="{Binding StopServer}" MinWidth="160"  VerticalAlignment="Stretch" HorizontalAlignment="Right" Background="{DynamicResource AccentColor}" DockPanel.Dock="Right" Padding="20 0 20 2" Margin="10 10 10 10" c:Switch.Default="True">
-					<Label Content="STOP" Foreground="White" FontSize="30" FontWeight="DemiBold"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
-				</Button>
+				<c:SfaStartButton Command="{Binding StartServer}"
+								  Content="START"
+								  c:Switch.Case="{x:False}"
+								  VerticalAlignment="Stretch"
+								  HorizontalAlignment="Right"
+								  DockPanel.Dock="Right"
+								  Margin="10 10 10 10"
+								  MinWidth="160"/>
+				
+				<c:SfaStartButton Command="{Binding StopServer}"
+								  Content="STOP"
+								  c:Switch.Case="{x:True}"
+								  VerticalAlignment="Stretch"
+								  HorizontalAlignment="Right"
+								  DockPanel.Dock="Right"
+								  Margin="10 10 10 10"
+								  MinWidth="160"/>
 			</c:Switch>
 		</StackPanel>
 		<Panel>

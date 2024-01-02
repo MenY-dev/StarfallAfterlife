@@ -1,0 +1,118 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:c="using:StarfallAfterlife.Launcher.Controls"
+                    xmlns:sys="using:System"
+                    xmlns:converters="using:Avalonia.Controls.Converters">
+
+	<ResourceDictionary.MergedDictionaries>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceInclude Source="/Styles/Colors.axaml"/>
+				<ResourceInclude Source="/Styles/Params.axaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</ResourceDictionary.MergedDictionaries>
+	
+	<Design.PreviewWith>
+		<Border Padding="20">
+			<StackPanel Spacing="20">
+				<c:SfaStartButton Content="Click Me!"/>
+				<c:SfaStartButton Classes="accent" Content="Click Me!"/>
+				<c:SfaStartButton Content="Click Me!" IsEnabled="False"/>
+			</StackPanel>
+		</Border>
+	</Design.PreviewWith>
+
+	<ControlTheme x:Key="{x:Type c:SfaStartButton}"
+				  TargetType="{x:Type c:SfaStartButton}"
+				  BasedOn="{StaticResource {x:Type Button}}">
+
+		<Setter Property="FontSize" Value="30"/>
+		<Setter Property="FontWeight" Value="DemiBold"/>
+		<Setter Property="Padding" Value="20 5"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+		<Setter Property="Foreground" Value="White"/>
+		
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Panel>
+					<Rectangle Name="background" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+					<Rectangle Name="accentbackground" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+					<Rectangle Name="holo" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+					<ContentPresenter x:Name="PART_ContentPresenter"
+									  Content="{TemplateBinding Content}"
+									  ContentTemplate="{TemplateBinding ContentTemplate}"
+									  FontSize="{TemplateBinding FontSize}"
+									  FontFamily="{TemplateBinding FontFamily}"
+									  FontWeight="{TemplateBinding FontWeight}"
+									  FontStyle="{TemplateBinding FontStyle}"
+									  FontStretch="{TemplateBinding FontStretch}"
+									  Padding="{TemplateBinding Padding}"
+									  RecognizesAccessKey="True"
+									  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+									  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+					<Border Name="border" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+				</Panel>
+			</ControlTemplate>
+		</Setter>
+
+		<Style Selector="^ /template/ Rectangle#background" >
+			<Setter Property="Fill" Value="Black"/>
+		</Style>
+		<Style Selector="^ /template/ Rectangle#accentbackground" >
+			<Setter Property="Fill" Value="{DynamicResource AccentColor}"/>
+			<Setter Property="OpacityMask">
+				<LinearGradientBrush StartPoint="0% 0%" EndPoint="0% 100%">
+					<GradientStop Offset="0" Color="#AAFFFFFF"/>
+					<GradientStop Offset="0.5" Color="#50FFFFFF"/>
+					<GradientStop Offset="1" Color="#AAFFFFFF"/>
+				</LinearGradientBrush>
+			</Setter>
+		</Style>
+		<Style Selector="^ /template/ Rectangle#holo" >
+			<Setter Property="Fill" Value="{DynamicResource AccentColor}"/>
+			<Setter Property="OpacityMask">
+				<LinearGradientBrush StartPoint="0 0" EndPoint="0 5" SpreadMethod="Repeat">
+					<GradientStop Offset="0" Color="#55FFFFFF"/>
+					<GradientStop Offset="0.5" Color="#20FFFFFF"/>
+					<GradientStop Offset="1" Color="#55FFFFFF"/>
+				</LinearGradientBrush>
+			</Setter>
+		</Style>
+		
+		<Style Selector="^ /template/ Border#border" >
+			<Setter Property="BorderBrush" Value="{DynamicResource AccentColor}"/>
+			<Setter Property="BorderThickness" Value="2"/>
+		</Style>
+		
+		<Style Selector="^.accent">
+			<Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+				<Setter Property="Background" Value="{x:Null}" />
+			</Style>
+		</Style>
+
+		<Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{Binding $self.Background}" />
+			<Setter Property="BorderBrush" Value="{Binding $self.BorderBrush}" />
+			<Setter Property="Foreground" Value="{Binding $self.Foreground}" />
+		</Style>
+		
+		<Style Selector="^:disabled">
+			<Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+				<Setter Property="Background" Value="{Binding $self.Background}" />
+				<Setter Property="BorderBrush" Value="{Binding $self.BorderBrush}" />
+				<Setter Property="Foreground" Value="{Binding $self.Foreground}" />
+				<Setter Property="Opacity" Value="0.5" />
+			</Style>
+			<Style Selector="^ /template/ Rectangle#holo">
+				<Setter Property="Fill" Value="Gray"/>
+				<Setter Property="Opacity" Value="1"/>
+			</Style>
+			<Style Selector="^ /template/ Border#border">
+				<Setter Property="Opacity" Value="0.5"/>
+			</Style>
+		</Style>
+		
+	</ControlTheme>
+	</ResourceDictionary>
