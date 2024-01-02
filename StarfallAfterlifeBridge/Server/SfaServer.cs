@@ -401,6 +401,16 @@ namespace StarfallAfterlife.Bridge.Server
             (Realm ??= new()).Load(Path.Combine(directory, "Realm"));
         }
 
+        public static bool IsVersionCompatible(Version target)
+        {
+            if (target is null ||
+                target.Major != Version.Major ||
+                target.Minor != Version.Minor)
+                return false;
+
+            return true;
+        }
+
         public static string CreatePasswordHash(string password)
         {
             try

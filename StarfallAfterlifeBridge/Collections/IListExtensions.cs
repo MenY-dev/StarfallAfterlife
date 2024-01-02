@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +26,36 @@ namespace StarfallAfterlife.Bridge.Collections
             }
 
             return self;
+        }
+
+        public static ObservableCollection<TSource> SortBy<TSource, TKey>(this ObservableCollection<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            var sorted = source.OrderBy(keySelector).ToArray();
+
+            for (int i = 0; i < sorted.Count(); i++)
+                source.Move(source.IndexOf(sorted[i]), i);
+
+            return source;
+        }
+
+        public static ObservableCollection<TSource> Sort<TSource>(this ObservableCollection<TSource> source, IComparer<TSource> comparer)
+        {
+            var sorted = source.Order(comparer).ToArray();
+
+            for (int i = 0; i < sorted.Count(); i++)
+                source.Move(source.IndexOf(sorted[i]), i);
+
+            return source;
+        }
+
+        public static ObservableCollection<TSource> Sort<TSource>(this ObservableCollection<TSource> source)
+        {
+            var sorted = source.Order().ToArray();
+
+            for (int i = 0; i < sorted.Count(); i++)
+                source.Move(source.IndexOf(sorted[i]), i);
+
+            return source;
         }
     }
 }

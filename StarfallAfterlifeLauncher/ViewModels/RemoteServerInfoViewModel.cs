@@ -1,5 +1,6 @@
 ﻿using Avalonia.Threading;
 using StarfallAfterlife.Bridge.Launcher;
+using StarfallAfterlife.Bridge.Server;
 using StarfallAfterlife.Launcher.Services;
 using System;
 using System.Collections.Generic;
@@ -24,8 +25,11 @@ namespace StarfallAfterlife.Launcher.ViewModels
 
         public bool IsOnline => Info?.IsOnline ?? false;
 
+        public bool IsBadVersion => Version is not null && SfaServer.IsVersionCompatible(Version) == false;
+
         public bool NeedPassword => Info?.NeedPassword ?? false;
 
+        public FindServerPageViewModel Page { get; }
 
         public RemoteServerInfo Info
         {
@@ -39,8 +43,9 @@ namespace StarfallAfterlife.Launcher.ViewModels
 
         private RemoteServerInfo _info;
 
-        public RemoteServerInfoViewModel(RemoteServerInfo info)
+        public RemoteServerInfoViewModel(FindServerPageViewModel page, RemoteServerInfo info)
         {
+            Page = page;
             Info = info;
         }
 
@@ -62,7 +67,11 @@ namespace StarfallAfterlife.Launcher.ViewModels
         {
             return Info?.Update(5000, ct).ContinueWith(t =>
             {
-                Dispatcher.UIThread.Invoke(() => Info = Info);
+                Dispatcher.UIThread.Invoke(() =>
+                {
+                    Info = Info;
+                    Page?.UpdateList();
+                });
 
                 if (ct.IsCancellationRequested)
                     return false;

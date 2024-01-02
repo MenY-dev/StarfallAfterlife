@@ -1,9 +1,11 @@
 ﻿using Avalonia.Controls.Documents;
 using Avalonia.Threading;
+using StarfallAfterlife.Bridge.Collections;
 using StarfallAfterlife.Bridge.Launcher;
 using StarfallAfterlife.Bridge.Server;
 using StarfallAfterlife.Launcher.Controls;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
@@ -113,7 +115,36 @@ namespace StarfallAfterlife.Launcher.ViewModels
                         server.Info = server.Info;
 
                 foreach (var server in toAdd)
-                    Servers.Add(new(server));
+                    Servers.Add(new(this, server));
+
+                Servers.Sort(Comparer<RemoteServerInfoViewModel>.Create((x, y) => 
+                {
+                    if (x is null || y is null)
+                        return x == y ? 0 : (x == null ? -1 : 1);
+
+                    var xVersion = x.Version ?? SfaServer.Version;
+                    var yVersion = y.Version ?? SfaServer.Version;
+                    var xIsActual = SfaServer.IsVersionCompatible(xVersion);
+                    var yIsActual = SfaServer.IsVersionCompatible(yVersion);
+
+                    if (xIsActual != yIsActual)
+                        return yIsActual.CompareTo(xIsActual);
+
+                    var result = yVersion.CompareTo(xVersion);
+
+                    if (result != 0)
+                        return result;
+
+                    result = y.IsOnline.CompareTo(x.IsOnline);
+
+                    if (result != 0)
+                        return result;
+
+                    var xName = x.Name ?? x.Address ?? string.Empty;
+                    var yName = y.Name ?? y.Address ?? string.Empty;
+
+                    return xName.CompareTo(yName);
+                }));
 
                 SelectedServer = Servers.FirstOrDefault(s => s.Address == selected?.Address);
                 SelectedServer ??= Servers.FirstOrDefault();

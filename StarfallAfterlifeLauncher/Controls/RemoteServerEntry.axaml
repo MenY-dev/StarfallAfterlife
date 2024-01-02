@@ -29,8 +29,23 @@
 					   IsVisible="{Binding Name, Converter={x:Static ObjectConverters.IsNull}}"/>
 			
 		</StackPanel>
-		<StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Right" VerticalAlignment="Center">
-			<TextBlock Text="🔒" VerticalAlignment="Center" IsVisible="{Binding NeedPassword}"/>
+		<StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Right" VerticalAlignment="Center">
+			
+			<TextBlock Text="🔒"
+					   VerticalAlignment="Center"
+					   IsVisible="{Binding NeedPassword}" 
+					   RenderTransform="scaleX(1.5)scaleY(1.5)"
+					   ToolTip.Tip="Password required."/>
+			
+			<TextBlock Text="⚠"
+					   VerticalAlignment="Center"
+					   IsVisible="{Binding IsBadVersion}"
+					   Foreground="Red"
+					   RenderTransform="scaleX(1.5)scaleY(1.5)"
+					   ToolTip.Tip="Incompatible server version.">
+
+			</TextBlock>
+			
 			<TextBlock VerticalAlignment="Center" Opacity="0.5" IsVisible="{Binding !!Version}">
 				<TextBlock.Text>
 					<MultiBinding StringFormat="v{0}.{1}">
