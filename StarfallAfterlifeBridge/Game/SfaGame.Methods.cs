@@ -18,6 +18,8 @@ namespace StarfallAfterlife.Bridge.Game
                 {
                     var now = DateTime.Now;
 
+                    DistributeProductionPoints(false);
+
                     if (character.ProductionPoints < character.ProductionCap)
                     {
                         var timeDelta = now - character.LastProductionIncomeTime;
