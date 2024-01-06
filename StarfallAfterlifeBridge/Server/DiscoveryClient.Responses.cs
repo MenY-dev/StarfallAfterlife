@@ -488,18 +488,15 @@ namespace StarfallAfterlife.Bridge.Server
 
         public void SendQuestCompleteData(QuestListener quest)
         {
-            if (CurrentCharacter?.Fleet is UserFleet fleet)
-            {
-                SendGalaxyMessage(
-                    DiscoveryServerGalaxyAction.QuestCompleteData,
-                    writer =>
-                    {
-                        writer.WriteInt32(quest.Id);
-                        writer.WriteInt32((byte)quest.State);
-                    });
+            SendGalaxyMessage(
+                DiscoveryServerGalaxyAction.QuestCompleteData,
+                writer =>
+                {
+                    writer.WriteInt32(quest.Id);
+                    writer.WriteInt32((byte)quest.State);
+                });
 
-                SfaDebug.Print($"QuestStateUpdate (UserFleet = {fleet.Id}, Quest = {quest.Id}, State = {quest.State})", "DiscoveryServerClient");
-            }
+            SfaDebug.Print($"QuestStateUpdate (UserFleet = {CurrentCharacter?.Fleet?.Id}, Quest = {quest.Id}, State = {quest.State})", "DiscoveryServerClient");
         }
 
 
