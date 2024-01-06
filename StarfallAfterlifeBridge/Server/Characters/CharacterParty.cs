@@ -28,7 +28,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                 if (characret is null)
                     return;
 
-                member = new() { Id = charId, Status = status };
+                member = new() { Id = charId, Name = characret.Name, Status = status };
                 Members.Add(member);
 
                 if (status is PartyMemberStatus.Joined)

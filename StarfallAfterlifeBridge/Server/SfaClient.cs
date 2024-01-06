@@ -328,6 +328,7 @@ namespace StarfallAfterlife.Bridge.Server
                                 character.Database = Game.Profile.Database;
                                 character.UniqueId = (int?)charData["unique_id"] ?? -1;
                                 character.UniqueName = (string)charData["unique_name"];
+                                character.IndexSpace = (int?)charData["index_space"] ?? 0;
                             }
                         }
                     }
@@ -427,7 +428,7 @@ namespace StarfallAfterlife.Bridge.Server
                         session?.Save();
                     }
 
-                    doc["char_data"] = JsonHelpers.ParseNode(Game.CreateCharacterResponse(character, UserDataFlag.All)?.ToJsonString());
+                    doc["char_data"] = Game.CreateCharacterResponse(character, UserDataFlag.All);
                     request.SendResponce(doc.ToJsonString(), SfaServerAction.StartSession);
                 }
             });

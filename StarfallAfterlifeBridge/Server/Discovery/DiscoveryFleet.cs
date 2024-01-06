@@ -248,7 +248,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                 System?.AddBattle(battle);
 
                 battle.AddToBattle(this, BattleRole.Attack, CreateHexOffset());
-                battle.AddToBattle(targetFleet, BattleRole.Defense, targetFleet.CreateHexOffset());
+                battle.AddToBattle(targetFleet, targetFleet.Faction != Faction ? BattleRole.Defense : BattleRole.Join, targetFleet.CreateHexOffset());
                 battle.HasNebula = System?.NebulaMap?[battle.Hex] == true;
                 battle.HasAsteroids = System?.AsteroidsMap?[battle.Hex] == true;
                 battle.RichAsteroidField = System?.GetObjectAt(battle.Hex, DiscoveryObjectType.RichAsteroids) as StarSystemRichAsteroid;

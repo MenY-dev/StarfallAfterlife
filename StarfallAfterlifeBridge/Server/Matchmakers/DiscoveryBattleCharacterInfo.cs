@@ -43,10 +43,11 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 Name = ServerCharacter.Name,
                 Auth = Guid.NewGuid().ToString(),
                 Faction = ServerCharacter.Faction,
-                PartyId = ServerCharacter.Party?.Id ?? 0,
+                PartyId = ServerCharacter.Party?.Id ?? -1,
+                Team = ServerCharacter.UniqueId,
                 Role = member.Role == BattleRole.Defense ?
                        DiscoveryPlayerInstanceStatus.None :
-                       DiscoveryPlayerInstanceStatus.Initiate,
+                       DiscoveryPlayerInstanceStatus.Join,
                 HexOffsetX = member.HexOffset.X,
                 HexOffsetY = member.HexOffset.Y,
                 Features = new()

@@ -41,6 +41,9 @@ namespace StarfallAfterlife.Bridge.Server
         {
             var userName = reader.ReadShortString(Encoding.UTF8);
 
+            if (userName is null)
+                return;
+
             Invoke(c =>
             {
                 var character = CurrentCharacter;
@@ -55,7 +58,9 @@ namespace StarfallAfterlife.Bridge.Server
                     character.Party = party = CharacterParty.Create(Server, character.UniqueId);
                 }
 
-                var newMember = c.Server?.GetCharacter(userName);
+                var newMember = userName.StartsWith("@") ?
+                    c.Server?.GetPlayer(userName[1..])?.CurrentCharacter :
+                    c.Server?.GetCharacter(userName);
 
                 if (newMember is null)
                 {
@@ -173,11 +178,11 @@ namespace StarfallAfterlife.Bridge.Server
 
         public void SendPartyMembers()
         {
-            var members = CurrentCharacter?.Party?.CreateMembersSnapshot();
+            var members = CurrentCharacter?.Party?.CreateMembersSnapshot() ?? Array.Empty<CharacterPartyMember>();
 
             SendCharacterPartyMessage(CharacterPartyServerAction.MemberList, writer =>
             {
-                writer.WriteUInt16((ushort)members.Length);
+                writer.WriteUInt16((ushort)(members.Length));
 
                 foreach (var member in members)
                 {

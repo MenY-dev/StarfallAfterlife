@@ -285,7 +285,7 @@ namespace StarfallAfterlife.Bridge.Game
                 {
                     ships.Add(new JsonObject()
                     {
-                        ["id"] = ship.Id,
+                        ["id"] = ship.Id + character.IndexSpace,
                         ["in_galaxy"] = 1,
                         ["destroyed"] = 0,
                         ["data"] = JsonHelpers.ParseNodeUnbuffered(ship, options)?.ToJsonStringUnbuffered(false)

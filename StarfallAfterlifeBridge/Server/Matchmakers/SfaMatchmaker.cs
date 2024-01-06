@@ -302,7 +302,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 foreach (var battle in GetBattles(user))
                     battle?.UserStatusChanged(user, status);
 
-                foreach (var character in user.DiscoveryClient.Characters?.ToArray() ?? Array.Empty<ServerCharacter>())
+                foreach (var character in user.DiscoveryClient?.Characters?.ToArray() ?? Array.Empty<ServerCharacter>())
                 {
                     foreach (var battle in GetBattles(character))
                         battle?.CharStatusChanged(character, status);

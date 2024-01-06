@@ -382,6 +382,7 @@ namespace StarfallAfterlife.Bridge.Server
                             ["id"] = character.Id,
                             ["unique_id"] = character.UniqueId,
                             ["unique_name"] = character.UniqueName,
+                            ["index_space"] = character.UniqueId * 2000,
                         });
                     }
                 }
