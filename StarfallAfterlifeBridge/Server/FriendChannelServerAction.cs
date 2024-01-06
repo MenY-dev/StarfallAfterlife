@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace StarfallAfterlife.Bridge.Server
 {
-    public enum FriendChannelServerAction
+    public enum FriendChannelServerAction : byte
     {
+        AcceptNewFriend = 0,
+        AddToFriendsRequest = 1,
+        RemoveFromFriends = 2,
+        FriendStatus = 3,
+        ReciveFriendRequestResult = 4
     }
 }

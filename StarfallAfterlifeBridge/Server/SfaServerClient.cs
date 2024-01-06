@@ -43,6 +43,8 @@ namespace StarfallAfterlife.Bridge.Server
 
         public SfaClientState State { get; set; } = SfaClientState.PendingLogin;
 
+        public UserInGameStatus UserStatus { get; set; } = UserInGameStatus.None;
+
         public bool IsPlayer { get; set; }
 
         public SfaServer Server { get; set; }
@@ -104,6 +106,10 @@ namespace StarfallAfterlife.Bridge.Server
                     break;
 
                 default:
+
+                    if (action == SfaServerAction.RegisterChannel)
+                        ProcessRegisterChannel(JsonHelpers.ParseNodeUnbuffered(text));
+
                     DiscoveryClient?.OnTextReceive(text, action);
                     break;
             }
@@ -393,6 +399,14 @@ namespace StarfallAfterlife.Bridge.Server
                 ["msg"] = msg,
                 ["is_private"] = isPrivate,
             }, SfaServerAction.Chat);
+        }
+
+        private void ProcessRegisterChannel(JNode doc)
+        {
+            var channelName = (string)doc?["name"];
+
+            if ("UserFriends".Equals(channelName, StringComparison.InvariantCultureIgnoreCase) == true)
+                SendServerPlayerStatuses();
         }
 
         public void TravelToClient(SfaServerClient client)
