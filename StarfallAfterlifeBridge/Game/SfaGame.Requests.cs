@@ -496,6 +496,33 @@ namespace StarfallAfterlife.Bridge.Game
             return new JsonObject { };
         }
 
+        protected JsonNode HandleCancelCraftedItem(SfaHttpQuery query)
+        {
+            UpdateProductionPointsIncome();
+
+            var doc = new JsonObject() { ["ok"] = 1 };
+
+            if (query is null)
+                return doc;
+
+            Profile.Use(p =>
+            {
+                if ((int?)query["craftingid"] is int craftingId &&
+                    p.GameProfile.CurrentCharacter is Character character)
+                {
+                    character.DeleteCraftingItem(craftingId);
+                    doc["crafting"] = CreateCraftingResponce(character.Crafting.ToArray());
+                    Profile.SaveGameProfile();
+                    SfaClient?.SyncCharacterCurrencies(character);
+                }
+            });
+
+            return new JsonObject
+            {
+                ["data_result"] = SValue.Create(doc.ToJsonStringUnbuffered(false))
+            };
+        }
+
         public JsonNode HandleRushCraftingItem(SfaHttpQuery query)
         {
             UpdateProductionPointsIncome();

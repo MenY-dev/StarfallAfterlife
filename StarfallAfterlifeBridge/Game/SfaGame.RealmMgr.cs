@@ -166,6 +166,10 @@ namespace StarfallAfterlife.Bridge.Game
                         response = HandleSwapCraftingQueue(query);
                         break;
 
+                    case "cancel_crafting_item":
+                        response = HandleCancelCraftedItem(query);
+                        break;
+
                     case "ship.delete":
                         UpdateShipsRepairProgress(false);
                         response = HandleShipDelete(query);
