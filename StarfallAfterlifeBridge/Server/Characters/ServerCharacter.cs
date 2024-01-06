@@ -268,16 +268,28 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
                     AddCharacterCurrencies(igc: igc, bgc: bgc, xp: xp);
 
+
                     if (reward.Items is not null &&
                         (Database ?? SfaDatabase.Instance) is SfaDatabase database)
                     {
-                        foreach (var item in reward.Items)
+                        DiscoveryClient.Invoke(c =>
                         {
-                            if (database.GetItem(item.Id) is SfaItem itemInfo)
-                                (Inventory ?? new(this)).AddItem(item.ToInventoryItem());
-                        }
-                    }
+                            var addedItems = new List<InventoryItem>();
 
+                            foreach (var rewardItem in reward.Items)
+                            {
+                                if (database.GetItem(rewardItem.Id) is SfaItem itemInfo)
+                                {
+                                    var item = rewardItem.ToInventoryItem();
+                                    (Inventory ?? new(this)).AddItem(item);
+                                    addedItems.Add(item);
+                                }
+                            }
+
+                            if (addedItems.Count > 0)
+                                c.SendInventoryNewItems(addedItems);
+                        });
+                    }
                     var notification = $"+{bgc} BGC";
 
                     if (igc is not null)

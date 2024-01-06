@@ -499,6 +499,33 @@ namespace StarfallAfterlife.Bridge.Server
             SfaDebug.Print($"QuestStateUpdate (UserFleet = {CurrentCharacter?.Fleet?.Id}, Quest = {quest.Id}, State = {quest.State})", "DiscoveryServerClient");
         }
 
+        public void SendUpdateInventory()
+        {
+            SendGalaxyMessage(DiscoveryServerGalaxyAction.UpdateInventory);
+            SfaDebug.Print("UpdateInventory");
+        }
+
+        public void SendInventoryNewItems(ICollection<InventoryItem> newItems)
+        {
+            var items = newItems?.ToList() ?? new();
+
+            SendGalaxyMessage(DiscoveryServerGalaxyAction.InventoryNewItems, writer =>
+            {
+                writer.WriteUInt16((ushort)items.Count); // Count
+
+                foreach (var item in items)
+                {
+                    writer.WriteByte((byte)item.Type); // ItemType
+                    writer.WriteInt32(item.Id); // Id
+                    writer.WriteInt32(item.Count); // Count
+                    writer.WriteInt32(item.IGCPrice); // IGCPrice
+                    writer.WriteInt32(item.BGCPrice); // BGCPrice
+                    writer.WriteShortString(item.UniqueData ?? "", -1, true, Encoding.UTF8); // UniqueData
+                }
+            });
+
+            SfaDebug.Print("InventoryNewItems");
+        }
 
         public void SendFleetAttacked(int objectId, DiscoveryObjectType type, SystemHex hex)
         {
