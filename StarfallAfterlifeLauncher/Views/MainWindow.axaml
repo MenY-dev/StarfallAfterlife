@@ -9,7 +9,7 @@
         x:Class="StarfallAfterlife.Launcher.Views.MainWindow"
         Title="Starfall Afterlife"
 		Icon="/Assets/Icons/icon_128.ico"
-		Width="1000" Height="600"
+		Width="1056" Height="640"
 		MinWidth="640" MinHeight="360">
 	
 	<Window.DataContext>
@@ -64,7 +64,7 @@
 							
 							<StackPanel Orientation="Horizontal" Spacing="6" IsVisible="{Binding IsUpdateAvailable}">
 								<c:Separator Classes="vertical" DockPanel.Dock="Left" Width="2" Opacity="0.5"/>
-								<TextBlock Text="New Version!" VerticalAlignment="Center"
+								<TextBlock Text="{DynamicResource s_updater_new_ver_msg}" VerticalAlignment="Center"
 										   FontWeight="DemiBold"  Foreground="White">
 									<TextBlock.Effect>
 										<DropShadowEffect Color="{DynamicResource AccentColor}" BlurRadius="1" OffsetX="0" OffsetY="0"/>
@@ -86,52 +86,8 @@
 					<p:SinglePlayerModePage Name="SinglePlayerPage" DataContext="{Binding SinglePlayerPageViewModel}"/>
 					<p:FindServerPage Name="FindServerPage" DataContext="{Binding FindServerPageViewModel}"/>
 					<p:CreateServerPage Name="CreateServerPage" DataContext="{Binding CreateServerPageViewModel}"/>
-					<p:LogPage Name="LogPage"/>
-					<c:SidebarPage Name="SettingsPage">
-						<DockPanel LastChildFill="True">
-							<Panel DockPanel.Dock="Top">
-								<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="15 10" Spacing="5">
-									<Label Content="f" FontFamily="{StaticResource IconsFont}" Classes="h3" VerticalContentAlignment="Center"/>
-									<Label Content="SETTINGS" Classes="h3" VerticalAlignment="Top" Margin="0 0 0 2" />
-								</StackPanel>
-								<c:Separator Height="2" Opacity="0.8" VerticalAlignment="Bottom"/>
-							</Panel>
-							<Panel DockPanel.Dock="Bottom" MinHeight="20">
-							</Panel>
-							<Panel>
-								<Rectangle Fill="Black" Opacity="0.8" IsHitTestVisible="False" >
-									<Rectangle.OpacityMask>
-										<LinearGradientBrush StartPoint="0% 0%" EndPoint="0% 100%">
-											<GradientStop Color="#FFFFFFFF" Offset="0"/>
-											<GradientStop Color="#20FFFFFF" Offset="1"/>
-										</LinearGradientBrush>
-									</Rectangle.OpacityMask>
-								</Rectangle>
-								<StackPanel Margin="10" Spacing="10">
-									<StackPanel Spacing="10" Orientation="Horizontal" HorizontalAlignment="Stretch">
-										<Label Content="GAME DIRECTORY" VerticalContentAlignment="Center" FontSize="16" FontWeight="DemiBold" Foreground="White" Width="160"/>
-										<c:SfaButton Content="SELECT" Command="{Binding ShowGameDirSelector}" />
-										<Label ClipToBounds="True" VerticalContentAlignment="Center" Content="{Binding GameDirectory}" Foreground="White" Opacity="0.75" />
-									</StackPanel>
-									<WrapPanel Name="DebugUtilsView">
-
-									</WrapPanel>
-								</StackPanel>
-								
-								<TextBlock Text="Made with Avalonia UI" FontSize="16" Opacity="0.5"
-										   Margin="10"
-										   HorizontalAlignment="Right"
-										   VerticalAlignment="Bottom"/>
-								
-								<TextBlock Text="{Binding CurrentFullVersion}" FontSize="16" Opacity="0.5"
-										   Margin="10"
-										   HorizontalAlignment="Left"
-										   VerticalAlignment="Bottom"/>
-								
-								<c:Separator Height="2" Opacity="0.8" VerticalAlignment="Bottom"/>
-							</Panel>
-						</DockPanel>
-					</c:SidebarPage>
+					<p:LogPage Name="LogPage" DataContext="{Binding}"/>
+					<p:SettingsPage Name="SettingsPage"/>
 				</c:SidebarPageContainer>
 
 				<c:Sidebar Grid.Column="0" Width="50" PageContainer="{Binding #Pages}">
@@ -143,7 +99,7 @@
 										   HorizontalContentAlignment="Center"
 										   VerticalContentAlignment="Center"
 										   Width="50" Height="50"/>
-									<Label Content="SINGLE PLAYER" VerticalAlignment="Center" Margin="0, 0, 40, 0"/>
+									<Label Content="{DynamicResource s_page_sp_header}" VerticalAlignment="Center" Margin="0, 0, 40, 0"/>
 								</StackPanel>
 							</c:SidebarTab>
 							<c:SidebarTab PageName="FindServerPage" HorizontalAlignment="Stretch">
@@ -152,7 +108,7 @@
 										   HorizontalContentAlignment="Center"
 										   VerticalContentAlignment="Center"
 										   Width="50" Height="50"/>
-									<Label Content="FIND SERVER" VerticalAlignment="Center"/>
+									<Label Content="{DynamicResource s_page_fs_header}" VerticalAlignment="Center"/>
 								</StackPanel>
 							</c:SidebarTab>
 							<c:SidebarTab PageName="CreateServerPage" HorizontalAlignment="Stretch">
@@ -161,7 +117,7 @@
 										   HorizontalContentAlignment="Center"
 										   VerticalContentAlignment="Center"
 										   Width="50" Height="50"/>
-									<Label Content="CREATE SERVER" VerticalAlignment="Center"/>
+									<Label Content="{DynamicResource s_page_cs_header}" VerticalAlignment="Center"/>
 								</StackPanel>
 							</c:SidebarTab>
 						</StackPanel>
@@ -173,7 +129,7 @@
 										   HorizontalContentAlignment="Center"
 										   VerticalContentAlignment="Center"
 										   Width="50" Height="50"/>
-									<Label Content="LOG" VerticalAlignment="Center"/>
+									<Label Content="{DynamicResource s_page_log_header}" VerticalAlignment="Center"/>
 								</StackPanel>
 							</c:SidebarTab>
 							<c:SidebarTab PageName="SettingsPage" HorizontalAlignment="Stretch">
@@ -182,7 +138,7 @@
 										   HorizontalContentAlignment="Center"
 										   VerticalContentAlignment="Center"
 										   Width="50" Height="50"/>
-									<Label Content="SETTINGS" VerticalAlignment="Center"/>
+									<Label Content="{DynamicResource s_page_settings_header}" VerticalAlignment="Center"/>
 								</StackPanel>
 							</c:SidebarTab>
 						</StackPanel>
@@ -192,101 +148,13 @@
 			</Grid>
 			
 			<c:SfaProfilesEditor DataContext="{Binding ProfilesEditorViewModel}"/>
-			
-			<Panel>
-				<Panel Width="300"
-					   HorizontalAlignment="Right"
-					   VerticalAlignment="Top"
-					   Margin="12 12"
-					   IsVisible="{Binding IsUpdatePanelVisible}">
 
-					<Rectangle Fill="{DynamicResource AccentColor}" Opacity="0.5" />
-					<Rectangle Fill="{DynamicResource PageMainColor}" Opacity="0.8" />
-					
-					<c:SfaPanel>
-						<Panel>
-							<StackPanel>
-								<Grid ColumnDefinitions="* Auto">
-									<TextBlock Grid.Column="0"
-											   Text="{Binding CurrentFullVersion, StringFormat='Current: {0}'}"
-											   VerticalAlignment="Center" Margin="10 2"/>
-									
-									<c:SfaButton Grid.Column="1"
-												 Classes="clear"
-												 Content="×"
-												 FontSize="20"
-												 Foreground="White"
-												 Command="{Binding ToggleUpdatePanel}"
-												 Width="36"
-												 HorizontalAlignment="Right"
-												 VerticalAlignment="Top"
-												 HorizontalContentAlignment="Center"
-												 VerticalContentAlignment="Center"/>
-								</Grid>
-								<c:Separator Height="2" Opacity="0.5"/>
-								
-								<Panel MinHeight="100" MaxHeight="400">
-									<Rectangle Fill="Black" Opacity="0.75">
-										<Rectangle.OpacityMask>
-											<LinearGradientBrush StartPoint="0% 0%" EndPoint="0% 100%">
-												<GradientStop Offset="0" Color="#FFFFFFFF"/>
-												<GradientStop Offset="1" Color="#00FFFFFF"/>
-											</LinearGradientBrush>
-										</Rectangle.OpacityMask>
-									</Rectangle>
-									<StackPanel IsVisible="{Binding IsUpdateAvailable}" Spacing="6" Margin="10">
-
-										<ScrollViewer>
-											<StackPanel  Spacing="6">
-												<Panel>
-													<Rectangle Fill="{DynamicResource HoloColor}" Opacity="0.1"
-															   HorizontalAlignment="Stretch"
-															   VerticalAlignment="Stretch"/>
-
-													<TextBlock Foreground="{DynamicResource AccentColor}"
-														   FontSize="16" FontWeight="DemiBold"
-														   HorizontalAlignment="Center"
-														   Padding="2"
-														   Text="NEW VERSION!"/>
-												</Panel>
-
-												<TextBlock Foreground="White" TextWrapping="Wrap"
-														   Text="{Binding LatestRelese.ReleseName}"/>
-
-												<TextBlock Foreground="White" TextWrapping="Wrap" Opacity="0.75"
-														   Text="{Binding LatestRelese.Description}"
-														   Padding="5 0 0 0"/>
-											</StackPanel>
-										</ScrollViewer>
-
-										<c:SfaButton Content="INSTALL"
-													 HorizontalAlignment="Stretch"
-													 HorizontalContentAlignment="Center"
-													 Command="{Binding InstallLatestRelese}"/>
-										
-									</StackPanel>
-									
-									<TextBlock Text="The latest version is already installed!"
-											   Foreground="White"
-											   Opacity="0.75"
-											   FontSize="16"
-											   FontWeight="DemiBold"
-											   Padding="10"
-											   TextAlignment="Center"
-											   IsVisible="{Binding !IsUpdateAvailable}"
-											   HorizontalAlignment="Center"
-											   VerticalAlignment="Center"
-											   TextWrapping="Wrap"/>
-								</Panel>
-								
-							</StackPanel>
-						</Panel>
-					</c:SfaPanel>
-				</Panel>
-				<Panel.Effect>
-					<DropShadowEffect BlurRadius="10" OffsetX="0" OffsetY="5" Color="Black"/>
-				</Panel.Effect>
-			</Panel>
+			<c:UpdaterPanel Width="300"
+							HorizontalAlignment="Right"
+							VerticalAlignment="Top"
+							Margin="12 12"
+							IsVisible="{Binding IsUpdatePanelVisible}"
+							DataContext="{Binding}"/>
 		</c:AppHeaderMask>
 	</DockPanel>
 	

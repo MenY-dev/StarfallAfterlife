@@ -29,15 +29,15 @@ namespace StarfallAfterlife.Launcher.Controls
         public static readonly IValueConverter InGameStatusConverter =
             new FuncValueConverter<UserInGameStatus, string>(v => v switch
             {
-                UserInGameStatus.CharMainMenu => "In Shipyard",
-                UserInGameStatus.CharSearchingForGame => "Search BG",
-                UserInGameStatus.CharInBattle => "In Battle",
-                UserInGameStatus.CharInDiscovery => "In Discovery",
-                UserInGameStatus.RankedMainMenu => "In Ranked",
-                UserInGameStatus.RankedSearchingForGame => "Search Ranked",
-                UserInGameStatus.RankedInBattle => "In Ranked Battle",
-                UserInGameStatus.None => "Offline",
+                UserInGameStatus.CharMainMenu => App.GetString("s_type_user_game_status_char_main_menu"),
+                UserInGameStatus.CharSearchingForGame => App.GetString("s_type_user_game_status_char_searching_game"),
+                UserInGameStatus.CharInBattle => App.GetString("s_type_user_game_status_char_in_battle"),
+                UserInGameStatus.CharInDiscovery => App.GetString("s_type_user_game_status_char_in_discovery"),
+                UserInGameStatus.RankedMainMenu => App.GetString("s_type_user_game_status_ranked_main_menu"),
+                UserInGameStatus.RankedSearchingForGame => App.GetString("s_type_user_game_status_ranked_searching_game"),
+                UserInGameStatus.RankedInBattle => App.GetString("s_type_user_game_status_ranked_in_battle"),
+                UserInGameStatus.None => App.GetString("s_type_user_game_status_ranked_none"),
                 _ => v.ToString()
-            });
+            } ?? v.ToString());
     }
 }

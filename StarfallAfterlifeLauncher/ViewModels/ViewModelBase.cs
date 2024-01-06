@@ -42,7 +42,6 @@ namespace StarfallAfterlife.Launcher.ViewModels
 
         protected void RaisePropertyChanged(object oldValue, object newValue, [CallerMemberName] string name = null)
         {
-            Trace.WriteLine($"PropertyChanged (Name={name}, Owner={GetType().Name}, OldValue={oldValue}, NewValue={newValue})");
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
             OnPropertyChanged(oldValue, newValue, name);
         }

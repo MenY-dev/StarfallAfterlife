@@ -11,7 +11,7 @@
 		<Panel DockPanel.Dock="Top">
 			<StackPanel Orientation="Horizontal" Margin="15 10" Spacing="5">
 				<Label Content="a" FontFamily="{StaticResource IconsFont}" Classes="h3" VerticalContentAlignment="Center"/>
-				<Label Content="CREATE SERVER" Classes="h3" VerticalAlignment="Top" Margin="0 0 0 2" />
+				<Label Content="{DynamicResource s_page_cs_header}" Classes="h3" VerticalContentAlignment="Center" Margin="0 2" />
 			</StackPanel>
 			<StackPanel IsEnabled="{Binding !ServerStarted}" HorizontalAlignment="Right" Orientation="Horizontal" Spacing="10" Margin="0 0 10 0">
 			</StackPanel>
@@ -20,7 +20,7 @@
 		<StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right">
 
 			<c:SfaStartButton Command="{Binding ConnectToServer}"
-							  Content="CONNECT"
+							  Content="{DynamicResource s_page_cs_connect_btn}"
 							  IsVisible="{Binding ServerStarted}"
 							  IsEnabled="{Binding !AppVM.IsGameStarted}"
 							  VerticalAlignment="Stretch"
@@ -31,7 +31,7 @@
 			
 			<c:Switch Value="{Binding ServerStarted}">
 				<c:SfaStartButton Command="{Binding StartServer}"
-								  Content="START"
+								  Content="{DynamicResource s_page_cs_start_btn}"
 								  c:Switch.Case="{x:False}"
 								  VerticalAlignment="Stretch"
 								  HorizontalAlignment="Right"
@@ -40,7 +40,7 @@
 								  MinWidth="160"/>
 				
 				<c:SfaStartButton Command="{Binding StopServer}"
-								  Content="STOP"
+								  Content="{DynamicResource s_page_cs_stop_btn}"
 								  c:Switch.Case="{x:True}"
 								  VerticalAlignment="Stretch"
 								  HorizontalAlignment="Right"
@@ -60,10 +60,12 @@
 			</Rectangle>
 			<c:Separator Height="2" Opacity="0.8" VerticalAlignment="Bottom"/>
 			<Grid RowDefinitions="2* 0 1*" ColumnDefinitions="1* 2 1*">
-				<c:SfaPanel Grid.Row="0" Grid.Column="0" HeaderText="SETTINGS" ShowHeader="True" Margin="10 10 5 5">
+				<c:SfaPanel Grid.Row="0" Grid.Column="0"
+							HeaderText="{DynamicResource s_page_cs_settings_headet}"
+							ShowHeader="True" Margin="10 10 5 5">
 					<ScrollViewer>
 						<StackPanel IsEnabled="{Binding !ServerStarted}" Margin="10" Spacing="3">
-							<c:Property Text="Realm">
+							<c:Property Text="{DynamicResource s_page_cs_settings_realm_lbl}">
 								<c:SfaButton Height="30"  HorizontalAlignment="Stretch">
 									<c:SfaButton.Flyout>
 										<c:SfaMenuFlyout ItemsSource="{Binding AppVM.Realms}"
@@ -84,7 +86,7 @@
 									</Panel>
 								</c:SfaButton>
 							</c:Property>
-							<c:Property Text="Network" IsEnabled="True">
+							<c:Property Text="{DynamicResource s_page_cs_settings_network_lbl}">
 								<c:SfaTextBox Text="{Binding ServerAddress}" HorizontalAlignment="Stretch">
 									<c:SfaTextBox.InnerRightContent>
 										<c:SfaButton Classes="clear"
@@ -111,18 +113,23 @@
 									</c:SfaTextBox.InnerRightContent>
 								</c:SfaTextBox>
 							</c:Property>
-							<c:Property Text="Port">
+							<c:Property Text="{DynamicResource s_page_cs_settings_port_lbl}">
 								<c:SfaTextBox Text="{Binding ServerPort}"  HorizontalAlignment="Stretch"/>
 							</c:Property>
 							
-							<c:Property Text="Port Forwarding">
+							<c:Property Text="{DynamicResource s_page_cs_settings_port_forwarding_lbl}">
 								<c:SfaButton Height="30" HorizontalAlignment="Stretch">
 									<c:SfaButton.Flyout>
 										<c:SfaMenuFlyout Placement="BottomEdgeAlignedRight"
 														 SelectedItem="{Binding UsePortForwarding}">
 											<c:SfaMenuFlyout.ItemTemplate>
 												<DataTemplate>
-													<Label Foreground="White" Content="{Binding}" Width="{Binding $parent[Button].Bounds.Width}"/>
+													<c:Switch Value="{Binding}">
+														<Label c:Switch.Case="{x:True}" Width="{Binding $parent[Button].Bounds.Width}"
+															   Foreground="White" Content="{DynamicResource s_type_bool_true}"/>
+														<Label c:Switch.Case="{x:False}" Width="{Binding $parent[Button].Bounds.Width}"
+															   Foreground="White" Content="{DynamicResource s_type_bool_false}"/>
+													</c:Switch>
 												</DataTemplate>
 											</c:SfaMenuFlyout.ItemTemplate>
 											<x:True/>
@@ -130,16 +137,19 @@
 										</c:SfaMenuFlyout>
 									</c:SfaButton.Flyout>
 									<Panel>
-										<TextBlock Text="{Binding UsePortForwarding}" />
+										<c:Switch Value="{Binding UsePortForwarding}">
+											<TextBlock c:Switch.Case="{x:True}" Foreground="White" Text="{DynamicResource s_type_bool_true}"/>
+											<TextBlock c:Switch.Case="{x:False}" Foreground="White" Text="{DynamicResource s_type_bool_false}"/>
+										</c:Switch>
 										<c:DropdownIcon HorizontalAlignment="Right"/>
 									</Panel>
 								</c:SfaButton>
 							</c:Property>
 
-							<c:Property Text="Password">
+							<c:Property Text="{DynamicResource s_page_cs_settings_password_lbl}">
 								<Grid ColumnDefinitions="Auto 6 *">
-									<c:SfaCheckBox Grid.Column="0" Content="Enable" IsChecked="{Binding UsePassword}"/>
-									<c:SfaButton Grid.Column="2" Content="SET" Height="30"
+									<c:SfaCheckBox Grid.Column="0" Content="{DynamicResource s_page_cs_settings_password_use_lbl}" IsChecked="{Binding UsePassword}"/>
+									<c:SfaButton Grid.Column="2" Content="{DynamicResource s_page_cs_settings_password_set_btn}" Height="30"
 												 IsEnabled="{Binding UsePassword}" Command="{Binding ShowPasswordDialog}"
 												 HorizontalContentAlignment="Center" HorizontalAlignment="Stretch"/>
 								</Grid>
@@ -147,17 +157,17 @@
 						</StackPanel>
 					</ScrollViewer>
 				</c:SfaPanel>
-				<c:SfaPanel Grid.Row="2" Grid.Column="0" HeaderText="CONTROLS" ShowHeader="True"
+				<c:SfaPanel Grid.Row="2" Grid.Column="0" HeaderText="{DynamicResource s_page_cs_controls_headet}" ShowHeader="True"
 							Margin="10 5 5 10">
 					<ScrollViewer Padding="10">
 						<WrapPanel>
-							<c:SfaButton Content="OPEN BATTLEGROUNDS EDITOR"
+							<c:SfaButton Content="{DynamicResource s_page_cs_controls_bg_editor_btn}"
 										 Command="{Binding ShowBattlegroundsEditor}"
 										 IsEnabled="{Binding ServerStarted}"/>
 						</WrapPanel>
 					</ScrollViewer>
 				</c:SfaPanel>
-				<c:SfaPanel Grid.Row="0" Grid.RowSpan="3" Grid.Column="2" HeaderText="PLAYERS" ShowHeader="True"
+				<c:SfaPanel Grid.Row="0" Grid.RowSpan="3" Grid.Column="2" HeaderText="{DynamicResource s_page_cs_players_headet}" ShowHeader="True"
 							Margin="5 10 10 10">
 					<c:SfaListBox Padding="10 20 10 20"
 								  ItemsSource="{Binding Players}"

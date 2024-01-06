@@ -65,8 +65,8 @@
 							<DockPanel LastChildFill="True" Margin="6">
 								<Panel DockPanel.Dock="Bottom">
 									<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="6">
-										<c:SfaButton Content="OK" IsEnabled="{Binding $parent[Window].IsValid, Mode=OneWay}" Command="{Binding $parent[Window].OkPressed}"/>
-										<c:SfaButton Content="CANCELL" Command="{Binding $parent[Window].Close}"/>
+										<c:SfaButton Content="{DynamicResource s_app_ok_btn}" IsEnabled="{Binding $parent[Window].IsValid, Mode=OneWay}" Command="{Binding $parent[Window].OkPressed}"/>
+										<c:SfaButton Content="{DynamicResource s_app_cancell_btn}" Command="{Binding $parent[Window].Close}"/>
 									</StackPanel>
 								</Panel>
 								<Panel>

@@ -65,7 +65,7 @@ namespace StarfallAfterlife.Launcher.ViewModels
         {
             new EditNamePopup()
             {
-                Title = "Enter Room Name",
+                Title = App.GetString("s_bg_editor_dialog_enter_room_name"),
                 TextFilter = @"([\s]*[\S]+[\s]*)+$",
             }.ShowDialog("BG Room")
             .ContinueWith(t => Dispatcher.UIThread.Invoke(() =>
@@ -87,8 +87,8 @@ namespace StarfallAfterlife.Launcher.ViewModels
             {
                 var dialog = new SfaMessageBox()
                 {
-                    Text = $"Delete Room {vm.Name}?",
-                    Title = "Delete Room...",
+                    Text = string.Format(App.GetString("s_bg_editor_dialog_delete_room_msg") ?? string.Empty, vm.Name),
+                    Title = App.GetString("s_bg_editor_dialog_delete_room_title"),
                     Buttons = MessageBoxButton.Delete |
                               MessageBoxButton.Cancell
                 };

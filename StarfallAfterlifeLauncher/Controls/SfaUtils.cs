@@ -3,6 +3,7 @@ using Avalonia.Media;
 using StarfallAfterlife.Bridge.Database;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -50,7 +51,18 @@ namespace StarfallAfterlife.Launcher.Controls
         public static readonly IValueConverter FactionToBrushConverter =
             new FuncValueConverter<Faction, Brush>(GetFactionBrush);
 
+        public static readonly IValueConverter LocalizationKeyToNameConverter =
+            new FuncValueConverter<object, string>(v =>
+            {
+                try
+                {
+                    var culture = CultureInfo.GetCultureInfo(v?.ToString());
+                    return culture.TextInfo.ToTitleCase(culture.DisplayName);
+                }
+                catch { }
 
+                return v?.ToString();
+            });
 
         public static readonly IValueConverter HardpointsToShipSpecConverter =
             new FuncValueConverter<IEnumerable<HardpointInfo>, string[]>(hs => hs

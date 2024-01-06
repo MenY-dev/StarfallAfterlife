@@ -11,7 +11,7 @@
 		<Panel DockPanel.Dock="Top">
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="15 10" Spacing="5">
 				<Label Content="d" FontFamily="{StaticResource IconsFont}" Classes="h3" VerticalContentAlignment="Center"/>
-				<Label Content="LOG" Classes="h3" VerticalAlignment="Top" Margin="0 0 0 2" />
+				<Label Content="{DynamicResource s_page_log_header}" Classes="h3" VerticalContentAlignment="Center" Margin="0 2" />
 			</StackPanel>
 			<c:Separator Height="2" Opacity="0.8" VerticalAlignment="Bottom"/>
 		</Panel>

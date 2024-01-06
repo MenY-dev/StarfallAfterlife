@@ -14,7 +14,7 @@
 		<Panel DockPanel.Dock="Top">
 			<StackPanel Orientation="Horizontal" Margin="15 10" Spacing="5">
 				<Label Content="c" FontFamily="{StaticResource IconsFont}" Classes="h3" VerticalContentAlignment="Center"/>
-				<Label Content="SINGLE PLAYER" Classes="h3" VerticalAlignment="Top" Margin="0 0 0 2" />
+				<Label Content="{DynamicResource s_page_sp_header}" Classes="h3" VerticalContentAlignment="Center" Margin="0 2" />
 			</StackPanel>
 			<StackPanel HorizontalAlignment="Right"
 						Orientation="Horizontal"
@@ -22,13 +22,13 @@
 						Margin="0 0 10 0"
 						IsEnabled="{Binding !AppVM.IsGameStarted}">
 				
-				<c:SfaButton Content="DELETE REALM"
+				<c:SfaButton Content="{DynamicResource s_page_sp_delete_realm_btn}"
 							 Background="Red"
 							 Foreground="White" BorderBrush="Red"
 							 HorizontalAlignment="Left"
 							 Command="{Binding DeleteSelectedRealm}"/>
 				
-				<c:SfaButton Content="CREATE NEW REALM"
+				<c:SfaButton Content="{DynamicResource s_page_sp_add_realm_btn}"
 							 Foreground="White"
 							 HorizontalAlignment="Right"
 							 Command="{Binding CreateNewRealm}"/>
@@ -37,7 +37,7 @@
 		</Panel>
 		<Panel DockPanel.Dock="Bottom">
 			<c:SfaStartButton Command="{Binding StartGame}"
-							  Content="PLAY"
+							  Content="{DynamicResource s_page_sp_play_btn}"
 							  IsEnabled="{Binding !AppVM.IsGameStarted}"
 							  VerticalAlignment="Stretch"
 							  HorizontalAlignment="Right"
@@ -75,7 +75,7 @@
 									   IsVisible="{Binding IsActiveSession}"
 									   VerticalAlignment="Center"
 									   RenderTransform="scaleX(2) scaleY(2)"
-									   ToolTip.Tip="Active Session"/>
+									   ToolTip.Tip="{DynamicResource s_tooltip_active_session}"/>
 							</StackPanel>
 						</Grid>
 					</DataTemplate>

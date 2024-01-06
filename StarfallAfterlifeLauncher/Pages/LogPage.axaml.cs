@@ -89,7 +89,11 @@ namespace StarfallAfterlife.Launcher.Pages
                         _releseStarted = false;
                     }
 
-                    Dispatcher.UIThread.Invoke(() => SendToOutput(output.ToString()));
+                    try
+                    {
+                        Dispatcher.UIThread.Invoke(() => SendToOutput(output.ToString()));
+                    }
+                    catch { }
                 });
             }
 

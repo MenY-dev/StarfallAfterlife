@@ -24,11 +24,17 @@ namespace StarfallAfterlife.Launcher.Controls
             set => SetValue(ExpandProgressProperty, value);
         }
 
+        private double _expandedWidth = 0;
+
         protected override Size ArrangeOverride(Size finalSize)
         {
             var t = double.Clamp(ExpandProgress, 0, 1);
-            var maxSize = MeasureOverride(new(double.MaxValue, finalSize.Height));
-            return base.ArrangeOverride(new(finalSize.Width * (1 - t) + maxSize.Width * t, finalSize.Height));
+            return base.ArrangeOverride(new(finalSize.Width * (1 - t) + _expandedWidth * t, finalSize.Height));
+        }
+
+        protected void UpdateExpandedWidth()
+        {
+            _expandedWidth = MeasureOverride(new(double.MaxValue, Bounds.Height)).Width;
         }
 
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -36,7 +42,10 @@ namespace StarfallAfterlife.Launcher.Controls
             base.OnPropertyChanged(change);
 
             if (change.Property == ExpandProgressProperty)
+            {
+                UpdateExpandedWidth();
                 UpdateLayout();
+            }
         }
     }
 }

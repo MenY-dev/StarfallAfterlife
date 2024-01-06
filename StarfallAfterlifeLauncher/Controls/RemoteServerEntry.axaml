@@ -35,14 +35,14 @@
 					   VerticalAlignment="Center"
 					   IsVisible="{Binding NeedPassword}" 
 					   RenderTransform="scaleX(1.5)scaleY(1.5)"
-					   ToolTip.Tip="Password required."/>
+					   ToolTip.Tip="{DynamicResource s_tooltip_password_required}"/>
 			
 			<TextBlock Text="⚠"
 					   VerticalAlignment="Center"
 					   IsVisible="{Binding IsBadVersion}"
 					   Foreground="Red"
 					   RenderTransform="scaleX(1.5)scaleY(1.5)"
-					   ToolTip.Tip="Incompatible server version.">
+					   ToolTip.Tip="{DynamicResource s_tooltip_bad_server_version}">
 
 			</TextBlock>
 			

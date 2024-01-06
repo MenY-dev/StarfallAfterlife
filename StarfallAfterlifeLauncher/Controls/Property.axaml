@@ -4,10 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="StarfallAfterlife.Launcher.Controls.Property"
-			 Text="123456789">
+			 Text="123456789"
+			 LabelWidth="2*"
+			 ContentWidth="3*">
+	
 	<UserControl.Template>
 		<ControlTemplate>
-			<Grid ColumnDefinitions="2* 3*" Background="{TemplateBinding Background}">
+			<Grid Name="Wrapper" Background="{TemplateBinding Background}">
 				<Label Grid.Column="0" FontSize="16" FontWeight="Normal" Foreground="White" VerticalContentAlignment="Center" Content="{TemplateBinding Text}" />
 				<ContentPresenter x:Name="PART_ContentPresenter"
 								  Grid.Column="1"

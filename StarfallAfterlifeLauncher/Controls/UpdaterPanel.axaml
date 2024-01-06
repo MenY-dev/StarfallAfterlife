@@ -1,0 +1,107 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:c="using:StarfallAfterlife.Launcher.Controls"
+			 xmlns:vm="using:StarfallAfterlife.Launcher.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="400"
+             x:Class="StarfallAfterlife.Launcher.Controls.UpdaterPanel">
+
+	<Design.DataContext>
+		<vm:AppViewModel/>
+	</Design.DataContext>
+
+	<UserControl.Effect>
+		<DropShadowEffect BlurRadius="10" OffsetX="0" OffsetY="5" Color="Black"/>
+	</UserControl.Effect>
+	
+	<Panel>
+		<Rectangle Fill="{DynamicResource AccentColor}" Opacity="0.5" />
+		<Rectangle Fill="{DynamicResource PageMainColor}" Opacity="0.8" />
+
+		<c:SfaPanel>
+			<Panel>
+				<StackPanel>
+					<Grid ColumnDefinitions="* Auto">
+
+						<StackPanel Grid.Column="0" Margin="10 2"
+									Spacing="0" Orientation="Horizontal"
+									VerticalAlignment="Center">
+							
+							<TextBlock Text="{DynamicResource s_updater_current_ver_msg}" VerticalAlignment="Center"/>
+							<TextBlock Text="{Binding CurrentFullVersion}" VerticalAlignment="Center"/>
+						</StackPanel>
+						
+						<c:SfaButton Grid.Column="2"
+									 Classes="clear"
+									 Content="×"
+									 FontSize="20"
+									 Foreground="White"
+									 Command="{Binding ToggleUpdatePanel}"
+									 Width="36"
+									 HorizontalAlignment="Right"
+									 VerticalAlignment="Top"
+									 HorizontalContentAlignment="Center"
+									 VerticalContentAlignment="Center"/>
+					</Grid>
+					<c:Separator Height="2" Opacity="0.5"/>
+
+					<Panel MinHeight="100" MaxHeight="400">
+						<Rectangle Fill="Black" Opacity="0.75">
+							<Rectangle.OpacityMask>
+								<LinearGradientBrush StartPoint="0% 0%" EndPoint="0% 100%">
+									<GradientStop Offset="0" Color="#FFFFFFFF"/>
+									<GradientStop Offset="1" Color="#00FFFFFF"/>
+								</LinearGradientBrush>
+							</Rectangle.OpacityMask>
+						</Rectangle>
+						<StackPanel IsVisible="{Binding IsUpdateAvailable}" Spacing="6" Margin="10">
+
+							<ScrollViewer>
+								<StackPanel  Spacing="6">
+									<Panel>
+										<Rectangle Fill="{DynamicResource HoloColor}" Opacity="0.1"
+												   HorizontalAlignment="Stretch"
+												   VerticalAlignment="Stretch"/>
+
+										<TextBlock Foreground="{DynamicResource AccentColor}"
+											   FontSize="16" FontWeight="DemiBold"
+											   HorizontalAlignment="Center"
+											   Padding="2"
+											   Text="{DynamicResource s_updater_new_ver_msg}"/>
+									</Panel>
+
+									<TextBlock Foreground="White" TextWrapping="Wrap"
+											   Text="{Binding LatestRelese.ReleseName}"/>
+
+									<TextBlock Foreground="White" TextWrapping="Wrap" Opacity="0.75"
+											   Text="{Binding LatestRelese.Description}"
+											   Padding="5 0 0 0"/>
+								</StackPanel>
+							</ScrollViewer>
+
+							<c:SfaButton Content="{DynamicResource s_updater_install_btn}"
+										 HorizontalAlignment="Stretch"
+										 HorizontalContentAlignment="Center"
+										 Command="{Binding InstallLatestRelese}"/>
+
+						</StackPanel>
+
+						<TextBlock Text="{DynamicResource s_updater_no_update_msg}"
+								   Foreground="White"
+								   Opacity="0.75"
+								   FontSize="16"
+								   FontWeight="DemiBold"
+								   Padding="10"
+								   TextAlignment="Center"
+								   IsVisible="{Binding !IsUpdateAvailable}"
+								   HorizontalAlignment="Center"
+								   VerticalAlignment="Center"
+								   TextWrapping="Wrap"/>
+					</Panel>
+
+				</StackPanel>
+			</Panel>
+		</c:SfaPanel>
+	</Panel>
+</UserControl>

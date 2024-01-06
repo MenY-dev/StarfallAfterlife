@@ -34,23 +34,23 @@
 			
 			<DockPanel LastChildFill="True">
 				<Panel Classes="header" DockPanel.Dock="Top" Margin="20 10">
-					<Label Content="SELECT PROFILE" FontSize="16" FontWeight="DemiBold" Foreground="White"/>
+					<Label Content="{DynamicResource s_page_pe_header}" FontSize="16" FontWeight="DemiBold" Foreground="White"/>
 				</Panel>
 				<Panel Classes="footer" DockPanel.Dock="Bottom" Margin="20 10 20 20">
 					<Panel HorizontalAlignment="Stretch">
 						<StackPanel HorizontalAlignment="Right" Spacing="10" Orientation="Horizontal">
-							<c:SfaButton Content="SELECT" Command="{Binding SelectProfile}"/>
-							<c:SfaButton Content="CANCELL" Command="{Binding CancellSelection}"/>
+							<c:SfaButton Content="{DynamicResource s_app_select_btn}" Command="{Binding SelectProfile}"/>
+							<c:SfaButton Content="{DynamicResource s_app_cancell_btn}" Command="{Binding CancellSelection}"/>
 						</StackPanel>
 						<StackPanel HorizontalAlignment="Left" Spacing="10" Orientation="Horizontal">
-							<c:SfaButton Content="DELETE" Command="{Binding DeleteProfile}" Background="Red" BorderBrush="Red"/>
-							<c:SfaButton Content="NEW PROFILE" Command="{Binding CreateNewProfile}"/>
+							<c:SfaButton Content="{DynamicResource s_app_delete_btn}" Command="{Binding DeleteProfile}" Background="Red" BorderBrush="Red"/>
+							<c:SfaButton Content="{DynamicResource s_page_pe_new_profile_btn}" Command="{Binding CreateNewProfile}"/>
 						</StackPanel>
 					</Panel>
 				</Panel>
 				<Panel Classes="profiles">
 					<Grid RowDefinitions="*" ColumnDefinitions="1*" HorizontalAlignment="Stretch">
-						<c:SfaPanel ShowHeader="True" HeaderText="PROFILES" Grid.Column="0" Margin="20, 0, 10, 0">
+						<c:SfaPanel ShowHeader="True" HeaderText="{DynamicResource s_page_pe_profiles_panel_title}" Grid.Column="0" Margin="20, 0, 10, 0">
 							<c:SfaListBox Padding="10 20 10 20" ItemsSource="{Binding Profiles}" SelectionMode="AlwaysSelected" SelectedItem="{Binding SelectedProfile}">
 								<c:SfaListBox.ItemTemplate>
 									<DataTemplate>

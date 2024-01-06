@@ -109,6 +109,27 @@ namespace StarfallAfterlife.Launcher.ViewModels
             }
         }
 
+        public ICollection<object> Localizations => App.Localizations.Keys;
+
+        public string CurrentLocalization
+        {
+            get => Launcher?.Localization;
+            set
+            {
+                if (Launcher is SfaLauncher launcher)
+                {
+                    if (launcher.Localization == value &&
+                        App.CurrentLocalization == value)
+                        return;
+
+                    SetAndRaise(launcher.Localization, value,
+                        v => launcher.Localization = App.CurrentLocalization = v);
+
+                    launcher.SaveSettings();
+                }
+            }
+        }
+
         private RealmInfoViewModel _selectedLocalRealm;
         private RealmInfoViewModel _selectedServerRealm;
         private bool _isGameStarted;
@@ -280,11 +301,8 @@ namespace StarfallAfterlife.Launcher.ViewModels
         {
             return Dispatcher.UIThread.Invoke(
                 () => SfaMessageBox.ShowDialog(
-                    "Active sessions have been found in other realms. " +
-                    "These sessions must be dropped to continue. " +
-                    "The ships will be sent for repairs, and the contents of their holds will be lost. " +
-                    "\r\n\r\nDrop sessions?",
-                    "Drop active sessions?",
+                    App.GetString("s_dialog_active_session_msg"),
+                    App.GetString("s_dialog_active_session_title"),
                     MessageBoxButton.Yes | MessageBoxButton.Cancell)
                 .ContinueWith(t => t.Result == MessageBoxButton.Yes));
         }
@@ -417,8 +435,8 @@ namespace StarfallAfterlife.Launcher.ViewModels
             {
                 var popup = new SfaMessageBox()
                 {
-                    Title = "Game starting..",
-                    Text = "Game starting..",
+                    Title = App.GetString("s_dialog_game_starting_title"),
+                    Text = App.GetString("s_dialog_game_starting_loading"),
                     Buttons = MessageBoxButton.Undefined,
                 };
 
@@ -430,7 +448,7 @@ namespace StarfallAfterlife.Launcher.ViewModels
             {
                 Dispatcher.UIThread.Invoke(() =>
                 {
-                    gameLoadingPopup.Text = s;
+                    gameLoadingPopup.Text = App.GetString("s_dialog_game_starting_" + s);
                 });
             });
 
@@ -472,8 +490,8 @@ namespace StarfallAfterlife.Launcher.ViewModels
             {
                 var popup = new SfaMessageBox()
                 {
-                    Title = "Game starting..",
-                    Text = "Game starting..",
+                    Title = App.GetString("s_dialog_game_starting_title"),
+                    Text = App.GetString("s_dialog_game_starting_loading"),
                     Buttons = MessageBoxButton.Undefined,
                 };
 
@@ -485,7 +503,7 @@ namespace StarfallAfterlife.Launcher.ViewModels
             {
                 Dispatcher.UIThread.Invoke(() =>
                 {
-                    gameLoadingPopup.Text = s;
+                    gameLoadingPopup.Text = App.GetString("s_dialog_game_starting_" + s);
                 });
             });
 
@@ -551,8 +569,8 @@ namespace StarfallAfterlife.Launcher.ViewModels
                 var name = realm.Realm?.Name ?? "Realm";
 
                 return SfaMessageBox.ShowDialog(
-                    name + " will be removed. This action cannot be undone!",
-                    "DELETE REALM",
+                    string.Format(App.GetString("s_dialog_delete_realm_msg") ?? string.Empty, name ?? string.Empty),
+                    string.Format(App.GetString("s_dialog_delete_realm_title") ?? string.Empty, name ?? string.Empty),
                     MessageBoxButton.Cancell |
                     MessageBoxButton.Delete).
                     ContinueWith(t =>

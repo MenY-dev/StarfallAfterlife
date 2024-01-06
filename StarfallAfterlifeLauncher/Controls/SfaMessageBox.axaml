@@ -42,12 +42,12 @@
 		<DockPanel LastChildFill="True" Margin="0">
 			<Panel DockPanel.Dock="Bottom" Margin="6">
 				<StackPanel Name="buttons" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="6">
-					<c:SfaButton Content="OK" Command="{Binding #window.OnButtonClick}" CommandParameter="{x:Static c:MessageBoxButton.Ok}"/>
-					<c:SfaButton Content="YES" Command="{Binding #window.OnButtonClick}" CommandParameter="{x:Static c:MessageBoxButton.Yes}"/>
-					<c:SfaButton Content="NO" Command="{Binding #window.OnButtonClick}" CommandParameter="{x:Static c:MessageBoxButton.No}"/>
-					<c:SfaButton Content="DELETE" Command="{Binding #window.OnButtonClick}" CommandParameter="{x:Static c:MessageBoxButton.Delete}" Background="Red" BorderBrush="Red"/>
-					<c:SfaButton Content="CANCELL" Command="{Binding #window.OnButtonClick}" CommandParameter="{x:Static c:MessageBoxButton.Cancell}"/>
-					<c:SfaButton Content="CLOSE" Command="{Binding #window.OnButtonClick}" CommandParameter="{x:Static c:MessageBoxButton.Close}"/>
+					<c:SfaButton Content="{DynamicResource s_app_ok_btn}" Command="{Binding #window.OnButtonClick}" CommandParameter="{x:Static c:MessageBoxButton.Ok}"/>
+					<c:SfaButton Content="{DynamicResource s_app_yes_btn}" Command="{Binding #window.OnButtonClick}" CommandParameter="{x:Static c:MessageBoxButton.Yes}"/>
+					<c:SfaButton Content="{DynamicResource s_app_no_btn}" Command="{Binding #window.OnButtonClick}" CommandParameter="{x:Static c:MessageBoxButton.No}"/>
+					<c:SfaButton Content="{DynamicResource s_app_delete_btn}" Command="{Binding #window.OnButtonClick}" CommandParameter="{x:Static c:MessageBoxButton.Delete}" Background="Red" BorderBrush="Red"/>
+					<c:SfaButton Content="{DynamicResource s_app_cancell_btn}" Command="{Binding #window.OnButtonClick}" CommandParameter="{x:Static c:MessageBoxButton.Cancell}"/>
+					<c:SfaButton Content="{DynamicResource s_app_close_btn}" Command="{Binding #window.OnButtonClick}" CommandParameter="{x:Static c:MessageBoxButton.Close}"/>
 				</StackPanel>
 			</Panel>
 			<Panel>

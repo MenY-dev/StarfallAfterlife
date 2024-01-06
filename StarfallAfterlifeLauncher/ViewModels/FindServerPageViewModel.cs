@@ -70,7 +70,9 @@ namespace StarfallAfterlife.Launcher.ViewModels
                         if (AddServer(ip.ToString()) is var(IsSuccess, Reason) &&
                             IsSuccess == false)
                         {
-                            SfaMessageBox.ShowDialog(Reason, "ERROR");
+                            SfaMessageBox.ShowDialog(
+                                App.GetString("s_dialog_server_connect_add_" + (Reason ?? string.Empty)),
+                                App.GetString("s_dialog_server_connect_add_error_title"));
                         }
                     }
                 })));
@@ -199,8 +201,8 @@ namespace StarfallAfterlife.Launcher.ViewModels
             var name = server.Name ?? server.Address ?? "server";
 
             SfaMessageBox.ShowDialog(
-                $"Delete {name}? This action cannot be undone!",
-                $"Delete {name}?",
+                string.Format(App.GetString("s_dialog_server_connect_remove_server_msg") ?? string.Empty, name),
+                string.Format(App.GetString("s_dialog_server_connect_remove_server_title") ?? string.Empty, name),
                 MessageBoxButton.Delete | MessageBoxButton.Cancell)
                 .ContinueWith(t => Dispatcher.UIThread.Invoke(() =>
                 {
@@ -223,14 +225,16 @@ namespace StarfallAfterlife.Launcher.ViewModels
                 var appVM = AppVM;
 
                 if (server is null || server.Info is null || appVM is null)
-                    SfaMessageBox.ShowDialog("Server not selected!", "Error");
+                    SfaMessageBox.ShowDialog(
+                        App.GetString("s_dialog_server_connect_error_not_selected"),
+                        App.GetString("s_dialog_server_connect_error_title"));
 
                 var serverName = server.Name ?? server.Address ?? "server";
                 var connectionCancellation = new CancellationTokenSource();
                 var connectingDialog = new SfaMessageBox
                 {
-                    Title = $"Connecting...",
-                    Text = $"Connecting to {serverName}...",
+                    Title = App.GetString("s_dialog_server_connect_title"),
+                    Text = string.Format(App.GetString("s_dialog_server_connect_msg") ?? string.Empty, serverName),
                     Buttons = MessageBoxButton.Cancell
                 };
 
@@ -261,7 +265,9 @@ namespace StarfallAfterlife.Launcher.ViewModels
                             t.Result == false)
                         {
                             Dispatcher.UIThread.Invoke(() =>
-                                SfaMessageBox.ShowDialog("Server offline!", "Error"));
+                                SfaMessageBox.ShowDialog(
+                                    App.GetString("s_dialog_server_connect_error_offline"),
+                                    App.GetString("s_dialog_server_connect_error_title")));
 
                             return false;
                         }
@@ -278,7 +284,8 @@ namespace StarfallAfterlife.Launcher.ViewModels
 
                             Dispatcher.UIThread.Invoke(() =>
                                 SfaMessageBox.ShowDialog(
-                                    "The launcher version does not match the server version.", "Error"));
+                                    App.GetString("s_dialog_server_connect_error_version"),
+                                    App.GetString("s_dialog_server_connect_error_title")));
 
                             return false;
                         }
@@ -325,11 +332,9 @@ namespace StarfallAfterlife.Launcher.ViewModels
                                     if (session.IsSuccess == false &&
                                         session.Reason is string reason &&
                                         reason != "auth_cancelled")
-                                        SfaMessageBox.ShowDialog(reason switch
-                                        {
-                                            "bad_password" => "Invalid password!",
-                                            _ => reason,
-                                        }, "Error");
+                                        SfaMessageBox.ShowDialog(
+                                            App.GetString("s_dialog_server_connect_error_" + (reason ?? string.Empty)) ?? reason,
+                                            App.GetString("s_dialog_server_connect_error_title"));
                                 }));
                         }
                     });
@@ -337,7 +342,7 @@ namespace StarfallAfterlife.Launcher.ViewModels
             }
             catch (Exception e)
             {
-                SfaMessageBox.ShowDialog(e.Message, "Error");
+                SfaMessageBox.ShowDialog(e.Message, App.GetString("s_dialog_server_connect_error_title"));
             }
         }
     }

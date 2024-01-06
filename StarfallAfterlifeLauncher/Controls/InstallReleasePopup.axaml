@@ -5,12 +5,12 @@
             xmlns:c="using:StarfallAfterlife.Launcher.Controls"
             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="200"
             Width="400" Height="200"
-			Title="Downloading..."
+			Title="{DynamicResource s_dialog_install_release_downloading_lbl}"
             x:Class="StarfallAfterlife.Launcher.Controls.InstallReleasePopup">
 	
 	<Grid RowDefinitions="Auto 2 * 2 Auto">
 		<Panel Grid.Row="0">
-			<TextBlock Text="Downloading..." Foreground="White"
+			<TextBlock Text="{DynamicResource s_dialog_install_release_downloading_lbl}" Foreground="White"
 					   FontWeight="DemiBold" FontSize="16" Margin="10"/>
 		</Panel>
 		<c:Separator Grid.Row="1" Opacity="0.5"/>

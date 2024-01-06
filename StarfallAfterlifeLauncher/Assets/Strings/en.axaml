@@ -1,0 +1,140 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:sys="using:System">
+
+	<sys:String x:Key="s_app_ok_btn">OK</sys:String>
+	<sys:String x:Key="s_app_yes_btn">YES</sys:String>
+	<sys:String x:Key="s_app_no_btn">NO</sys:String>
+	<sys:String x:Key="s_app_delete_btn">DELETE</sys:String>
+	<sys:String x:Key="s_app_cancell_btn">CANCELL</sys:String>
+	<sys:String x:Key="s_app_close_btn">CLOSE</sys:String>
+	<sys:String x:Key="s_app_back_btn">BACK</sys:String>
+	<sys:String x:Key="s_app_select_btn">SELECT</sys:String>
+	
+	<sys:String x:Key="s_page_sp_header">SINGLE PLAYER</sys:String>
+	<sys:String x:Key="s_page_sp_add_realm_btn">CREATE REALM</sys:String>
+	<sys:String x:Key="s_page_sp_delete_realm_btn">DELETE REALM</sys:String>
+	<sys:String x:Key="s_page_sp_play_btn">PLAY</sys:String>
+	
+	<sys:String x:Key="s_page_fs_header">FIND SERVER</sys:String>
+	<sys:String x:Key="s_page_fs_update_all_btn">UPDATE ALL</sys:String>
+	<sys:String x:Key="s_page_fs_add_server_btn">ADD SERVER</sys:String>
+	<sys:String x:Key="s_page_fs_connect_btn">CONNECT</sys:String>
+	<sys:String x:Key="s_page_fs_info_name_lbl">Name</sys:String>
+	<sys:String x:Key="s_page_fs_info_address_lbl">Address</sys:String>
+	<sys:String x:Key="s_page_fs_info_status_lbl">Status</sys:String>
+	<sys:String x:Key="s_page_fs_info_server_ver_lbl">Version</sys:String>
+	<sys:String x:Key="s_page_fs_info_need_password_lbl">Password</sys:String>
+	<sys:String x:Key="s_page_fs_info_description_lbl">Description</sys:String>
+	<sys:String x:Key="s_page_fs_info_update_btn">UPDATE</sys:String>
+	<sys:String x:Key="s_page_fs_info_delete_btn">DELETE</sys:String>
+
+	<sys:String x:Key="s_page_cs_header">CREATE SERVER</sys:String>
+	<sys:String x:Key="s_page_cs_settings_headet">SETTINGS</sys:String>
+	<sys:String x:Key="s_page_cs_settings_realm_lbl">Realm</sys:String>
+	<sys:String x:Key="s_page_cs_settings_network_lbl">Network</sys:String>
+	<sys:String x:Key="s_page_cs_settings_port_lbl">Port</sys:String>
+	<sys:String x:Key="s_page_cs_settings_port_forwarding_lbl">Port Forwarding</sys:String>
+	<sys:String x:Key="s_page_cs_settings_password_lbl">Password</sys:String>
+	<sys:String x:Key="s_page_cs_settings_password_use_lbl">Use</sys:String>
+	<sys:String x:Key="s_page_cs_settings_password_set_btn">SET</sys:String>
+	<sys:String x:Key="s_page_cs_controls_headet">Controls</sys:String>
+	<sys:String x:Key="s_page_cs_controls_bg_editor_btn">BATTLEGROUNDS EDITOR</sys:String>
+	<sys:String x:Key="s_page_cs_players_headet">PLAYERS</sys:String>
+	<sys:String x:Key="s_page_cs_start_btn">START</sys:String>
+	<sys:String x:Key="s_page_cs_stop_btn">STOP</sys:String>
+	<sys:String x:Key="s_page_cs_connect_btn">CONNECT</sys:String>
+	<sys:String x:Key="s_page_cs_dialog_starting">Starting the server...</sys:String>
+
+	<sys:String x:Key="s_page_log_header">LOG</sys:String>
+
+	<sys:String x:Key="s_page_settings_header">SETTINGS</sys:String>
+	<sys:String x:Key="s_page_settings_game_dir_lbl">Game Directory</sys:String>
+	<sys:String x:Key="s_page_settings_lang_lbl">Interface language</sys:String>
+
+	<sys:String x:Key="s_page_pe_header">SELECT PROFILE</sys:String>
+	<sys:String x:Key="s_page_pe_new_profile_btn">NEW PROFILE</sys:String>
+	<sys:String x:Key="s_page_pe_profiles_panel_title">PROFILES</sys:String>
+
+	<sys:String x:Key="s_updater_current_ver_msg">Current: </sys:String>
+	<sys:String x:Key="s_updater_new_ver_msg">NEW VERSION</sys:String>
+	<sys:String x:Key="s_updater_install_btn">INSTALL</sys:String>
+	<sys:String x:Key="s_updater_no_update_msg">The latest version is already installed</sys:String>
+
+	<sys:String x:Key="s_dialog_delete_profile_title">DELETE PROFILE</sys:String>
+	<sys:String x:Key="s_dialog_delete_profile_label">{0} will be removed. This action cannot be undone!</sys:String>
+
+	<sys:String x:Key="s_dialog_edit_name_error">Invalid symbols!</sys:String>
+
+	<sys:String x:Key="s_dialog_add_server_title">ADD SERVER</sys:String>
+	<sys:String x:Key="s_dialog_add_server_label">Address</sys:String>
+
+	<sys:String x:Key="s_dialog_create_profile_title">CREATE NEW PROFILE</sys:String>
+	<sys:String x:Key="s_dialog_create_profile_label">Profile name</sys:String>
+
+	<sys:String x:Key="s_dialog_create_realm_title">CREATE NEW REALM</sys:String>
+	<sys:String x:Key="s_dialog_create_realm_label">Realm name</sys:String>
+	
+	<sys:String x:Key="s_dialog_enter_password_title">ENTER PASSWORD</sys:String>
+	<sys:String x:Key="s_dialog_enter_password_label">Password</sys:String>
+
+	<sys:String x:Key="s_dialog_install_release_downloading_lbl">Downloading...</sys:String>
+
+	<sys:String x:Key="s_dialog_active_session_title">Drop active sessions?</sys:String>
+	<sys:String x:Key="s_dialog_active_session_msg">Active sessions have been found in other realms. These sessions must be dropped to continue. The ships will be sent for repairs, and the contents of their holds will be lost.&#x0d;&#x0a;&#x0d;&#x0a; Drop active sessions?</sys:String>
+
+	<sys:String x:Key="s_dialog_game_starting_title">Game starting..</sys:String>
+	<sys:String x:Key="s_dialog_game_starting_loading">Loading...</sys:String>
+	<sys:String x:Key="s_dialog_game_starting_connecting">Connecting...</sys:String>
+	<sys:String x:Key="s_dialog_game_starting_auth">Auth...</sys:String>
+	<sys:String x:Key="s_dialog_game_starting_auth_cancelled">Auth cancelled!</sys:String>
+	<sys:String x:Key="s_dialog_game_starting_bad_password">Invalid password!</sys:String>
+	<sys:String x:Key="s_dialog_game_starting_load_galaxy">Loading map...</sys:String>
+	<sys:String x:Key="s_dialog_game_starting_sync_player_data">Sync player data...</sys:String>
+	<sys:String x:Key="s_dialog_game_starting_start_game">Starting the game...</sys:String>
+
+	<sys:String x:Key="s_dialog_server_connect_title">Connecting...</sys:String>
+	<sys:String x:Key="s_dialog_server_connect_msg">Connecting to {0}...</sys:String>
+	<sys:String x:Key="s_dialog_server_connect_error_title">Error</sys:String>
+	<sys:String x:Key="s_dialog_server_connect_error_not_selected">Server not selected!</sys:String>
+	<sys:String x:Key="s_dialog_server_connect_error_offline">Server offline!</sys:String>
+	<sys:String x:Key="s_dialog_server_connect_error_version">The launcher version does not match the server version!</sys:String>
+	<sys:String x:Key="s_dialog_server_connect_error_bad_password">Invalid password!</sys:String>
+	<sys:String x:Key="s_dialog_server_connect_remove_server_title">Delete {0}?</sys:String>
+	<sys:String x:Key="s_dialog_server_connect_remove_server_msg">Delete {0}? This action cannot be undone!</sys:String>
+	<sys:String x:Key="s_dialog_server_connect_add_error_title">Error</sys:String>
+	<sys:String x:Key="s_dialog_server_connect_add_bad_address">Invalid address!</sys:String>
+	<sys:String x:Key="s_dialog_server_connect_add_already_exist">Server already added!</sys:String>
+	<sys:String x:Key="s_dialog_server_connect_add_internal_error">Internal error!</sys:String>
+
+	<sys:String x:Key="s_dialog_delete_realm_title">Deleting {0}</sys:String>
+	<sys:String x:Key="s_dialog_delete_realm_msg">{0} will be removed. This action cannot be undone!</sys:String>
+
+	<sys:String x:Key="s_bg_editor_title">Battlegrounds Editor</sys:String>
+	<sys:String x:Key="s_bg_editor_add_room_btn">ADD ROON</sys:String>
+	<sys:String x:Key="s_bg_editor_add_player_btn">ADD PLAYER</sys:String>
+	<sys:String x:Key="s_bg_editor_start_bg_btn">START BATTLE</sys:String>
+	<sys:String x:Key="s_bg_editor_dialog_enter_room_name">Room Name</sys:String>
+	<sys:String x:Key="s_bg_editor_dialog_delete_room_title">Deleting a Room</sys:String>
+	<sys:String x:Key="s_bg_editor_dialog_delete_room_msg">Delete {0}?</sys:String>
+	<sys:String x:Key="s_bg_editor_field_map_lbl">Map</sys:String>
+	<sys:String x:Key="s_bg_editor_field_income_lbl">Mothership Income</sys:String>
+	<sys:String x:Key="s_bg_editor_field_freighter_spawn_lbl">Freighter Period (s)</sys:String>
+	<sys:String x:Key="s_bg_editor_field_neutralizer_spawn_lbl">Neutralizer Period (s)</sys:String>
+
+	<sys:String x:Key="s_tooltip_password_required">Password required</sys:String>
+	<sys:String x:Key="s_tooltip_bad_server_version">Incompatible server version</sys:String>
+	<sys:String x:Key="s_tooltip_active_session">Active session</sys:String>
+
+	<sys:String x:Key="s_type_bool_true">Yes</sys:String>
+	<sys:String x:Key="s_type_bool_false">No</sys:String>
+
+	<sys:String x:Key="s_type_user_game_status_char_main_menu">In shipyard</sys:String>
+	<sys:String x:Key="s_type_user_game_status_char_searching_game">Search BG</sys:String>
+	<sys:String x:Key="s_type_user_game_status_char_in_battle">In battle</sys:String>
+	<sys:String x:Key="s_type_user_game_status_char_in_discovery">In galaxy</sys:String>
+	<sys:String x:Key="s_type_user_game_status_ranked_main_menu">In ranked</sys:String>
+	<sys:String x:Key="s_type_user_game_status_ranked_searching_game">Search ranked</sys:String>
+	<sys:String x:Key="s_type_user_game_status_ranked_in_battle">In ranked battle</sys:String>
+	<sys:String x:Key="s_type_user_game_status_ranked_none">Offline</sys:String>
+</ResourceDictionary>

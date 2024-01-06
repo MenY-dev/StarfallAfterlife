@@ -1,0 +1,72 @@
+<c:SidebarPage xmlns="https://github.com/avaloniaui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		       xmlns:c="using:StarfallAfterlife.Launcher.Controls"
+               mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+               x:Class="StarfallAfterlife.Launcher.Pages.SettingsPage">
+	<DockPanel LastChildFill="True">
+		<Panel DockPanel.Dock="Top">
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="15 10" Spacing="5">
+				<Label Content="f" FontFamily="{StaticResource IconsFont}" Classes="h3" VerticalContentAlignment="Center"/>
+				<Label Content="{DynamicResource s_page_settings_header}" Classes="h3" VerticalContentAlignment="Center" Margin="0 2" />
+			</StackPanel>
+			<c:Separator Height="2" Opacity="0.8" VerticalAlignment="Bottom"/>
+		</Panel>
+		<Panel DockPanel.Dock="Bottom" MinHeight="20">
+		</Panel>
+		<Panel>
+			<Rectangle Fill="Black" Opacity="0.8" IsHitTestVisible="False" >
+				<Rectangle.OpacityMask>
+					<LinearGradientBrush StartPoint="0% 0%" EndPoint="0% 100%">
+						<GradientStop Color="#FFFFFFFF" Offset="0"/>
+						<GradientStop Color="#20FFFFFF" Offset="1"/>
+					</LinearGradientBrush>
+				</Rectangle.OpacityMask>
+			</Rectangle>
+			<Grid ColumnDefinitions="*" Margin="20">
+				<StackPanel Grid.Column="0" Spacing="3">
+					<c:Property Text="{DynamicResource s_page_settings_game_dir_lbl}" LabelWidth="200" ContentWidth="*">
+						<StackPanel Orientation="Horizontal" Spacing="6">
+							<c:SfaButton MinWidth="150" Content="{DynamicResource s_app_select_btn}" Command="{Binding ShowGameDirSelector}" HorizontalContentAlignment="Center"/>
+							<Label ClipToBounds="True" VerticalContentAlignment="Center" Content="{Binding GameDirectory}" Foreground="White" Opacity="0.75" />
+						</StackPanel>
+					</c:Property>
+					<c:Property Text="{DynamicResource s_page_settings_lang_lbl}" LabelWidth="200" ContentWidth="*">
+						<c:SfaButton MinWidth="150" HorizontalAlignment="Left">
+							<c:SfaButton.Flyout>
+								<c:SfaMenuFlyout Placement="BottomEdgeAlignedRight"
+												 ItemsSource="{Binding Localizations}"
+												 SelectedItem="{Binding CurrentLocalization}">
+									<c:SfaMenuFlyout.ItemTemplate>
+										<DataTemplate>
+											<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" MinWidth="100">
+												<Label Foreground="White" Content="{Binding Converter={x:Static c:SfaUtils.LocalizationKeyToNameConverter}}" Opacity="0.75"/>
+											</StackPanel>
+										</DataTemplate>
+									</c:SfaMenuFlyout.ItemTemplate>
+								</c:SfaMenuFlyout>
+							</c:SfaButton.Flyout>
+							<Panel>
+								<TextBlock Text="{Binding CurrentLocalization, Converter={x:Static c:SfaUtils.LocalizationKeyToNameConverter}}"/>
+								<c:DropdownIcon HorizontalAlignment="Right"/>
+							</Panel>
+						</c:SfaButton>
+					</c:Property>
+					<WrapPanel Name="DebugUtilsView"/>
+				</StackPanel>
+			</Grid>
+			<TextBlock Text="Made with Avalonia UI" FontSize="16" Opacity="0.5"
+					   Margin="10"
+					   HorizontalAlignment="Right"
+					   VerticalAlignment="Bottom"/>
+
+			<TextBlock Text="{Binding CurrentFullVersion}" FontSize="16" Opacity="0.5"
+					   Margin="10"
+					   HorizontalAlignment="Left"
+					   VerticalAlignment="Bottom"/>
+
+			<c:Separator Height="2" Opacity="0.8" VerticalAlignment="Bottom"/>
+		</Panel>
+	</DockPanel>
+</c:SidebarPage>

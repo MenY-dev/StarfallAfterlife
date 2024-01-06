@@ -114,8 +114,8 @@ namespace StarfallAfterlife.Launcher.ViewModels
                 var name = profile.GameProfile?.Nickname ?? "Profile";
 
                 SfaMessageBox.ShowDialog(
-                    name + " will be removed. This action cannot be undone!",
-                    "DELETE PROFILE",
+                    string.Format(App.GetString("s_dialog_delete_profile_label") ?? string.Empty, name),
+                    App.GetString("s_dialog_delete_profile_title"),
                     MessageBoxButton.Cancell |
                     MessageBoxButton.Delete).
                     ContinueWith(t =>

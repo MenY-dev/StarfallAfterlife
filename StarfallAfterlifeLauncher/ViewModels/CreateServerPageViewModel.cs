@@ -162,7 +162,7 @@ namespace StarfallAfterlife.Launcher.ViewModels
                 if (Server?.IsStarted == true)
                     return;
 
-                var startingPopup = new SFAWaitingPopup() { Title = "Starting the server..." };
+                var startingPopup = new SFAWaitingPopup() { Title = App.GetString("s_page_cs_dialog_starting") };
                 startingPopup.ShowDialog();
 
                 Task.Factory.StartNew(() =>

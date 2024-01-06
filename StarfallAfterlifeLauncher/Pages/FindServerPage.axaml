@@ -10,17 +10,17 @@
 		<Panel DockPanel.Dock="Top">
 			<StackPanel Orientation="Horizontal" Margin="15 10" Spacing="5">
 				<Label Content="b" FontFamily="{StaticResource IconsFont}" Classes="h3" VerticalContentAlignment="Center"/>
-				<Label Content="FIND SERVER" Classes="h3" VerticalAlignment="Top" Margin="0 0 0 2" />
+				<Label Content="{DynamicResource s_page_fs_header}" Classes="h3" VerticalContentAlignment="Center" Margin="0 2" />
 			</StackPanel>
-			<StackPanel IsEnabled="{Binding !ServerStarted}" HorizontalAlignment="Right" Orientation="Horizontal" Spacing="10" Margin="0 0 10 0">
-				<c:SfaButton Content="UPDATE ALL" Command="{Binding UpdateStatuses}"/>
-				<c:SfaButton Content="ADD SERVER" Command="{Binding ShowAddServerDialog}"/>
+			<StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Spacing="10" Margin="0 0 10 0">
+				<c:SfaButton Content="{DynamicResource s_page_fs_update_all_btn}" Command="{Binding UpdateStatuses}"/>
+				<c:SfaButton Content="{DynamicResource s_page_fs_add_server_btn}" Command="{Binding ShowAddServerDialog}"/>
 			</StackPanel>
 			<c:Separator Height="2" Opacity="0.8" VerticalAlignment="Bottom"/>
 		</Panel>
 		<Panel DockPanel.Dock="Bottom">
 			<c:SfaStartButton Command="{Binding ConnectToServer}"
-							  Content="CONNECT"
+							  Content="{DynamicResource s_page_fs_connect_btn}"
 							  IsEnabled="{Binding !AppVM.IsGameStarted}"
 							  VerticalAlignment="Stretch"
 							  HorizontalAlignment="Right"
@@ -56,31 +56,40 @@
 				<Panel Grid.Column="2">
 					<ScrollViewer>
 						<StackPanel Margin="10" Spacing="3">
-							<c:Property Text="Name" HorizontalAlignment="Stretch">
+							<c:Property Text="{DynamicResource s_page_fs_info_name_lbl}" HorizontalAlignment="Stretch">
 								<SelectableTextBlock Text="{Binding SelectedServer.Name}" FontSize="16" VerticalAlignment="Center"/>
 							</c:Property>
-							<c:Property Text="Address" HorizontalAlignment="Stretch">
+							<c:Property Text="{DynamicResource s_page_fs_info_address_lbl}" HorizontalAlignment="Stretch">
 								<SelectableTextBlock Text="{Binding SelectedServer.Address}" FontSize="16" VerticalAlignment="Center"/>
 							</c:Property>
-							<c:Property Text="Status" HorizontalAlignment="Stretch">
+							<c:Property Text="{DynamicResource s_page_fs_info_status_lbl}" HorizontalAlignment="Stretch">
 								<c:Switch Value="{Binding SelectedServer.IsOnline}">
 									<SelectableTextBlock c:Switch.Case="{x:True}" Text="Online" Foreground="#00FF50" FontSize="16" VerticalAlignment="Center"/>
 									<SelectableTextBlock c:Switch.Case="{x:False}" Text="Offline" Foreground="#FF2000" FontSize="16" VerticalAlignment="Center"/>
 								</c:Switch>
 							</c:Property>
-							<c:Property Text="Server Version" HorizontalAlignment="Stretch">
+							<c:Property Text="{DynamicResource s_page_fs_info_server_ver_lbl}" HorizontalAlignment="Stretch">
 								<SelectableTextBlock Text="{Binding SelectedServer.Version}" FontSize="16" VerticalAlignment="Center"/>
 							</c:Property>
-							<c:Property Text="Need Password" HorizontalAlignment="Stretch">
-								<SelectableTextBlock Text="{Binding SelectedServer.NeedPassword}" FontSize="16" VerticalAlignment="Center"/>
+							<c:Property Text="{DynamicResource s_page_fs_info_need_password_lbl}" HorizontalAlignment="Stretch">
+								<c:Switch Value="{Binding SelectedServer.NeedPassword}">
+									
+									<SelectableTextBlock c:Switch.Case="{x:True}"
+														 Text="{DynamicResource s_type_bool_true}"
+														 FontSize="16" VerticalAlignment="Center"/>
+									
+									<SelectableTextBlock c:Switch.Case="{x:False}"
+														 Text="{DynamicResource s_type_bool_false}"
+														 FontSize="16" VerticalAlignment="Center"/>
+								</c:Switch>
 							</c:Property>
-							<c:Property Text="Description" HorizontalAlignment="Stretch">
+							<c:Property Text="{DynamicResource s_page_fs_info_description_lbl}" HorizontalAlignment="Stretch">
 								<SelectableTextBlock Text="{Binding SelectedServer.Description}" FontSize="16" VerticalAlignment="Center"/>
 							</c:Property>
-							<c:Property Text="" HorizontalAlignment="Stretch" IsVisible="{Binding !!SelectedServer}">
+							<c:Property Text="" HorizontalAlignment="Stretch" IsVisible="{Binding SelectedServer, Converter={x:Static ObjectConverters.IsNotNull}}">
 								<StackPanel Spacing="6" Orientation="Horizontal" HorizontalAlignment="Right">
-									<c:SfaButton Content="UPDATE" Command="{Binding SelectedServer.Update}" HorizontalAlignment="Right"/>
-									<c:SfaButton Content="REMOVE" Command="{Binding RemoveSelectedServer}" HorizontalAlignment="Right" Background="Red" BorderBrush="Red"/>
+									<c:SfaButton Content="{DynamicResource s_page_fs_info_update_btn}" Command="{Binding SelectedServer.Update}" HorizontalAlignment="Right"/>
+									<c:SfaButton Content="{DynamicResource s_page_fs_info_delete_btn}" Command="{Binding RemoveSelectedServer}" HorizontalAlignment="Right" Background="Red" BorderBrush="Red"/>
 								</StackPanel>
 							</c:Property>
 						</StackPanel>

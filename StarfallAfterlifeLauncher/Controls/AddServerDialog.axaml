@@ -4,6 +4,6 @@
 				 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		         xmlns:c="using:StarfallAfterlife.Launcher.Controls"
 				 x:Class="StarfallAfterlife.Launcher.Controls.AddServerDialog"
-                 Title="ADD NEW SERVER"
-		         Label="Address">
+                 Title="{DynamicResource s_dialog_add_server_title}"
+		         Label="{DynamicResource s_dialog_add_server_label}">
 </c:EditNamePopup>

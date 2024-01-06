@@ -8,7 +8,7 @@
         Width="480" Height="560"
 		WindowStartupLocation="CenterOwner"
         x:Class="StarfallAfterlife.Launcher.Views.BattlegroundsEditorWindow"
-        Title="Battlegrounds Editor">
+        Title="{DynamicResource s_bg_editor_title}">
 	
 	<Design.DataContext>
 	</Design.DataContext>
@@ -29,7 +29,7 @@
 							HorizontalAlignment="Right"
 							VerticalAlignment="Center">
 
-					<c:SfaButton Content="NEW ROOM"
+					<c:SfaButton Content="{DynamicResource s_bg_editor_add_room_btn}"
 								 Foreground="White"
 								 HorizontalAlignment="Right"
 								 Command="{Binding AddRoom}"/>
@@ -109,8 +109,8 @@
 				<Panel Grid.Row="0">
 
 					<TextBlock FontSize="20"
-									   Foreground="{DynamicResource HoloColor}"
-									   Opacity="0.75"
+							   Foreground="{DynamicResource HoloColor}"
+							   Opacity="0.75"
 							   HorizontalAlignment="Center"
 							   VerticalAlignment="Center"
 							   Text="{Binding SelectedRoom.Name}"/>
@@ -120,7 +120,7 @@
 								HorizontalAlignment="Left"
 								VerticalAlignment="Center">
 
-						<c:SfaButton Content="BACK"
+						<c:SfaButton Content="{DynamicResource s_app_back_btn}"
 									 Foreground="White"
 									 HorizontalAlignment="Left"
 									 Command="{Binding CloseEditor}"/>
@@ -132,7 +132,7 @@
 								HorizontalAlignment="Right"
 								VerticalAlignment="Center">
 
-						<c:SfaButton Content="ADD Character"
+						<c:SfaButton Content="{DynamicResource s_bg_editor_add_player_btn}"
 									 Foreground="White"
 									 HorizontalAlignment="Right"
 									 Command="{Binding ShowPlayerSelector}"/>
@@ -195,7 +195,7 @@
 				<Panel Grid.Row="2" >
 					<Grid RowDefinitions="Auto Auto" Margin="10">
 						<Grid Grid.Row="0" ColumnDefinitions="3* 2*" RowDefinitions="Auto Auto Auto Auto" HorizontalAlignment="Stretch">
-							<TextBlock Grid.Row="0" Grid.Column="0" Text="Map" VerticalAlignment="Center"/>
+							<TextBlock Grid.Row="0" Grid.Column="0" Text="{DynamicResource s_bg_editor_field_map_lbl}" VerticalAlignment="Center"/>
 							<c:SfaButton Grid.Row="0" Grid.Column="1" Margin="0 3" Height="32" HorizontalAlignment="Stretch">
 								<c:SfaButton.Flyout>
 									<c:SfaMenuFlyout ItemsSource="{Binding SelectedRoom.MapVariants}"
@@ -209,20 +209,20 @@
 								</Grid>
 							</c:SfaButton>
 
-							<TextBlock Grid.Row="1" Grid.Column="0" Text="Mothership Income" VerticalAlignment="Center"/>
+							<TextBlock Grid.Row="1" Grid.Column="0" Text="{DynamicResource s_bg_editor_field_income_lbl}" VerticalAlignment="Center"/>
 							<c:SfaNumericUpDown Grid.Row="1" Grid.Column="1" Margin="0 3"
 										   Value="{Binding SelectedRoom.MothershipIncome}"/>
 
-							<TextBlock Grid.Row="2" Grid.Column="0" Text="Freighter Period (s)" VerticalAlignment="Center"/>
+							<TextBlock Grid.Row="2" Grid.Column="0" Text="{DynamicResource s_bg_editor_field_freighter_spawn_lbl}" VerticalAlignment="Center"/>
 							<c:SfaNumericUpDown Grid.Row="2" Grid.Column="1" Margin="0 3"
 										   Value="{Binding SelectedRoom.FreighterSpawnPeriod}"/>
 
-							<TextBlock Grid.Row="3" Grid.Column="0" Text="Neutralizer Period (s)" VerticalAlignment="Center"/>
+							<TextBlock Grid.Row="3" Grid.Column="0" Text="{DynamicResource s_bg_editor_field_neutralizer_spawn_lbl}" VerticalAlignment="Center"/>
 							<c:SfaNumericUpDown  Grid.Row="3" Grid.Column="1" Margin="0 3"
 											Value="{Binding SelectedRoom.ShieldNeutralizerSpawnPeriod}"/>
 						</Grid>
 						<Panel Grid.Row="1">
-							<c:SfaButton Content="START BATTLEGROUND"
+							<c:SfaButton Content="{DynamicResource s_bg_editor_start_bg_btn}"
 										 Command="{Binding SelectedRoom.Start}"
 										 FontSize="20"
 										 Foreground="{DynamicResource HoloColor}"
@@ -256,14 +256,14 @@
 									   Opacity="0.75"
 									   HorizontalAlignment="Center"
 									   VerticalAlignment="Center"
-									   Text="ADD CHARACTER"/>
+									   Text="{DynamicResource s_bg_editor_add_player_btn}"/>
 
 							<StackPanel Spacing="10" Margin="10"
 										Orientation="Horizontal"
 										HorizontalAlignment="Left"
 										VerticalAlignment="Center">
 
-								<c:SfaButton Content="BACK"
+								<c:SfaButton Content="{DynamicResource s_app_back_btn}"
 											 Foreground="White"
 											 HorizontalAlignment="Left"
 											 Command="{Binding ClosePlayerSelector}"/>

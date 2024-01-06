@@ -1,0 +1,7 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+	<ResourceInclude x:Key="ru" Source="/Assets/Strings/ru.axaml"/>
+	<ResourceInclude x:Key="en" Source="/Assets/Strings/en.axaml"/>
+	
+</ResourceDictionary>

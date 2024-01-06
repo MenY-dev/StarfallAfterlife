@@ -90,7 +90,7 @@ namespace StarfallAfterlife.Launcher.Controls
         public IEnumerable GetErrors(string propertyName)
         {
             if (HasErrors == true)
-                yield return "Invalid symbols!";
+                yield return App.GetString("s_dialog_edit_name_error") ?? "Invalid symbols!";
         }
     }
 }
