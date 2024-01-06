@@ -155,6 +155,12 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                     fleet.System?.Broadcast<IStarSystemObjectListener>(l => l.OnObjectSpawned(member.Fleet));
                 }
             }
+
+            if (IsStarted == true &&
+                IsFinished == false &&
+                IsDungeon == false &&
+                Members.Count < 1)
+                Finish();
         }
 
 
