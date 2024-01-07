@@ -151,6 +151,9 @@ namespace StarfallAfterlife.Bridge.Server
 
                 case DiscoveryClientAction.SecretObjectLooted:
                     HandleSecretObjectLooted(reader, systemId, objectType, objectId); break;
+
+                case DiscoveryClientAction.CreateNewHouse:
+                    HandleCreateNewHouse(reader, systemId, objectType, objectId); break;
             }
         }
 
@@ -990,6 +993,14 @@ namespace StarfallAfterlife.Bridge.Server
             Invoke(() =>
             {
 
+            });
+        }
+
+        private void HandleCreateNewHouse(SfReader reader, int systemId, DiscoveryObjectType objectType, int objectId)
+        {
+            Invoke(() =>
+            {
+                SendGalaxyMessage(DiscoveryServerGalaxyAction.CreatedHouse, writer => writer.WriteByte(3));
             });
         }
     }
