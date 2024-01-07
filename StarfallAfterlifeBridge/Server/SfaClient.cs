@@ -42,6 +42,8 @@ namespace StarfallAfterlife.Bridge.Server
 
         public string AsteroidsMapHash { get; protected set; }
 
+        public JNode VariableMap { get; protected set; }
+
         protected SfaGame Game { get; set; }
 
         protected SfaGameProfile Profile => Game?.GameProfile;
@@ -389,6 +391,38 @@ namespace StarfallAfterlife.Bridge.Server
                 }
 
                 return false;
+            });
+        }
+
+        public Task<bool> LoadVariableMap()
+        {
+            return SendRequest(SfaServerAction.LoadVariableMap, default).ContinueWith(t =>
+            {
+                var result = false;
+                JNode map = new JObject();
+
+                if (t.Result is SfaClientResponse response &&
+                    response.IsSuccess == true &&
+                    response.Action == SfaServerAction.LoadVariableMap)
+                {
+                    map = JsonHelpers.ParseNodeUnbuffered(response.Text);
+                    result = map is JObject;
+                }
+
+                if (map is not JObject)
+                    map = new JObject();
+
+                if (map["renamedsystems"]?.AsArraySelf() is null)
+                    map["renamedsystems"] = new JArray();
+
+                if (map["renamedplanets"]?.AsArraySelf() is null)
+                    map["renamedplanets"] = new JArray();
+
+                if (map["faction_event"]?.AsArraySelf() is null)
+                    map["faction_event"] = new JArray();
+
+                VariableMap = map;
+                return result;
             });
         }
 

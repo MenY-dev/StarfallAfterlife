@@ -17,6 +17,7 @@ namespace StarfallAfterlife.Bridge.Server
         Auth = 1,
         GetServerInfo = 2,
         LoadGalaxyMap = 32,
+        LoadVariableMap = 33,
 
         // 128..255 - game actions
         RegisterPlayer = 128,

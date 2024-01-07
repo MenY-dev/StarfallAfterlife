@@ -636,7 +636,7 @@ namespace StarfallAfterlife.Bridge.Game
             {
                 ["galaxymap"] = SValue.Create(galaxyMap),
 
-                ["variablemap"] = new JsonObject
+                ["variablemap"] = SfaClient?.VariableMap?.Clone() ?? new JsonObject
                 {
                     ["renamedsystems"] = new JsonArray(),
                     ["renamedplanets"] = new JsonArray(),

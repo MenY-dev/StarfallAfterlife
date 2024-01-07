@@ -133,6 +133,10 @@ namespace StarfallAfterlife.Bridge.Server
                     ProcessLoadGalaxyMap(request);
                     break;
 
+                case SfaServerAction.LoadVariableMap:
+                    ProcessLoadVariableMap(request);
+                    break;
+
                 case SfaServerAction.RegisterPlayer:
                     ProcessRegisterPlayer(JsonHelpers.ParseNodeUnbuffered(request.Text)?.AsObjectSelf(), request);
                     break;
@@ -287,6 +291,11 @@ namespace StarfallAfterlife.Bridge.Server
             catch { }
 
             request.SendResponce(new Memory<byte>(output.GetBuffer(), 0, (int)output.Length), SfaServerAction.LoadGalaxyMap);
+        }
+
+        private void ProcessLoadVariableMap(SfaClientRequest request)
+        {
+            request.SendResponce("{}", SfaServerAction.LoadVariableMap);
         }
 
         public void ProcessRegisterPlayer(JNode doc, SfaClientRequest request)

@@ -117,6 +117,7 @@ namespace StarfallAfterlife.Bridge.Game
                         break;
 
                     case "galaxymapload":
+                        SfaClient?.LoadVariableMap().Wait(TimeSpan.FromSeconds(2));
                         response = CreateGalaxyMapResponse((string)query["hash"] == Realm.GalaxyMapHash);
                         GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
                         GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
