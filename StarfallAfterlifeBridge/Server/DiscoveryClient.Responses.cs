@@ -641,7 +641,6 @@ namespace StarfallAfterlife.Bridge.Server
         public void SendSessionDropDone()
         {
             Client?.Send(new JsonObject { }, SfaServerAction.DropSession);
-            SendGalaxyMessage(DiscoveryServerGalaxyAction.SessionDropDone);
         }
 
         public void SendFleetRecallStateUpdate(FleetRecallState state, float time, int slotId)

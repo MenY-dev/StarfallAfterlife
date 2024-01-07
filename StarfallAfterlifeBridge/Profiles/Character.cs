@@ -158,6 +158,9 @@ namespace StarfallAfterlife.Bridge.Profiles
         public bool HasActiveSession { get; set; } = false;
 
         [JsonIgnore]
+        public bool IsReadyToDropSession { get; set; } = false;
+
+        [JsonIgnore]
         public JsonNode ActiveShips { get; set; }
     }
 }

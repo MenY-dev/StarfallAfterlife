@@ -17,6 +17,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace StarfallAfterlife.Bridge.Game
@@ -154,9 +155,30 @@ namespace StarfallAfterlife.Bridge.Game
                 JsonArray ships = new JsonArray();
                 JsonArray groups = new JsonArray();
 
-
-                foreach (var item in character.Ships ?? new())
-                    ships.Add(CreateShipResponse(item));
+                if (character.IsReadyToDropSession == true &&
+                    Profile?.CurrentSession is DiscoverySession session &&
+                    Profile?.Database is SfaDatabase database)
+                {
+                    foreach (var item in character.Ships ?? new())
+                    {
+                        if (session.Ships?.Any(s => s?.Id == item.Id) == true &&
+                            database.GetShip(item.Data?.Hull ?? -1) is ShipBlueprint blueprint)
+                        {
+                            var destroyedShip = item.Clone();
+                            destroyedShip.TimeToRepair = blueprint.TimeToRepair;
+                            ships.Add(CreateShipResponse(destroyedShip));
+                        }
+                        else
+                        {
+                            ships.Add(CreateShipResponse(item));
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var item in character.Ships ?? new())
+                        ships.Add(CreateShipResponse(item));
+                }
 
                 foreach (var item in character.ShipGroups ?? new())
                     groups.Add(CreateShipGroupResponse(character, item));
@@ -283,12 +305,14 @@ namespace StarfallAfterlife.Bridge.Game
 
                 foreach (var ship in Profile?.CurrentSession?.Ships ?? new())
                 {
+                    var data = ship.Clone();
+                    data.Id += character.IndexSpace;
                     ships.Add(new JsonObject()
                     {
                         ["id"] = ship.Id + character.IndexSpace,
                         ["in_galaxy"] = 1,
                         ["destroyed"] = 0,
-                        ["data"] = JsonHelpers.ParseNodeUnbuffered(ship, options)?.ToJsonStringUnbuffered(false)
+                        ["data"] = JsonHelpers.ParseNodeUnbuffered(data, options)?.ToJsonStringUnbuffered(false)
                     });
                 }
 

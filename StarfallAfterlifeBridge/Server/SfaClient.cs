@@ -818,6 +818,7 @@ namespace StarfallAfterlife.Bridge.Server
             Game?.Profile.Use(p =>
             {
                 p.FinishSession(p.CurrentSession, true);
+                GalacticChannel.SendGalaxyMessage(DiscoveryServerGalaxyAction.SessionDropDone);
             });
         }
 

@@ -49,6 +49,27 @@ namespace StarfallAfterlife.Bridge.Networking.Channels
             }
             else
             {
+                switch (action)
+                {
+                    case DiscoveryClientAction.EnterToGalaxy:
+                    case DiscoveryClientAction.DropSession:
+                        Game?.Profile?.Use(p =>
+                        {
+                            if (p.GameProfile?.CurrentCharacter is Character character)
+                                character.IsReadyToDropSession = false;
+
+                        });
+                        break;
+                    case DiscoveryClientAction.ExitGalaxyAction:
+                        Game?.Profile?.Use(p =>
+                        {
+                            if (p.GameProfile?.CurrentCharacter is Character character)
+                                character.IsReadyToDropSession = true;
+
+                        });
+                        break;
+                }
+
                 Game?.SfaClient?.Send(data, SfaServerAction.DiscoveryChannel);
             }
         }

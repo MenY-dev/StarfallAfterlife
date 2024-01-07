@@ -544,7 +544,7 @@ namespace StarfallAfterlife.Bridge.Profiles
 
             foreach (var slot in detachment.Slots)
             {
-                slots[slot.Key.ToString()] = (slot.Value < 1 ? int.MaxValue : slot.Value + IndexSpace);
+                slots[slot.Key.ToString()] = (slot.Value < 1 ? 0 : slot.Value + IndexSpace);
             }
 
             return slots;

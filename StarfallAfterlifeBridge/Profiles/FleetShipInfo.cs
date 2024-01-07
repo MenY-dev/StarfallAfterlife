@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace StarfallAfterlife.Bridge.Profiles
 {
-    public class FleetShipInfo
+    public class FleetShipInfo : ICloneable
     {
         [JsonPropertyName("id")]
         public int Id { get; set; } = 0;
@@ -53,5 +53,14 @@ namespace StarfallAfterlife.Bridge.Profiles
 
         [JsonPropertyName("is_favorite")]
         public int IsFavorite { get; set; } = 0;
+
+        object ICloneable.Clone() => Clone();
+
+        public FleetShipInfo Clone()
+        {
+            var clone = MemberwiseClone() as FleetShipInfo;
+            clone.Data = Data?.Clone();
+            return clone;
+        }
     }
 }
