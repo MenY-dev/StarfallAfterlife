@@ -18,6 +18,7 @@ namespace StarfallAfterlife.Bridge.Server
             switch (action)
             {
                 case FriendChannelAction.AddToFriends:
+                    HandleAddToFriends(isCharChannel, reader);
                     break;
                 case FriendChannelAction.AcceptNewFriend:
                     break;
@@ -32,6 +33,17 @@ namespace StarfallAfterlife.Bridge.Server
                 default:
                     break;
             }
+        }
+
+        private void HandleAddToFriends(bool isCharChannel, SfReader reader)
+        {
+            var name = reader.ReadShortString(Encoding.UTF8);
+
+            SendFriendChannelMessage(isCharChannel, FriendChannelServerAction.ReciveFriendRequestResult, writer =>
+            {
+                writer.WriteByte(1);
+                writer.WriteShortString(name, -1, true, Encoding.UTF8);
+            });
         }
 
         private void HandleUserStatus(bool isCharChannel, SfReader reader)
