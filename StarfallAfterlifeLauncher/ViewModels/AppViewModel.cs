@@ -7,6 +7,7 @@ using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Diagnostics;
 using StarfallAfterlife.Bridge.Generators;
 using StarfallAfterlife.Bridge.Launcher;
+using StarfallAfterlife.Bridge.Primitives;
 using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Realms;
 using StarfallAfterlife.Bridge.Server;
@@ -364,7 +365,7 @@ namespace StarfallAfterlife.Launcher.ViewModels
                         Dispatcher.UIThread.Invoke(waitingPopup.ShowDialog);
 
                         realmInfo = Launcher?.CreateNewRealm(realmName);
-                        var generator = new VanillaRealmGenerator(realmInfo.Realm, Launcher?.Database);
+                        var generator = new VanillaRealmGenerator(realmInfo.Realm, Launcher?.Database, seed: new Random128().Next());
                         generator.ProgressUpdated += (o, e) => SfaDebug.Print(e.Status, e.Task?.GetType().Name);
                         generator.Run().Wait();
                         realmInfo.Save();
