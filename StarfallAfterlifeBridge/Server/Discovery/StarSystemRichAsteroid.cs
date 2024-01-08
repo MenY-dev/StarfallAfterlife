@@ -1,4 +1,5 @@
 ﻿using StarfallAfterlife.Bridge.Database;
+using StarfallAfterlife.Bridge.Primitives;
 using StarfallAfterlife.Bridge.Server.Galaxy;
 using System;
 using System.Collections.Generic;
@@ -31,7 +32,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             Hex = mapAsteroid.Hex;
             Id = mapAsteroid.Id;
 
-            var rnd = new Random(Id);
+            var rnd = new Random128(Id);
             var variantsCount = mapAsteroid.Ores.Count;
             _variantMinOreCount = (_minOreCount / variantsCount);
             _variantMaxOreCount = (_maxOreCount / variantsCount);

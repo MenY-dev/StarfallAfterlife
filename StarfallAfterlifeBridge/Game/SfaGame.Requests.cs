@@ -1,6 +1,7 @@
 ﻿using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Diagnostics;
 using StarfallAfterlife.Bridge.Networking;
+using StarfallAfterlife.Bridge.Primitives;
 using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Serialization;
 using StarfallAfterlife.Bridge.Server;
@@ -128,7 +129,7 @@ namespace StarfallAfterlife.Bridge.Game
                     p.GameProfile.CurrentCharacter is Character character &&
                     p.Database is SfaDatabase database)
                 {
-                    var rnd = new Random();
+                    var rnd = new Random128();
 
                     foreach (var eq in eqlist)
                     {

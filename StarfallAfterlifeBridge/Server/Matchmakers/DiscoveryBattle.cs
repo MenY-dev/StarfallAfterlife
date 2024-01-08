@@ -3,6 +3,7 @@ using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Instances;
 using StarfallAfterlife.Bridge.Mathematics;
 using StarfallAfterlife.Bridge.Networking;
+using StarfallAfterlife.Bridge.Primitives;
 using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Realms;
 using StarfallAfterlife.Bridge.Serialization;
@@ -408,13 +409,13 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                         "star_flashes",
                     };
 
-                    if (new Random().Next(0, 10) == 0)
+                    if (new Random128().Next(0, 10) == 0)
                         env.EnviropmentEffects.Add("plasma_storm");
                 }
 
                 if (battle.IsDungeon == false)
                 {
-                    var rnd = new Random();
+                    var rnd = new Random128();
                     env.HasNebula = battle.HasNebula;
 
                     if (battle.HasAsteroids == true)
@@ -663,7 +664,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         protected virtual List<TileInfo> CreateLocationTiles()
         {
-            var rnd = new Random();
+            var rnd = new Random128();
 
             if (rnd.NextSingle() < 0.2f &&
                 SystemBattle is not null and { IsDungeon: false, HasAsteroids: false } &&

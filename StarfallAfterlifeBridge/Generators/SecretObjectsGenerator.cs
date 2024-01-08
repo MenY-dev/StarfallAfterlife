@@ -1,6 +1,7 @@
 ﻿using StarfallAfterlife.Bridge.Collections;
 using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Mathematics;
+using StarfallAfterlife.Bridge.Primitives;
 using StarfallAfterlife.Bridge.Realms;
 using StarfallAfterlife.Bridge.Server.Discovery;
 using StarfallAfterlife.Bridge.Server.Galaxy;
@@ -37,7 +38,7 @@ namespace StarfallAfterlife.Bridge.Generators
         public virtual SecretObjectsMap Build()
         {
             var map = new SecretObjectsMap();
-            var rnd = new Random(0);
+            var rnd = new Random128(0);
 
             ExtraMap.Build();
 
@@ -59,7 +60,7 @@ namespace StarfallAfterlife.Bridge.Generators
             return map;
         }
 
-        public void GenerateObjects(SecretObjectsMap map, IList<GalaxyMapStarSystem> systems, SecretObjectType type, int count, Random rnd)
+        public void GenerateObjects(SecretObjectsMap map, IList<GalaxyMapStarSystem> systems, SecretObjectType type, int count, Random128 rnd)
         {
             if (systems is null or { Count: 0})
                 return;
@@ -81,7 +82,7 @@ namespace StarfallAfterlife.Bridge.Generators
             }
         }
 
-        private static SystemHex CreateObjectHex(GalaxyMapStarSystem system, Random rnd)
+        private static SystemHex CreateObjectHex(GalaxyMapStarSystem system, Random128 rnd)
         {
             var count = SystemHexMap.HexesCount;
             var startIndex = rnd.Next(0, count);

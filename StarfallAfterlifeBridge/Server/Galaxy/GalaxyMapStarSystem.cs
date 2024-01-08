@@ -1,5 +1,6 @@
 ﻿using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Mathematics;
+using StarfallAfterlife.Bridge.Primitives;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -239,7 +240,7 @@ namespace StarfallAfterlife.Bridge.Server.Galaxy
                     .ToList();
 
                 return SystemHexMap.HexToSystemPoint(
-                    hexes[new Random().Next(0, hexes.Count)]);
+                    hexes[new Random128().Next(0, hexes.Count)]);
             }
 
             return Vector2.Zero;

@@ -1,5 +1,6 @@
 ﻿using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Mathematics;
+using StarfallAfterlife.Bridge.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery.AI
 
         public DateTime AttackEndTime { get; protected set; }
 
-        private readonly Random _rnd = new();
+        private readonly Random128 _rnd = new();
 
         public override void Update()
         {

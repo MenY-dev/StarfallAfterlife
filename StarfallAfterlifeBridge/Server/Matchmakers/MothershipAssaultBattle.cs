@@ -1,4 +1,5 @@
 ﻿using StarfallAfterlife.Bridge.Instances;
+using StarfallAfterlife.Bridge.Primitives;
 using StarfallAfterlife.Bridge.Serialization;
 using StarfallAfterlife.Bridge.Server.Characters;
 using System;
@@ -71,7 +72,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 };
             }
 
-            return Random.Shared.Next() % 3 < 2 ?
+            return new Random128().Next() % 3 < 2 ?
                 "bg_MothershipAssault" :
                 "bg_MothershipAssault_2";
         }

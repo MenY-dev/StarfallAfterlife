@@ -1,5 +1,6 @@
 ﻿using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Networking;
+using StarfallAfterlife.Bridge.Primitives;
 using StarfallAfterlife.Bridge.Realms;
 using StarfallAfterlife.Bridge.Serialization;
 using StarfallAfterlife.Bridge.Server.Galaxy;
@@ -21,7 +22,7 @@ namespace StarfallAfterlife.Bridge.Generators
 
         public GalaxyExtraMap ExtraMap { get; protected set; }
 
-        protected Random Rnd { get; set; }
+        protected Random128 Rnd { get; set; }
 
         protected static readonly List<LevelQuestInfo> RelictShipLevelingQuests = new()
         {

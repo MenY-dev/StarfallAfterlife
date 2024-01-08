@@ -1,4 +1,5 @@
 ﻿using StarfallAfterlife.Bridge.Mathematics;
+using StarfallAfterlife.Bridge.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +36,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery.AI
 
         protected Vector2 CreateNextWaypoint()
         {
-            var rnd = new Random();
+            var rnd = new Random128();
             var hexes = new List<SystemHex>();
             var map = System?.AsteroidsMap;
 

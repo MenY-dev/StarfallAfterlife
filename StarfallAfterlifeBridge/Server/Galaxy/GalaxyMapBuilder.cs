@@ -1,5 +1,6 @@
 ﻿using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Mathematics;
+using StarfallAfterlife.Bridge.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,7 +15,7 @@ namespace StarfallAfterlife.Bridge.Server.Galaxy
         public virtual GalaxyMap Create(int seed, float density = 5000, float radius = 300000)
         {
             GalaxyMap map = new();
-            Random rnd = new Random(seed);
+            Random128 rnd = new Random128(seed);
             GalacticSystemsInfo info = GenerateSystemsLocations(rnd, radius, density);
             IList<Vector2> systemsLocations = info.Locations;
             IList<int> orbitsIndices = info.OrbitsIndices;
@@ -24,9 +25,9 @@ namespace StarfallAfterlife.Bridge.Server.Galaxy
             {
                 GalaxyMapStarSystem system = GalaxyMapStarSystem.Create(i, systemsLocations[i]);
 
-                system.StarType = new Random(i).Next(0, 15);
-                system.Z = new Random(i).Next(-3000, 3000);
-                system.Faction = (Faction)new Random(i).Next(10, 15);
+                system.StarType = new Random128(i).Next(0, 15);
+                system.Z = new Random128(i).Next(-3000, 3000);
+                system.Faction = (Faction)new Random128(i).Next(10, 15);
                 system.FactionGroup = 1;
 
                 map.Systems.Add(system);
@@ -73,7 +74,7 @@ namespace StarfallAfterlife.Bridge.Server.Galaxy
 
 
 
-        protected GalacticSystemsInfo GenerateSystemsLocations(Random rnd, float radius, float density)
+        protected GalacticSystemsInfo GenerateSystemsLocations(Random128 rnd, float radius, float density)
         {
             GalacticSystemsInfo info = new GalacticSystemsInfo();
             int orbitsCount = (int)MathF.Floor(radius / density);

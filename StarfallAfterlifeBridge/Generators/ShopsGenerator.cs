@@ -1,4 +1,5 @@
 ﻿using StarfallAfterlife.Bridge.Database;
+using StarfallAfterlife.Bridge.Primitives;
 using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Realms;
 using StarfallAfterlife.Bridge.Server.Galaxy;
@@ -79,7 +80,7 @@ namespace StarfallAfterlife.Bridge.Generators
             };
 
             seed += system.Id + obj.Id + (int)obj.ObjectType;
-            var rnd = new Random(seed);
+            var rnd = new Random128(seed);
 
             var chance = obj.ObjectType switch
             {
@@ -156,7 +157,7 @@ namespace StarfallAfterlife.Bridge.Generators
 
         protected virtual ShopInfo GenJunkieShop(GalaxyMapStarSystem system, IGalaxyMapObject obj, int seed)
         {
-            var rnd = new Random(seed);
+            var rnd = new Random128(seed);
             var shop = new ShopInfo { ShopName = "shop_junkie", StocName = "s_junkie" };
 
             if (GetCircleData(system) is SfaCircleData circle)
@@ -178,7 +179,7 @@ namespace StarfallAfterlife.Bridge.Generators
 
         protected virtual ShopInfo GenCraftingShop(GalaxyMapStarSystem system, IGalaxyMapObject obj, int seed)
         {
-            var rnd = new Random(seed);
+            var rnd = new Random128(seed);
             var shop = new ShopInfo { ShopName = "shop_crafting", StocName = "s_crafting" };
 
             if (GetCircleData(system) is SfaCircleData circle)
@@ -200,7 +201,7 @@ namespace StarfallAfterlife.Bridge.Generators
 
         protected virtual ShopInfo GenProjectsShop(GalaxyMapStarSystem system, IGalaxyMapObject obj, int seed)
         {
-            var rnd = new Random(seed);
+            var rnd = new Random128(seed);
             var shop = new ShopInfo { ShopName = "shop_repair_station_bp", StocName = "s_repair_station_bp" };
 
             if (GetCircleData(system) is SfaCircleData circle)
@@ -222,7 +223,7 @@ namespace StarfallAfterlife.Bridge.Generators
 
         protected virtual ShopInfo GenGunsShop(GalaxyMapStarSystem system, IGalaxyMapObject obj, int seed)
         {
-            var rnd = new Random(seed);
+            var rnd = new Random128(seed);
             var shop = new ShopInfo { ShopName = "shop_weapon", StocName = "s_weapon" };
 
             if (GetCircleData(system) is SfaCircleData circle)
@@ -246,7 +247,7 @@ namespace StarfallAfterlife.Bridge.Generators
 
         protected virtual ShopInfo GenOreShop(GalaxyMapStarSystem system, IGalaxyMapObject obj, int seed)
         {
-            var rnd = new Random(seed);
+            var rnd = new Random128(seed);
             var shop = new ShopInfo { ShopName = "shop_resources", StocName = "s_resources" };
 
             if (GetCircleData(system) is SfaCircleData circle)
@@ -266,7 +267,7 @@ namespace StarfallAfterlife.Bridge.Generators
 
         protected virtual ShopInfo GenModulesShop(GalaxyMapStarSystem system, IGalaxyMapObject obj, int seed)
         {
-            var rnd = new Random(seed);
+            var rnd = new Random128(seed);
             var shop = new ShopInfo { ShopName = "shop_modules", StocName = "s_modules" };
 
             if (GetCircleData(system) is SfaCircleData circle)
@@ -290,7 +291,7 @@ namespace StarfallAfterlife.Bridge.Generators
 
         protected virtual ShopInfo GenAutonomousEquipmentShop(GalaxyMapStarSystem system, IGalaxyMapObject obj, int seed)
         {
-            var rnd = new Random(seed);
+            var rnd = new Random128(seed);
             var shop = new ShopInfo { ShopName = "shop_consumable", StocName = "s_consumable" };
 
             if (GetCircleData(system) is SfaCircleData circle)
@@ -312,7 +313,7 @@ namespace StarfallAfterlife.Bridge.Generators
 
         protected virtual ShopInfo GenImprovedEquipmentShop(GalaxyMapStarSystem system, IGalaxyMapObject obj, int seed)
         {
-            var rnd = new Random(seed);
+            var rnd = new Random128(seed);
             var shop = new ShopInfo { ShopName = "shop_dev_lab", StocName = "s_dev_lab" };
 
             if (GetCircleData(system) is SfaCircleData circle)
@@ -336,7 +337,7 @@ namespace StarfallAfterlife.Bridge.Generators
 
         protected virtual ShopInfo GenImprovedEquipmentLvl3Shop(GalaxyMapStarSystem system, IGalaxyMapObject obj, int seed)
         {
-            var rnd = new Random(seed);
+            var rnd = new Random128(seed);
             var shop = new ShopInfo { ShopName = "shop_advanced_dev_lab", StocName = "s_advanced_dev_lab" };
 
             if (GetCircleData(system) is SfaCircleData circle)
@@ -360,7 +361,7 @@ namespace StarfallAfterlife.Bridge.Generators
 
         protected virtual ShopInfo GenEquipmentShop(GalaxyMapStarSystem system, IGalaxyMapObject obj, int seed)
         {
-            var rnd = new Random(seed);
+            var rnd = new Random128(seed);
             var shop = new ShopInfo { ShopName = "shop_engineering_department", StocName = "s_engineering_department" };
 
             if (GetCircleData(system) is SfaCircleData circle)
@@ -384,7 +385,7 @@ namespace StarfallAfterlife.Bridge.Generators
 
         protected virtual ShopInfo GenEquipmentLvl3Shop(GalaxyMapStarSystem system, IGalaxyMapObject obj, int seed)
         {
-            var rnd = new Random(seed);
+            var rnd = new Random128(seed);
             var shop = new ShopInfo { ShopName = "shop_engineering_lab", StocName = "s_engineering_lab" };
 
             if (GetCircleData(system) is SfaCircleData circle)
@@ -408,7 +409,7 @@ namespace StarfallAfterlife.Bridge.Generators
 
         protected virtual ShopInfo GenFuelShop(GalaxyMapStarSystem system, IGalaxyMapObject obj, int seed)
         {
-            var rnd = new Random(seed);
+            var rnd = new Random128(seed);
             var shop = new ShopInfo { ShopName = "shop_fuel", StocName = "s_fuel" };
 
             if (GetCircleData(system) is SfaCircleData circle)

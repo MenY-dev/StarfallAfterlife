@@ -1,6 +1,7 @@
 ﻿using StarfallAfterlife.Bridge.Collections;
 using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Mathematics;
+using StarfallAfterlife.Bridge.Primitives;
 using StarfallAfterlife.Bridge.Serialization;
 using StarfallAfterlife.Bridge.Server.Galaxy;
 using System;
@@ -35,7 +36,7 @@ namespace StarfallAfterlife.Bridge.Generators
 
         public static void GeneratePiratesOutposts(GalaxyMap map, int seed = 0)
         {
-            var rnd = new Random(seed);
+            var rnd = new Random128(seed);
             int id = 0;
 
             foreach (var system in map.Systems)
@@ -68,7 +69,7 @@ namespace StarfallAfterlife.Bridge.Generators
                 };
 
                 bool isSucces = false;
-                var posRnd = new Random(id);
+                var posRnd = new Random128(id);
                 var asteroids = new SystemHexMap(system.AsteroidsMask);
                 var nebulas = new SystemHexMap(system.NebulaMask);
                 var hexes = Enumerable
@@ -108,7 +109,7 @@ namespace StarfallAfterlife.Bridge.Generators
 
         public static void GenerateRichAsteroids(GalaxyMap map, int seed = 0)
         {
-            var rnd = new Random(seed);
+            var rnd = new Random128(seed);
             int id = 0;
             var ores = SfaDatabase.Instance.DiscoveryItems?.Values
                 .Where(i => i.Tags.Contains("Item.Role.Ore") == true).ToList() ?? new();

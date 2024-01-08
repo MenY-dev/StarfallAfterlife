@@ -2,6 +2,7 @@
 using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Instances;
 using StarfallAfterlife.Bridge.Networking;
+using StarfallAfterlife.Bridge.Primitives;
 using StarfallAfterlife.Bridge.Realms;
 using StarfallAfterlife.Bridge.Serialization;
 using StarfallAfterlife.Bridge.Server.Characters;
@@ -90,7 +91,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 if (secret.SecretType is SecretObjectType.Stash or SecretObjectType.ShipsGraveyard)
                 {
                     var drop = new JsonArray();
-                    var rnd = new Random(secret.Id + system.Id);
+                    var rnd = new Random128(secret.Id + system.Id);
                     var items = GetLevelItems(lvl);
 
                     if (lvl > 1)
@@ -116,7 +117,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 if (secret.SecretType is SecretObjectType.ShipsGraveyard)
                 {
                     var drop = new JsonArray();
-                    var rnd = new Random(secret.Id + system.Id);
+                    var rnd = new Random128(secret.Id + system.Id);
                     var items = GetLevelItems(lvl);
 
                     if (lvl > 1)

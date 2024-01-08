@@ -1,5 +1,6 @@
 ﻿using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Mathematics;
+using StarfallAfterlife.Bridge.Primitives;
 using StarfallAfterlife.Bridge.Realms;
 using StarfallAfterlife.Bridge.Server.Discovery;
 using StarfallAfterlife.Bridge.Server.Galaxy;
@@ -70,7 +71,7 @@ namespace StarfallAfterlife.Bridge.Generators
 
         private void GenerateForSystem(MobsMap map, GalaxyMapStarSystem system, SfaDatabase database)
         {
-            var rnd = new Random(system.Id);
+            var rnd = new Random128(system.Id);
             var influenceInfo = InfluenceMap.GetValueOrDefault(system.Id, new(Faction.None, -1, 0));
 
             var countRange = GetMobsCount(influenceInfo);
@@ -139,7 +140,7 @@ namespace StarfallAfterlife.Bridge.Generators
                 .ToList();
 
             var bossesCount = 1 + outpost.Level / 3;
-            var rnd = new Random(outpost.Id);
+            var rnd = new Random128(outpost.Id);
 
             if (bosses.Count < 1)
                 return;
@@ -176,7 +177,7 @@ namespace StarfallAfterlife.Bridge.Generators
                 .ToList();
 
             var bossesCount = 3 + station.Level / 2;
-            var rnd = new Random(station.Id);
+            var rnd = new Random128(station.Id);
 
             if (bosses.Count < 1)
                 return;

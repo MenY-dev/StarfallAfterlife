@@ -1,4 +1,5 @@
 ﻿using StarfallAfterlife.Bridge.Database;
+using StarfallAfterlife.Bridge.Primitives;
 using StarfallAfterlife.Bridge.Server.Quests;
 using System;
 using System.Collections;
@@ -81,7 +82,7 @@ namespace StarfallAfterlife.Bridge.Generators
                 return default;
 
             var revard = new QuestReward();
-            var rnd = new Random(quest.Id + quest.ObjectId);
+            var rnd = new Random128(quest.Id + quest.ObjectId);
 
             switch (rnd.Next() % 10)
             {

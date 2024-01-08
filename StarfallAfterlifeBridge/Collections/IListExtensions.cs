@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StarfallAfterlife.Bridge.Primitives;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace StarfallAfterlife.Bridge.Collections
             if (self is null)
                 return null;
 
-            var rnd = new Random(seed);
+            var rnd = new Random128(seed);
             var count = self.Count;
 
             for (int i = count - 1; i > 1; i--)

@@ -1,4 +1,5 @@
-﻿using StarfallAfterlife.Bridge.Serialization;
+﻿using StarfallAfterlife.Bridge.Primitives;
+using StarfallAfterlife.Bridge.Serialization;
 using StarfallAfterlife.Bridge.Server.Galaxy;
 using System;
 using System.Collections.Generic;
@@ -256,7 +257,7 @@ namespace StarfallAfterlife.Bridge.Database
             if (name.Length > 22)
                 name = name[..22];
 
-            name = $"{name}-{new Random().Next():D}";
+            name = $"{name}-{new Random128().Next():D}";
 
             return name ;
         }
