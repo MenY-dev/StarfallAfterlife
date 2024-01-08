@@ -53,8 +53,6 @@ namespace StarfallAfterlife.Bridge.Server
 
         public event EventHandler<PlayerStatusInfoEventArgs> PlayerStatusUpdated;
 
-        public int ShopsMapSeed { get; set; } = 1;
-
         public ShopsMap ShopsMap { get; protected set; }
 
         public ShopsGenerator ShopsGenerator{ get; protected set; }
@@ -314,7 +312,7 @@ namespace StarfallAfterlife.Bridge.Server
             if (shops is null)
             {
                 var system = Realm?.GalaxyMap?.GetSystem(objectType, objectId);
-                shops = generator.GenerateObjectShops(system, system?.GetObject(objectType, objectId), ShopsMapSeed);
+                shops = generator.GenerateObjectShops(system, system?.GetObject(objectType, objectId), Realm?.Seed ?? 0);
 
                 if (shops is not null)
                     map.SetObjectShops(shops);

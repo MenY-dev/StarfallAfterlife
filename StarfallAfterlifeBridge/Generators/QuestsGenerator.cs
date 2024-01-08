@@ -18,6 +18,8 @@ namespace StarfallAfterlife.Bridge.Generators
 {
     public partial class QuestsGenerator : GenerationTask
     {
+        public int Seed { get; }
+
         public SfaRealm Realm { get; set; }
 
         public GalaxyExtraMap ExtraMap { get; protected set; }
@@ -55,13 +57,14 @@ namespace StarfallAfterlife.Bridge.Generators
             new() { Faction = Faction.Vanguard, Level = 85, Logics = new(){ 1504953610 } },
         };
 
-        public QuestsGenerator(SfaRealm realm)
+        public QuestsGenerator(SfaRealm realm, int seed = 0)
         {
             if (realm is null)
                 return;
 
             Realm = realm;
             ExtraMap = new GalaxyExtraMap(Realm.GalaxyMap);
+            Seed = seed;
         }
 
         protected override bool Generate()
@@ -74,7 +77,7 @@ namespace StarfallAfterlife.Bridge.Generators
         {
             var qd = new DiscoveryQuestsDatabase();
             ExtraMap.Build();
-            Rnd = new(0);
+            Rnd = new(Seed);
             GenerateQuestLines(qd);
             GenerateTaskBoardQuests(qd);
             GenerateLevelingQuests(qd);

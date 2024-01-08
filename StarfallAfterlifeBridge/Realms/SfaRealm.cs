@@ -20,6 +20,8 @@ namespace StarfallAfterlife.Bridge.Realms
     {
         public string Id { get; set; } = "3af8cc9c641f452fbf69b9c99d6f2569";
 
+        public int Seed { get; set; } = 0;
+
         public string Name { get; set; }
 
         public string Description { get; set; }
@@ -83,6 +85,7 @@ namespace StarfallAfterlife.Bridge.Realms
                 if (doc is not null)
                 {
                     Id = (string)doc["id"];
+                    Seed = (int?)doc["seed"] ?? 0;
                     Name = (string)doc["name"];
                     Description = (string)doc["description"];
                     Version = (int?)doc["version"] ?? CurrentVersion;
@@ -181,6 +184,7 @@ namespace StarfallAfterlife.Bridge.Realms
             File.WriteAllText(realmPath, new JsonObject
             {
                 ["id"] = Id,
+                ["seed"] = Seed,
                 ["name"] = Name,
                 ["description"] = Description,
                 ["version"] = Version,

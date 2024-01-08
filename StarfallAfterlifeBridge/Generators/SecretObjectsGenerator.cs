@@ -16,16 +16,19 @@ namespace StarfallAfterlife.Bridge.Generators
 {
     public class SecretObjectsGenerator : GenerationTask
     {
+        public int Seed { get; }
+
         public SfaRealm Realm { get; }
 
         public GalaxyExtraMap ExtraMap { get; protected set; }
 
         protected int ObjectId { get; set; } = 0;
 
-        public SecretObjectsGenerator(SfaRealm realm)
+        public SecretObjectsGenerator(SfaRealm realm, int seed = 0)
         {
             Realm = realm;
             ExtraMap = new GalaxyExtraMap(Realm.GalaxyMap);
+            Seed = seed;
         }
 
         protected override bool Generate()
@@ -38,7 +41,7 @@ namespace StarfallAfterlife.Bridge.Generators
         public virtual SecretObjectsMap Build()
         {
             var map = new SecretObjectsMap();
-            var rnd = new Random128(0);
+            var rnd = new Random128(Seed);
 
             ExtraMap.Build();
 

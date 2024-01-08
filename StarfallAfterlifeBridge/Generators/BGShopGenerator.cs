@@ -11,6 +11,8 @@ namespace StarfallAfterlife.Bridge.Generators
 {
     public class BGShopGenerator : GenerationTask
     {
+        public int Seed { get; }
+
         public SfaRealm Realm { get; }
 
         public BGShopGenerator()
@@ -18,9 +20,10 @@ namespace StarfallAfterlife.Bridge.Generators
 
         }
 
-        public BGShopGenerator(SfaRealm realm)
+        public BGShopGenerator(SfaRealm realm, int seed = 0)
         {
             Realm = realm;
+            Seed = seed;
         }
 
         protected override bool Generate()

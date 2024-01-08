@@ -12,6 +12,8 @@ namespace StarfallAfterlife.Bridge.Generators
 {
     public class SummarySeasonGenerator : GenerationTask
     {
+        public int Seed { get; }
+
         public SfaRealm Realm { get; }
 
         public SummarySeasonGenerator()
@@ -19,9 +21,10 @@ namespace StarfallAfterlife.Bridge.Generators
 
         }
 
-        public SummarySeasonGenerator(SfaRealm realm)
+        public SummarySeasonGenerator(SfaRealm realm, int seed = 0)
         {
             Realm = realm;
+            Seed = seed;
         }
 
         protected override bool Generate()

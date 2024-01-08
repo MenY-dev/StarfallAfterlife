@@ -16,6 +16,8 @@ namespace StarfallAfterlife.Bridge.Generators
 {
     public class MobsMapGenerator : GenerationTask
     {
+        public int Seed { get; }
+
         public SfaRealm Realm { get; set; }
 
         public GalaxyExtraMap ExtraMap { get; protected set; }
@@ -26,13 +28,14 @@ namespace StarfallAfterlife.Bridge.Generators
 
         protected Dictionary<int, InfluenceInfo> InfluenceMap { get; set; } = new();
 
-        public MobsMapGenerator(SfaRealm realm)
+        public MobsMapGenerator(SfaRealm realm, int seed = 0)
         {
             if (realm is null)
                 return;
 
             Realm = realm;
             ExtraMap = new GalaxyExtraMap(Realm.GalaxyMap);
+            Seed = seed;
         }
 
         protected override bool Generate()
@@ -71,7 +74,7 @@ namespace StarfallAfterlife.Bridge.Generators
 
         private void GenerateForSystem(MobsMap map, GalaxyMapStarSystem system, SfaDatabase database)
         {
-            var rnd = new Random128(system.Id);
+            var rnd = new Random128(system.Id ^ Seed);
             var influenceInfo = InfluenceMap.GetValueOrDefault(system.Id, new(Faction.None, -1, 0));
 
             var countRange = GetMobsCount(influenceInfo);
@@ -140,7 +143,7 @@ namespace StarfallAfterlife.Bridge.Generators
                 .ToList();
 
             var bossesCount = 1 + outpost.Level / 3;
-            var rnd = new Random128(outpost.Id);
+            var rnd = new Random128(outpost.Id ^ Seed);
 
             if (bosses.Count < 1)
                 return;
@@ -177,7 +180,7 @@ namespace StarfallAfterlife.Bridge.Generators
                 .ToList();
 
             var bossesCount = 3 + station.Level / 2;
-            var rnd = new Random128(station.Id);
+            var rnd = new Random128(station.Id ^ Seed);
 
             if (bosses.Count < 1)
                 return;

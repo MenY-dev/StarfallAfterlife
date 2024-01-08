@@ -20,7 +20,7 @@ namespace StarfallAfterlife.Bridge.Generators
         {
             var systems = Realm.GalaxyMap.GetSystemsAtDistance(context.TargetSystemId, info.JumpsToSystem, true)
                 .ToList()
-                .Randomize(context.Quest.ObjectId + context.Quest.LogicId);
+                .Randomize((context.Quest.ObjectId + context.Quest.LogicId) ^ Seed);
 
             var addedSystems = context.Quest.Conditions?
                 .Select(q => (int?)q["system_to_explore"])
@@ -51,7 +51,7 @@ namespace StarfallAfterlife.Bridge.Generators
             var systems = Realm.GalaxyMap.GetSystemsArround(context.TargetSystemId, info.MaxJumpsToSystem, true)
                 .Select(s => s.Key)
                 .ToList()
-                .Randomize(context.Quest.ObjectId + context.Quest.LogicId);
+                .Randomize((context.Quest.ObjectId + context.Quest.LogicId) ^ Seed);
 
             var addedPlanets = context.Quest.Conditions?
                 .Select(q => (int?)q["target_object_id"])
@@ -86,7 +86,7 @@ namespace StarfallAfterlife.Bridge.Generators
             var systems = Realm.GalaxyMap.GetSystemsArround(context.TargetSystemId, info.MaxJumpsToSystem, true)
                 .Select(s => s.Key)
                 .ToList()
-                .Randomize(context.Quest.ObjectId + context.Quest.LogicId);
+                .Randomize((context.Quest.ObjectId + context.Quest.LogicId) ^ Seed);
 
             var addedObjects = context.Quest.Conditions?
                 .Select(q => (
@@ -178,7 +178,7 @@ namespace StarfallAfterlife.Bridge.Generators
         {
             var items = info.Items?.Select(i => i.Id)
                 .ToList()
-                .Randomize(context.Quest.ObjectId + context.Quest.LogicId);
+                .Randomize((context.Quest.ObjectId + context.Quest.LogicId) ^ Seed);
 
             var addedItems = context.Quest.Conditions?
                 .Select(q => (int?)q["item_to_deliver"])
@@ -204,7 +204,7 @@ namespace StarfallAfterlife.Bridge.Generators
             var systems = Realm.GalaxyMap.GetSystemsArround(context.TargetSystemId, 6, true)
                 .Select(s => s.Key)
                 .ToList()
-                .Randomize(context.Quest.ObjectId + context.Quest.LogicId);
+                .Randomize((context.Quest.ObjectId + context.Quest.LogicId) ^ Seed);
 
             foreach (var system in systems)
             {
@@ -214,7 +214,7 @@ namespace StarfallAfterlife.Bridge.Generators
                 var obj = system
                     .GetObjectsWithTaskBoard()
                     .ToList()
-                    .Randomize(context.Quest.ObjectId + context.Quest.LogicId)
+                    .Randomize((context.Quest.ObjectId + context.Quest.LogicId) ^ Seed)
                     .FirstOrDefault();
 
                 if (obj is not null)
@@ -240,7 +240,7 @@ namespace StarfallAfterlife.Bridge.Generators
             var systems = Realm.GalaxyMap.GetSystemsArround(context.TargetSystemId, 4, true)
                 .Select(s => s.Key)
                 .ToList()
-                .Randomize(context.Quest.ObjectId + context.Quest.LogicId);
+                .Randomize((context.Quest.ObjectId + context.Quest.LogicId) ^ Seed);
 
             var addedObjects = context.Quest.Conditions?
                 .Select(q => (
@@ -280,7 +280,7 @@ namespace StarfallAfterlife.Bridge.Generators
             var systems = Realm.GalaxyMap.GetSystemsArround(context.TargetSystemId, 3, true)
                 .Select(s => s.Key)
                 .ToList()
-                .Randomize(context.Quest.ObjectId + context.Quest.LogicId);
+                .Randomize((context.Quest.ObjectId + context.Quest.LogicId) ^ Seed);
 
             var addedMobs = context.Quest.Conditions?
                 .Select(q => (int?)q["target_mob_id"])
@@ -322,7 +322,7 @@ namespace StarfallAfterlife.Bridge.Generators
             var systems = Realm.GalaxyMap.GetSystemsArround(context.TargetSystemId, 3, true)
                 .Select(s => s.Key)
                 .ToList()
-                .Randomize(context.Quest.ObjectId + context.Quest.LogicId);
+                .Randomize((context.Quest.ObjectId + context.Quest.LogicId) ^ Seed);
 
             var addedMobs = context.Quest.Conditions?
                 .Select(q => (int?)q["group_id"])
@@ -385,7 +385,7 @@ namespace StarfallAfterlife.Bridge.Generators
                 {
                     foreach (var item in system.PiratesOutposts?
                         .ToList()
-                        .Randomize(context.Quest.ObjectId + context.Quest.LogicId)
+                        .Randomize((context.Quest.ObjectId + context.Quest.LogicId) ^ Seed)
                         .ToList() ?? new())
                     {
                         if (item is null ||
@@ -453,7 +453,7 @@ namespace StarfallAfterlife.Bridge.Generators
                 {
                     foreach (var item in system.PiratesStations?
                         .ToList()
-                        .Randomize(context.Quest.ObjectId + context.Quest.LogicId)
+                        .Randomize((context.Quest.ObjectId + context.Quest.LogicId) ^ Seed)
                         .ToList() ?? new())
                     {
                         if (item is null ||
@@ -509,7 +509,7 @@ namespace StarfallAfterlife.Bridge.Generators
             var systems = Realm.GalaxyMap.GetSystemsArround(context.TargetSystemId, 3, true)
                 .Select(s => s.Key)
                 .ToList()
-                .Randomize(context.Quest.ObjectId + context.Quest.LogicId);
+                .Randomize((context.Quest.ObjectId + context.Quest.LogicId) ^ Seed);
 
             var addedBosses = context.Quest.Conditions?
                 .Select(q => (int?)q["target_mob_id"])
@@ -523,12 +523,12 @@ namespace StarfallAfterlife.Bridge.Generators
 
                 foreach (var targetObject in mapObjects
                     .ToList()
-                    .Randomize(context.Quest.ObjectId + context.Quest.LogicId)
+                    .Randomize((context.Quest.ObjectId + context.Quest.LogicId) ^ Seed)
                     .ToList() ?? new())
                 {
                     foreach (var item in Realm.MobsMap.GetObjectMobs(system.Id, targetObject.ObjectType, targetObject.Id)
                             .ToList()
-                            .Randomize(context.Quest.ObjectId + context.Quest.LogicId)
+                            .Randomize((context.Quest.ObjectId + context.Quest.LogicId) ^ Seed)
                             .ToList() ?? new())
                     {
                         if (item is not null &&
@@ -613,7 +613,7 @@ namespace StarfallAfterlife.Bridge.Generators
             var systems = Realm.GalaxyMap.GetSystemsArround(context.TargetSystemId, 3, true)
                 .Select(s => s.Key)
                 .ToList()
-                .Randomize(context.Quest.ObjectId + context.Quest.LogicId);
+                .Randomize((context.Quest.ObjectId + context.Quest.LogicId) ^ Seed);
 
             var addedMobs = context.Quest.Conditions?
                 .Select(q => (int?)q["target_id"])
@@ -650,7 +650,7 @@ namespace StarfallAfterlife.Bridge.Generators
             var systems = Realm.GalaxyMap.GetSystemsArround(context.TargetSystemId, 5, true)
                 .Select(s => s.Key)
                 .ToList()
-                .Randomize(context.Quest.ObjectId + context.Quest.LogicId);
+                .Randomize((context.Quest.ObjectId + context.Quest.LogicId) ^ Seed);
 
             var addedMobs = context.Quest.Conditions?
                 .SelectMany(q => q["target_mobs"]?.DeserializeUnbuffered<List<int>>() ?? new())
@@ -766,7 +766,7 @@ namespace StarfallAfterlife.Bridge.Generators
                     }
                 }
 
-                foreach (var system in systems.ToList().Randomize(context.Quest.ObjectId + context.Quest.LogicId))
+                foreach (var system in systems.ToList().Randomize((context.Quest.ObjectId + context.Quest.LogicId) ^ Seed))
                 {
                     foreach (var mob in Realm.MobsMap.GetSystemMobs(system.Id) ?? new())
                     {

@@ -11,15 +11,17 @@ namespace StarfallAfterlife.Bridge.Generators
 {
     public class VanillaRealmGenerator : GenerationTask
     {
+        public int Seed { get; }
         public SfaRealm Realm { get; }
         public SfaDatabase Database { get; }
         public MobsDatabase MobsDatabase { get; }
 
-        public VanillaRealmGenerator(SfaRealm realm, SfaDatabase database = null, MobsDatabase mobsDatabase = null)
+        public VanillaRealmGenerator(SfaRealm realm, SfaDatabase database = null, MobsDatabase mobsDatabase = null, int seed = 0)
         {
             Realm = realm;
             Database = database ?? SfaDatabase.Instance;
             MobsDatabase = mobsDatabase ?? MobsDatabase.Instance;
+            realm.Seed = Seed = seed;
         }
 
         protected override bool Generate()
@@ -37,11 +39,11 @@ namespace StarfallAfterlife.Bridge.Generators
                 Realm.GalaxyMapHash = Realm.GalaxyMap.Hash;
 
                 result = RunChildTasks(
-                    new SecretObjectsGenerator(Realm),
-                    new MobsMapGenerator(Realm),
-                    new QuestsGenerator(Realm),
-                    new SummarySeasonGenerator(Realm),
-                    new BGShopGenerator(Realm));
+                    new SecretObjectsGenerator(Realm, Seed),
+                    new MobsMapGenerator(Realm, Seed),
+                    new QuestsGenerator(Realm, Seed),
+                    new SummarySeasonGenerator(Realm, Seed),
+                    new BGShopGenerator(Realm, Seed));
             }
             catch
             {

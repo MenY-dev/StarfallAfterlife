@@ -15,14 +15,17 @@ namespace StarfallAfterlife.Bridge.Generators
 {
     public class ShopsGenerator : GenerationTask
     {
+        public int Seed { get; }
+
         public SfaRealm Realm { get; set; }
 
-        public ShopsGenerator(SfaRealm realm)
+        public ShopsGenerator(SfaRealm realm, int seed = 0)
         {
             if (realm is null)
                 return;
 
             Realm = realm;
+            Seed = seed;
         }
 
         protected override bool Generate()
@@ -51,7 +54,7 @@ namespace StarfallAfterlife.Bridge.Generators
                             planet.Faction == Faction.None)
                             continue;
 
-                        var shops = GenerateObjectShops(system, item);
+                        var shops = GenerateObjectShops(system, item, Seed);
 
                         if (shops is not null)
                             map.SetObjectShops(shops);
