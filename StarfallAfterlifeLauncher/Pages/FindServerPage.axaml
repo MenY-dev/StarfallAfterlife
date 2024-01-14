@@ -83,6 +83,11 @@
 														 FontSize="16" VerticalAlignment="Center"/>
 								</c:Switch>
 							</c:Property>
+							<c:Property Text="{DynamicResource s_page_fs_info_active_sessions_lbl}" HorizontalAlignment="Stretch" IsVisible="{Binding AppVM.SelectedLocalRealm.IsActiveSession}">
+								<ItemsControl ItemsSource="{Binding SelectedServer.ActiveSessionChars}">
+
+								</ItemsControl>
+							</c:Property>
 							<c:Property Text="{DynamicResource s_page_fs_info_description_lbl}" HorizontalAlignment="Stretch">
 								<SelectableTextBlock Text="{Binding SelectedServer.Description}" FontSize="16"
 													 VerticalAlignment="Center" TextWrapping="WrapWithOverflow"/>

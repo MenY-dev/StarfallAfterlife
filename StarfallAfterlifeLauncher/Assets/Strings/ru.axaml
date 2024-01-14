@@ -31,6 +31,7 @@
 	<sys:String x:Key="s_page_fs_info_server_ver_lbl">Версия</sys:String>
 	<sys:String x:Key="s_page_fs_info_need_password_lbl">Пароль</sys:String>
 	<sys:String x:Key="s_page_fs_info_description_lbl">Описание</sys:String>
+	<sys:String x:Key="s_page_fs_info_active_sessions_lbl">Активные Сессии</sys:String>
 	<sys:String x:Key="s_page_fs_info_update_btn">ОБНОВИТЬ</sys:String>
 	<sys:String x:Key="s_page_fs_info_delete_btn">УДАЛИТЬ</sys:String>
 

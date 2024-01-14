@@ -1,5 +1,6 @@
 ﻿using Avalonia.Threading;
 using StarfallAfterlife.Bridge.Launcher;
+using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Server;
 using StarfallAfterlife.Launcher.Services;
 using System;
@@ -29,6 +30,13 @@ namespace StarfallAfterlife.Launcher.ViewModels
 
         public bool NeedPassword => Info?.NeedPassword ?? false;
 
+        public DiscoverySession[] Sessions { get; protected set; }
+
+        public bool IsActiveSession => Sessions?.Any(
+            s => s?.RealmId is not null && s.RealmId == Id) ?? false;
+
+        public string[] ActiveSessionChars { get; protected set; }
+
         public FindServerPageViewModel Page { get; }
 
         public RemoteServerInfo Info
@@ -37,6 +45,22 @@ namespace StarfallAfterlife.Launcher.ViewModels
             set
             {
                 SetAndRaise(ref _info, value);
+
+                if (Page?.Launcher is SfaLauncher launcher)
+                {
+                    Sessions = launcher.CurrentProfile?.GetSessions(Id);
+                    ActiveSessionChars = Sessions?
+                        .Where(s => s is not null)
+                        .Select(s => launcher.CurrentProfile?.GetCharacter(s?.CharacterId ?? -1)?.Name)
+                        .Where(n => n is not null)
+                        .ToArray();
+                }
+                else
+                {
+                    Sessions = null;
+                    ActiveSessionChars = null;
+                }
+
                 RaiseModelChanged();
             }
         }
@@ -58,6 +82,9 @@ namespace StarfallAfterlife.Launcher.ViewModels
             RaisePropertyChanged(Info?.Version, nameof(Version));
             RaisePropertyChanged(Info?.IsOnline ?? false, nameof(IsOnline));
             RaisePropertyChanged(Info?.NeedPassword ?? false, nameof(NeedPassword));
+            RaisePropertyChanged(Sessions, nameof(Sessions));
+            RaisePropertyChanged(IsActiveSession, nameof(IsActiveSession));
+            RaisePropertyChanged(ActiveSessionChars, nameof(ActiveSessionChars));
         }
 
         public Task<bool> Update() =>

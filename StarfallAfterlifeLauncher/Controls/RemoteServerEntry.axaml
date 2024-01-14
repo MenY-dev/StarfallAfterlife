@@ -27,6 +27,14 @@
 
 			<TextBlock Text="{Binding Address}" VerticalAlignment="Center" Opacity="1"
 					   IsVisible="{Binding Name, Converter={x:Static ObjectConverters.IsNull}}"/>
+
+			<Label Grid.Column="0" Content="◈"
+				   FontSize="14"
+				   Foreground="{DynamicResource AccentColor}"
+				   IsVisible="{Binding IsActiveSession}"
+				   VerticalAlignment="Center"
+				   RenderTransform="scaleX(1.5) scaleY(1.5)"
+				   ToolTip.Tip="{DynamicResource s_tooltip_active_session}"/>
 			
 		</StackPanel>
 		<StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Right" VerticalAlignment="Center">
