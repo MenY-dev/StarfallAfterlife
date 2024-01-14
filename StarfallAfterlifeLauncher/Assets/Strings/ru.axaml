@@ -10,11 +10,16 @@
 	<sys:String x:Key="s_app_close_btn">ЗАКРЫТЬ</sys:String>
 	<sys:String x:Key="s_app_back_btn">НАЗАД</sys:String>
 	<sys:String x:Key="s_app_select_btn">ВЫБРАТЬ</sys:String>
+	<sys:String x:Key="s_app_edit_btn">ИЗМЕНИТЬ</sys:String>
 	
 	<sys:String x:Key="s_page_sp_header">ОДИНОЧНАЯ ИГРА</sys:String>
 	<sys:String x:Key="s_page_sp_add_realm_btn">СОЗДАТЬ МИР</sys:String>
 	<sys:String x:Key="s_page_sp_delete_realm_btn">УДАЛИТЬ МИР</sys:String>
 	<sys:String x:Key="s_page_sp_play_btn">ИГРАТЬ</sys:String>
+	<sys:String x:Key="s_page_sp_info_name_lbl">Название</sys:String>
+	<sys:String x:Key="s_page_sp_info_description_lbl">Описание</sys:String>
+	<sys:String x:Key="s_page_sp_info_seed_lbl">Зерно</sys:String>
+	<sys:String x:Key="s_page_sp_info_active_sessions_lbl">Активные Сессии</sys:String>
 
 	<sys:String x:Key="s_page_fs_header">ПОИСК СЕРВЕРА</sys:String>
 	<sys:String x:Key="s_page_fs_update_all_btn">ОБНОВИТЬ ВСЕ</sys:String>
@@ -73,7 +78,11 @@
 	<sys:String x:Key="s_dialog_create_profile_label">Имя профиля</sys:String>
 
 	<sys:String x:Key="s_dialog_create_realm_title">СОЗДАТЬ НОВЫЙ МИР</sys:String>
+	<sys:String x:Key="s_dialog_create_realm_edit_title">Редактирование {0}</sys:String>
 	<sys:String x:Key="s_dialog_create_realm_label">Название мира</sys:String>
+	<sys:String x:Key="s_dialog_create_realm_name_label">Название</sys:String>
+	<sys:String x:Key="s_dialog_create_realm_seed_label">Зерно</sys:String>
+	<sys:String x:Key="s_dialog_create_realm_description_label">Описание</sys:String>
 	
 	<sys:String x:Key="s_dialog_enter_password_title">ВВЕДИТЕ ПАРОЛЬ</sys:String>
 	<sys:String x:Key="s_dialog_enter_password_label">Пароль</sys:String>

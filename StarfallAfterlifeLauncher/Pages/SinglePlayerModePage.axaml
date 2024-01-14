@@ -22,12 +22,6 @@
 						Margin="0 0 10 0"
 						IsEnabled="{Binding !AppVM.IsGameStarted}">
 				
-				<c:SfaButton Content="{DynamicResource s_page_sp_delete_realm_btn}"
-							 Background="Red"
-							 Foreground="White" BorderBrush="Red"
-							 HorizontalAlignment="Left"
-							 Command="{Binding DeleteSelectedRealm}"/>
-				
 				<c:SfaButton Content="{DynamicResource s_page_sp_add_realm_btn}"
 							 Foreground="White"
 							 HorizontalAlignment="Right"
@@ -54,34 +48,68 @@
 					</LinearGradientBrush>
 				</Rectangle.OpacityMask>
 			</Rectangle>
-			
-			<c:SfaListBox Padding="10 20 10 20"
+
+			<Grid ColumnDefinitions="1* 2 1*" IsEnabled="{Binding !AppVM.IsGameStarted}">
+				<Panel Grid.Column="0">
+					<c:SfaListBox Padding="10 20 10 20"
 						  ItemsSource="{Binding AppVM.Realms}"
 						  SelectionMode="AlwaysSelected"
-						  SelectedItem="{Binding AppVM.SelectedLocalRealm}"
-						  IsEnabled="{Binding !AppVM.IsGameStarted}">
-				
-				<c:SfaListBox.ItemTemplate>
-					<DataTemplate>
-						<Grid ColumnDefinitions="* *" Margin="6 6">
-							<StackPanel Orientation="Horizontal" Spacing="6">
-								<Label Grid.Column="0" Content="{Binding Name}"
-									   FontSize="14"
-									   Foreground="White" Margin="0"
-									   VerticalAlignment="Center"/>
-								<Label Grid.Column="0" Content="◈"
-									   FontSize="14"
-									   Foreground="{DynamicResource AccentColor}"
-									   IsVisible="{Binding IsActiveSession}"
-									   VerticalAlignment="Center"
-									   RenderTransform="scaleX(2) scaleY(2)"
-									   ToolTip.Tip="{DynamicResource s_tooltip_active_session}"/>
-							</StackPanel>
-						</Grid>
-					</DataTemplate>
-				</c:SfaListBox.ItemTemplate>
-				
-			</c:SfaListBox>
+						  SelectedItem="{Binding AppVM.SelectedLocalRealm}">
+
+						<c:SfaListBox.ItemTemplate>
+							<DataTemplate>
+								<Grid ColumnDefinitions="* *" Margin="6 6">
+									<StackPanel Orientation="Horizontal" Spacing="6">
+										<Label Grid.Column="0" Content="{Binding Name}"
+											   FontSize="14"
+											   Foreground="White" Margin="0"
+											   VerticalAlignment="Center"/>
+										<Label Grid.Column="0" Content="◈"
+											   FontSize="14"
+											   Foreground="{DynamicResource AccentColor}"
+											   IsVisible="{Binding IsActiveSession}"
+											   VerticalAlignment="Center"
+											   RenderTransform="scaleX(2) scaleY(2)"
+											   ToolTip.Tip="{DynamicResource s_tooltip_active_session}"/>
+									</StackPanel>
+								</Grid>
+							</DataTemplate>
+						</c:SfaListBox.ItemTemplate>
+
+					</c:SfaListBox>
+				</Panel>
+				<Panel Grid.Column="2">
+					<ScrollViewer>
+						<StackPanel Margin="10" Spacing="3">
+							<c:Property Text="{DynamicResource s_page_sp_info_name_lbl}" HorizontalAlignment="Stretch">
+								<SelectableTextBlock Text="{Binding AppVM.SelectedLocalRealm.Name}" FontSize="16" VerticalAlignment="Center"/>
+							</c:Property>
+							<c:Property Text="{DynamicResource s_page_sp_info_description_lbl}" HorizontalAlignment="Stretch">
+								<SelectableTextBlock Text="{Binding AppVM.SelectedLocalRealm.Description}" FontSize="16"
+													 VerticalAlignment="Center" TextWrapping="WrapWithOverflow"/>
+							</c:Property>
+							<c:Property Text="{DynamicResource s_page_sp_info_seed_lbl}" HorizontalAlignment="Stretch" IsVisible="{Binding AppVM.SelectedLocalRealm.Seed}">
+								<SelectableTextBlock Text="{Binding AppVM.SelectedLocalRealm.Seed}" FontSize="16" VerticalAlignment="Center"/>
+							</c:Property>
+							<c:Property Text="{DynamicResource s_page_sp_info_active_sessions_lbl}" HorizontalAlignment="Stretch" IsVisible="{Binding AppVM.SelectedLocalRealm.IsActiveSession}">
+								<ItemsControl ItemsSource="{Binding AppVM.SelectedLocalRealm.ActiveSessionChars}">
+									
+								</ItemsControl>
+							</c:Property>
+							<c:Property Text=""
+										IsEnabled="{Binding !AppVM.SelectedLocalRealm.LockedByServer}"
+										HorizontalAlignment="Stretch">
+								<StackPanel Spacing="6" Orientation="Horizontal" HorizontalAlignment="Right">
+									<c:SfaButton Content="{DynamicResource s_app_edit_btn}" Command="{Binding EditRealm}" HorizontalAlignment="Right"/>
+									<c:SfaButton Content="{DynamicResource s_app_delete_btn}" Command="{Binding DeleteSelectedRealm}" HorizontalAlignment="Right" Background="Red" BorderBrush="Red"/>
+								</StackPanel>
+							</c:Property>
+						</StackPanel>
+					</ScrollViewer>
+				</Panel>
+				<c:Separator Classes="vertical" Opacity="0.5" Grid.Column="1"/>
+			</Grid>
+			
 			<c:Separator Height="2" Opacity="0.8" VerticalAlignment="Bottom"/>
 		</Panel>
 	</DockPanel>

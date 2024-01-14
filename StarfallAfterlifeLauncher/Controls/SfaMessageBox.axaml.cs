@@ -6,6 +6,7 @@ using Avalonia.Data;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using StarfallAfterlife.Launcher.Views;
+using System;
 using System.Collections;
 using System.Diagnostics;
 using System.Linq;
@@ -21,6 +22,8 @@ namespace StarfallAfterlife.Launcher.Controls
                 defaultValue: null,
                 defaultBindingMode: BindingMode.TwoWay);
 
+        public static readonly StyledProperty<object> MessageContentProperty =
+            AvaloniaProperty.Register<SfaMessageBox, object>(nameof(MessageContent));
 
         public static readonly StyledProperty<MessageBoxButton> ButtonsProperty =
             AvaloniaProperty.Register<SfaMessageBox, MessageBoxButton>(
@@ -35,6 +38,8 @@ namespace StarfallAfterlife.Launcher.Controls
                 defaultBindingMode: BindingMode.OneWay);
 
         public string Text { get => GetValue(TextProperty); set => SetValue(TextProperty, value); }
+
+        public object MessageContent { get => GetValue(MessageContentProperty); set => SetValue(ContentProperty, value); }
 
         public MessageBoxButton Buttons { get => GetValue(ButtonsProperty); set { SetValue(ButtonsProperty, value); UpdateButtons(); } }
 

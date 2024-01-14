@@ -1,4 +1,5 @@
-﻿using StarfallAfterlife.Bridge.Profiles;
+﻿using StarfallAfterlife.Bridge.Launcher;
+using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Realms;
 using System;
 using System.Collections.Generic;
@@ -12,12 +13,27 @@ namespace StarfallAfterlife.Launcher.ViewModels
     {
         public string Name => RealmInfo?.Realm?.Name;
 
-        public bool IsActiveSession { get; set; }
+        public string Description => RealmInfo?.Realm?.Description;
+
+        public int Seed => RealmInfo?.Realm?.Seed ?? -1;
+
+        public DiscoverySession[] Sessions { get; protected set; }
+
+        public bool IsActiveSession => Sessions?.Any(
+            s => s?.RealmId is not null && s.RealmId == RealmInfo?.Realm?.Id) ?? false;
+
+        public string[] ActiveSessionChars { get; protected set; }
+
+        public bool LockedByServer { get; protected set; }
 
         public SfaRealmInfo RealmInfo
         {
             get => _realmInfo;
-            set => SetAndRaise(ref _realmInfo, value);
+            set
+            {
+                SetAndRaise(ref _realmInfo, value);
+                Update();
+            }
         }
 
         public AppViewModel AppVM { get; set; }
@@ -33,12 +49,41 @@ namespace StarfallAfterlife.Launcher.ViewModels
         {
             AppVM = appVM;
             RealmInfo = realm;
-            IsActiveSession = appVM.Launcher.CurrentProfile?.GetSession(realm?.Realm?.Id) is not null;
         }
 
         public void Update()
         {
-            RealmInfo = RealmInfo;
+            RaisePropertyChanged(Name, nameof(Name));
+            RaisePropertyChanged(Description, nameof(Description));
+            RaisePropertyChanged(Seed, nameof(Seed));
+
+            if (AppVM is AppViewModel app &&
+                app.Launcher is SfaLauncher launcher)
+            {
+                Sessions = launcher.CurrentProfile?.GetSessions(RealmInfo?.Realm?.Id);
+
+                ActiveSessionChars = Sessions?
+                    .Where(s => s is not null)
+                    .Select(s => launcher.CurrentProfile?.GetCharacter(s?.CharacterId ?? -1)?.Name)
+                    .Where(n => n is not null)
+                    .ToArray();
+
+                LockedByServer =
+                    RealmInfo is not null &&
+                    (app.CreateServerPageViewModel?.ServerStarted == true &&
+                    app.SelectedServerRealm?.RealmInfo == RealmInfo);
+            }
+            else
+            {
+                Sessions = null;
+                ActiveSessionChars = null;
+                LockedByServer = false;
+            }
+
+            RaisePropertyChanged(Sessions, nameof(Sessions));
+            RaisePropertyChanged(IsActiveSession, nameof(IsActiveSession));
+            RaisePropertyChanged(ActiveSessionChars, nameof(ActiveSessionChars));
+            RaisePropertyChanged(LockedByServer, nameof(LockedByServer));
         }
     }
 }

@@ -10,11 +10,16 @@
 	<sys:String x:Key="s_app_close_btn">CLOSE</sys:String>
 	<sys:String x:Key="s_app_back_btn">BACK</sys:String>
 	<sys:String x:Key="s_app_select_btn">SELECT</sys:String>
+	<sys:String x:Key="s_app_edit_btn">EDIT</sys:String>
 	
 	<sys:String x:Key="s_page_sp_header">SINGLE PLAYER</sys:String>
 	<sys:String x:Key="s_page_sp_add_realm_btn">CREATE REALM</sys:String>
 	<sys:String x:Key="s_page_sp_delete_realm_btn">DELETE REALM</sys:String>
 	<sys:String x:Key="s_page_sp_play_btn">PLAY</sys:String>
+	<sys:String x:Key="s_page_sp_info_name_lbl">Name</sys:String>
+	<sys:String x:Key="s_page_sp_info_description_lbl">Description</sys:String>
+	<sys:String x:Key="s_page_sp_info_seed_lbl">Seed</sys:String>
+	<sys:String x:Key="s_page_sp_info_active_sessions_lbl">Active Sessions</sys:String>
 	
 	<sys:String x:Key="s_page_fs_header">FIND SERVER</sys:String>
 	<sys:String x:Key="s_page_fs_update_all_btn">UPDATE ALL</sys:String>
@@ -73,7 +78,11 @@
 	<sys:String x:Key="s_dialog_create_profile_label">Profile name</sys:String>
 
 	<sys:String x:Key="s_dialog_create_realm_title">CREATE NEW REALM</sys:String>
+	<sys:String x:Key="s_dialog_create_realm_edit_title">Edit {0}</sys:String>
 	<sys:String x:Key="s_dialog_create_realm_label">Realm name</sys:String>
+	<sys:String x:Key="s_dialog_create_realm_name_label">Name</sys:String>
+	<sys:String x:Key="s_dialog_create_realm_seed_label">Seed</sys:String>
+	<sys:String x:Key="s_dialog_create_realm_description_label">Description</sys:String>
 	
 	<sys:String x:Key="s_dialog_enter_password_title">ENTER PASSWORD</sys:String>
 	<sys:String x:Key="s_dialog_enter_password_label">Password</sys:String>

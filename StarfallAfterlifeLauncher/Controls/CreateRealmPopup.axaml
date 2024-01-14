@@ -1,10 +1,42 @@
-<c:EditNamePopup xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-		xmlns:c="using:StarfallAfterlife.Launcher.Controls"
-        mc:Ignorable="d"
-        x:Class="StarfallAfterlife.Launcher.Controls.CreateRealmPopup"
-        Title="{DynamicResource s_dialog_create_realm_title}"
-		Label="{DynamicResource s_dialog_create_realm_label}">
-</c:EditNamePopup>
+<c:SfaPopup xmlns="https://github.com/avaloniaui"
+			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			xmlns:c="using:StarfallAfterlife.Launcher.Controls"
+			mc:Ignorable="d"
+			x:Class="StarfallAfterlife.Launcher.Controls.CreateRealmPopup"
+			MinWidth="520" SizeToContent="WidthAndHeight"
+			Title="{DynamicResource s_dialog_create_realm_title}">
+	<c:DialogPanel>
+		<c:DialogPanel.Header>
+			<Label Classes="label" Margin="10 6" Foreground="White" FontSize="16" FontWeight="DemiBold" HorizontalAlignment="Center" Content="{Binding $parent[Window].Title}"/>
+		</c:DialogPanel.Header>
+		<c:DialogPanel.Footer>
+			<Panel DockPanel.Dock="Bottom" Margin="6">
+				<StackPanel Name="buttons" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="6">
+					<c:SfaButton Content="{DynamicResource s_app_ok_btn}"
+								 Command="{Binding OkPressed}"
+								 IsEnabled="{Binding IsValid}"/>
+					<c:SfaButton Content="{DynamicResource s_app_cancell_btn}"
+								 Command="{Binding Close}"/>
+				</StackPanel>
+			</Panel>
+		</c:DialogPanel.Footer>
+		<Panel Margin="10">
+			<StackPanel Spacing="3">
+				<c:Property Text="{DynamicResource s_dialog_create_realm_name_label}">
+					<c:SfaTextBox Text="{Binding RealmName}"/>
+				</c:Property>
+				<c:Property Text="{DynamicResource s_dialog_create_realm_seed_label}"
+							IsVisible="{Binding !EditRealm}">
+					<c:SfaNumericUpDown Value="{Binding RealmSeed}"
+										Minimum="1" Maximum="2147483646" Increment="1"/>
+				</c:Property>
+				<c:Property Text="{DynamicResource s_dialog_create_realm_description_label}">
+					<c:SfaTextBox Text="{Binding RealmDescription}"
+								  AcceptsReturn="True" TextWrapping="Wrap" MaxHeight="160"/>
+				</c:Property>
+			</StackPanel>
+		</Panel>
+	</c:DialogPanel>
+</c:SfaPopup>

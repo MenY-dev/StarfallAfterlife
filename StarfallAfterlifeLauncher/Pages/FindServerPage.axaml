@@ -84,7 +84,8 @@
 								</c:Switch>
 							</c:Property>
 							<c:Property Text="{DynamicResource s_page_fs_info_description_lbl}" HorizontalAlignment="Stretch">
-								<SelectableTextBlock Text="{Binding SelectedServer.Description}" FontSize="16" VerticalAlignment="Center"/>
+								<SelectableTextBlock Text="{Binding SelectedServer.Description}" FontSize="16"
+													 VerticalAlignment="Center" TextWrapping="WrapWithOverflow"/>
 							</c:Property>
 							<c:Property Text="" HorizontalAlignment="Stretch" IsVisible="{Binding SelectedServer, Converter={x:Static ObjectConverters.IsNotNull}}">
 								<StackPanel Spacing="6" Orientation="Horizontal" HorizontalAlignment="Right">

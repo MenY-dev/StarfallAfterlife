@@ -182,11 +182,16 @@ namespace StarfallAfterlife.Launcher.ViewModels
                     if (server is not null)
                     {
                         server.PlayerStatusUpdated += PlayerStatusUpdated;
-                        Dispatcher.UIThread?.InvokeAsync(() => ServerStarted = true).Wait();
+                        Dispatcher.UIThread?.InvokeAsync(() =>
+                        {
+                            ServerStarted = true;
+                            appVM.UpdateRealms();
+                        }).Wait();
 
                         server.Task.ContinueWith(t => Dispatcher.UIThread.Invoke(() =>
                         {
                             ServerStarted = false;
+                            appVM.UpdateRealms();
                         }));
                     }
                 });

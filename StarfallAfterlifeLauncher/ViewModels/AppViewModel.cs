@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
+using StarfallAfterlife.Bridge.Collections;
 using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Diagnostics;
 using StarfallAfterlife.Bridge.Generators;
@@ -25,6 +26,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Xml.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace StarfallAfterlife.Launcher.ViewModels
@@ -289,6 +291,8 @@ namespace StarfallAfterlife.Launcher.ViewModels
                             if (launcher.CurrentProfile is null && profile is not null)
                                 SelectProfile(profile);
                         }
+
+                        UpdateRealms();
                     });
                 }
             }));
@@ -350,7 +354,7 @@ namespace StarfallAfterlife.Launcher.ViewModels
         }
 
 
-        public Task<RealmInfoViewModel> AddRealm(string realmName)
+        public Task<RealmInfoViewModel> AddRealm(string realmName, int? seed = default, string description = default)
         {
             if (Launcher is SfaLauncher launcher)
             {
@@ -365,9 +369,19 @@ namespace StarfallAfterlife.Launcher.ViewModels
                         Dispatcher.UIThread.Invoke(waitingPopup.ShowDialog);
 
                         realmInfo = Launcher?.CreateNewRealm(realmName);
-                        var generator = new VanillaRealmGenerator(realmInfo.Realm, Launcher?.Database, seed: new Random128().Next());
+                        realmInfo.Realm.Description = description;
+
+                        var realm = realmInfo.Realm;
+                        var generator = new VanillaRealmGenerator(
+                            realm,
+                            Launcher?.Database,
+                            MobsDatabase.Instance,
+                            seed: seed ?? new Random128().Next());
+
                         generator.ProgressUpdated += (o, e) => SfaDebug.Print(e.Status, e.Task?.GetType().Name);
                         generator.Run().Wait();
+
+                        realm.Description = description;
                         realmInfo.Save();
                     }
                     catch
@@ -412,6 +426,8 @@ namespace StarfallAfterlife.Launcher.ViewModels
                 {
                     Realms.Add(new(this, item));
                 }
+
+                Realms.SortBy(x => x.Name);
 
                 SelectedLocalRealm =
                     Realms.FirstOrDefault(r => r.RealmInfo == selectedLocalRealm) ??
@@ -473,6 +489,7 @@ namespace StarfallAfterlife.Launcher.ViewModels
                 session.StartingTask.ContinueWith(t => Dispatcher.UIThread.Invoke(() =>
                 {
                     gameLoadingPopup.Close();
+                    UpdateRealms();
                 }));
 
                 return session;
@@ -529,6 +546,7 @@ namespace StarfallAfterlife.Launcher.ViewModels
                 session.StartingTask.ContinueWith(t => Dispatcher.UIThread.Invoke(() =>
                 {
                     gameLoadingPopup.Close();
+                    UpdateRealms();
                 }));
 
                 return task;
@@ -545,20 +563,64 @@ namespace StarfallAfterlife.Launcher.ViewModels
 
         public Task<RealmInfoViewModel> ShowCreateNewRealm()
         {
-            return Dispatcher.UIThread.InvokeAsync(() => new CreateRealmPopup()
-                .ShowDialog("NewRealm")
-                .ContinueWith(t =>
+            var dialog = new CreateRealmPopup()
+            {
+                RealmName = "NewRealm",
+                RealmSeed = new Random128().Next()
+            };
+
+            return dialog.ShowDialog().ContinueWith(t =>
+            {
+                return Dispatcher.UIThread.Invoke(() =>
                 {
-                    if (t.Result is CreateRealmPopup result &&
-                        result.IsDone == true &&
-                        result.Text is not null)
+                    if (dialog.IsDone == true &&
+                        dialog.RealmName is not null)
                     {
-                        return AddRealm(result.Text).Result;
+                        return AddRealm(
+                            dialog.RealmName,
+                            dialog.RealmSeed,
+                            dialog.RealmDescription);
                     }
 
-                    return null;
-                }));
+                    return Task.FromResult<RealmInfoViewModel>(null);
+                }).Result;
+            });
         }
+
+
+        public Task<SfaRealmInfo> ShowEditRealm(SfaRealmInfo realmInfo)
+        {
+            var realm = realmInfo?.Realm;
+
+            if (realm is null)
+                return Task.FromResult(realmInfo);
+
+            var dialog = new CreateRealmPopup()
+            {
+                RealmName = realm.Name,
+                RealmDescription = realm.Description,
+                EditRealm = true,
+                Title = string.Format(App.GetString("s_dialog_create_realm_edit_title") ?? string.Empty, realm.Name ?? string.Empty),
+            };
+
+            return dialog.ShowDialog().ContinueWith(t =>
+            {
+                return Dispatcher.UIThread.Invoke(() =>
+                {
+                    if (dialog.IsDone == true)
+                    {
+                        realm.Name = dialog.RealmName;
+                        realm.Description = dialog.RealmDescription;
+                    }
+
+                    realmInfo?.SaveInfo();
+                    UpdateRealms();
+
+                    return Task.FromResult(realmInfo);
+                }).Result;
+            });
+        }
+
 
         public Task<bool> ShowDeleteRealm(RealmInfoViewModel realm) =>
             ShowDeleteRealm(realm?.RealmInfo);

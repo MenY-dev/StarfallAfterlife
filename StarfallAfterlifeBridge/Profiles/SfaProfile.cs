@@ -445,13 +445,14 @@ namespace StarfallAfterlife.Bridge.Profiles
             return null;
         }
 
-        public DiscoverySession GetSession(string realmId)
+        public DiscoverySession[] GetSessions(string realmId)
         {
             if (realmId == null)
                 return null;
 
-            return Sessions?.FirstOrDefault(
-                s =>s.RealmId is not null && s.RealmId == realmId);
+            return Sessions?
+                .Where(s => s.RealmId is not null && s.RealmId == realmId)
+                .ToArray() ?? Array.Empty<DiscoverySession>();
 
         }
 

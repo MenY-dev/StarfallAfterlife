@@ -39,12 +39,22 @@ namespace StarfallAfterlife.Launcher.ViewModels
 
         public Task CreateNewRealm()
         {
-            return AppVM.ShowCreateNewRealm().ContinueWith(t => Dispatcher.UIThread.Invoke(() =>
+            return AppVM?.ShowCreateNewRealm().ContinueWith(t => Dispatcher.UIThread.Invoke(() =>
             {
                 if (AppVM is AppViewModel app &&
                     t.Result is RealmInfoViewModel realm)
                     app.SelectedLocalRealm = realm;
             }));
+        }
+
+        public Task EditRealm()
+        {
+            var app = AppVM;
+
+            if (app is null)
+                return Task.CompletedTask;
+
+            return app.ShowEditRealm(app.SelectedLocalRealm?.RealmInfo);
         }
 
         public Task<bool> DeleteSelectedRealm() =>

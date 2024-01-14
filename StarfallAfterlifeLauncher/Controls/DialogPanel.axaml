@@ -1,0 +1,51 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:c="using:StarfallAfterlife.Launcher.Controls"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="StarfallAfterlife.Launcher.Controls.DialogPanel">
+
+	<UserControl.Template>
+		<ControlTemplate>
+			<DockPanel LastChildFill="True">
+				<Panel Classes="header" DockPanel.Dock="Top">
+					<Rectangle Classes="background" Opacity="0.5">
+						<Rectangle.Fill>
+							<LinearGradientBrush>
+								<GradientStop Offset="0" Color="{StaticResource HeaderMainColor}"/>
+								<GradientStop Offset="1" Color="{StaticResource HeaderSecondaryColor}"/>
+							</LinearGradientBrush>
+						</Rectangle.Fill>
+					</Rectangle>
+					<Panel>
+						<ContentPresenter x:Name="PART_HeaderContentPresenter"
+										  Content="{TemplateBinding Header}"
+										  FontSize="12" Foreground="White"/>
+					</Panel>
+					<Rectangle Classes="shadow" Height="20" Margin="0 0 0 -20" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" IsHitTestVisible="False" Fill="Black" Opacity="0.5">
+						<Rectangle.OpacityMask>
+							<LinearGradientBrush StartPoint="0,0" EndPoint="0%,100%">
+								<GradientStop Offset="0" Color="#FFFFFFFF"/>
+								<GradientStop Offset="1" Color="#00FFFFFF"/>
+							</LinearGradientBrush>
+						</Rectangle.OpacityMask>
+					</Rectangle>
+				</Panel>
+				<DockPanel LastChildFill="True" Margin="0">
+					<Panel DockPanel.Dock="Bottom">
+						<ContentPresenter x:Name="PART_FooterContentPresenter"
+										  Content="{TemplateBinding Footer}"
+										  FontSize="12" Foreground="White"/>
+					</Panel>
+					<Panel>
+						<Rectangle Fill="Black" Opacity="0.25"/>
+						<ContentPresenter x:Name="PART_ContentPresenter"
+										  Content="{TemplateBinding DialogContent}"
+										  FontSize="12" Foreground="White"/>
+					</Panel>
+				</DockPanel>
+			</DockPanel>
+		</ControlTemplate>
+	</UserControl.Template>
+</UserControl>
