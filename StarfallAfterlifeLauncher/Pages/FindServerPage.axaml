@@ -84,7 +84,7 @@
 								</c:Switch>
 							</c:Property>
 							<c:Property Text="{DynamicResource s_page_fs_info_active_sessions_lbl}" HorizontalAlignment="Stretch" IsVisible="{Binding AppVM.SelectedLocalRealm.IsActiveSession}">
-								<ItemsControl ItemsSource="{Binding SelectedServer.ActiveSessionChars}">
+								<ItemsControl ItemsSource="{Binding SelectedServer.ActiveSessionChars}" VerticalAlignment="Center">
 
 								</ItemsControl>
 							</c:Property>

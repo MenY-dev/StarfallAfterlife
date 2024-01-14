@@ -92,7 +92,7 @@
 								<SelectableTextBlock Text="{Binding AppVM.SelectedLocalRealm.Seed}" FontSize="16" VerticalAlignment="Center"/>
 							</c:Property>
 							<c:Property Text="{DynamicResource s_page_sp_info_active_sessions_lbl}" HorizontalAlignment="Stretch" IsVisible="{Binding AppVM.SelectedLocalRealm.IsActiveSession}">
-								<ItemsControl ItemsSource="{Binding AppVM.SelectedLocalRealm.ActiveSessionChars}">
+								<ItemsControl ItemsSource="{Binding AppVM.SelectedLocalRealm.ActiveSessionChars}" VerticalAlignment="Center">
 									
 								</ItemsControl>
 							</c:Property>
