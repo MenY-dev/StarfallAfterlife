@@ -208,6 +208,9 @@ namespace StarfallAfterlife.Launcher.ViewModels
             {
                 Task.Factory.StartNew(() =>
                 {
+                    if (appVM.ProcessSessionsCancellationBeforePlay(server.Realm?.Id).Result == false)
+                        return;
+
                     if (appVM.MakeBaseTests(true, true).Result == false)
                         return;
 
