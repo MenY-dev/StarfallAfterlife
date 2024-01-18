@@ -176,21 +176,27 @@ namespace StarfallAfterlife.Bridge.Realms
 
         public virtual void SaveInfo(string directory)
         {
-            if (Directory.Exists(directory) == false)
-                Directory.CreateDirectory(directory);
-
-            string realmPath = Path.Combine(directory, "Realm.json");
-
-            File.WriteAllText(realmPath, new JsonObject
+            try
             {
-                ["id"] = Id,
-                ["seed"] = Seed,
-                ["name"] = Name,
-                ["description"] = Description,
-                ["version"] = Version,
-                ["galaxy_hash"] = GalaxyMapHash,
-                ["last_auth"] = LastAuth,
-            }.ToJsonStringUnbuffered(true));
+                string realmPath = Path.Combine(directory, "Realm.json");
+
+                var doc = JsonHelpers.ParseNodeFromFileUnbuffered(realmPath)?
+                    .AsObjectSelf() ?? new JsonObject();
+
+                doc.Override(new Dictionary<string, JsonNode>
+                {
+                    ["id"] = Id,
+                    ["seed"] = Seed,
+                    ["name"] = Name,
+                    ["description"] = Description,
+                    ["version"] = Version,
+                    ["galaxy_hash"] = GalaxyMapHash,
+                    ["last_auth"] = LastAuth,
+                });
+
+                doc.WriteToFileUnbuffered(realmPath, new() { WriteIndented = true });
+            }
+            catch { }
         }
 
         public virtual void SaveDatabase(string directory)

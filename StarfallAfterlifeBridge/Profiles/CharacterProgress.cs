@@ -1,4 +1,5 @@
-﻿using StarfallAfterlife.Bridge.Mathematics;
+﻿using StarfallAfterlife.Bridge.Launcher;
+using StarfallAfterlife.Bridge.Mathematics;
 using StarfallAfterlife.Bridge.Primitives;
 using StarfallAfterlife.Bridge.Serialization;
 using StarfallAfterlife.Bridge.Server.Discovery;
@@ -189,13 +190,12 @@ namespace StarfallAfterlife.Bridge.Profiles
         {
             try
             {
-                if (System.IO.Path.GetDirectoryName(Path) is string dir &&
-                    Directory.Exists(dir) == false)
-                    Directory.CreateDirectory(dir);
+                var doc = JsonHelpers.ParseNodeFromFileUnbuffered(Path)?
+                    .AsObjectSelf() ?? new JsonObject();
 
-                var doc = ToJson();
-                var text = doc.ToJsonString(false);
-                File.WriteAllText(Path, text);
+                doc.Override(ToJson()?.AsObjectSelf());
+                doc.WriteToFileUnbuffered(Path, new() { WriteIndented = true });
+
                 return true;
             }
             catch { }

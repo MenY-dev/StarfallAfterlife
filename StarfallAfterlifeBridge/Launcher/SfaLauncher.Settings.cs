@@ -29,23 +29,18 @@ namespace StarfallAfterlife.Bridge.Launcher
         {
             try
             {
-                var doc = new JsonObject()
+                var doc = JsonHelpers.ParseNodeFromFileUnbuffered(SettingsFile)?
+                    .AsObjectSelf() ?? new JsonObject();
+
+                doc.Override(new Dictionary<string, JsonNode>()
                 {
                     ["game_dir"] = GameDirectory,
                     ["last_selected_profile_id"] = LastSelectedProfileId,
                     ["last_selected_local_realm_id"] = LastSelectedLocalRealmId,
                     ["localization"] = Localization,
-                };
+                });
 
-                if (SettingsFile is string path &&
-                    doc.ToJsonStringUnbuffered(true) is string text)
-                {
-                    if (Path.GetDirectoryName(path) is string dir &&
-                        Directory.Exists(dir) == false)
-                        Directory.CreateDirectory(dir);
-
-                    File.WriteAllText(path, text);
-                }
+                doc.WriteToFileUnbuffered(SettingsFile, new() { WriteIndented = true });
             }
             catch { }
         }
@@ -54,15 +49,11 @@ namespace StarfallAfterlife.Bridge.Launcher
         {
             try
             {
-                if (ServerSettingsFile is string path &&
-                    JsonHelpers.SerializeUnbuffered(ServerSettings ??= new(), new() { WriteIndented = true}) is string text)
-                {
-                    if (Path.GetDirectoryName(path) is string dir &&
-                            Directory.Exists(dir) == false)
-                        Directory.CreateDirectory(dir);
+                var doc = JsonHelpers.ParseNodeFromFileUnbuffered(ServerSettingsFile)?
+                    .AsObjectSelf() ?? new JsonObject();
 
-                    File.WriteAllText(path, text);
-                }
+                doc.Override(JsonHelpers.ParseNodeUnbuffered(ServerSettings ?? new())?.AsObjectSelf());
+                doc.WriteToFileUnbuffered(ServerSettingsFile, new() { WriteIndented = true });
             }
             catch { }
         }
@@ -86,7 +77,7 @@ namespace StarfallAfterlife.Bridge.Launcher
         }
 
 
-        public void LoadeServerSettings()
+        public void LoadServerSettings()
         {
             try
             {

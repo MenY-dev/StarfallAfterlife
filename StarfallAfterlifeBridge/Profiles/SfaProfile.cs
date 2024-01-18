@@ -11,8 +11,8 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace StarfallAfterlife.Bridge.Profiles
 {
@@ -191,18 +191,15 @@ namespace StarfallAfterlife.Bridge.Profiles
         {
             try
             {
-                if (Directory.Exists(ProfileDirectory) == false)
-                    Directory.CreateDirectory(ProfileDirectory);
+                var doc = JsonHelpers.ParseNodeFromFileUnbuffered(GameProfileLocation)?
+                    .AsObjectSelf() ?? new JsonObject();
 
-                if (GameProfile is not null)
-                {
-                    var gameProfileText = JsonSerializer.Serialize(GameProfile);
-                    File.WriteAllText(GameProfileLocation, gameProfileText);
-                }
-
-                SaveInfo();
+                doc.Override(JsonHelpers.ParseNodeUnbuffered(GameProfile)?.AsObjectSelf());
+                doc.WriteToFileUnbuffered(GameProfileLocation, new() { WriteIndented = true });
             }
-            catch {}
+            catch { }
+
+            SaveInfo();
         }
 
         public void SaveCharacterProgress()
@@ -221,13 +218,11 @@ namespace StarfallAfterlife.Bridge.Profiles
                     info.Version = SfaProfileInfo.CurrentVersion;
 
                 var path = InfoLocation;
+                var doc = JsonHelpers.ParseNodeFromFileUnbuffered(path)?
+                    .AsObjectSelf() ?? new JsonObject();
 
-                if (Path.GetDirectoryName(path) is string dir &&
-                    Directory.Exists(dir) == false)
-                    Directory.CreateDirectory(dir);
-
-                var text = JsonHelpers.SerializeUnbuffered(Info);
-                File.WriteAllText(path, text);
+                doc.Override(JsonHelpers.ParseNodeUnbuffered(Info)?.AsObjectSelf());
+                doc.WriteToFileUnbuffered(path, new() { WriteIndented = true });
             }
             catch { }
         }

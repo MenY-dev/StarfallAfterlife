@@ -30,6 +30,34 @@ namespace StarfallAfterlife.Bridge.Serialization
             catch { return null; }
         }
 
+        public static JsonNode ParseNodeFromFile(string path, JsonSerializerOptions options = default)
+        {
+            try
+            {
+                return ParseNode(File.ReadAllText(path), options);
+            }
+            catch { return null; }
+        }
+
+        public static bool WriteToFile(this JsonNode self, string path, JsonSerializerOptions options = default)
+        {
+            try
+            {
+                if (self?.ToJsonString(options?.WriteIndented ?? true) is string text)
+                {
+                    if (Path.GetDirectoryName(path) is string dir &&
+                        Directory.Exists(dir) == false)
+                        Directory.CreateDirectory(dir);
+
+                    File.WriteAllText(path, text);
+                    return true;
+                }
+            }
+            catch { }
+
+            return false;
+        }
+
         public static JsonNode ParseNodeUnbuffered(string jsonString, JsonSerializerOptions options = default)
         {
             try
@@ -56,6 +84,34 @@ namespace StarfallAfterlife.Bridge.Serialization
             catch { return null; }
         }
 
+        public static JsonNode ParseNodeFromFileUnbuffered(string path, JsonSerializerOptions options = default)
+        {
+            try
+            {
+                return ParseNodeUnbuffered(File.ReadAllText(path), options);
+            }
+            catch { return null; }
+        }
+
+        public static bool WriteToFileUnbuffered(this JsonNode self, string path, JsonSerializerOptions options = default)
+        {
+            try
+            {
+                if (self?.ToJsonStringUnbuffered(options?.WriteIndented ?? true) is string text)
+                {
+                    if (Path.GetDirectoryName(path) is string dir &&
+                        Directory.Exists(dir) == false)
+                        Directory.CreateDirectory(dir);
+
+                    File.WriteAllText(path, text);
+                    return true;
+                }
+            }
+            catch { }
+
+            return false;
+        }
+
         public static JsonNode Clone(this JsonNode self)
         {
             try
@@ -67,6 +123,30 @@ namespace StarfallAfterlife.Bridge.Serialization
                 return JsonNode.Parse(new ReadOnlySpan<byte>(buffer.GetBuffer(), 0, (int)buffer.Position));
             }
             catch { return null; }
+        }
+
+        public static JsonNode Override(this JsonNode self, IEnumerable<KeyValuePair<string, JsonNode>> nodes)
+        {
+            try
+            {
+                if (self is not JsonObject)
+                    return self;
+
+                foreach (var item in nodes)
+                {
+                    if (item.Key is null)
+                        continue;
+
+                    if (item.Value is JsonNode node &&
+                        node.Parent is not null)
+                        self[item.Key] = node.Clone();
+                    else
+                        self[item.Key] = item.Value;
+                }
+            }
+            catch {}
+
+            return self;
         }
 
         public static string ToJsonString(this JsonNode self, bool writeIndented)
