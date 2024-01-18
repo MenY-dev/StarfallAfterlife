@@ -130,20 +130,28 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
         public void SetFleetState(FleetState state)
         {
             State = state;
-            Broadcast<IFleetListener>(l => l.OnFleetDataChanged(this));
 
             if (state != FleetState.InGalaxy)
+            {
                 Stop();
+                AI?.StopCurrentAction();
+            }
 
+            Broadcast<IFleetListener>(l => l.OnFleetDataChanged(this));
             OnFleetStateChanged(State, state);
         }
 
         protected virtual void SetTargetLocation(Vector2 location)
         {
             if (Location != location)
+            {
                 Route.Update(CreateRoute(location));
+            }
             else
+            {
+                Route.Update(location);
                 OnTargetLocationReached();
+            }
 
             Broadcast<IFleetListener>(l => l.OnFleetMoved(this));
             Broadcast<IFleetListener>(l => l.OnFleetRouteChanged(this));

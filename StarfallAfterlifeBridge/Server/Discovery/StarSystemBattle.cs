@@ -144,7 +144,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                 if (destroyed == true)
                 {
                     fleet.SetFleetState(FleetState.Destroyed);
-                    fleet.System?.Broadcast<IStarSystemObjectListener>(l => l.OnObjectSpawned(member.Fleet));
+                    fleet.System?.Broadcast<IStarSystemObjectListener>(l => l.OnObjectDestroed(member.Fleet));
                 }
                 else
                 {
