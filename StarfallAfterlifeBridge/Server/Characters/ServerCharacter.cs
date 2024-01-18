@@ -496,6 +496,24 @@ namespace StarfallAfterlife.Bridge.Server.Characters
         }
 
 
+        public void RepairAndRefuelFleet()
+        {
+            if (Ships?.ToArray() is ShipConstructionInfo[] fleet)
+            {
+                foreach (var ship in fleet)
+                {
+                    if (ship is null)
+                        continue;
+
+                    ship.ArmorDelta = 0;
+                    ship.StructureDelta = 0;
+                }
+
+                DiscoveryClient?.SynckSessionFleetInfo();
+                DiscoveryClient?.SendFleetCargo();
+            }
+        }
+
         public void HandleBattleResults(JsonNode doc)
         {
             if (doc is not JsonObject)

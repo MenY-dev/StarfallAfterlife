@@ -140,6 +140,9 @@ namespace StarfallAfterlife.Bridge.Server
                 case DiscoveryClientAction.DropSession:
                     HandleSessionDrop(reader, systemId, objectType, objectId); break;
 
+                case DiscoveryClientAction.RepairAndRefuel:
+                    HandleRepairAndRefuel(reader, systemId, objectType, objectId); break;
+
                 case DiscoveryClientAction.FleetRecall:
                     HandleFleetRecall(reader, systemId, objectType, objectId); break;
 
@@ -917,6 +920,14 @@ namespace StarfallAfterlife.Bridge.Server
         private void HandleSessionDrop(SfReader reader, int systemId, DiscoveryObjectType objectType, int objectId)
         {
             DropGalaxySession();
+        }
+
+        private void HandleRepairAndRefuel(SfReader reader, int systemId, DiscoveryObjectType objectType, int objectId)
+        {
+            var character = CurrentCharacter;
+
+            if (character is not null)
+                Invoke(() => character?.RepairAndRefuelFleet());
         }
 
         private void HandleFleetRecall(SfReader reader, int systemId, DiscoveryObjectType objectType, int objectId)
