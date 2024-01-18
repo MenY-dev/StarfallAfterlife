@@ -77,6 +77,7 @@ namespace StarfallAfterlife.Bridge.Instances
                 EnableLog = true,
                 DisableSplashScreen = true,
                 DisableLoadingScreen = true,
+                ProcessArguments = new() { "CULTUREFORCOOKING=en" },
                 ConsoleCommands =
                 {
                     "DebugRemovePlayer 0"
