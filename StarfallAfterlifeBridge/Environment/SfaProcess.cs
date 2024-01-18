@@ -216,6 +216,9 @@ namespace StarfallAfterlife.Bridge.Environment
 
                 if (sandbox.GameIni is not null && string.IsNullOrWhiteSpace(sandbox.GameIniLocation) == false)
                     sb.Append($" -GAMEINI=\"{sandbox.GameIniLocation}\"");
+
+                if (sandbox.GameUserSettingsIni is not null && string.IsNullOrWhiteSpace(sandbox.GameUserSettingsIniLocation) == false)
+                    sb.Append($" -USERSETTINGSINI=\"{sandbox.GameUserSettingsIniLocation}\"");
             }
 
 

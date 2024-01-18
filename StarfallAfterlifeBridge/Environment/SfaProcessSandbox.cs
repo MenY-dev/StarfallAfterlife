@@ -35,6 +35,9 @@ namespace StarfallAfterlife.Bridge.Environment
         public UEConfig GameIni { get; set; }
         public string GameIniLocation { get; protected set; }
 
+        public UEConfig GameUserSettingsIni { get; set; }
+        public string GameUserSettingsIniLocation { get; protected set; }
+
         protected object DeployLockher { get; } = new object();
         protected Timer InstanceLoadedWatcher { get; set; }
         protected string directory;
@@ -64,6 +67,7 @@ namespace StarfallAfterlife.Bridge.Environment
 
             EngineIniLocation = Path.Combine(configLocation, "Engine.ini");
             GameIniLocation = Path.Combine(configLocation, "Game.ini");
+            GameUserSettingsIniLocation = Path.Combine(configLocation, "GameUserSettings.ini");
         }
 
         public bool Deploy()
@@ -82,6 +86,9 @@ namespace StarfallAfterlife.Bridge.Environment
 
                     if (GameIni is not null)
                         WriteText(GameIniLocation, GameIni.ToConfigString());
+
+                    if (GameUserSettingsIni is not null)
+                        WriteText(GameUserSettingsIniLocation, GameUserSettingsIni.ToConfigString());
 
                     if (string.IsNullOrWhiteSpace(InstanceConfig) == false)
                     {
