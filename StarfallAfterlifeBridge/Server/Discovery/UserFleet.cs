@@ -34,7 +34,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                 battle.IsFinished == false &&
                 battle.GetMember(this) is null)
             {
-                battle.AddToBattle(this, BattleRole.Defense, CreateHexOffset());
+                battle.AddToBattle(this, BattleRole.Join, CreateHexOffset());
             }
         }
 
