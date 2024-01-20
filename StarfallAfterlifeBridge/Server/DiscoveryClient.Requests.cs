@@ -203,10 +203,11 @@ namespace StarfallAfterlife.Bridge.Server
             Invoke(() =>
             {
                 var channel = (string)doc["channel"];
+                var isGeneralChat = channel == "GeneralTextChat";
                 var msg = (string)doc["msg"];
                 var isPrivate = (bool?)doc["is_private"];
                 var receiver = (string)doc["receiver"];
-                var sender = channel == "GeneralTextChat" ?
+                var sender = isGeneralChat ?
                     Client.UniqueName ?? "" :
                     CurrentCharacter?.UniqueName ?? "";
 
@@ -240,9 +241,27 @@ namespace StarfallAfterlife.Bridge.Server
                         }
                     });
                 }
-                else
+                else if (receiver is not null and { Length: > 0})
                 {
-                    Server?.GetCharacter(receiver)?.DiscoveryClient?.Client?.SendToChat(channel, sender, msg, true);
+
+                    if (isGeneralChat)
+                    {
+                        Server?.GetPlayer(receiver)?
+                            .SendToChat("GeneralTextChat", sender, msg, true);
+                    }
+                    else if (Server?.GetCharacter(receiver) is ServerCharacter character)
+                    {
+                        var currentChannel = character.Faction switch
+                        {
+                            Faction.Deprived => "Deprived Chat",
+                            Faction.Eclipse => "Eclipse Chat",
+                            Faction.Vanguard => "Vanguard Chat",
+                            _ => "GeneralTextChat",
+                        };
+
+                        character?.DiscoveryClient?.Client?
+                            .SendToChat(currentChannel, sender, msg, true);
+                    }
                 }
             });
         }
