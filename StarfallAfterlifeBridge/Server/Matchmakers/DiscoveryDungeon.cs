@@ -83,61 +83,106 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 .Where(i => i.IsAvailableForTrading == true) ??
                 Enumerable.Empty<SfaItem>();
 
-            if (SystemBattle.DungeonInfo?.Target is SecretObject secret &&
-                secret.System is StarSystem system)
+            JsonObject CreateDrop(SfaItem item, float weight = 0.1f, int count = 1) => new()
             {
-                var lvl = system.Info?.Level ?? 1;
+                ["id"] = SValue.Create(item?.Id ?? 0),
+                ["weight"] = SValue.Create(weight),
+                ["basecount"] = SValue.Create(count),
+            };
 
-                if (secret.SecretType is SecretObjectType.Stash or SecretObjectType.ShipsGraveyard)
+            if (SystemBattle.IsDungeon == true &&
+                SystemBattle.DungeonInfo?.Target is StarSystemObject obj &&
+                obj.System is StarSystem system &&
+                (Server?.Realm?.Database ?? SfaDatabase.Instance) is SfaDatabase database)
+            {
+                if (obj is PiratesOutpost or PiratesStation)
                 {
-                    var drop = new JsonArray();
-                    var rnd = new Random128(secret.Id + system.Id);
-                    var items = GetLevelItems(lvl);
+                    var rnd = new Random128();
+                    var outpostDrop = new JsonArray();
+                    var mothershipDrop = new JsonArray();
+                    var faction = obj.Faction;
+                    var factionName = faction.GetName().ToLowerInvariant();
+                    var lvl = (obj as PiratesOutpost)?.Level ?? (obj as PiratesStation)?.Level ?? 0;
 
-                    if (lvl > 1)
-                        items = items.Concat(GetLevelItems(lvl - 1));
+                    var items = database
+                        .GetCircleDatabase(lvl)?.Equipments.Values?
+                        .Where(i => i.IsStationAttackItem == false &&
+                                    i.IsDefective == false &&
+                                    (i.Faction == faction || i.Faction.IsMainFaction()))
+                        .ToList() ?? new();
 
-                    items = items
-                        .Where(i => i.IsDefective == false && i.TechLvl > 1)
-                        .ToList().Randomize(rnd.Next());
+                    items.Randomize(rnd.Next());
+                    outpostDrop = items.Take(3).Select(i => CreateDrop(i, (5 - i.TechLvl) / 5f, 1)).ToJsonArray();
 
-                    foreach (var eq in items)
+                    if (rnd.Next(2) == 0)
                     {
-                        drop.Add(new JsonObject
-                        {
-                            ["id"] = SValue.Create(eq.Id),
-                            ["weight"] = SValue.Create(0.1f),
-                            ["basecount"] = SValue.Create(1),
-                        });
+                        var ships = database.Ships?.Values?
+                            .Where(s => s.Faction.IsMainFaction() &&
+                                        s.MinLvl > 0 &&
+                                        s.MinLvl > 7 ? lvl > 6 : s.MinLvl == lvl)
+                            .ToList() ?? new();
+
+                        if (ships.Count > 0 &&
+                            ships[rnd.Next(0, ships.Count)] is SfaItem ship)
+                            mothershipDrop = new JsonArray() { CreateDrop(ship, 1, 1) };
                     }
 
-                    Drops["epic_" + lvl] = drop;
+                    if (outpostDrop is null || outpostDrop.Count < 1)
+                    {
+                        outpostDrop = GetLevelItems(lvl)
+                            .ToList().Randomize(rnd.Next())
+                            .Take(3)
+                            .Select(i => CreateDrop(i, (5 - i.TechLvl) / 5f, 1)).ToJsonArray();
+                    }
+
+                    if (mothershipDrop is null || mothershipDrop.Count < 1)
+                        mothershipDrop = outpostDrop.Clone().AsArraySelf();
+
+                    Drops[$"{lvl}_{factionName}_outpost_station"] = outpostDrop;
+                    Drops[$"{lvl}_{factionName}_mothership"] = mothershipDrop;
                 }
 
-                if (secret.SecretType is SecretObjectType.ShipsGraveyard)
+                if (SystemBattle.DungeonInfo?.Target is SecretObject secret)
                 {
-                    var drop = new JsonArray();
-                    var rnd = new Random128(secret.Id + system.Id);
-                    var items = GetLevelItems(lvl);
+                    var lvl = system.Info?.Level ?? 1;
 
-                    if (lvl > 1)
-                        items = items.Concat(GetLevelItems(lvl - 1));
-
-                    items = items
-                        .Where(i => i.IsDefective == true)
-                        .ToList().Randomize(rnd.Next());
-
-                    foreach (var eq in items)
+                    if (secret.SecretType is SecretObjectType.Stash or SecretObjectType.ShipsGraveyard)
                     {
-                        drop.Add(new JsonObject
-                        {
-                            ["id"] = SValue.Create(eq.Id),
-                            ["weight"] = SValue.Create(0.25f),
-                            ["basecount"] = SValue.Create(1),
-                        });
+                        var drop = new JsonArray();
+                        var rnd = new Random128(secret.Id + system.Id);
+                        var items = GetLevelItems(lvl);
+
+                        if (lvl > 1)
+                            items = items.Concat(GetLevelItems(lvl - 1));
+
+                        items = items
+                            .Where(i => i.IsDefective == false && i.TechLvl > 1)
+                            .ToList().Randomize(rnd.Next());
+
+                        foreach (var eq in items)
+                            drop.Add(CreateDrop(eq, 0.1f, 1));
+
+                        Drops["epic_" + lvl] = drop;
                     }
 
-                    Drops["relic_ship_level_" + lvl] = drop;
+                    if (secret.SecretType is SecretObjectType.ShipsGraveyard)
+                    {
+                        var drop = new JsonArray();
+                        var rnd = new Random128(secret.Id + system.Id);
+                        var items = GetLevelItems(lvl);
+
+                        if (lvl > 1)
+                            items = items.Concat(GetLevelItems(lvl - 1));
+
+                        items = items
+                            .Where(i => i.IsDefective == true)
+                            .ToList().Randomize(rnd.Next());
+
+                        foreach (var eq in items)
+                            drop.Add(CreateDrop(eq, 0.25f, 1));
+
+                        Drops["relic_ship_level_" + lvl] = drop;
+                    }
                 }
             }
         }

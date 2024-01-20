@@ -37,5 +37,13 @@ namespace StarfallAfterlife.Bridge.Database
 
             return false;
         }
+
+        public static string GetName(this Faction self) => self switch
+        {
+            Faction.Pyramid => "P.Y.R.A.M.I.D.",
+            Faction.MineworkerUnion => "Mineworker Union",
+            Faction.FreeTraders => "Free Traders",
+            _ => self.ToString(),
+        };
     }
 }
