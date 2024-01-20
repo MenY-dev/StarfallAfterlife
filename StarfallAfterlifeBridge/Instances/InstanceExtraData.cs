@@ -30,6 +30,8 @@ namespace StarfallAfterlife.Bridge.Instances
 
         public InstanceEnviropmentInfo EnviropmentInfo { get; set; }
 
+        public InstanceXpData XpData { get; set; } = new();
+
         public List<InstanceAIFleet> AiList { get; set; } = new();
 
         public List<InstanceMob> Bosses { get; set; } = new();
@@ -76,6 +78,9 @@ namespace StarfallAfterlife.Bridge.Instances
             if (EnviropmentInfo is not null)
                 doc["env_info"] = EnviropmentInfo.ToJson();
 
+            if (XpData is not null)
+                doc["xp_data"] = JsonHelpers.ParseNodeUnbuffered(XpData);
+
             if (Tiles is not null and { Count: > 0 })
                 doc["tiles"] = JsonSerializer.SerializeToNode(Tiles);
 
@@ -104,6 +109,9 @@ namespace StarfallAfterlife.Bridge.Instances
 
             if (doc["env_info"] is JsonObject enviropmentInfoNode)
                 (EnviropmentInfo ??= new()).LoadFromJson(enviropmentInfoNode);
+
+            if (doc["xp_data"] is JsonObject xpData)
+                XpData = xpData.DeserializeUnbuffered<InstanceXpData>() ?? new();
 
             if (doc["ai_list"] is JsonArray aiListNode)
             {

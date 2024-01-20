@@ -379,6 +379,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 AiList = aiList,
                 Bosses = Bosses?.Select(b => b.InstanceMob).ToList() ?? new(),
                 EnviropmentInfo = CreateEnviropment(),
+                XpData = CreateXpData(),
                 Tiles = tiles,
             };
         }
@@ -434,6 +435,19 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
             }
 
             return env;
+        }
+
+        protected virtual InstanceXpData CreateXpData()
+        {
+            var lvl = SystemBattle?.System?.Info?.Level ?? 0;
+
+            return new InstanceXpData()
+            {
+                DungeonShip = lvl * 2500,
+                DungeonBoss = lvl * 7500,
+                Outpost = lvl * 5000,
+                Station = lvl * 10000,
+            };
         }
 
         public DiscoveryBattleCharacterInfo GetCharacter(ServerCharacter character)
