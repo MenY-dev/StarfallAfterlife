@@ -48,6 +48,7 @@ namespace StarfallAfterlife.Bridge.Server
             else
             {
                 RequestDiscoveryObjectSync(obj);
+                SyncDiscoveryObject(obj);
             }
         });
 

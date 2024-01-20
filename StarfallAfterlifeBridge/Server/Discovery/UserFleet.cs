@@ -31,7 +31,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                 Stealth == false &&
                 DockObjectType == DiscoveryObjectType.None &&
                 System.GetBattle(Hex) is StarSystemBattle battle &&
-                battle.IsFinished == false &&
+                battle.IsPossibleToJoin == true &&
                 battle.GetMember(this) is null)
             {
                 battle.AddToBattle(this, BattleRole.Join, CreateHexOffset());

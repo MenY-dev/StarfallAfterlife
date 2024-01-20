@@ -40,7 +40,7 @@ namespace StarfallAfterlife.Bridge.Server
 
         void IBattleListener.OnBattleFinished(StarSystemBattle battle) => Invoke(() =>
         {
-
+            Matchmaker?.DiscoveryGameMode?.GetBattle(battle)?.Stop();
         });
     }
 }

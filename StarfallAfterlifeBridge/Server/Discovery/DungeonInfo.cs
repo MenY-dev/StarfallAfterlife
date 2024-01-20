@@ -10,5 +10,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
     public class DungeonInfo
     {
         public StarSystemObject Target;
+
+        public bool Completed;
     }
 }

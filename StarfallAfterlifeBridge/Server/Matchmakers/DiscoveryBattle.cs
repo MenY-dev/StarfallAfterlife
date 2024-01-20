@@ -649,8 +649,8 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 SystemBattle.IsDungeon &&
                 SystemBattle.DungeonInfo?.Target is StarSystemObject obj &&
                 (DiscoveryObjectType?)(byte?)doc["obj_type"] == obj.Type &&
-                (int?)doc["obj_id"] == obj.Id )
-                SystemBattle.SetDungeonCompleted();
+                (int?)doc["obj_id"] == obj.Id)
+                Galaxy?.BeginPreUpdateAction(g => SystemBattle.SetDungeonCompleted());
         }
 
         public override bool ContainsChar(ServerCharacter character)

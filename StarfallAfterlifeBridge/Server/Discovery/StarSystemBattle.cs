@@ -42,6 +42,10 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
         public DiscoveryObjectType AttackerTargetType { get; protected set; } = DiscoveryObjectType.None;
 
+        public bool IsPossibleToJoin =>
+            IsFinished == false &&
+            (IsDungeon == false || DungeonInfo?.Completed is false || Members.Count > 0);
+
         public override void Init()
         {
             base.Init();
@@ -97,12 +101,12 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
         public virtual void Finish()
         {
             IsFinished = false;
-            Galaxy?.Listeners.Broadcast<IBattleListener>(l => l.OnBattleFinished(this));
 
             foreach (var member in Members.ToList())
                 Leave(member, Hex);
 
             System?.RemoveBattle(this);
+            Galaxy?.Listeners.Broadcast<IBattleListener>(l => l.OnBattleFinished(this));
         }
 
         public void AddToBattle(DiscoveryFleet fleet, BattleRole role, Vector2 hexOffset) =>
@@ -158,17 +162,20 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
             if (IsStarted == true &&
                 IsFinished == false &&
-                IsDungeon == false &&
+                (IsDungeon == false || DungeonInfo?.Completed is null or true) &&
                 Members.Count < 1)
                 Finish();
         }
 
-
         public void SetDungeonCompleted()
         {
             if (IsDungeon == true &&
-                DungeonInfo.Target is StarSystemDungeon dungeon)
+                DungeonInfo is DungeonInfo info &&
+                info.Target is StarSystemDungeon dungeon)
+            {
+                info.Completed = true;
                 dungeon.SetDungeonVisible(false);
+            }
         }
 
         public virtual BattleMember GetMember(DiscoveryFleet fleet) =>

@@ -516,6 +516,12 @@ namespace StarfallAfterlife.Bridge.Server
                 });
         }
 
+        public void SyncDiscoveryObject(StarSystemObject obj)
+        {
+            if (obj is not null)
+                SyncDiscoveryObject(obj.System?.Id ?? -1, obj.Type, obj.Id);
+        }
+
         public void SyncDiscoveryObject(int systemId, DiscoveryObjectType objectType, int objectId)
         {
             switch (objectType)

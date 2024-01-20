@@ -14,9 +14,11 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
         public override void SetDungeonVisible(bool isVisible)
         {
+            var currentState = IsDungeonVisible;
+
             base.SetDungeonVisible(isVisible);
 
-            if (isVisible == IsDungeonVisible)
+            if (isVisible == currentState)
                 return;
 
             if (isVisible == false)

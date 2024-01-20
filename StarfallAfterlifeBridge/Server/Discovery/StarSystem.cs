@@ -229,7 +229,8 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                 .Concat(TradeStations)
                 .Concat(Motherships)
                 .Concat(QuickTravelGates)
-                .Concat(RichAsteroids);
+                .Concat(RichAsteroids)
+                .Where(i => (i as StarSystemDungeon)?.IsDungeonVisible is not false);
 
             centers.Add(Vector2.Zero);
             radiuses.Add(starSize);
