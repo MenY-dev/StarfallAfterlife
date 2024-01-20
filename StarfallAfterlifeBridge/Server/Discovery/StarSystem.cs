@@ -1,4 +1,5 @@
-﻿using StarfallAfterlife.Bridge.Database;
+﻿using StarfallAfterlife.Bridge.Collections;
+using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Mathematics;
 using StarfallAfterlife.Bridge.Realms;
 using StarfallAfterlife.Bridge.Server.Discovery.AI;
@@ -346,6 +347,20 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             }
 
             return targetHex;
+        }
+
+        public SystemHex GetRandomFreeHex(int safeArea = 1)
+        {
+            var hexes = Enumerable.Range(0, SystemHexMap.HexesCount)
+                .ToList().Randomize((int)DateTime.Now.Ticks);
+
+            var freeIndex = hexes.FirstOrDefault(i =>
+                ObstacleMap[i] == false &&
+                SystemHexMap.ArrayIndexToHex(i)
+                    .GetSpiralEnumerator(safeArea)
+                    .Any(h => ObstacleMap[h] == true) == false);
+
+            return SystemHexMap.ArrayIndexToHex(freeIndex);
         }
 
         public virtual StarSystemBattle GetFleetBattle(DiscoveryFleet fleet) =>

@@ -16,7 +16,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
         public PiratesOutpost(GalaxyMapPiratesOutpost mapOutpost, StarSystem system)
         {
             System = system;
-            Hex = mapOutpost.Hex;
+            Hex = System?.GetRandomFreeHex(1) ?? mapOutpost.Hex;
             Id = mapOutpost.Id;
             Faction = (Faction)mapOutpost.Faction;
             FactionGroup = mapOutpost.FactionGroup;
