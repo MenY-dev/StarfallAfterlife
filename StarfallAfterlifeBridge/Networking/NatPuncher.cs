@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -207,6 +208,30 @@ namespace StarfallAfterlife.Bridge.Networking
 
                 if (needSave == true)
                     _openPorts.Add(mapping);
+            }
+        }
+
+        public static Task<(IPAddress Internal, IPAddress External)[]> GetExternalAdresses()
+        {
+            Task<(IPAddress, IPAddress)>[] requests;
+
+            lock (_locker)
+            {
+                requests = _devices.Select(d => Task.Factory.StartNew(() =>
+                {
+                    var result = d.GetExternalIP();
+                    return (d.DeviceEndpoint?.Address, result);
+                })).ToArray();
+                
+                return Task.Factory.StartNew(() =>
+                {
+                    Task.WaitAll(requests);
+
+                    return requests
+                        .Where(r => r.IsCompleted == true)
+                        .Select(r => r.Result)
+                        .ToArray();
+                });
             }
         }
     }

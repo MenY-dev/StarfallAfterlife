@@ -1,0 +1,48 @@
+<c:SfaPopup xmlns="https://github.com/avaloniaui"
+			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			xmlns:c="using:StarfallAfterlife.Launcher.Controls"
+			x:Class="StarfallAfterlife.Launcher.Controls.ShowServerAddressPopup"
+			SizeToContent="WidthAndHeight"
+			ShowInTaskbar="False"
+			Title="{DynamicResource s_dialog_show_server_address_title}">
+	<c:DialogPanel>
+		<c:DialogPanel.Header>
+			<Label Classes="label" Margin="10 6" Foreground="White" FontSize="16" FontWeight="DemiBold" HorizontalAlignment="Center" Content="{Binding $parent[Window].Title}"/>
+		</c:DialogPanel.Header>
+		<c:DialogPanel.Footer>
+			<Panel DockPanel.Dock="Bottom" Margin="6">
+				<StackPanel Name="buttons" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="6">
+					<c:SfaButton Content="{DynamicResource s_app_close_btn}"
+								 Command="{Binding Close}"/>
+				</StackPanel>
+			</Panel>
+		</c:DialogPanel.Footer>
+		<Panel Margin="10">
+			<StackPanel Spacing="3">
+				<StackPanel Orientation="Horizontal" Spacing="10" Margin="10">
+					<SelectableTextBlock Text="{Binding MainAddress}"
+										 FontSize="32"
+										 FontWeight="DemiBold"
+										 Foreground="White"
+										 Padding="0 0 0 5"/>
+					<c:SfaButton Content="{DynamicResource s_app_copy_btn}"
+								 VerticalAlignment="Center"
+								 IsVisible="{Binding MainAddress, Converter={x:Static ObjectConverters.IsNotNull}}"
+								 Command="{Binding CopyMainAddress}"/>
+				</StackPanel>
+				<TextBlock Text="{DynamicResource s_dialog_show_server_address_more_adr_lbl}"
+						   Foreground="{DynamicResource AccentColor}"
+						   IsVisible="{Binding Addresses.Count}"/>
+				<ItemsControl Padding="10 0" ItemsSource="{Binding Addresses}">
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<SelectableTextBlock Text="{Binding}" FontSize="16"/>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+			</StackPanel>
+		</Panel>
+	</c:DialogPanel>
+</c:SfaPopup>

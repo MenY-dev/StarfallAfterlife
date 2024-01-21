@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -104,6 +105,31 @@ namespace StarfallAfterlife.Bridge.Networking
             }
 
             return tableRows?.ToList() ?? new();
+        }
+
+        public static (IPAddress Address, string Name, NetworkInterface Info)[] GetInterfaces()
+        {
+            var result = new List<(IPAddress, string, NetworkInterface)>();
+
+            try
+            {
+                var interfaces = NetworkInterface.GetAllNetworkInterfaces()
+                   .Where(i => i?.OperationalStatus is OperationalStatus.Up);
+
+                foreach (var item in interfaces)
+                {
+                    var ip = item.GetIPProperties()?.UnicastAddresses?.FirstOrDefault(
+                       x => x.Address?.AddressFamily == AddressFamily.InterNetwork);
+
+                    if (ip is null)
+                        continue;
+
+                    result.Add((ip.Address, item.Name, item));
+                }
+            }
+            catch { }
+
+            return result.ToArray();
         }
     }
 }

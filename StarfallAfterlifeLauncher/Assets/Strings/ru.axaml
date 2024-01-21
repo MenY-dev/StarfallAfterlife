@@ -11,6 +11,7 @@
 	<sys:String x:Key="s_app_back_btn">НАЗАД</sys:String>
 	<sys:String x:Key="s_app_select_btn">ВЫБРАТЬ</sys:String>
 	<sys:String x:Key="s_app_edit_btn">ИЗМЕНИТЬ</sys:String>
+	<sys:String x:Key="s_app_copy_btn">КОПИРОВАТЬ</sys:String>
 	
 	<sys:String x:Key="s_page_sp_header">ОДИНОЧНАЯ ИГРА</sys:String>
 	<sys:String x:Key="s_page_sp_add_realm_btn">СОЗДАТЬ МИР</sys:String>
@@ -46,6 +47,7 @@
 	<sys:String x:Key="s_page_cs_settings_password_set_btn">УСТАНОВИТЬ</sys:String>
 	<sys:String x:Key="s_page_cs_controls_headet">УПРАВЛЕНИЕ</sys:String>
 	<sys:String x:Key="s_page_cs_controls_bg_editor_btn">РЕДАКТОР ПОЛЕЙ СРАЖЕНИЙ</sys:String>
+	<sys:String x:Key="s_page_cs_controls_show_curr_address">ПОКАЗАТЬ АДРЕС</sys:String>
 	<sys:String x:Key="s_page_cs_players_headet">ИГРОКИ</sys:String>
 	<sys:String x:Key="s_page_cs_start_btn">СТАРТ</sys:String>
 	<sys:String x:Key="s_page_cs_stop_btn">СТОП</sys:String>
@@ -119,6 +121,9 @@
 
 	<sys:String x:Key="s_dialog_delete_realm_title">Удаление {0}</sys:String>
 	<sys:String x:Key="s_dialog_delete_realm_msg">{0} будет удален. Эта операция не может быть отменена!</sys:String>
+
+	<sys:String x:Key="s_dialog_show_server_address_title">Адрес сервера</sys:String>
+	<sys:String x:Key="s_dialog_show_server_address_more_adr_lbl">Другие адреса:</sys:String>
 
 	<sys:String x:Key="s_bg_editor_title">Редактор Полей Сражений</sys:String>
 	<sys:String x:Key="s_bg_editor_add_room_btn">ДОБАВИТЬ КОМНАТУ</sys:String>

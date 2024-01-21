@@ -11,6 +11,7 @@
 	<sys:String x:Key="s_app_back_btn">BACK</sys:String>
 	<sys:String x:Key="s_app_select_btn">SELECT</sys:String>
 	<sys:String x:Key="s_app_edit_btn">EDIT</sys:String>
+	<sys:String x:Key="s_app_copy_btn">COPY</sys:String>
 	
 	<sys:String x:Key="s_page_sp_header">SINGLE PLAYER</sys:String>
 	<sys:String x:Key="s_page_sp_add_realm_btn">CREATE REALM</sys:String>
@@ -46,6 +47,7 @@
 	<sys:String x:Key="s_page_cs_settings_password_set_btn">SET</sys:String>
 	<sys:String x:Key="s_page_cs_controls_headet">Controls</sys:String>
 	<sys:String x:Key="s_page_cs_controls_bg_editor_btn">BATTLEGROUNDS EDITOR</sys:String>
+	<sys:String x:Key="s_page_cs_controls_show_curr_address">SHOW ADDRESS</sys:String>
 	<sys:String x:Key="s_page_cs_players_headet">PLAYERS</sys:String>
 	<sys:String x:Key="s_page_cs_start_btn">START</sys:String>
 	<sys:String x:Key="s_page_cs_stop_btn">STOP</sys:String>
@@ -119,6 +121,9 @@
 
 	<sys:String x:Key="s_dialog_delete_realm_title">Deleting {0}</sys:String>
 	<sys:String x:Key="s_dialog_delete_realm_msg">{0} will be removed. This action cannot be undone!</sys:String>
+
+	<sys:String x:Key="s_dialog_show_server_address_title">Server address</sys:String>
+	<sys:String x:Key="s_dialog_show_server_address_more_adr_lbl">Other addresses:</sys:String>
 
 	<sys:String x:Key="s_bg_editor_title">Battlegrounds Editor</sys:String>
 	<sys:String x:Key="s_bg_editor_add_room_btn">ADD ROON</sys:String>

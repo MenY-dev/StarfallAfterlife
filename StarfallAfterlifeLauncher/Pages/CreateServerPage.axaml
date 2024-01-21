@@ -160,10 +160,14 @@
 				<c:SfaPanel Grid.Row="2" Grid.Column="0" HeaderText="{DynamicResource s_page_cs_controls_headet}" ShowHeader="True"
 							Margin="10 5 5 10">
 					<ScrollViewer Padding="10">
-						<WrapPanel>
+						<WrapPanel IsEnabled="{Binding ServerStarted}">
+							<c:SfaButton Content="{DynamicResource s_page_cs_controls_show_curr_address}"
+										 Command="{Binding ShowCurrentAddress}"
+										 Margin="3"/>
+							
 							<c:SfaButton Content="{DynamicResource s_page_cs_controls_bg_editor_btn}"
 										 Command="{Binding ShowBattlegroundsEditor}"
-										 IsEnabled="{Binding ServerStarted}"/>
+										 Margin="3"/>
 						</WrapPanel>
 					</ScrollViewer>
 				</c:SfaPanel>

@@ -2,6 +2,7 @@
 using Avalonia.OpenGL;
 using Avalonia.Threading;
 using StarfallAfterlife.Bridge.Launcher;
+using StarfallAfterlife.Bridge.Networking;
 using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Server;
 using StarfallAfterlife.Bridge.Server.Characters;
@@ -93,26 +94,11 @@ namespace StarfallAfterlife.Launcher.ViewModels
         {
             var result = new List<InterfaceInfo>();
 
-            try
+            result.AddRange(NetUtils.GetInterfaces().Select(i => new InterfaceInfo()
             {
-                var interfaces = NetworkInterface.GetAllNetworkInterfaces()
-                   .Where(i => i.OperationalStatus is OperationalStatus.Up);
-
-                foreach (var item in interfaces)
-                {
-                    if (item is null)
-                        continue;
-
-                    var ip = item.GetIPProperties().UnicastAddresses?.FirstOrDefault(
-                       x => x.Address.AddressFamily == AddressFamily.InterNetwork);
-
-                    if (ip is null)
-                        continue;
-
-                    result.Add(new() { Address = ip.Address, Name = item.Name});
-                }
-            }
-            catch { }
+                Name = i.Name,
+                Address = i.Address
+            }));
 
             if (result.FirstOrDefault(i => i.Address.Equals(IPAddress.Loopback)) is InterfaceInfo info)
                 info.Name = "Localhost";
@@ -290,6 +276,14 @@ namespace StarfallAfterlife.Launcher.ViewModels
         public PlayerStatusInfoViewModel GetCharacterVM(int id)
         {
             return Players.FirstOrDefault(p => p.CharacterId == id);
+        }
+
+        public void ShowCurrentAddress()
+        {
+            new ShowServerAddressPopup()
+            {
+                Server = this,
+            }.ShowDialog();
         }
     }
 }
