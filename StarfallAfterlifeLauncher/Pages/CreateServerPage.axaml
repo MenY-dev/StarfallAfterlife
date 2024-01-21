@@ -114,7 +114,11 @@
 								</c:SfaTextBox>
 							</c:Property>
 							<c:Property Text="{DynamicResource s_page_cs_settings_port_lbl}">
-								<c:SfaTextBox Text="{Binding ServerPort}"  HorizontalAlignment="Stretch"/>
+								<c:SfaNumericUpDown Value="{Binding ServerPort}"
+													Minimum="1"
+													Maximum="65535"
+													Increment="1"
+													HorizontalAlignment="Stretch"/>
 							</c:Property>
 							
 							<c:Property Text="{DynamicResource s_page_cs_settings_port_forwarding_lbl}">
