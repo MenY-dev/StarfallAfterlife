@@ -6,6 +6,42 @@
 			 xmlns:sys="using:System"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="StarfallAfterlife.Launcher.Pages.FindServerPage">
+
+	<c:SidebarPage.Resources>
+		<ResourceDictionary>
+			<DataTemplate x:Key="server_loading_icon">
+				<PathIcon Width="20" Height="20" Foreground="White">
+					<PathIcon.Data>
+						<GeometryGroup>
+							<EllipseGeometry Center="10 10" RadiusX="20" RadiusY="20"/>
+							<EllipseGeometry Center="10 10" RadiusX="16" RadiusY="16"/>
+						</GeometryGroup>
+					</PathIcon.Data>
+					<PathIcon.OpacityMask>
+						<ConicGradientBrush Center="50% 50%">
+							<GradientStop Offset="0" Color="#00FFFFFF"/>
+							<GradientStop Offset="1" Color="#FFFFFFFF"/>
+						</ConicGradientBrush>
+					</PathIcon.OpacityMask>
+					<PathIcon.Styles>
+						<Style Selector="PathIcon">
+							<Style.Animations>
+								<Animation Duration="0:0:2" IterationCount="INFINITE">
+									<KeyFrame Cue="0%">
+										<Setter Property="RotateTransform.Angle" Value="0.0"/>
+									</KeyFrame>
+									<KeyFrame Cue="100%">
+										<Setter Property="RotateTransform.Angle" Value="360.0"/>
+									</KeyFrame>
+								</Animation>
+							</Style.Animations>
+						</Style>
+					</PathIcon.Styles>
+				</PathIcon>
+			</DataTemplate>
+		</ResourceDictionary>
+	</c:SidebarPage.Resources>
+	
 	<DockPanel LastChildFill="True">
 		<Panel DockPanel.Dock="Top">
 			<StackPanel Orientation="Horizontal" Margin="15 10" Spacing="5">
@@ -13,6 +49,9 @@
 				<Label Content="{DynamicResource s_page_fs_header}" Classes="h3" VerticalContentAlignment="Center" Margin="0 2" />
 			</StackPanel>
 			<StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Spacing="10" Margin="0 0 10 0">
+				<Panel IsVisible="{Binding IsUpdateStarted}">
+					<ContentPresenter ContentTemplate="{StaticResource server_loading_icon}"/>
+				</Panel>
 				<c:SfaButton Content="{DynamicResource s_page_fs_update_all_btn}" Command="{Binding UpdateStatuses}"/>
 				<c:SfaButton Content="{DynamicResource s_page_fs_add_server_btn}" Command="{Binding ShowAddServerDialog}"/>
 			</StackPanel>
@@ -94,6 +133,9 @@
 							</c:Property>
 							<c:Property Text="" HorizontalAlignment="Stretch" IsVisible="{Binding SelectedServer, Converter={x:Static ObjectConverters.IsNotNull}}">
 								<StackPanel Spacing="6" Orientation="Horizontal" HorizontalAlignment="Right">
+									<Panel IsVisible="{Binding SelectedServer.IsUpdateStarted}">
+										<ContentPresenter ContentTemplate="{StaticResource server_loading_icon}"/>
+									</Panel>
 									<c:SfaButton Content="{DynamicResource s_page_fs_info_update_btn}" Command="{Binding SelectedServer.Update}" HorizontalAlignment="Right"/>
 									<c:SfaButton Content="{DynamicResource s_page_fs_info_delete_btn}" Command="{Binding RemoveSelectedServer}" HorizontalAlignment="Right" Background="Red" BorderBrush="Red"/>
 								</StackPanel>

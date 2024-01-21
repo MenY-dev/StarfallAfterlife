@@ -39,6 +39,10 @@ namespace StarfallAfterlife.Launcher.ViewModels
 
         public FindServerPageViewModel Page { get; }
 
+        protected bool IsUpdateStarted => UpdateTasksCount > 0;
+
+        protected int UpdateTasksCount = 0;
+
         public RemoteServerInfo Info
         {
             get => _info;
@@ -92,6 +96,9 @@ namespace StarfallAfterlife.Launcher.ViewModels
 
         public Task<bool> Update(CancellationToken ct)
         {
+            UpdateTasksCount++;
+            RaisePropertyChanged(IsUpdateStarted, nameof(IsUpdateStarted));
+
             return Info?.Update(5000, ct).ContinueWith(t =>
             {
                 Dispatcher.UIThread.Invoke(() =>
@@ -99,6 +106,9 @@ namespace StarfallAfterlife.Launcher.ViewModels
                     Info = Info;
                     Page?.UpdateList();
                 });
+
+                UpdateTasksCount--;
+                RaisePropertyChanged(IsUpdateStarted, nameof(IsUpdateStarted));
 
                 if (ct.IsCancellationRequested)
                     return false;
