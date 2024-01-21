@@ -190,7 +190,8 @@ namespace StarfallAfterlife.Launcher.ViewModels
                 Launcher is SfaLauncher launcher &&
                 Server is SfaServer server &&
                 AppVM is AppViewModel appVM &&
-                launcher.CurrentProfile is SfaProfile profile)
+                launcher.CurrentProfile is SfaProfile profile &&
+                IPAddress.TryParse(ServerAddress, out var address) == true)
             {
                 Task.Factory.StartNew(() =>
                 {
@@ -202,7 +203,13 @@ namespace StarfallAfterlife.Launcher.ViewModels
 
                     try
                     {
-                        appVM.StartGame(profile, ServerAddress + ":" + ServerPort, () => server.Password);
+                        if (address.Equals(IPAddress.Any) == true)
+                            address = Interfaces.FirstOrDefault()?.Address;
+
+                        if (address is null)
+                            return;
+
+                        appVM.StartGame(profile, new IPEndPoint(address, ServerPort).ToString(), () => server.Password);
                     }
                     catch { }
                 });
