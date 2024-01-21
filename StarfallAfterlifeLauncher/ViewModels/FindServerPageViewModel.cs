@@ -11,6 +11,7 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -81,7 +82,9 @@ namespace StarfallAfterlife.Launcher.ViewModels
         public (bool Result, string Reason) AddServer(string address)
         {
             if (address is null ||
-                IPEndPoint.TryParse(address, out _) == false)
+                IPEndPoint.TryParse(address, out var endpoint) == false ||
+                endpoint?.Address?.Equals(IPAddress.Any) == true ||
+                endpoint?.Address?.AddressFamily == AddressFamily.InterNetworkV6)
                 return (false, "bad_address");
 
             var comparison = StringComparison.InvariantCultureIgnoreCase;
