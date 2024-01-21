@@ -59,6 +59,7 @@
 	<sys:String x:Key="s_page_settings_header">НАСТРОЙКИ</sys:String>
 	<sys:String x:Key="s_page_settings_game_dir_lbl">Директория Игры</sys:String>
 	<sys:String x:Key="s_page_settings_lang_lbl">Язык Интерфейса</sys:String>
+	<sys:String x:Key="s_page_settings_show_licenses_btn">ЛИЦЕНЗИИ</sys:String>
 	
 	<sys:String x:Key="s_page_pe_header">ВЫБОР ПРОФИЛЯ</sys:String>
 	<sys:String x:Key="s_page_pe_new_profile_btn">НОВЫЙ ПРОФИЛЬ</sys:String>
@@ -139,6 +140,8 @@
 	<sys:String x:Key="s_bg_editor_field_income_lbl">Доход Космопорта</sys:String>
 	<sys:String x:Key="s_bg_editor_field_freighter_spawn_lbl">Варп Грузовиков (с)</sys:String>
 	<sys:String x:Key="s_bg_editor_field_neutralizer_spawn_lbl">Варп Нейтрализаторов (с)</sys:String>
+	
+	<sys:String x:Key="s_licenses_window_title">Лицензии</sys:String>
 
 	<sys:String x:Key="s_tooltip_password_required">Требуется пароль</sys:String>
 	<sys:String x:Key="s_tooltip_bad_server_version">Несовместимая версия сервера</sys:String>

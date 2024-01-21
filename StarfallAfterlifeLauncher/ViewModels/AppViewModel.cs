@@ -17,6 +17,7 @@ using StarfallAfterlife.Launcher.Controls;
 using StarfallAfterlife.Launcher.MapEditor;
 using StarfallAfterlife.Launcher.MobsEditor;
 using StarfallAfterlife.Launcher.Services;
+using StarfallAfterlife.Launcher.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -682,6 +683,11 @@ namespace StarfallAfterlife.Launcher.ViewModels
         public void InstallLatestRelese()
         {
             InstallReleasePopup.InstallRelese(LatestRelese);
+        }
+
+        public void ShowLicenses()
+        {
+            new LicensesWindow().Show(App.MainWindow);
         }
     }
 }

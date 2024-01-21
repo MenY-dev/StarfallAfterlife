@@ -561,6 +561,9 @@
     <None Update="Database\Mobs\wreckers_512131826.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Licenses\Mono.Nat\License.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

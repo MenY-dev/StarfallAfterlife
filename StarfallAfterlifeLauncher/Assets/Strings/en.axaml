@@ -59,6 +59,7 @@
 	<sys:String x:Key="s_page_settings_header">SETTINGS</sys:String>
 	<sys:String x:Key="s_page_settings_game_dir_lbl">Game Directory</sys:String>
 	<sys:String x:Key="s_page_settings_lang_lbl">Interface language</sys:String>
+	<sys:String x:Key="s_page_settings_show_licenses_btn">LICENSES</sys:String>
 
 	<sys:String x:Key="s_page_pe_header">SELECT PROFILE</sys:String>
 	<sys:String x:Key="s_page_pe_new_profile_btn">NEW PROFILE</sys:String>
@@ -139,6 +140,8 @@
 	<sys:String x:Key="s_bg_editor_field_income_lbl">Mothership Income</sys:String>
 	<sys:String x:Key="s_bg_editor_field_freighter_spawn_lbl">Freighter Period (s)</sys:String>
 	<sys:String x:Key="s_bg_editor_field_neutralizer_spawn_lbl">Neutralizer Period (s)</sys:String>
+
+	<sys:String x:Key="s_licenses_window_title">Licenses</sys:String>
 
 	<sys:String x:Key="s_tooltip_password_required">Password required</sys:String>
 	<sys:String x:Key="s_tooltip_bad_server_version">Incompatible server version</sys:String>
