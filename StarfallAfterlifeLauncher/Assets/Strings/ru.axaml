@@ -125,6 +125,9 @@
 	<sys:String x:Key="s_dialog_show_server_address_title">Адрес сервера</sys:String>
 	<sys:String x:Key="s_dialog_show_server_address_more_adr_lbl">Другие адреса:</sys:String>
 
+	<sys:String x:Key="s_dialog_stop_server_title">Остановка сервера...</sys:String>
+	<sys:String x:Key="s_dialog_stop_server_msg">Остановить сервер?</sys:String>
+
 	<sys:String x:Key="s_bg_editor_title">Редактор Полей Сражений</sys:String>
 	<sys:String x:Key="s_bg_editor_add_room_btn">ДОБАВИТЬ КОМНАТУ</sys:String>
 	<sys:String x:Key="s_bg_editor_add_player_btn">ДОБАВИТЬ ИГРОКА</sys:String>

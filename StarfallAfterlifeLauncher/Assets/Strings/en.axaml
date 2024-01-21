@@ -125,6 +125,9 @@
 	<sys:String x:Key="s_dialog_show_server_address_title">Server address</sys:String>
 	<sys:String x:Key="s_dialog_show_server_address_more_adr_lbl">Other addresses:</sys:String>
 
+	<sys:String x:Key="s_dialog_stop_server_title">Stopping the server...</sys:String>
+	<sys:String x:Key="s_dialog_stop_server_msg">Stop the server?</sys:String>
+
 	<sys:String x:Key="s_bg_editor_title">Battlegrounds Editor</sys:String>
 	<sys:String x:Key="s_bg_editor_add_room_btn">ADD ROON</sys:String>
 	<sys:String x:Key="s_bg_editor_add_player_btn">ADD PLAYER</sys:String>

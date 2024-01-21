@@ -232,13 +232,24 @@ namespace StarfallAfterlife.Launcher.ViewModels
 
         public void StopServer()
         {
-            var server = Server;
+            SfaMessageBox.ShowDialog(
+                App.GetString("s_dialog_stop_server_msg"),
+                App.GetString("s_dialog_stop_server_title"),
+                MessageBoxButton.Yes | MessageBoxButton.Cancell)
+                .ContinueWith(t => Dispatcher.UIThread.Invoke(() =>
+                {
+                    if (t.IsCompleted == true &&
+                        t.Result == MessageBoxButton.Yes)
+                    {
+                        var server = Server;
 
-            if (server is not null)
-                server.PlayerStatusUpdated -= PlayerStatusUpdated;
+                        if (server is not null)
+                            server.PlayerStatusUpdated -= PlayerStatusUpdated;
 
-            Launcher?.StopServer();
-            Players.Clear();
+                        Launcher?.StopServer();
+                        Players.Clear();
+                    }
+                }));
         }
 
         public Task CreateNewRealm()
