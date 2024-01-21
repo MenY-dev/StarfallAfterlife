@@ -1,4 +1,5 @@
-﻿using StarfallAfterlife.Bridge.Mathematics;
+﻿using StarfallAfterlife.Bridge.Database;
+using StarfallAfterlife.Bridge.Mathematics;
 using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Server.Characters;
 using StarfallAfterlife.Bridge.Server.Discovery;
@@ -115,6 +116,20 @@ namespace StarfallAfterlife.Bridge.Server
                 {
                     var party = CharacterParty.Create(Server, character.UniqueId);
                     SendToChat(channel, label, $"New party: {party?.Id.ToString() ?? "error"}");
+                }
+            }
+            else if (msg.StartsWith("add item ") &&
+                msg.Length > 9 &&
+                int.TryParse(msg[9..].Trim(), out int itemId))
+            {
+                if (CurrentCharacter is ServerCharacter character &&
+                    (Server?.Realm?.Database ?? SfaDatabase.Instance)?.GetItem(itemId) is SfaItem item)
+                {
+                    character.DiscoveryClient?.Invoke(c =>
+                    {
+                        character.Inventory.AddItem(InventoryItem.Create(item));
+                        SendToChat(channel, label, $"{item.Name} added to inventory.");
+                    });
                 }
             }
             else if (msg.StartsWith("toast ") &&
