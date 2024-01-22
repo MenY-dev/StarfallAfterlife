@@ -443,10 +443,10 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
             return new InstanceXpData()
             {
-                DungeonShip = lvl * 2500,
-                DungeonBoss = lvl * 7500,
-                Outpost = lvl * 5000,
-                Station = lvl * 10000,
+                DungeonShip = lvl * 500,
+                DungeonBoss = lvl * 3000,
+                Outpost = lvl * 2500,
+                Station = lvl * 5000,
             };
         }
 
