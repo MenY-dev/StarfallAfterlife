@@ -28,6 +28,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Xml.Linq;
+using static System.Net.WebRequestMethods;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace StarfallAfterlife.Launcher.ViewModels
@@ -230,6 +231,38 @@ namespace StarfallAfterlife.Launcher.ViewModels
             {
                 if (t.Result?.FirstOrDefault()?.Path.LocalPath is string gameDir)
                 {
+                    if (Launcher is SfaLauncher launcher &&
+                        launcher.TestGameDirectory(gameDir) == false)
+                    {
+                        try
+                        {
+                            IEnumerable<string> GetSubdirs(string path)
+                            {
+                                var dirs = Directory.EnumerateDirectories(path).GetEnumerator();
+                                
+                                while (true)
+                                {
+                                    try
+                                    {
+                                        if (dirs.MoveNext() == false)
+                                            break;
+                                    }
+                                    catch (UnauthorizedAccessException) { }
+
+                                    yield return dirs.Current;
+                                }
+                            }
+
+                            if (Directory.Exists(gameDir) == true &&
+                                GetSubdirs(gameDir) is IEnumerable<string> dirs)
+                            {
+                                dirs = dirs.Concat(dirs.SelectMany(d => GetSubdirs(d)));
+                                gameDir = dirs.FirstOrDefault(launcher.TestGameDirectory) ?? gameDir;
+                            }
+                        }
+                        catch {}
+                    }
+
                     GameDirectory = gameDir;
                     Launcher?.SaveSettings();
                 }
