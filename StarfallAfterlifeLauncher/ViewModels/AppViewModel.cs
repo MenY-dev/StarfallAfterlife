@@ -7,6 +7,7 @@ using StarfallAfterlife.Bridge.Collections;
 using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Diagnostics;
 using StarfallAfterlife.Bridge.Generators;
+using StarfallAfterlife.Bridge.IO;
 using StarfallAfterlife.Bridge.Launcher;
 using StarfallAfterlife.Bridge.Primitives;
 using StarfallAfterlife.Bridge.Profiles;
@@ -236,27 +237,10 @@ namespace StarfallAfterlife.Launcher.ViewModels
                     {
                         try
                         {
-                            IEnumerable<string> GetSubdirs(string path)
-                            {
-                                var dirs = Directory.EnumerateDirectories(path).GetEnumerator();
-                                
-                                while (true)
-                                {
-                                    try
-                                    {
-                                        if (dirs.MoveNext() == false)
-                                            break;
-                                    }
-                                    catch (UnauthorizedAccessException) { }
-
-                                    yield return dirs.Current;
-                                }
-                            }
-
                             if (Directory.Exists(gameDir) == true &&
-                                GetSubdirs(gameDir) is IEnumerable<string> dirs)
+                                FileHelpers.EnumerateDirectoriesSelf(gameDir) is IEnumerable<string> dirs)
                             {
-                                dirs = dirs.Concat(dirs.SelectMany(d => GetSubdirs(d)));
+                                dirs = dirs.Concat(dirs.SelectMany(FileHelpers.EnumerateDirectoriesSelf));
                                 gameDir = dirs.FirstOrDefault(launcher.TestGameDirectory) ?? gameDir;
                             }
                         }

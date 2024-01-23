@@ -24,7 +24,7 @@ namespace StarfallAfterlife.Bridge.IO
                 if (Directory.Exists(root) == false)
                     Directory.CreateDirectory(root);
 
-                var dirs = Directory.GetDirectories(root);
+                var dirs = GetDirectoriesSelf(root);
                 var newDir = Path.Combine(root, baseName);
 
                 if (Directory.Exists(newDir) == false)
@@ -41,6 +41,26 @@ namespace StarfallAfterlife.Bridge.IO
             catch { }
 
             return null;
+        }
+
+        public static string[] GetDirectoriesSelf(string path) =>
+            EnumerateDirectoriesSelf(path).ToArray();
+
+        public static IEnumerable<string> EnumerateDirectoriesSelf(string path)
+        {
+            var dirs = Directory.EnumerateDirectories(path).GetEnumerator();
+
+            while (true)
+            {
+                try
+                {
+                    if (dirs.MoveNext() == false)
+                        break;
+                }
+                catch (UnauthorizedAccessException) { }
+
+                yield return dirs.Current;
+            }
         }
     }
 }

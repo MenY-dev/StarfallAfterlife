@@ -119,7 +119,7 @@ namespace StarfallAfterlife.Bridge.Profiles
                 {
                     if (Directory.Exists(RealmsDirectory))
                     {
-                        var realmsPaths = Directory.GetDirectories(RealmsDirectory);
+                        var realmsPaths = FileHelpers.GetDirectoriesSelf(RealmsDirectory);
 
                         foreach (var path in realmsPaths)
                         {

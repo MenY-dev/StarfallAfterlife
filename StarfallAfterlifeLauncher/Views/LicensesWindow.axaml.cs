@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using StarfallAfterlife.Bridge.IO;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -48,7 +49,7 @@ namespace StarfallAfterlife.Launcher.Views
                 var dir = Path.Combine("", "Licenses");
 
                 if (Directory.Exists(dir) &&
-                    Directory.GetDirectories(dir) is string[] dirs)
+                    FileHelpers.GetDirectoriesSelf(dir) is string[] dirs)
                 {
                     foreach (var licenseDir in dirs)
                     {

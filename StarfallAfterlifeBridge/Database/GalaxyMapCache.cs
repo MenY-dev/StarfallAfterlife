@@ -1,4 +1,5 @@
-﻿using StarfallAfterlife.Bridge.Primitives;
+﻿using StarfallAfterlife.Bridge.IO;
+using StarfallAfterlife.Bridge.Primitives;
 using StarfallAfterlife.Bridge.Serialization;
 using StarfallAfterlife.Bridge.Server.Galaxy;
 using System;
@@ -35,7 +36,7 @@ namespace StarfallAfterlife.Bridge.Database
                         Directory.Exists(dtbDir) == false)
                         return;
 
-                    var subDirs = Directory.GetDirectories(dtbDir);
+                    var subDirs = FileHelpers.GetDirectoriesSelf(dtbDir);
 
                     foreach (var dir in subDirs)
                     {
