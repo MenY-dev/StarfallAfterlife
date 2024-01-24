@@ -295,24 +295,22 @@ namespace StarfallAfterlife.Launcher.ViewModels
         {
             return Dispatcher.UIThread.Invoke(() => new CreateProfilePopup().ShowDialog().ContinueWith(t =>
             {
-
-                if (t.Result is CreateProfilePopup result &&
-                    result.IsDone == true &&
-                    result.Text is not null)
+                Dispatcher.UIThread.Invoke(() =>
                 {
-                    Dispatcher.UIThread.Invoke(() =>
+                    if (Launcher is SfaLauncher launcher &&
+                        t.Result is CreateProfilePopup result &&
+                        result.IsDone == true &&
+                        result.IsValid == true &&
+                        result.Text is not null)
                     {
-                        if (Launcher is SfaLauncher launcher)
-                        {
-                            var profile = Launcher?.CreateNewProfile(result.Text);
+                        var profile = Launcher?.CreateNewProfile(result.Text);
 
-                            if (launcher.CurrentProfile is null && profile is not null)
-                                SelectProfile(profile);
-                        }
+                        if (launcher.CurrentProfile is null && profile is not null)
+                            SelectProfile(profile);
+                    }
 
-                        UpdateRealms();
-                    });
-                }
+                    UpdateRealms();
+                });
             }));
         }
 

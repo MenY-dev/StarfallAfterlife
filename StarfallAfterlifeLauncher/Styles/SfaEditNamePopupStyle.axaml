@@ -65,14 +65,14 @@
 							<DockPanel LastChildFill="True" Margin="6">
 								<Panel DockPanel.Dock="Bottom">
 									<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="6">
-										<c:SfaButton Content="{DynamicResource s_app_ok_btn}" IsEnabled="{Binding $parent[Window].IsValid, Mode=OneWay}" Command="{Binding $parent[Window].OkPressed}"/>
+										<c:SfaButton Content="{DynamicResource s_app_ok_btn}" IsEnabled="{TemplateBinding IsValid}" Command="{Binding $parent[Window].OkPressed}"/>
 										<c:SfaButton Content="{DynamicResource s_app_cancell_btn}" Command="{Binding $parent[Window].Close}"/>
 									</StackPanel>
 								</Panel>
 								<Panel>
 									<StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Spacing="6">
-										<Label Foreground="White" Content="{Binding $parent[Window].Label}"/>
-										<c:SfaTextBox HorizontalAlignment="Stretch" Text="{Binding $parent[Window].Text}"/>
+										<Label Foreground="White" Content="{TemplateBinding Label}"/>
+										<c:SfaTextBox HorizontalAlignment="Stretch" Text="{Binding $parent[Window].Text, Mode=TwoWay}"/>
 									</StackPanel>
 								</Panel>
 							</DockPanel>
