@@ -198,7 +198,9 @@ namespace StarfallAfterlife.Bridge.Game
                                     {
                                         foreach (var dropItem in drop)
                                         {
-                                            var dropCount = rnd.Next(dropItem.Min, dropItem.Max + 1);
+                                            var min = dropItem.Min * count;
+                                            var max = dropItem.Max * count + 1;
+                                            var dropCount = rnd.Next(min, max);
                                             var newItem = database.GetItem(dropItem.Id);
                                             character.AddInventoryItem(newItem, dropCount);
 
