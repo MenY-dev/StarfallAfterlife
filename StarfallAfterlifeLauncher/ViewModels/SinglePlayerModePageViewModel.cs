@@ -74,7 +74,7 @@ namespace StarfallAfterlife.Launcher.ViewModels
                     return false;
 
                 if (launcher.Realms.Count < 1)
-                    CreateNewRealm().Wait();
+                    Dispatcher.UIThread.InvokeAsync(() => CreateNewRealm())?.Wait();
 
                 if (launcher.Realms.Count < 1)
                     return false;
