@@ -159,6 +159,16 @@ namespace StarfallAfterlife.Launcher.ViewModels
                         return;
                     }
 
+                    if (launcher.Realms.Count < 1)
+                        Dispatcher.UIThread.InvokeAsync(() => CreateNewRealm())?.Wait();
+
+                    if (launcher.Realms.Count < 1)
+                    {
+                        Dispatcher.UIThread?.InvokeAsync(() => startingPopup.Close());
+                        return;
+                    }
+
+                    appVM.SelectedServerRealm ??= appVM.Realms.FirstOrDefault();
                     Dispatcher.UIThread?.InvokeAsync(() => Players.Clear()).Wait();
 
                     var server = Server = launcher.StartServer();
