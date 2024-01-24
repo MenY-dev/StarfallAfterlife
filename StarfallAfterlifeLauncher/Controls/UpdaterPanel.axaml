@@ -46,7 +46,7 @@
 					</Grid>
 					<c:Separator Height="2" Opacity="0.5"/>
 
-					<Panel MinHeight="100" MaxHeight="400">
+					<Panel MinHeight="100">
 						<Rectangle Fill="Black" Opacity="0.75">
 							<Rectangle.OpacityMask>
 								<LinearGradientBrush StartPoint="0% 0%" EndPoint="0% 100%">
@@ -55,10 +55,16 @@
 								</LinearGradientBrush>
 							</Rectangle.OpacityMask>
 						</Rectangle>
-						<StackPanel IsVisible="{Binding IsUpdateAvailable}" Spacing="6" Margin="10">
+						<DockPanel IsVisible="{Binding IsUpdateAvailable}" Margin="10" LastChildFill="True">
 
-							<ScrollViewer>
-								<StackPanel  Spacing="6">
+							<c:SfaButton DockPanel.Dock="Bottom"
+										 Content="{DynamicResource s_updater_install_btn}"
+										 HorizontalAlignment="Stretch"
+										 HorizontalContentAlignment="Center"
+										 Command="{Binding InstallLatestRelese}"/>
+							
+							<ScrollViewer MaxHeight="350">
+								<StackPanel Spacing="6">
 									<Panel>
 										<Rectangle Fill="{DynamicResource HoloColor}" Opacity="0.1"
 												   HorizontalAlignment="Stretch"
@@ -76,16 +82,11 @@
 
 									<TextBlock Foreground="White" TextWrapping="Wrap" Opacity="0.75"
 											   Text="{Binding LatestRelese.Description}"
-											   Padding="5 0 0 0"/>
+											   Padding="5 0 0 5"/>
 								</StackPanel>
 							</ScrollViewer>
 
-							<c:SfaButton Content="{DynamicResource s_updater_install_btn}"
-										 HorizontalAlignment="Stretch"
-										 HorizontalContentAlignment="Center"
-										 Command="{Binding InstallLatestRelese}"/>
-
-						</StackPanel>
+						</DockPanel>
 
 						<TextBlock Text="{DynamicResource s_updater_no_update_msg}"
 								   Foreground="White"
