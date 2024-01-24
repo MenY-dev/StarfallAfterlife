@@ -4,12 +4,16 @@ using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Data;
 using Avalonia.Metadata;
+using System.Windows.Input;
 
 namespace StarfallAfterlife.Launcher.Controls
 {
     [PseudoClasses(":pageshow", ":pagehide")]
     public class SidebarPage : UserControl
     {
+        public static readonly StyledProperty<ICommand> ShowCommandProperty =
+            AvaloniaProperty.Register<SidebarPage, ICommand>(nameof(ShowCommand));
+
         public static readonly DirectProperty<SidebarPage, bool> IsShowProperty =
             AvaloniaProperty.RegisterDirect<SidebarPage, bool>(
                 nameof(IsShow),
@@ -25,7 +29,16 @@ namespace StarfallAfterlife.Launcher.Controls
             {
                 SetAndRaise(IsShowProperty, ref isShow, value);
                 ApplyPseudoClasses(IsShow);
+
+                if (value == true)
+                    ShowCommand?.Execute(null);
             }
+        }
+
+        public ICommand ShowCommand
+        {
+            get => GetValue(ShowCommandProperty);
+            set => SetValue(ShowCommandProperty, value);
         }
 
         private bool isShow = true;

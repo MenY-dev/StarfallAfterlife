@@ -348,5 +348,10 @@ namespace StarfallAfterlife.Launcher.ViewModels
                 SfaMessageBox.ShowDialog(e.Message, App.GetString("s_dialog_server_connect_error_title"));
             }
         }
+
+        public void OnPageShow()
+        {
+            UpdateStatuses();
+        }
     }
 }
