@@ -58,8 +58,8 @@ namespace StarfallAfterlife.Bridge.Launcher
                         Version = Version.TryParse((string)doc["version"] ?? "", out var ver) ? ver : Version;
                         Id = (string)doc["realm_id"] ?? Id;
                         Name = (string)doc["realm_name"] ?? Name;
-                        Description = (string)doc["realm_description"] ?? Description;
-                        NeedPassword = (bool?)doc["need_password"] ?? NeedPassword;
+                        NeedPassword = (bool?)doc["need_password"] ?? false;
+                        Description = (string)doc["realm_description"];
                     }
 
                     return true;
