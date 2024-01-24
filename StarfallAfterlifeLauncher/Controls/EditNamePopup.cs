@@ -58,8 +58,6 @@ namespace StarfallAfterlife.Launcher.Controls
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
-        private string _text;
-
         public void OkPressed()
         {
             IsDone = true;
