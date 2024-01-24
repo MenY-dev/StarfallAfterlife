@@ -119,6 +119,9 @@ namespace StarfallAfterlife.Bridge.Server
                 case DiscoveryClientAction.AcceptQuest:
                     HandleAcceptQuest(reader, systemId, objectType, objectId); break;
 
+                case DiscoveryClientAction.AbandoneQuest:
+                    HandleAbandoneQuest(reader, systemId, objectType, objectId); break;
+
                 case DiscoveryClientAction.DeliverQuestItems:
                     HandleDeliverQuestItems(reader, systemId, objectType, objectId); break;
 
@@ -831,6 +834,17 @@ namespace StarfallAfterlife.Bridge.Server
             {
                 character.AcceptQuest(entityId);
                 SendQuestDataUpdate();
+                character.UpdateQuestLines();
+            }
+        }
+
+        private void HandleAbandoneQuest(SfReader reader, int systemId, DiscoveryObjectType objectType, int objectId)
+        {
+            int entityId = reader.ReadInt32();
+
+            if (CurrentCharacter is ServerCharacter character)
+            {
+                character.AbandoneQuest(entityId);
                 character.UpdateQuestLines();
             }
         }

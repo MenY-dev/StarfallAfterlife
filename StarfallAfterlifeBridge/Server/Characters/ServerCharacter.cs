@@ -227,6 +227,18 @@ namespace StarfallAfterlife.Bridge.Server.Characters
             }
         }
 
+        public void AbandoneQuest(int questId)
+        {
+            if (ActiveQuests.ToArray().FirstOrDefault(q => q?.Id == questId) is QuestListener quest)
+            {
+                quest.StopListening();
+                quest.State = QuestState.Abandoned;
+                ActiveQuests.Remove(quest);
+                Progress?.ActiveQuests?.Remove(questId);
+                DiscoveryClient?.SendQuestCompleteData(quest);
+                DiscoveryClient?.SyncQuestCanceled(questId);
+            }
+        }
 
         public void UpdateQuestProgress(int questId, QuestProgress questProgress)
         {

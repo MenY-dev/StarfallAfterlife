@@ -566,6 +566,17 @@ namespace StarfallAfterlife.Bridge.Server
                     }
                 }
 
+                if (doc["new_canceled_quests"]?.AsArray() is JArray canceledQuests)
+                {
+                    foreach (var item in canceledQuests)
+                    {
+                        if ((int?)item is int quest)
+                        {
+                            progress.ActiveQuests.Remove(quest);
+                        }
+                    }
+                }
+
                 if (doc["new_rewards"]?.AsArray() is JArray rewards)
                 {
                     foreach (var item in rewards)

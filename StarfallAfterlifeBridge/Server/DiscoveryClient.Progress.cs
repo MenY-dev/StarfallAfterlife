@@ -51,6 +51,15 @@ namespace StarfallAfterlife.Bridge.Server
             }, SfaServerAction.SyncProgress);
         }
 
+        public void SyncQuestCanceled(int questId)
+        {
+
+            Client?.Send(new JsonObject()
+            {
+                ["new_canceled_quests"] = new JsonArray(JsonValue.Create(questId))
+            }, SfaServerAction.SyncProgress);
+        }
+
         public void SyncCharReward(int rewardId)
         {
 
