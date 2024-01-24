@@ -35,7 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Product.wxs" />
-    <HarvestDirectory Include="..\StarfallAfterlifeLauncher\bin\Debug\net7.0-windows\win-x64">
+    <HarvestDirectory Include="..\StarfallAfterlifeLauncher\bin\Release\net7.0-windows\win-x64">
       <DirectoryRefId>INSTALLFOLDER</DirectoryRefId>
       <SuppressRootDirectory>true</SuppressRootDirectory>
       <SuppressCom>true</SuppressCom>
