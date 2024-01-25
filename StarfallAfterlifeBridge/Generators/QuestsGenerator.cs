@@ -224,6 +224,7 @@ namespace StarfallAfterlife.Bridge.Generators
 
         protected virtual void GenerateLevelingQuests(DiscoveryQuestsDatabase qd)
         {
+            var database = Realm?.Database ?? SfaDatabase.Instance;
             var groups = Realm.Database.LevelQuests.Concat(RelictShipLevelingQuests)
                 .GroupBy(x => x.Faction);
 
@@ -289,10 +290,9 @@ namespace StarfallAfterlife.Bridge.Generators
 
                         var reward = logic.Rewards.FirstOrDefault();
 
-                        reward.Items = (reward.Items ?? new()).Select(i => new QuestItemInfo()
+                        reward.Items = (reward.Items ?? new()).Select(i => new QuestRevardItemInfo()
                         {
                             Id = i.Id,
-                            Type = i.Type,
                             Count = i.Count * 4
                         }).ToList();
 

@@ -107,10 +107,9 @@ namespace StarfallAfterlife.Bridge.Generators
                 {
                     var item = items[rnd.Next(0, items.Count)];
 
-                    (revard.Items ??= new()).Add(new QuestItemInfo
+                    (revard.Items ??= new()).Add(new QuestRevardItemInfo
                     {
                         Id = item.Id,
-                        Type = (int)item.ItemType,
                         Count = (rnd.Next() % 10) switch
                         {
                             0 => 4,

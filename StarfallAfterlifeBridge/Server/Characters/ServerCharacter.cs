@@ -292,7 +292,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                             {
                                 if (database.GetItem(rewardItem.Id) is SfaItem itemInfo)
                                 {
-                                    var item = rewardItem.ToInventoryItem();
+                                    var item = InventoryItem.Create(itemInfo, rewardItem.Count);
                                     (Inventory ?? new(this)).AddItem(item);
                                     addedItems.Add(item);
                                 }

@@ -20,7 +20,7 @@ namespace StarfallAfterlife.Bridge.Database
         public int HouseCurrency;
 
         [JsonInclude, JsonPropertyName("items")]
-        public List<QuestItemInfo> Items;
+        public List<QuestRevardItemInfo> Items;
 
         public QuestReward(JsonNode doc)
         {
@@ -57,11 +57,11 @@ namespace StarfallAfterlife.Bridge.Database
         {
             var newItems = reward.Items?.ToList() ?? new();
 
-            if (Items is List<QuestItemInfo> items)
+            if (Items is List<QuestRevardItemInfo> items)
             {
                 foreach (var item in items)
                 {
-                    var index = newItems.FindIndex(m => m.Id == item.Id && m.Type == item.Type);
+                    var index = newItems.FindIndex(m => m.Id == item.Id);
 
                     if (index < 0)
                     {
