@@ -112,6 +112,7 @@ namespace StarfallAfterlife.Bridge.Profiles
                 {
                     string text = File.ReadAllText(GameProfileLocation);
                     GameProfile = JsonSerializer.Deserialize<SfaGameProfile>(text);
+                    ApplyGameProfileFixes();
                 }
                 catch { }
 
@@ -153,6 +154,37 @@ namespace StarfallAfterlife.Bridge.Profiles
             catch {}
 
             return false;
+        }
+
+        private void ApplyGameProfileFixes()
+        {
+            if (GameProfile is SfaGameProfile profile &&
+                (Database ?? SfaDatabase.Instance) is SfaDatabase database)
+            {
+                foreach (var character in profile.DiscoveryModeProfile.Chars)
+                {
+                    if (character is null)
+                        continue;
+
+                    foreach (var item in character.Inventory?.ToList() ?? new())
+                    {
+                        if (database.GetItem(item.Id) is SfaItem blueprint &&
+                            item.Type != blueprint.ItemType)
+                        {
+                            character.Inventory?.Remove(item, item.Count);
+                            character.Inventory?.Add(new InventoryItem
+                            {
+                                Id = item.Id,
+                                Type = blueprint.ItemType,
+                                Count = item.Count,
+                                UniqueData = item.UniqueData,
+                                IGCPrice = item.IGCPrice,
+                                BGCPrice = item.BGCPrice
+                            }, item.Count);
+                        }
+                    }
+                }
+            }
         }
 
         public SfaRealmInfo AddNewRealm(SfaRealm realm)
