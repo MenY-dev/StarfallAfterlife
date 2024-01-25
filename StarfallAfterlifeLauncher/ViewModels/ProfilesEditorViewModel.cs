@@ -10,8 +10,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace StarfallAfterlife.Launcher.ViewModels
 {
@@ -72,12 +74,31 @@ namespace StarfallAfterlife.Launcher.ViewModels
         public void UpdateProfiles()
         {
             var selectedProfile = SelectedProfile?.Profile;
-            Profiles?.Clear();
 
-            foreach (var item in Launcher?.Profiles ?? new())
-                Profiles.Add(new(item));
+            if (Launcher?.Profiles?.ToArray() is SfaProfile[] profiles)
+            {
+                var profilesVM = Profiles.ToArray();
 
-            SelectedProfile = Profiles.FirstOrDefault(p => p.Profile == selectedProfile);
+                foreach (var item in profilesVM)
+                {
+                    if (profiles.Contains(item?.Profile) == false)
+                        Profiles.Remove(item);
+                }
+
+                profilesVM = Profiles.ToArray();
+
+                for (int i = 0; i < profiles.Length; i++)
+                {
+                    var item = profiles[i];
+
+                    if (profilesVM.Any(s => s?.Profile == item) == false)
+                        Profiles.Insert(i, new(item));
+                }
+            }
+
+            SelectedProfile =
+                Profiles.FirstOrDefault(p => p.Profile == selectedProfile) ??
+                Profiles.FirstOrDefault();
         }
 
         public void OnSelectionChanged()

@@ -32,11 +32,98 @@
 				</Rectangle.Fill>
 			</Rectangle>
 			
-			<DockPanel LastChildFill="True">
-				<Panel Classes="header" DockPanel.Dock="Top" Margin="20 10">
-					<Label Content="{DynamicResource s_page_pe_header}" FontSize="16" FontWeight="DemiBold" Foreground="White"/>
+			<Grid RowDefinitions="Auto 2 * 2 Auto">
+				<Panel Grid.Row="0" Classes="header" Margin="20 10">
+					<TextBlock Text="{DynamicResource s_page_pe_header}"
+							   FontSize="16" FontWeight="DemiBold"
+							   Foreground="White"
+							   HorizontalAlignment="Center"/>
 				</Panel>
-				<Panel Classes="footer" DockPanel.Dock="Bottom" Margin="20 10 20 20">
+				
+				<c:Separator Grid.Row="1" Opacity="0.6"/>
+				
+				<Panel Grid.Row="2" Classes="profiles">
+					<Rectangle Fill="Black" Opacity="0.8" IsHitTestVisible="False" >
+						<Rectangle.OpacityMask>
+							<LinearGradientBrush StartPoint="0% 0%" EndPoint="0% 100%">
+								<GradientStop Color="#FFFFFFFF" Offset="0"/>
+								<GradientStop Color="#30FFFFFF" Offset="1"/>
+							</LinearGradientBrush>
+						</Rectangle.OpacityMask>
+					</Rectangle>
+
+					<Grid ColumnDefinitions="* 2 *">
+						<c:SfaListBox Grid.Column="0" Padding="10 20 10 20" ItemsSource="{Binding Profiles}" SelectionMode="AlwaysSelected" SelectedItem="{Binding SelectedProfile}">
+							<c:SfaListBox.ItemTemplate>
+								<DataTemplate>
+									<Panel Margin="0">
+										<Label Content="{Binding Name}" Foreground="White" Margin="6"/>
+									</Panel>
+								</DataTemplate>
+							</c:SfaListBox.ItemTemplate>
+						</c:SfaListBox>
+						
+						<c:Separator Grid.Column="1" Opacity="0.6" Classes="vertical"/>
+
+						<Panel Grid.Column="2">
+							<ScrollViewer Padding="10">
+								<StackPanel Spacing="3">
+									<c:Property Text="Characters:"/>
+									<ItemsControl ItemsSource="{Binding SelectedProfile.Chars}">
+										<ItemsControl.ItemTemplate>
+											<DataTemplate>
+												<Grid RowDefinitions="Auto 3 Auto">
+													<Panel Grid.Row="0">
+														<Rectangle Fill="{Binding Faction, Converter={x:Static c:SfaUtils.FactionToBrushConverter}}"
+																   Opacity="0.6">
+															<Rectangle.OpacityMask>
+																<LinearGradientBrush StartPoint="0% 0%" EndPoint="100% 0%">
+																	<GradientStop Offset="0" Color="#00FFFFFF"/>
+																	<GradientStop Offset="0.3" Color="#FFFFFFFF"/>
+																	<GradientStop Offset="0.7" Color="#FFFFFFFF"/>
+																	<GradientStop Offset="1" Color="#00FFFFFF"/>
+																</LinearGradientBrush>
+															</Rectangle.OpacityMask>
+														</Rectangle>
+														<TextBlock Text="{Binding Name}"
+																   FontSize="16"
+																   HorizontalAlignment="Center"
+																   Margin="5 3"/>
+													</Panel>
+													<StackPanel Grid.Row="2" Spacing="0">
+														<c:Property Text="Level">
+															<TextBlock Text="{Binding Level}"/>
+														</c:Property>
+														<c:Property Text="Access Level">
+															<TextBlock Text="{Binding AccessLevel}"/>
+														</c:Property>
+														<c:Property Text="IGC">
+															<TextBlock Text="{Binding IGC}"/>
+														</c:Property>
+														<c:Property Text="BGC">
+															<TextBlock Text="{Binding BGC}"/>
+														</c:Property>
+														<c:Property Text="Ships">
+															<Panel>
+																<TextBlock Text="{Binding Ships.Count}" VerticalAlignment="Center"/>
+																<!--<c:SfaButton Content="SHOW" HorizontalAlignment="Right"/>-->
+															</Panel>
+														</c:Property>
+														<c:Property Text=""/>
+													</StackPanel>
+												</Grid>
+											</DataTemplate>
+										</ItemsControl.ItemTemplate>
+									</ItemsControl>
+								</StackPanel>
+							</ScrollViewer>
+						</Panel>
+					</Grid>
+				</Panel>
+				
+				<c:Separator Grid.Row="3" Opacity="0.6"/>
+				
+				<Panel Grid.Row="4" Classes="footer" DockPanel.Dock="Bottom" Margin="10">
 					<Panel HorizontalAlignment="Stretch">
 						<StackPanel HorizontalAlignment="Right" Spacing="10" Orientation="Horizontal">
 							<c:SfaButton Content="{DynamicResource s_app_select_btn}" Command="{Binding SelectProfile}"/>
@@ -48,24 +135,14 @@
 						</StackPanel>
 					</Panel>
 				</Panel>
-				<Panel Classes="profiles">
-					<Grid RowDefinitions="*" ColumnDefinitions="1*" HorizontalAlignment="Stretch">
-						<c:SfaPanel ShowHeader="True" HeaderText="{DynamicResource s_page_pe_profiles_panel_title}" Grid.Column="0" Margin="20, 0, 10, 0">
-							<c:SfaListBox Padding="10 20 10 20" ItemsSource="{Binding Profiles}" SelectionMode="AlwaysSelected" SelectedItem="{Binding SelectedProfile}">
-								<c:SfaListBox.ItemTemplate>
-									<DataTemplate>
-										<Panel Margin="0">
-											<Label Content="{Binding Name}" Foreground="White" Margin="6"/>
-										</Panel>
-									</DataTemplate>
-								</c:SfaListBox.ItemTemplate>
-							</c:SfaListBox>
-						</c:SfaPanel>
-					</Grid>
-				</Panel>
-			</DockPanel>
+			</Grid>
 
-			<Border BorderBrush="#FF204060" Opacity="0.5" Background="Transparent" IsHitTestVisible="False" BorderThickness="1" CornerRadius="0"/>
+			<Border BorderBrush="{DynamicResource AccentColor}"
+					Opacity="0.5"
+					Background="Transparent"
+					IsHitTestVisible="False"
+					BorderThickness="1"
+					CornerRadius="0"/>
 		</Panel>
 	</Panel>
 </UserControl>
