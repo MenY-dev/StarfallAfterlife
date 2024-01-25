@@ -12,7 +12,7 @@ namespace StarfallAfterlife.Launcher.Controls
     public partial class Property : UserControl
     {
         public static readonly StyledProperty<string> TextProperty =
-            AvaloniaProperty.Register<Property, string>(nameof(Text));
+            AvaloniaProperty.Register<Property, string>(nameof(Text), defaultBindingMode: BindingMode.TwoWay);
 
         public static readonly StyledProperty<GridLength> LabelWidthProperty =
             AvaloniaProperty.Register<Property, GridLength>(nameof(LabelWidth), GridLength.Star);
