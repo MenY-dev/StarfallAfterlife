@@ -10,8 +10,8 @@
 
 	<c:SidebarPage.Resources>
 		<ResourceDictionary>
-			<DataTemplate x:Key="server_loading_icon">
-				<PathIcon Width="20" Height="20" Foreground="White">
+			<DataTemplate x:Key="server_loading_icon" DataType="{x:Type sys:Boolean}">
+				<PathIcon Width="20" Height="20" Foreground="White" IsVisible="{Binding FallbackValue=False}">
 					<PathIcon.Data>
 						<GeometryGroup>
 							<EllipseGeometry Center="10 10" RadiusX="20" RadiusY="20"/>
@@ -25,7 +25,7 @@
 						</ConicGradientBrush>
 					</PathIcon.OpacityMask>
 					<PathIcon.Styles>
-						<Style Selector="PathIcon">
+						<Style Selector="PathIcon[IsVisible=True]">
 							<Style.Animations>
 								<Animation Duration="0:0:2" IterationCount="INFINITE">
 									<KeyFrame Cue="0%">
@@ -50,9 +50,7 @@
 				<Label Content="{DynamicResource s_page_fs_header}" Classes="h3" VerticalContentAlignment="Center" Margin="0 2" />
 			</StackPanel>
 			<StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Spacing="10" Margin="0 0 10 0">
-				<Panel IsVisible="{Binding IsUpdateStarted}">
-					<ContentPresenter ContentTemplate="{StaticResource server_loading_icon}"/>
-				</Panel>
+				<ContentControl ContentTemplate="{StaticResource server_loading_icon}" Content="{Binding IsUpdateStarted}"/>
 				<c:SfaButton Content="{DynamicResource s_page_fs_update_all_btn}" Command="{Binding UpdateStatuses}"/>
 				<c:SfaButton Content="{DynamicResource s_page_fs_add_server_btn}" Command="{Binding ShowAddServerDialog}"/>
 			</StackPanel>
@@ -134,9 +132,7 @@
 							</c:Property>
 							<c:Property Text="" HorizontalAlignment="Stretch" IsVisible="{Binding SelectedServer, Converter={x:Static ObjectConverters.IsNotNull}}">
 								<StackPanel Spacing="6" Orientation="Horizontal" HorizontalAlignment="Right">
-									<Panel IsVisible="{Binding SelectedServer.IsUpdateStarted}">
-										<ContentPresenter ContentTemplate="{StaticResource server_loading_icon}"/>
-									</Panel>
+									<ContentControl ContentTemplate="{StaticResource server_loading_icon}" Content="{Binding SelectedServer.IsUpdateStarted}"/>
 									<c:SfaButton Content="{DynamicResource s_page_fs_info_update_btn}" Command="{Binding SelectedServer.Update}" HorizontalAlignment="Right"/>
 									<c:SfaButton Content="{DynamicResource s_page_fs_info_delete_btn}" Command="{Binding RemoveSelectedServer}" HorizontalAlignment="Right" Background="Red" BorderBrush="Red"/>
 								</StackPanel>
