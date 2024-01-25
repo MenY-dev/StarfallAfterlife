@@ -6,7 +6,7 @@
 	<sys:String x:Key="s_app_yes_btn">YES</sys:String>
 	<sys:String x:Key="s_app_no_btn">NO</sys:String>
 	<sys:String x:Key="s_app_delete_btn">DELETE</sys:String>
-	<sys:String x:Key="s_app_cancell_btn">CANCELL</sys:String>
+	<sys:String x:Key="s_app_cancell_btn">CANCEL</sys:String>
 	<sys:String x:Key="s_app_close_btn">CLOSE</sys:String>
 	<sys:String x:Key="s_app_back_btn">BACK</sys:String>
 	<sys:String x:Key="s_app_select_btn">SELECT</sys:String>
@@ -136,7 +136,7 @@
 	<sys:String x:Key="s_dialog_stop_server_msg">Stop the server?</sys:String>
 
 	<sys:String x:Key="s_bg_editor_title">Battlegrounds Editor</sys:String>
-	<sys:String x:Key="s_bg_editor_add_room_btn">ADD ROON</sys:String>
+	<sys:String x:Key="s_bg_editor_add_room_btn">ADD ROOM</sys:String>
 	<sys:String x:Key="s_bg_editor_add_player_btn">ADD PLAYER</sys:String>
 	<sys:String x:Key="s_bg_editor_start_bg_btn">START BATTLE</sys:String>
 	<sys:String x:Key="s_bg_editor_dialog_enter_room_name">Room Name</sys:String>
