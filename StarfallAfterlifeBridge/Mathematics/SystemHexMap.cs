@@ -56,6 +56,9 @@ namespace StarfallAfterlife.Bridge.Mathematics
         public SystemHexMap(bool defaultValue)
         {
             Map = new BitArray(HexesCount, defaultValue);
+
+            if (defaultValue == true)
+                Filling = Map.Count;
         }
 
         public SystemHexMap(Func<SystemHex, bool> predicate)
