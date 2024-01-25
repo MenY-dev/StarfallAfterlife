@@ -64,6 +64,13 @@
 	<sys:String x:Key="s_page_pe_header">ВЫБОР ПРОФИЛЯ</sys:String>
 	<sys:String x:Key="s_page_pe_new_profile_btn">НОВЫЙ ПРОФИЛЬ</sys:String>
 	<sys:String x:Key="s_page_pe_profiles_panel_title">ПРОФИЛИ</sys:String>
+	<sys:String x:Key="s_page_pe_characters_lbl">Персонажи:</sys:String>
+	<sys:String x:Key="s_page_pe_character_lvl_lbl">Уровень</sys:String>
+	<sys:String x:Key="s_page_pe_character_access_lvl_lbl">Уровень Доступа</sys:String>
+	<sys:String x:Key="s_page_pe_character_igc_lbl">IGC</sys:String>
+	<sys:String x:Key="s_page_pe_character_bgc_lbl">BGC</sys:String>
+	<sys:String x:Key="s_page_pe_character_ships_lbl">Корабли</sys:String>
+
 
 	<sys:String x:Key="s_updater_current_ver_msg">Текущая: </sys:String>
 	<sys:String x:Key="s_updater_new_ver_msg">НОВАЯ ВЕРСИЯ</sys:String>

@@ -68,48 +68,44 @@
 						<Panel Grid.Column="2">
 							<ScrollViewer Padding="10">
 								<StackPanel Spacing="3">
-									<c:Property Text="Characters:"/>
-									<ItemsControl ItemsSource="{Binding SelectedProfile.Chars}">
+									<c:Property Text="{DynamicResource s_page_pe_characters_lbl}"/>
+									<ItemsControl ItemsSource="{Binding SelectedProfile.Chars}" Margin="0 0 0 20">
 										<ItemsControl.ItemTemplate>
 											<DataTemplate>
 												<Grid RowDefinitions="Auto 3 Auto">
 													<Panel Grid.Row="0">
 														<Rectangle Fill="{Binding Faction, Converter={x:Static c:SfaUtils.FactionToBrushConverter}}"
-																   Opacity="0.6">
-															<Rectangle.OpacityMask>
-																<LinearGradientBrush StartPoint="0% 0%" EndPoint="100% 0%">
-																	<GradientStop Offset="0" Color="#00FFFFFF"/>
-																	<GradientStop Offset="0.3" Color="#FFFFFFFF"/>
-																	<GradientStop Offset="0.7" Color="#FFFFFFFF"/>
-																	<GradientStop Offset="1" Color="#00FFFFFF"/>
-																</LinearGradientBrush>
-															</Rectangle.OpacityMask>
-														</Rectangle>
+																   Opacity="0.5"/>
 														<TextBlock Text="{Binding Name}"
 																   FontSize="16"
 																   HorizontalAlignment="Center"
 																   Margin="5 3"/>
 													</Panel>
 													<StackPanel Grid.Row="2" Spacing="0">
-														<c:Property Text="Level">
-															<TextBlock Text="{Binding Level}"/>
+														<StackPanel.Styles>
+															<Style Selector="StackPanel c|Property:nth-child(2n)">
+																<Setter Property="Background" Value="#10FFFFFF"/>
+															</Style>
+														</StackPanel.Styles>
+														<c:Property Text="{DynamicResource s_page_pe_character_lvl_lbl}">
+															<TextBlock Text="{Binding Level}" VerticalAlignment="Center"/>
 														</c:Property>
-														<c:Property Text="Access Level">
-															<TextBlock Text="{Binding AccessLevel}"/>
+														<c:Property Text="{DynamicResource s_page_pe_character_access_lvl_lbl}">
+															<TextBlock Text="{Binding AccessLevel}" VerticalAlignment="Center"/>
 														</c:Property>
-														<c:Property Text="IGC">
-															<TextBlock Text="{Binding IGC}"/>
+														<c:Property Text="{DynamicResource s_page_pe_character_igc_lbl}">
+															<TextBlock Text="{Binding IGC}" VerticalAlignment="Center"/>
 														</c:Property>
-														<c:Property Text="BGC">
-															<TextBlock Text="{Binding BGC}"/>
+														<c:Property Text="{DynamicResource s_page_pe_character_bgc_lbl}">
+															<TextBlock Text="{Binding BGC}" VerticalAlignment="Center"/>
 														</c:Property>
-														<c:Property Text="Ships">
+														<c:Property Text="{DynamicResource s_page_pe_character_ships_lbl}">
 															<Panel>
 																<TextBlock Text="{Binding Ships.Count}" VerticalAlignment="Center"/>
 																<!--<c:SfaButton Content="SHOW" HorizontalAlignment="Right"/>-->
 															</Panel>
 														</c:Property>
-														<c:Property Text=""/>
+														<Panel Height="20"/>
 													</StackPanel>
 												</Grid>
 											</DataTemplate>
