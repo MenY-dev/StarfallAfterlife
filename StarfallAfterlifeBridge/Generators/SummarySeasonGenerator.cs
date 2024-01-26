@@ -39,7 +39,7 @@ namespace StarfallAfterlife.Bridge.Generators
         {
             var info = new WeeklyQuestsInfo();
             const int questId = 4;
-            const int levelXp = 250000;
+            const int levelXp = 750000;
 
             info.Rewards = CreateRewards(questId);
             info.Stages = CreateAndApplyStages(questId, levelXp, info.Rewards);
