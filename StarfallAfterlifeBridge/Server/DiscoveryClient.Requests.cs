@@ -787,7 +787,7 @@ namespace StarfallAfterlife.Bridge.Server
                         srcObjectType == DiscoveryObjectType.UserFleet &&
                         srcObjectId == fleet.Id &&
                         Galaxy?.GetActiveSystem(systemId)?.GetObject(objectId, objectType) is StarSystemObject obj &&
-                        Server?.Realm?.ShopsMap?.GetObjectShops(obj.Id, obj.Type) is ObjectShops shopsInfo &&
+                        Server?.GetObjectShops(obj.Id, (GalaxyMapObjectType)obj.Type) is ObjectShops shopsInfo &&
                         shopsInfo?.Shops?.FirstOrDefault(s => s.StocName == stockName) is ShopInfo shop)
                     {
                         var src = CargoTransactionEndPoint.CreateForCharacterStoc(character, srcStockName);
@@ -797,7 +797,13 @@ namespace StarfallAfterlife.Bridge.Server
                         foreach (var item in items)
                         {
                             var result = src.SendItemTo(dst, item.Id, item.Count, item.UniqueData);
-                            totalPrice += Math.Max(0, item.IGCPrice * result);
+                            var itemPrice = item.IGCPrice;
+
+                            if (item.IGCPrice == 0 &&
+                                database.GetItem(item.Id) is SfaItem blueprint)
+                                itemPrice = blueprint.IGC;
+
+                            totalPrice += Math.Max(0, itemPrice * result);
                         }
 
                         character.AddCharacterCurrencies(igc: totalPrice);
