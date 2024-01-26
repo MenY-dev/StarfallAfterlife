@@ -1,4 +1,4 @@
-<Window xmlns="https://github.com/avaloniaui"
+<c:SfaWindow xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -12,16 +12,7 @@
 	
 	<Design.DataContext>
 	</Design.DataContext>
-	<Panel Background="{DynamicResource AccentColor}">
-		
-		<Rectangle Opacity="0.9">
-			<Rectangle.Fill>
-				<RadialGradientBrush GradientOrigin="50% 0%" Center="50% 10%" Radius="1">
-					<GradientStop Offset="0" Color="{StaticResource PageMainColor}"/>
-					<GradientStop Offset="1" Color="{StaticResource PageSecondaryColor}"/>
-				</RadialGradientBrush>
-			</Rectangle.Fill>
-		</Rectangle>
+	<Panel>
 		<Grid RowDefinitions="Auto * Auto" VerticalAlignment="Stretch">
 			<Panel Grid.Row="0">
 				<StackPanel Spacing="10" Margin="10"
@@ -303,4 +294,4 @@
 			</Border>
 		</Panel>
 	</Panel>
-</Window>
+</c:SfaWindow>

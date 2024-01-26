@@ -5,6 +5,7 @@
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceInclude Source="/Styles/Params.axaml"/>
+				<ResourceInclude Source="/Styles/SfaWindowStyle.axaml"/>
 				<ResourceInclude Source="/Styles/SfaTextBoxStyle.axaml"/>
 				<ResourceInclude Source="/Styles/SfaComboBoxItemStyle.axaml"/>
 				<ResourceInclude Source="/Styles/SfaComboBoxStyle.axaml"/>
