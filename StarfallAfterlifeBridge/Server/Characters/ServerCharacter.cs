@@ -151,7 +151,8 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                 {
                     foreach (var ability in abilities)
                     {
-                        if ((int?)ability?.AsObjectSelf()?.FirstOrDefault().Value is int abilityId)
+                        if ((int?)ability?.AsObjectSelf()?.FirstOrDefault().Value is int abilityId &&
+                            abilityId > 0)
                             Abilities.Add(abilityId);
                     }
                 }
