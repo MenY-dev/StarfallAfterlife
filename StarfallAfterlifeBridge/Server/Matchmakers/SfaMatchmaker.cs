@@ -15,6 +15,7 @@ using System.Net;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace StarfallAfterlife.Bridge.Server.Matchmakers
 {
@@ -130,20 +131,11 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
         {
             var ships = new JsonArray();
 
-            if (Server?.Realm?.MobsDatabase?.GetMob(e.FleetName) is DiscoveryMobInfo mob)
+            if (e.Auth is not null)
             {
-                int shipId = 2000000000;
-
-                foreach (var item in mob.Ships ?? Enumerable.Empty<DiscoveryMobShipData>())
+                if (GetBattle(e.Auth) is MatchmakerBattle battle)
                 {
-                    ships.Add(new JsonObject
-                    {
-                        ["id"] = SValue.Create(shipId),
-                        ["data"] = SValue.Create(JsonHelpers.ParseNodeUnbuffered(item.Data).ToJsonString(false)),
-                        ["service_data"] = SValue.Create(JsonHelpers.ParseNodeUnbuffered(item.ServiceData).ToJsonString(false)),
-                    });
-
-                    shipId++;
+                    ships = battle.GetSpecialFleet(e.FleetName) ?? new();
                 }
             }
 

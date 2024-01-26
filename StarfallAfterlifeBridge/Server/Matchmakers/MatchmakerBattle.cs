@@ -77,6 +77,11 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
             return null;
         }
 
+        public virtual JsonArray GetSpecialFleet(string fleetName)
+        {
+            return null;
+        }
+
         public virtual void HandleBattleResults(JsonNode doc)
         {
 

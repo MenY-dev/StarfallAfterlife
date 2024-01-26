@@ -44,6 +44,8 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         public Dictionary<string, JsonArray> Drops { get; } = new();
 
+        public List<DiscoveryMobInfo> RequestedSpecialFleets { get; } = new();
+
         protected CancellationTokenSource _cts;
         protected readonly object _lockher = new();
 
@@ -569,6 +571,41 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
             }
 
             return base.GetMobData(request);
+        }
+
+        public override JsonArray GetSpecialFleet(string fleetName)
+        {
+            var ships = new JsonArray();
+
+            lock (_lockher)
+            {
+                if (Server?.Realm?.MobsDatabase?.GetMob(fleetName) is DiscoveryMobInfo mob)
+                {
+                    int fleetId = 2000000 + RequestedSpecialFleets.Count;
+                    int shipId = fleetId * 1000;
+
+                    foreach (var item in mob.Ships ?? Enumerable.Empty<DiscoveryMobShipData>())
+                    {
+                        var data = item.Data.Clone();
+
+                        data.Id = shipId;
+                        data.FleetId = fleetId;
+
+                        ships.Add(new JsonObject
+                        {
+                            ["id"] = SValue.Create(shipId),
+                            ["data"] = SValue.Create(JsonHelpers.ParseNodeUnbuffered(data).ToJsonString(false)),
+                            ["service_data"] = SValue.Create(JsonHelpers.ParseNodeUnbuffered(item.ServiceData).ToJsonString(false)),
+                        });
+
+                        shipId++;
+                    }
+
+                    RequestedSpecialFleets.Add(mob);
+                }
+            }
+
+            return ships;
         }
 
         public virtual void OnInstanceAuthReady(int characterId, string auth)
