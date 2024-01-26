@@ -117,6 +117,7 @@ namespace StarfallAfterlife.Bridge.Generators
                                 condition["target_system"] = system.Id;
                                 condition["target_object_id"] = asteroid.Id;
                                 condition["target_object_type"] = (int)GalaxyMapObjectType.RichAsteroids;
+                                condition["need_specific_object"] = true;
                                 return true;
                             }
                         }
@@ -148,26 +149,39 @@ namespace StarfallAfterlife.Bridge.Generators
             }
             else if (info.ObjectType == (int)GalaxyMapObjectType.Planet)
             {
-                foreach (var system in systems)
+                if (info.NeedSpecificObject == true)
                 {
-                    if (system?.Planets is List<GalaxyMapPlanet> planets)
+                    foreach (var system in systems)
                     {
-                        foreach (var planet in planets)
+                        if (system?.Planets is List<GalaxyMapPlanet> planets)
                         {
-                            if (planet is not null &&
-                                planet.Faction is Faction.None &&
-                                addedObjects.Any(o =>
-                                    o.Type == (int)GalaxyMapObjectType.Planet &&
-                                    o.Id == planet.Id) == false)
+                            foreach (var planet in planets)
                             {
-                                condition["target_system"] = system.Id;
-                                condition["target_object_id"] = planet.Id;
-                                condition["target_object_type"] = (int)GalaxyMapObjectType.Planet;
-                                condition["planet_types"] = JsonHelpers.ParseNodeUnbuffered(info.PlanetTypes);
-                                return true;
+                                if (planet is not null &&
+                                    planet.Faction is Faction.None &&
+                                    addedObjects.Any(o =>
+                                        o.Type == (int)GalaxyMapObjectType.Planet &&
+                                        o.Id == planet.Id) == false)
+                                {
+                                    condition["target_system"] = system.Id;
+                                    condition["target_object_id"] = planet.Id;
+                                    condition["target_object_type"] = (int)GalaxyMapObjectType.Planet;
+                                    condition["planet_types"] = JsonHelpers.ParseNodeUnbuffered(info.PlanetTypes);
+                                    condition["need_specific_object"] = true;
+                                    return true;
+                                }
                             }
                         }
                     }
+                }
+                else
+                {
+                    condition["target_system"] = -1;
+                    condition["target_object_id"] = -1;
+                    condition["target_object_type"] = (int)GalaxyMapObjectType.Planet;
+                    condition["planet_types"] = JsonHelpers.ParseNodeUnbuffered(info.PlanetTypes);
+                    condition["need_specific_object"] = false;
+                    return true;
                 }
             }
 

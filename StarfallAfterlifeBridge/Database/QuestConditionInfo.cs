@@ -142,7 +142,7 @@ namespace StarfallAfterlife.Bridge.Database
 
             foreach (var item in doc["planet_types"]?.AsArray() ?? Enumerable.Empty<JsonNode>())
                 if ((byte?)item is byte type)
-                    Factions.Add((Faction)type);
+                    PlanetTypes.Add(type);
 
             NeedSpecificObject = (bool?)doc["need_specific_object"] ?? false;
             HiddenLocParams = (string)doc["hidden_loc_params"] ?? string.Empty;
