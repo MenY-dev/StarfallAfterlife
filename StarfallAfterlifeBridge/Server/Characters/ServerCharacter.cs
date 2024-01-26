@@ -168,6 +168,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
         public void LoadActiveShips(JsonNode doc)
         {
+            var database = Database ?? SfaDatabase.Instance;
             (Ships ??= new()).Clear();
 
             if (doc is JsonArray shipsData)
@@ -177,6 +178,20 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                     if (JsonHelpers.DeserializeUnbuffered<ShipConstructionInfo>(item) is ShipConstructionInfo ship)
                     {
                         ship.FleetId = UniqueId;
+
+                        if (ship.Cargo is InventoryStorage cargo)
+                        {
+                            foreach (var inventory in cargo.ToArray())
+                            {
+                                if (inventory.IGCPrice == 0 &&
+                                    database.GetItem(inventory.Id) is SfaItem blueprint)
+                                {
+                                    cargo.Remove(inventory, inventory.Count);
+                                    cargo.Add(blueprint, inventory.Count, inventory.UniqueData);
+                                }
+                            }
+                        }
+
                         Ships.Add(ship);
                     }
                 }
