@@ -173,7 +173,16 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                 HandleUpdateActions(PreUpdateActions);
 
                 foreach (var system in ActiveSystems.Values)
-                    system?.Update();
+                {
+                    try
+                    {
+                        system?.Update();
+                    }
+                    catch (Exception e)
+                    {
+                        SfaDebug.Print(e, GetType().Name);
+                    }
+                }
 
                 HandleUpdateActions(PostUpdateActions);
             }
