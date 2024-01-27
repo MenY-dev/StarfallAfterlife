@@ -311,10 +311,28 @@ namespace StarfallAfterlife.Bridge.Server
             Galaxy?.BeginPreUpdateAction(g => g.EnterToStarSystem(system, character.Fleet, location));
             character.Party?.SetMemberStarSystem(character.UniqueId, system);
 
-            if (Server.Matchmaker is SfaMatchmaker matchmaker &&
-                        matchmaker.GetBattle(character) is DiscoveryBattle battle)
+            if (character.Fleet is UserFleet fleet &&
+                Server.Matchmaker is SfaMatchmaker matchmaker &&
+                matchmaker.GetBattle(character) is DiscoveryBattle battle &&
+                battle.SystemBattle is StarSystemBattle systemBattle)
             {
-                Galaxy.BeginPreUpdateAction(g => battle.SystemBattle?.AddToBattle(CurrentCharacter.Fleet, BattleRole.Join, Vector2.Zero));
+                if (battle.State != MatchmakerBattleState.Finished &&
+                    systemBattle.IsPossibleToJoin == true)
+                {
+                    Galaxy.BeginPreUpdateAction(g => systemBattle.AddToBattle(fleet, BattleRole.Join, Vector2.Zero));
+                }
+                else
+                {
+                    Galaxy.BeginPreUpdateAction(g =>
+                    {
+                        systemBattle.Leave(
+                            fleet,
+                            systemBattle.System?.GetNearestSafeHex(fleet, systemBattle.Hex) ?? default,
+                            false);
+
+                        fleet.State = FleetState.InGalaxy;
+                    });
+                }
             }
         }
 
