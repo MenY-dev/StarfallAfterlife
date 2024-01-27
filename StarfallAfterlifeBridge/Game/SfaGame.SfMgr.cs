@@ -99,7 +99,7 @@ namespace StarfallAfterlife.Bridge.Game
                         break;
 
                     case "getdraftfleets":
-                        response = GameProfile.CreateDraftFleetsResponse();
+                        response = HandleGetDraftFleets(query);
                         break;
 
                     default:

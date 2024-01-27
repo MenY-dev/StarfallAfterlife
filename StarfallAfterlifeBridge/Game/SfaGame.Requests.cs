@@ -911,5 +911,36 @@ namespace StarfallAfterlife.Bridge.Game
 
             return doc;
         }
+
+        public JsonNode HandleGetDraftFleets(SfaHttpQuery query)
+        {
+            JsonArray fleets = new JsonArray
+            {
+                new JsonObject
+                {
+                    ["id"] = SValue.Create(1000),
+                    ["name"] = SValue.Create("Fleet 1000"),
+                    ["type"] = SValue.Create("delete-this!"),
+                    ["maxships"] = SValue.Create(20),
+                    ["ships"] = new JsonArray()
+                    {
+                        //new JsonObject
+                        //{
+                        //    ["id"] = SValue.Create(1),
+                        //    ["data"] = SValue.Create(JsonHelpers.ParseNodeUnbuffered(new ShipConstructionInfo
+                        //    {
+                        //        Hull = 1539941312
+                        //    }).ToJsonStringUnbuffered(true))
+                        //}
+                    },
+                    ["equipmentlimit"] = new JsonArray(),
+                }
+            };
+
+            return new JsonObject
+            {
+                ["fleets"] = fleets,
+            };
+        }
     }
 }
