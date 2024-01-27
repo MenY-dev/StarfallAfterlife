@@ -420,7 +420,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                 if (includeInventory == true && result < count)
                 {
                     var inv = CargoTransactionEndPoint.CreateForCharacterInventory(this);
-                    result += inv.Receive(item, count);
+                    result += inv.Receive(item, count - result);
                 }
 
                 RaseStockUpdated();
