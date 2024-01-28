@@ -474,7 +474,7 @@ namespace StarfallAfterlife.Bridge.Database
             2 => 250,
             3 => 500,
             4 => 750,
-            5 => 100,
+            5 => 1000,
             6 => 1250,
             _ => 1500
         };
