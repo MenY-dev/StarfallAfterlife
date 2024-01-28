@@ -482,9 +482,10 @@ namespace StarfallAfterlife.Bridge.Server
 
         private void HandleWarpGatewayFleet(int systemId)
         {
-            var fleet = CurrentCharacter?.Fleet;
+            var character = CurrentCharacter;
+            var fleet = character?.Fleet;
 
-            if (fleet is null)
+            if (character is null || fleet is null)
                 return;
 
             SyncExploration(new[]{ fleet.System?.Id ?? -1 });
@@ -499,14 +500,29 @@ namespace StarfallAfterlife.Bridge.Server
 
                 var portal = currentSystem.GetObjectAt(fleet.Hex, DiscoveryObjectType.WarpBeacon) as WarpBeacon;
 
-                if (portal is not null &&
-                    g.ActivateStarSystem(portal.Destination) is StarSystem newSystem)
-                {
-                    var newLocation = SystemHexMap.HexToSystemPoint(portal.Hex).GetNegative();
+                if (portal is null)
+                    return;
 
-                    currentSystem.RemoveFleet(fleet);
-                    Invoke(() => SendFleetWarpedGateway(currentSystem.Id, fleet.Type, fleet.Id));
-                    newSystem.AddFleet(fleet, newLocation);
+                if (portal is not null &&
+                    Map?.GetSystem(portal.Destination) is GalaxyMapStarSystem mapSystem)
+                {
+                    if (mapSystem.Level > character.AccessLevel)
+                    {
+                        Invoke(() => SendOnScreenNotification(new SfaNotification
+                        {
+                            Id = $"error_system_lvl_{mapSystem.Level}",
+                            Header = "AccessDeniedLowAccessLevel",
+                            Type = SfaNotificationType.Error
+                        }));
+                    }
+                    else if (g.ActivateStarSystem(portal.Destination) is StarSystem newSystem)
+                    {
+                        var newLocation = SystemHexMap.HexToSystemPoint(portal.Hex).GetNegative();
+
+                        currentSystem.RemoveFleet(fleet);
+                        Invoke(() => SendFleetWarpedGateway(currentSystem.Id, fleet.Type, fleet.Id));
+                        newSystem.AddFleet(fleet, newLocation);
+                    }
                 }
             });
         }
@@ -515,9 +531,10 @@ namespace StarfallAfterlife.Bridge.Server
         {
             int warpingSourceId = reader.ReadInt32();
             int targetSystem = reader.ReadInt32();
-            var fleet = CurrentCharacter?.Fleet;
+            var character = CurrentCharacter;
+            var fleet = character?.Fleet;
 
-            if (fleet is null)
+            if (character is null || fleet is null)
                 return;
 
             SyncExploration(new[] { fleet.System?.Id ?? -1 });
@@ -526,6 +543,19 @@ namespace StarfallAfterlife.Bridge.Server
             {
                 if (fleet.System?.Id != systemId)
                     return;
+
+                if (Map?.GetSystem(targetSystem) is GalaxyMapStarSystem mapSystem &&
+                    mapSystem.Level > character.AccessLevel)
+                {
+                    Invoke(() => SendOnScreenNotification(new SfaNotification
+                    {
+                        Id = $"error_system_lvl_{mapSystem.Level}",
+                        Header = "AccessDeniedLowAccessLevel",
+                        Type = SfaNotificationType.Error
+                    }));
+
+                    return;
+                }
 
                 var currentSystem = fleet.System;
                 var newSystem = g.ActivateStarSystem(targetSystem);
