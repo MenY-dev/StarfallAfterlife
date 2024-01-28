@@ -535,10 +535,15 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
                     ship.ArmorDelta = 0;
                     ship.StructureDelta = 0;
+
+                    foreach (var item in ship.HardpointList.ToArray()
+                        .SelectMany(h => h.EquipmentList.ToArray()))
+                    {
+                        item.IsDestroyed = 0;
+                    }
                 }
 
-                DiscoveryClient?.SynckSessionFleetInfo();
-                DiscoveryClient?.SendFleetCargo();
+                DiscoveryClient.Invoke(c => c.SynckSessionFleetInfo());
             }
         }
 
