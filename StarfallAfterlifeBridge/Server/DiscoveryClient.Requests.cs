@@ -522,6 +522,7 @@ namespace StarfallAfterlife.Bridge.Server
                         currentSystem.RemoveFleet(fleet);
                         Invoke(() => SendFleetWarpedGateway(currentSystem.Id, fleet.Type, fleet.Id));
                         newSystem.AddFleet(fleet, newLocation);
+                        fleet.AddEffect(new() { Duration = 5, Logic = GameplayEffectType.Immortal });
                     }
                 }
             });

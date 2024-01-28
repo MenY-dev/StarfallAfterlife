@@ -308,7 +308,12 @@ namespace StarfallAfterlife.Bridge.Server
                 character.CreateNewFleet();
 
             State = SfaCharacterState.InGalaxy;
-            Galaxy?.BeginPreUpdateAction(g => g.EnterToStarSystem(system, character.Fleet, location));
+            Galaxy?.BeginPreUpdateAction(g =>
+            {
+                g.EnterToStarSystem(system, character.Fleet, location);
+                character.Fleet?.AddEffect(new() { Duration = 5, Logic = GameplayEffectType.Immortal });
+            });
+
             character.Party?.SetMemberStarSystem(character.UniqueId, system);
 
             if (character.Fleet is UserFleet fleet &&
