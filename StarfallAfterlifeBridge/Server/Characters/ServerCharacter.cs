@@ -222,7 +222,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
             };
         }
 
-        public void AcceptQuest(int questId)
+        public void AcceptQuest(int questId, bool checkQuestLimits = false)
         {
             Progress.CompletedQuests ??= new();
             Progress.ActiveQuests ??= new();
@@ -230,6 +230,23 @@ namespace StarfallAfterlife.Bridge.Server.Characters
             if (Progress.CompletedQuests.Contains(questId) == true ||
                 Progress.ActiveQuests.ContainsKey(questId) == true)
                 return;
+
+            if (checkQuestLimits == true)
+            {
+                var countPredicate = (QuestListener q) => q?.Info?.Type is
+                    QuestType.Task or QuestType.HouseTask;
+
+                if (ActiveQuests.ToArray().Count(countPredicate) >= 30)
+                {
+                    DiscoveryClient.Invoke(c => c.SendOnScreenNotification(new SfaNotification
+                    {
+                        Id = "accept_quest" + questId,
+                        Header = "ReachedQuestLimit",
+                        Format = new()
+                    }));
+                    return;
+                }
+            }
 
             var questProgress = new QuestProgress();
 

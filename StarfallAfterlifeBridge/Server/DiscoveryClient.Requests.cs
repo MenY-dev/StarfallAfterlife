@@ -838,7 +838,7 @@ namespace StarfallAfterlife.Bridge.Server
 
             if (CurrentCharacter is ServerCharacter character)
             {
-                character.AcceptQuest(entityId);
+                character.AcceptQuest(entityId, true);
                 SendQuestDataUpdate();
                 character.UpdateQuestLines();
             }
