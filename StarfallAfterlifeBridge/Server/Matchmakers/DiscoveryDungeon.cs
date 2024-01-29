@@ -119,7 +119,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                         var ships = database.Ships?.Values?
                             .Where(s => s.Faction.IsMainFaction() &&
                                         s.MinLvl > 0 &&
-                                        s.MinLvl > 7 ? lvl > 6 : s.MinLvl == lvl)
+                                        (s.MinLvl > 7 ? lvl > 6 : s.MinLvl == lvl))
                             .ToList() ?? new();
 
                         if (ships.Count > 0 &&
