@@ -356,9 +356,13 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
             var freeIndex = hexes.FirstOrDefault(i =>
                 ObstacleMap[i] == false &&
-                SystemHexMap.ArrayIndexToHex(i)
+                false == SystemHexMap
+                    .ArrayIndexToHex(i)
                     .GetSpiralEnumerator(safeArea)
-                    .Any(h => ObstacleMap[h] == true) == false);
+                    .Where(h => h.GetSize() < 17)
+                    .Any(h => ObstacleMap[h] == true ||
+                              AsteroidsMap[h] == true ||
+                              NebulaMap[h] == true));
 
             return SystemHexMap.ArrayIndexToHex(freeIndex);
         }
