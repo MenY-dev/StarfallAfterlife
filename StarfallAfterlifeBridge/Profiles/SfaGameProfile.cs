@@ -20,11 +20,12 @@ namespace StarfallAfterlife.Bridge.Profiles
         [JsonPropertyName("temporarypass")]
         public string TemporaryPass { get; set; } = "a0b1c2d3e4f5g6h7i8j9k10l";
 
-        [JsonPropertyName("ranked_mode_profile")]
-        public RankedProfile RankedModeProfile { get; set; } = new RankedProfile();
+        [JsonPropertyName("ranked_fleets")]
+        public List<RankedFleetInfo> RankedFleets { get; set; } = new(); 
 
         [JsonPropertyName("discovery_mode_profile")]
         public DiscoveryProfile DiscoveryModeProfile { get; set; } = new DiscoveryProfile();
+
 
         public event EventHandler<EventArgs> Edited;
 
