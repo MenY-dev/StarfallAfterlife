@@ -187,7 +187,7 @@ namespace StarfallAfterlife.Bridge.Generators
                 QuestConditionType.ResearchProject => 10000,
                 QuestConditionType.ReachCharacterLevel => 10000,
                 QuestConditionType.InstanceEvent => 10000,
-                QuestConditionType.PickUpAndDeliverQuestItem => 10000,
+                QuestConditionType.PickUpAndDeliverQuestItem => 1000,
                 QuestConditionType.MineQuestItem => 1000,
                 QuestConditionType.DeliverRandomItems => 500,
                 QuestConditionType.InterceptPersonalMob => 10000,
