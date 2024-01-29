@@ -49,6 +49,7 @@ namespace StarfallAfterlife.Bridge.Generators
                 item.Faction is Faction.None or Faction.Other &&
                 item.IsBoundToCharacter == false &&
                 item.IsRareShopItem == false &&
+                item.IsStationAttackItem == false &&
                 item.IsUniqueReward == false;
 
             foreach (var lvl in levels)
