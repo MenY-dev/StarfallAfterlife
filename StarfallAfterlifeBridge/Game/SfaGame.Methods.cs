@@ -115,8 +115,7 @@ namespace StarfallAfterlife.Bridge.Game
             {
                 if (p.GameProfile?.CurrentCharacter is Character character &&
                     p.Database is SfaDatabase database &&
-                    (item.IGCToProduce * count) <= character.IGC &&
-                    (item.BGC * count) <= character.BGC)
+                    (item.IGCToProduce * count) <= character.IGC)
                 {
                     result = true;
 
