@@ -28,7 +28,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                     if (System is null || IsDungeonVisible == true)
                         return;
 
-                    Hex = System.GetRandomFreeHex(1);
+                    Hex = System.GetRandomFreeHex(2);
                     SetDungeonVisible(true);
                 }, TimeSpan.FromSeconds(RespawnTimeout));
             }

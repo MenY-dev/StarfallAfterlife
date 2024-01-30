@@ -17,7 +17,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
         {
             System = system;
 
-            Hex = System?.GetRandomFreeHex(1) ?? mapStation.Hex;
+            Hex = System?.GetRandomFreeHex(2) ?? mapStation.Hex;
             Id = mapStation.Id;
             Faction = (Faction)mapStation.Faction;
             FactionGroup = mapStation.FactionGroup;
