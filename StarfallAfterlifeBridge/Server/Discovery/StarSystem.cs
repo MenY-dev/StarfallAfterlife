@@ -362,7 +362,9 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                     .Where(h => h.GetSize() < 17)
                     .Any(h => ObstacleMap[h] == true ||
                               AsteroidsMap[h] == true ||
-                              NebulaMap[h] == true));
+                              NebulaMap[h] == true ||
+                              GetObjectAt(h) is not null ||
+                              GetBattle(h) is not null));
 
             return SystemHexMap.ArrayIndexToHex(freeIndex);
         }
