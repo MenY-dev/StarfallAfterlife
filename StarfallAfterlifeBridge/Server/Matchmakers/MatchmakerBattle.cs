@@ -1,5 +1,6 @@
 ﻿using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Instances;
+using StarfallAfterlife.Bridge.Serialization;
 using StarfallAfterlife.Bridge.Server.Characters;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,10 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
         public MatchmakerBattleState State { get; set; } = MatchmakerBattleState.Created;
 
         public InstanceInfo InstanceInfo { get; } = new();
+
+        public List<DiscoveryMobInfo> RequestedSpecialFleets { get; } = new();
+
+        private readonly object _specialFleetslockher = new();
 
         public virtual void Init()
         {
@@ -79,7 +84,37 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         public virtual JsonArray GetSpecialFleet(string fleetName)
         {
-            return null;
+            var ships = new JsonArray();
+
+            lock (_specialFleetslockher)
+            {
+                if (Server?.Realm?.MobsDatabase?.GetMob(fleetName) is DiscoveryMobInfo mob)
+                {
+                    int fleetId = 2000000 + RequestedSpecialFleets.Count;
+                    int shipId = fleetId * 1000;
+
+                    foreach (var item in mob.Ships ?? Enumerable.Empty<DiscoveryMobShipData>())
+                    {
+                        var data = item.Data.Clone();
+
+                        data.Id = shipId;
+                        data.FleetId = fleetId;
+
+                        ships.Add(new JsonObject
+                        {
+                            ["id"] = SValue.Create(shipId),
+                            ["data"] = SValue.Create(JsonHelpers.ParseNodeUnbuffered(data).ToJsonString(false)),
+                            ["service_data"] = SValue.Create(JsonHelpers.ParseNodeUnbuffered(item.ServiceData).ToJsonString(false)),
+                        });
+
+                        shipId++;
+                    }
+
+                    RequestedSpecialFleets.Add(mob);
+                }
+            }
+
+            return ships;
         }
 
         public virtual void HandleBattleResults(JsonNode doc)
