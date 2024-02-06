@@ -45,6 +45,12 @@ namespace StarfallAfterlife.Bridge.Server
 
         public UserInGameStatus UserStatus { get; set; } = UserInGameStatus.None;
 
+        public List<RankedFleetInfo> RankedFleets { get; set; } = new();
+
+        public int SelectedRankedFleet { get; set; } = 0;
+
+        public bool IsSpectator { get; set; }
+
         public bool IsPlayer { get; set; }
 
         public SfaServer Server { get; set; }
@@ -84,6 +90,9 @@ namespace StarfallAfterlife.Bridge.Server
                 case SfaServerAction.CharacterPartyChannel:
                     DiscoveryClient?.InputFromCharacterPartyChannel(reader);
                     break;
+                case SfaServerAction.MatchmakerChannel:
+                    InputFromMatchmakerChannel(reader);
+                    break;
             }
         }
 
@@ -103,6 +112,10 @@ namespace StarfallAfterlife.Bridge.Server
 
                 case SfaServerAction.SyncCharacterNewResearch:
                     ProcessSyncCharacterNewResearch(JsonHelpers.ParseNodeUnbuffered(text));
+                    break;
+
+                case SfaServerAction.SyncRankedFleets:
+                    ProcessSyncRankedFleets(JsonHelpers.ParseNodeUnbuffered(text));
                     break;
 
                 default:
@@ -302,6 +315,9 @@ namespace StarfallAfterlife.Bridge.Server
         {
             request.SendResponce(new JObject
             {
+                ["unique_id"] = PlayerId,
+                ["unique_name"] = UniqueName,
+                ["index_space"] = IndexSpace,
                 ["chars"] = HandleNewChars(doc?["chars"]?.AsArraySelf()),
                 ["seasons"] = JsonHelpers.ParseNodeUnbuffered(Server?.Realm?.Seasons ?? new()),
                 ["bg_shop"] = JsonHelpers.ParseNodeUnbuffered(Server?.Realm?.BGShop ?? new()),
@@ -351,6 +367,12 @@ namespace StarfallAfterlife.Bridge.Server
             {
                 character.ProcessSyncCharacterNewResearch(doc);
             }
+        }
+
+        private void ProcessSyncRankedFleets(JNode doc)
+        {
+            RankedFleets = JsonHelpers.DeserializeUnbuffered<List<RankedFleetInfo>>(
+                doc["fleets"] ?? new JArray()) ?? new();
         }
 
         public JNode HandleNewChars(JArray chars)
@@ -417,6 +439,22 @@ namespace StarfallAfterlife.Bridge.Server
 
             if ("UserFriends".Equals(channelName, StringComparison.InvariantCultureIgnoreCase) == true)
                 SendServerPlayerStatuses();
+        }
+
+        public void SendStartBattle(
+            string gameMode,
+            string address, int port, string auth,
+            int systemId = 0, int charId = 0)
+        {
+            Send(new JObject
+            {
+                ["game_mode"] = gameMode,
+                ["address"] = address,
+                ["port"] = port,
+                ["auth"] = auth,
+                ["system_id"] = systemId,
+                ["char_id"] = charId,
+            }, SfaServerAction.StartBattle);
         }
 
         public void TravelToClient(SfaServerClient client)

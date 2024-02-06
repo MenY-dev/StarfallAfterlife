@@ -31,6 +31,9 @@ namespace StarfallAfterlife.Bridge.Instances
         [JsonPropertyName("characters")]
         public List<InstanceCharacter> Characters { get; set; } = new();
 
+        [JsonPropertyName("players")]
+        public List<InstancePlayer> Players { get; set; } = new();
+
         [JsonPropertyName("extradata")]
         public string ExtraData { get; set; }
 

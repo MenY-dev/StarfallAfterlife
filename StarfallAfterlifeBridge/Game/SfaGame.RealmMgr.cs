@@ -21,6 +21,8 @@ namespace StarfallAfterlife.Bridge.Game
 {
     public partial class SfaGame
     {
+        public bool RealmAuthCompleted { get; protected set; }
+
         public ChatChannel DeprivedChatChannel { get; protected set; }
 
         public ChatChannel EclipseChatChannel { get; protected set; }
@@ -65,6 +67,7 @@ namespace StarfallAfterlife.Bridge.Game
                             ["realmname"] = SValue.Create("NewRealm"),
                             ["userbm"] = SValue.Create(1)
                         };
+                        RealmAuthCompleted = true;
                         break;
 
                     case "chatmgr":

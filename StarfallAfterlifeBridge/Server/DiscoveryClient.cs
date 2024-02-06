@@ -184,15 +184,7 @@ namespace StarfallAfterlife.Bridge.Server
             string address, int port, string auth,
             int systemId = 0, int charId = 0)
         {
-            Client.Send(new JsonObject
-            {
-                ["game_mode"] = gameMode,
-                ["address"] = address,
-                ["port"] = port,
-                ["auth"] = auth,
-                ["system_id"] = systemId,
-                ["char_id"] = charId,
-            }, SfaServerAction.StartBattle);
+            Client?.SendStartBattle(gameMode, address, port, auth, systemId, charId);
         }
 
         public void ProcessGalaxyEntryData(JsonNode doc)

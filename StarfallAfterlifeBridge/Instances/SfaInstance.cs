@@ -135,7 +135,7 @@ namespace StarfallAfterlife.Bridge.Instances
                 },
                 ["game_mode"] = "",
                 ["is_custom_game"] = 0,
-                ["players_list"] = new JsonArray(),
+                ["players_list"] = JsonHelpers.ParseNodeUnbuffered(Info.Players ?? new()),
                 ["characters_list"] = JsonHelpers.ParseNodeUnbuffered(Info.Characters ?? new()),
             };
         }
@@ -222,6 +222,7 @@ namespace StarfallAfterlife.Bridge.Instances
                 case InstanceType.MothershipAssault: return new MothershipAssaultInstanse() { Info = info };
                 case InstanceType.StationAttack: return new StationAttackInstance() { Info = info };
                 case InstanceType.SurvivalMode: return new SurvivalModeInstance() { Info = info };
+                case InstanceType.RankedMode: return new RankedInstance() { Info = info };
                 default: return null;
             }
         }

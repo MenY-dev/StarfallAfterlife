@@ -22,6 +22,7 @@ namespace StarfallAfterlife.Bridge.Server
         // 128..255 - game actions
         RegisterPlayer = 128,
         RegisterNewCharacters = 129,
+        SyncRankedFleets = 135,
         DeleteCharacter = 130,
         SyncCharacterSelect = 140,
         RequestCharacterDiscoveryData = 141,
@@ -55,6 +56,7 @@ namespace StarfallAfterlife.Bridge.Server
         UserFriendChannel = 196,
         CharacterFriendChannel = 197,
         CharacterPartyChannel = 198,
+        MatchmakerChannel = 199,
 
         Chat = 220,
     }

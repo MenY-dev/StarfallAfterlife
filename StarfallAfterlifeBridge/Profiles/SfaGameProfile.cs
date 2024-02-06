@@ -69,6 +69,15 @@ namespace StarfallAfterlife.Bridge.Profiles
         public List<BGShopItem> BGShop { get; set; } = new();
 
         [JsonIgnore]
+        public int UniqueId { get; internal set; } = 0;
+
+        [JsonIgnore]
+        public string UniqueName { get; internal set; }
+
+        [JsonIgnore]
+        public int IndexSpace { get; internal set; } = 0;
+
+        [JsonIgnore]
         protected object Locker { get; } = new object();
 
         public void Use(Action<UsageHandler> action)

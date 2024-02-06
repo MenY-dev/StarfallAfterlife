@@ -914,33 +914,200 @@ namespace StarfallAfterlife.Bridge.Game
 
         public JsonNode HandleGetDraftFleets(SfaHttpQuery query)
         {
-            JsonArray fleets = new JsonArray
+            var fleets = new JsonArray();
+            var equipmentLimit = new JsonArray();
+
+            foreach (var item in SfaClient?.RankedEquipmentLimit ?? new())
             {
-                new JsonObject
+                equipmentLimit.Add(new JsonObject
                 {
-                    ["id"] = SValue.Create(1000),
-                    ["name"] = SValue.Create("Fleet 1000"),
-                    ["type"] = SValue.Create("delete-this!"),
-                    ["maxships"] = SValue.Create(20),
-                    ["ships"] = new JsonArray()
+                    ["id"] = SValue.Create(item.Id.ToString()),
+                    ["itemtype"] = SValue.Create(((int)item.Type).ToString()),
+                    ["count"] = SValue.Create(item.Count.ToString()),
+                });
+            }
+
+            Profile.Use(p =>
+            {
+                var profileFleets = p.GameProfile.RankedFleets ??= new();
+                var fleetsDelta = 5 - profileFleets.Count;
+
+                if (fleetsDelta > 0)
+                {
+                    for (int i = 0; i < fleetsDelta; i++)
                     {
-                        //new JsonObject
-                        //{
-                        //    ["id"] = SValue.Create(1),
-                        //    ["data"] = SValue.Create(JsonHelpers.ParseNodeUnbuffered(new ShipConstructionInfo
-                        //    {
-                        //        Hull = 1539941312
-                        //    }).ToJsonStringUnbuffered(true))
-                        //}
-                    },
-                    ["equipmentlimit"] = new JsonArray(),
+                        profileFleets.Add(new()
+                        {
+                            Id = profileFleets
+                                .Select(p => p.Id)
+                                .DefaultIfEmpty(0)
+                                .Max() + 1
+                        });
+                    }
+
+                    p.SaveGameProfile();
                 }
-            };
+
+                foreach (var fleet in profileFleets)
+                {
+                    fleet.Ships.Select(s => new JsonObject
+                    {
+                        ["id"] = SValue.Create(s.Id),
+                        ["data"] = SValue.Create(JsonHelpers
+                            .ParseNodeUnbuffered(s)
+                            .ToJsonStringUnbuffered(true))
+                    }).ToJsonArray();
+
+                    fleets.Add(new JsonObject
+                    {
+                        ["id"] = SValue.Create(fleet.Id + p.GameProfile.IndexSpace),
+                        ["name"] = SValue.Create(null),
+                        ["type"] = SValue.Create(RealmAuthCompleted ? "r1" : "none_auth_in_realm"),
+                        ["maxships"] = SValue.Create(20),
+                        ["equipmentlimit"] = equipmentLimit.Clone(),
+                        ["ships"] = fleet.Ships.Select(s =>
+                        {
+                            var ship = s?.Clone() ?? new();
+                            ship.Id += p.GameProfile.IndexSpace;
+                            ship.FleetId += p.GameProfile.IndexSpace;
+
+                            return new JsonObject
+                            {
+                                ["id"] = SValue.Create(ship.Id),
+                                ["data"] = SValue.Create(JsonHelpers
+                                    .ParseNodeUnbuffered(ship)
+                                    .ToJsonStringUnbuffered(true))
+                            };
+                        }).ToJsonArray(),
+                    });
+                }
+            });
 
             return new JsonObject
             {
                 ["fleets"] = fleets,
             };
+        }
+
+        public JsonNode HandleFleetShipEdit(SfaHttpQuery query)
+        {
+            JsonNode result = null;
+
+            Profile.Use(p =>
+            {
+                if ((int?)query["plid"] is int fleetId &&
+                    (int?)query["hullentity"] is int hull &&
+                    SfaDatabase.Instance.GetShip(hull) is ShipBlueprint blueprint)
+                {
+                    fleetId -= p.GameProfile.IndexSpace;
+
+                    if (p.GameProfile.AddRankedShip(fleetId, hull) is ShipConstructionInfo ship)
+                    {
+                        result = new JsonObject
+                        {
+                            ["id"] = SValue.Create((ship.Id + p.GameProfile.IndexSpace).ToString()),
+                            ["timetoconstruct"] = SValue.Create("0"),
+                        };
+
+                        p.SaveGameProfile();
+                    }
+                }
+            });
+
+            return result;
+        }
+
+        public JsonNode HandleFleetShipDelete(SfaHttpQuery query)
+        {
+            JsonNode result = null;
+
+            Profile.Use(p =>
+            {
+                if ((int?)query["elid"] is int shipId)
+                {
+                    shipId -= p.GameProfile.IndexSpace;
+
+                    if (p.GameProfile.DeleteRankedShip(shipId) == true)
+                    {
+                        result = new JsonObject { ["ok"] = 1 };
+                        p.SaveGameProfile();
+                    }
+                }
+            });
+
+            return result;
+        }
+
+        public JsonNode HandleFleetShipSave(SfaHttpQuery query)
+        {
+            JsonNode result = null;
+
+            Profile.Use(p =>
+            {
+                var data = JsonHelpers
+                    .ParseNodeUnbuffered((string)query["data"])
+                    .AsObjectSelf();
+
+                if (data is null)
+                    return;
+
+                if ((int?)query["elid"] is int shipId)
+                {
+                    shipId -= p.GameProfile.IndexSpace;
+
+                    if (p.GameProfile.GetRankedShip(shipId) is ShipConstructionInfo ship)
+                    {
+                        ship.ShipSkin = (int?)data["ship_skin"] ?? 0;
+                        ship.SkinColor1 = (int?)data["skin_color_1"] ?? 0;
+                        ship.SkinColor2 = (int?)data["skin_color_2"] ?? 0;
+                        ship.SkinColor3 = (int?)data["skin_color_3"] ?? 0;
+                        ship.ShipDecal = (int?)data["shipdecal"] ?? 0;
+
+                        if (data["hplist"]?.AsArraySelf() is JsonArray newHardpoints)
+                        {
+                            var shipHardpoints = ship.HardpointList ??= new();
+                            shipHardpoints.Clear();
+
+                            shipHardpoints.AddRange(newHardpoints.Select(hardpoint => new ShipHardpoint
+                            {
+                                Hardpoint = (string)hardpoint["hp"],
+                                EquipmentList = hardpoint["eqlist"]?.AsArraySelf()?.Select(equipment => new ShipHardpointEquipment()
+                                {
+                                    Equipment = (int?)equipment["eq"] ?? -1,
+                                    X = (int?)equipment["x"] ?? 0,
+                                    Y = (int?)equipment["y"] ?? 0,
+                                }).ToList(),
+                            }).Where(h => h.Hardpoint is not null && h.EquipmentList is not null));
+                        }
+
+                        result = new JsonObject { ["ok"] = 1 };
+                        p.SaveGameProfile();
+                    }
+                }
+                else if ((int?)query["plid"] is int fleetId &&
+                         (int)data["elid"] is int refId)
+                {
+                    fleetId -= p.GameProfile.IndexSpace;
+                    refId -= p.GameProfile.IndexSpace;
+
+                    if (p.GameProfile.RankedFleets.FirstOrDefault(f => f.Id == fleetId) is RankedFleetInfo fleet &&
+                        fleet.Ships?.Count is null or < 20 &&
+                        p.GameProfile.GetRankedShip(refId) is ShipConstructionInfo refShip &&
+                        p.GameProfile.AddRankedShip(fleetId, refShip.Hull) is ShipConstructionInfo newShip)
+                    {
+                        newShip.ShipSkin = refShip.ShipSkin;
+                        newShip.SkinColor1 = refShip.SkinColor1;
+                        newShip.SkinColor2 = refShip.SkinColor2;
+                        newShip.SkinColor3 = refShip.SkinColor3;
+                        newShip.ShipDecal = refShip.ShipDecal;
+                        newShip.HardpointList = refShip.HardpointList?.Select(h => h?.Clone()).ToList();
+                        result = new JsonObject { ["ok"] = 1 };
+                        p.SaveGameProfile();
+                    }
+                }
+            });
+
+            return result;
         }
     }
 }

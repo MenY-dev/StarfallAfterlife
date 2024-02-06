@@ -41,6 +41,8 @@ namespace StarfallAfterlife.Bridge.Instances
 
         public event EventHandler<DropListRequestEventArgs> DropListRequested;
 
+        public event EventHandler<RankedFleetRequestEventArgs> RankedFleetRequested;
+
         protected Dictionary<string, InstanceInfo> Instances { get; } = new();
 
         protected object Lockher { get; } = new();
@@ -86,6 +88,9 @@ namespace StarfallAfterlife.Bridge.Instances
 
                 case "new_instance_action":
                     HandleNewInstanceAction(doc); break;
+
+                case "get_ranked_fleet_data":
+                    HandleRankedFleetData(doc); break;
             }
         }
 
@@ -361,6 +366,26 @@ namespace StarfallAfterlife.Bridge.Instances
                 (string)doc["action"] is string action)
             {
                 NewInstanceAction?.Invoke(this, new(info, action, (string)doc["data"]));
+            }
+        }
+
+        public void SendRankedFleetData(JsonNode data, int fleetId, string auth)
+        {
+            Send("send_ranked_fleet_data", new JsonObject
+            {
+                ["auth"] = auth,
+                ["fleet_id"] = fleetId,
+                ["data"] = data?.ToJsonStringUnbuffered(false),
+            });
+        }
+
+        public void HandleRankedFleetData(JsonNode doc)
+        {
+            if (doc is not null &&
+                (string)doc["auth"] is string auth &&
+                (int?)doc["fleet_id"] is int fleetId)
+            {
+                RankedFleetRequested?.Invoke(this, new(auth, fleetId));
             }
         }
 

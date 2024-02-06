@@ -51,6 +51,14 @@ namespace StarfallAfterlife.Bridge.Server
             var status = UserStatus = (UserInGameStatus)reader.ReadByte();
             Server?.OnUserStatusChanged(this, status);
 
+            if (State != SfaClientState.InRankedMode &&
+                status is UserInGameStatus.RankedMainMenu or
+                          UserInGameStatus.RankedSearchingForGame or
+                          UserInGameStatus.RankedInBattle)
+            {
+                State = SfaClientState.InRankedMode;
+            }
+
             Server?.UseClients(_ =>
             {
                 foreach (var item in Server.Players)

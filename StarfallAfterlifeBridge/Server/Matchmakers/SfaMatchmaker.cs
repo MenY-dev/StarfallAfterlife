@@ -33,6 +33,8 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         public QuickMatchGameMode QuickMatchGameMode { get; protected set; }
 
+        public RankedGameMode RankedGameMode { get; protected set; }
+
         public HashSet<MatchmakerGameMode> GameModes { get; } = new();
 
         public HashSet<MatchmakerBattle> Battles { get; } = new();
@@ -48,12 +50,15 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
             DiscoveryGameMode ??= new DiscoveryGameMode();
             MothershipAssaultGameMode ??= new MothershipAssaultGameMode();
             QuickMatchGameMode ??= new QuickMatchGameMode();
+            RankedGameMode ??= new RankedGameMode();
             GameModes.Add(DiscoveryGameMode);
             GameModes.Add(MothershipAssaultGameMode);
             GameModes.Add(QuickMatchGameMode);
+            GameModes.Add(RankedGameMode);
             DiscoveryGameMode.Init(this);
             MothershipAssaultGameMode.Init(this);
             QuickMatchGameMode.Init(this);
+            RankedGameMode.Init(this);
 
             InstanceManager = new InstanceManagerClient();
             InstanceManager.CharacterDataRequested += CharacterDataRequested;
@@ -67,6 +72,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
             InstanceManager.ShipStatusUpdated += ShipStatusUpdated;
             InstanceManager.AddCharacterShipsXp += AddCharacterShipsXp;
             InstanceManager.NewInstanceAction += OnNewInstanceAction;
+            InstanceManager.RankedFleetRequested += RankedFleetRequested; ;
             InstanceManager.ConnectAsync(InstanceManagerAddress).Wait();
 
             SfaDebug.Print($"Matchmaker Started! (InstanceManagerAddress = {InstanceManagerAddress})");
@@ -223,6 +229,15 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
             }
         }
 
+        private void RankedFleetRequested(object sender, RankedFleetRequestEventArgs e)
+        {
+            lock (Lockher)
+            {
+                var battle = Battles.FirstOrDefault(b => b.InstanceInfo?.Auth == e.InstanceAuth) as RankedBattle;
+                var fleet = battle?.GetRankedFleet(e.FleetId);
+                InstanceManager.SendRankedFleetData(fleet, e.FleetId, e.InstanceAuth);
+            }
+        }
 
         private void OnNewInstanceAction(object sender, InstanceActionEventArgs e)
         {

@@ -37,6 +37,8 @@ namespace StarfallAfterlife.Bridge.Instances
 
         public event EventHandler<DropListResponseEventArgs> DropListReceived;
 
+        public event EventHandler<RankedFleetResponseEventArgs> RankedFleetReceived;
+
         protected object Lockher { get; } = new();
 
         protected override void OnReceive(string msgType, JsonNode doc)
@@ -74,6 +76,9 @@ namespace StarfallAfterlife.Bridge.Instances
 
                 case "send_update_party_members":
                     HandleUpdatePartyMembers(doc); break;
+
+                case "send_ranked_fleet_data":
+                    HandleRankedFleetData(doc); break;
 
             }
         }
@@ -323,6 +328,26 @@ namespace StarfallAfterlife.Bridge.Instances
                     .DeserializeUnbuffered<List<CharacterPartyMember>>() ?? new();
 
                 instance.UpdatePartyMembers(partyId, members);
+            }
+        }
+
+        private void RequestRankedFleetData(int fleetId, string auth)
+        {
+            Send("get_ranked_fleet_data", new JsonObject
+            {
+                ["fleet_id"] = fleetId,
+                ["auth"] = auth,
+            });
+        }
+
+        private void HandleRankedFleetData(JsonNode doc)
+        {
+            if (doc is not null &&
+                (int?)doc["fleet_id"] is int fleetId &&
+                (string)doc["auth"] is string auth)
+            {
+                RankedFleetReceived?.Invoke(this,
+                    new(auth, fleetId, JsonHelpers.ParseNodeUnbuffered((string)doc["data"] ?? "")));
             }
         }
 

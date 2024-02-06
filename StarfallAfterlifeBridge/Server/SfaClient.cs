@@ -27,6 +27,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Xml;
 using System.IO.Compression;
+using StarfallAfterlife.Bridge.Generators;
 
 namespace StarfallAfterlife.Bridge.Server
 {
@@ -43,6 +44,8 @@ namespace StarfallAfterlife.Bridge.Server
         public string AsteroidsMapHash { get; protected set; }
 
         public JNode VariableMap { get; protected set; }
+
+        public List<InventoryItem> RankedEquipmentLimit { get; protected set; }
 
         protected SfaGame Game { get; set; }
 
@@ -61,6 +64,8 @@ namespace StarfallAfterlife.Bridge.Server
         protected FriendChannel UserFriendsChannel => Game?.UserFriendsChannel;
 
         protected CharactPartyChannel CharactPartyChannel => Game?.CharactPartyChannel;
+
+        protected MatchmakerChannel MatchmakerChannel => Game?.MatchmakerChannel;
 
         public SfaClient()
         {
@@ -98,6 +103,9 @@ namespace StarfallAfterlife.Bridge.Server
                     break;
                 case SfaServerAction.CharacterPartyChannel:
                     CharactPartyChannel?.Send(reader.ReadToEnd());
+                    break;
+                case SfaServerAction.MatchmakerChannel:
+                    MatchmakerChannel?.Send(reader.ReadToEnd());
                     break;
             }
         }
@@ -239,6 +247,10 @@ namespace StarfallAfterlife.Bridge.Server
                     var realmName = (string)doc["realm_name"];
                     var realmDescription = (string)doc["realm_description"];
 
+                    RankedEquipmentLimit = doc["ranked_eq_limit"]?
+                        .DeserializeUnbuffered<List<InventoryItem>>() ??
+                        new RankedEquipmentLimitGenerator().Build();
+
                     if (realmId is null)
                         return (false, "realm_id_not_found");
 
@@ -315,6 +327,9 @@ namespace StarfallAfterlife.Bridge.Server
             {
                 if (p.GameProfile is SfaGameProfile gameProfile)
                 {
+                    gameProfile.UniqueId = (int?)playerData["unique_id"] ?? -1;
+                    gameProfile.UniqueName = (string)playerData["unique_name"] ?? gameProfile.Nickname;
+                    gameProfile.IndexSpace = (int?)playerData["index_space"] ?? 0;
                     gameProfile.Seasons = playerData["seasons"]?.DeserializeUnbuffered<WeeklyQuestsInfo>() ?? new();
                     gameProfile.BGShop = playerData["bg_shop"]?.DeserializeUnbuffered<List<BGShopItem>>() ?? new();
 
@@ -909,6 +924,12 @@ namespace StarfallAfterlife.Bridge.Server
                             port,
                             auth);
                         break;
+                    case "ranked":
+                        MatchmakerChannel?.SendInstanceReady(
+                            address,
+                            port,
+                            auth);
+                        break;
                     default:
                         break;
                 }
@@ -1095,6 +1116,30 @@ namespace StarfallAfterlife.Bridge.Server
                     p.SaveGameProfile();
                 });
             }
+        }
+
+        public void SyncRankedFleets()
+        {
+            var doc = new JObject();
+
+            Game?.Profile?.Use(p =>
+            {
+                var indexSpace = p.GameProfile?.IndexSpace ?? 0;
+
+                doc["fleets"] = p.GameProfile?.RankedFleets?.Select(f => new JObject()
+                {
+                    ["id"] = f.Id + indexSpace,
+                    ["ships"] = f.Ships.Select(s =>
+                    {
+                        var ship = s.Clone();
+                        ship.Id += indexSpace;
+                        ship.FleetId = f.Id + indexSpace;
+                        return JsonHelpers.ParseNode(ship);
+                    }).ToJsonArray(),
+                }).ToJsonArray() ?? new();
+            });
+
+            Send(doc, SfaServerAction.SyncRankedFleets);
         }
     }
 }

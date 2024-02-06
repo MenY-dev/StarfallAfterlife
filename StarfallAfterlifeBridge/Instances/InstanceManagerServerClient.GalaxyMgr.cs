@@ -114,6 +114,13 @@ namespace StarfallAfterlife.Bridge.Instances
                     };
                     break;
 
+                case "fleet.getdata":
+                    response = new JsonObject
+                    {
+                        ["ships"] = HandleFleetGetData((int?)query["fleetid"] ?? 0, (string)query["auth"]),
+                    };
+                    break;
+
                 default:
                     break;
             }
@@ -317,6 +324,29 @@ namespace StarfallAfterlife.Bridge.Instances
             RequestRewardForEven(auth);
             responseWaiter.Wait();
             return doc ?? "{}";
+        }
+
+        private JsonNode HandleFleetGetData(int fleetId, string auth)
+        {
+            JsonNode doc = null;
+            var responseWaiter = EventWaiter<RankedFleetResponseEventArgs>
+                .Create()
+                .Subscribe(e => RankedFleetReceived += e)
+                .Unsubscribe(e => RankedFleetReceived -= e)
+                .Where((o, e) =>
+                {
+                    if (e.InstanceAuth != auth ||
+                        e.FleetId != fleetId)
+                        return false;
+
+                    doc = e.Data;
+                    return true;
+                })
+                .Start(20000);
+
+            RequestRankedFleetData(fleetId, auth);
+            responseWaiter.Wait();
+            return doc ?? new JsonObject();
         }
     }
 }

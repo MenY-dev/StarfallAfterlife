@@ -100,6 +100,22 @@ namespace StarfallAfterlife.Bridge.Game
 
                     case "getdraftfleets":
                         response = HandleGetDraftFleets(query);
+                        SfaClient?.SyncRankedFleets();
+                        break;
+
+                    case "fleet.ship.edit":
+                        response = HandleFleetShipEdit(query);
+                        SfaClient?.SyncRankedFleets();
+                        break;
+
+                    case "fleet.ship.delete":
+                        response = HandleFleetShipDelete(query);
+                        SfaClient?.SyncRankedFleets();
+                        break;
+
+                    case "fleet.ship.save":
+                        response = HandleFleetShipSave(query);
+                        SfaClient?.SyncRankedFleets();
                         break;
 
                     default:
@@ -148,7 +164,7 @@ namespace StarfallAfterlife.Bridge.Game
             SfMgrServer ??= new MgrServer(SfMgrInput);
             SfMgrChannelManager ??= new GameChannelManager(this);
 
-            MatchmakerChannel ??= new MatchmakerChannel("Matchmaker", 1);
+            MatchmakerChannel ??= new MatchmakerChannel("Matchmaker", 1, this);
             GeneralTextChatChannel ??= new ChatChannel("GeneralTextChat", 2, this);
             SystemMessagesChannel ??= new GameChannel("SystemMessages", 3);
             UserAnalyticsChannel ??= new GameChannel("UserAnalytics", 4);

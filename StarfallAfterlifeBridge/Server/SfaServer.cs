@@ -280,6 +280,16 @@ namespace StarfallAfterlife.Bridge.Server
             }
         }
 
+        public List<SfaServerClient> GetClientsInRankedMode()
+        {
+            lock (ClientsLockher)
+            {
+                return Clients
+                    .Where(c => c.State == SfaClientState.InRankedMode)
+                    .ToList();
+            }
+        }
+
         public void OnUserStatusChanged(SfaServerClient client, UserInGameStatus status)
         {
             if (client is null)
