@@ -44,13 +44,8 @@ namespace StarfallAfterlife.Bridge.Generators
             bool CheckItem(SfaItem item) =>
                 item is not null &&
                 item.IsDefective == false &&
-                item.TechLvl != 0 &&
-                item.GalaxyValue != 0 &&
                 item.Faction is Faction.None or Faction.Other &&
-                item.IsBoundToCharacter == false &&
-                item.IsRareShopItem == false &&
-                item.IsStationAttackItem == false &&
-                item.IsUniqueReward == false;
+                item.IsAvailableForTrading;
 
             foreach (var lvl in levels)
             {

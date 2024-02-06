@@ -60,7 +60,6 @@ namespace StarfallAfterlife.Bridge.Database
         public bool IsAvailableForTrading =>
             IsBoundToCharacter == false &&
             IsUniqueReward == false &&
-            IsRareShopItem == false &&
             IsStationAttackItem == false &&
             IGC > 0 &&
             TechLvl > 0 &&
@@ -147,23 +146,27 @@ namespace StarfallAfterlife.Bridge.Database
                     if ((string)item is string tag)
                         Tags.Add(tag);
 
-            if (Tags.Count > 0)
-            {
-                IsImproved = Tags.Contains("Item.Quality.Improved", StringComparer.InvariantCultureIgnoreCase);
-                IsDefective = Tags.Contains("Item.Quality.Broken", StringComparer.InvariantCultureIgnoreCase);
-                IsRareShopItem = Tags.Contains("Item.RareShopItem", StringComparer.InvariantCultureIgnoreCase);
-                IsUniqueReward = Tags.Contains("Item.Role.UniqueReward", StringComparer.InvariantCultureIgnoreCase);
-            }
-            else if (Name?.Split('_').ElementAtOrDefault(1) is string quality)
-            {
-                IsImproved = quality.StartsWith("Improved", StringComparison.InvariantCultureIgnoreCase);
-                IsDefective = quality.StartsWith("Defective", StringComparison.InvariantCultureIgnoreCase);
-            }
+            var simpleName = Name?.Split('_').ElementAtOrDefault(1) ?? "";
+
+            if (GetTag("Item.Quality.Improved") == true ||
+                simpleName.StartsWith("Improved", StringComparison.InvariantCultureIgnoreCase))
+                IsImproved = true;
+
+            if (GetTag("Item.Quality.Broken") == true ||
+                simpleName.StartsWith("Defective", StringComparison.InvariantCultureIgnoreCase) ||
+                simpleName.StartsWith("Defecive", StringComparison.InvariantCultureIgnoreCase))
+                IsDefective = true;
+
+            IsRareShopItem = GetTag("Item.RareShopItem");
+            IsUniqueReward = GetTag("Item.Role.UniqueReward");
 
             if (Name is string name && (
                 name.StartsWith("BP_SA_", StringComparison.InvariantCultureIgnoreCase) == true ||
                 name.StartsWith("Default__BP_SA_", StringComparison.InvariantCultureIgnoreCase) == true))
                 IsStationAttackItem = true;
         }
+
+        public bool GetTag(string name) =>
+            Tags?.Contains(name, StringComparer.InvariantCultureIgnoreCase) == true;
     }
 }

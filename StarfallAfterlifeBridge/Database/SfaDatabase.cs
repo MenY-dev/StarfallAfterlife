@@ -106,11 +106,7 @@ namespace StarfallAfterlife.Bridge.Database
             {
                 var itemsForProduction = dtb.Blueprints.Where(b =>
                     b.Value is SfaItem item &&
-                    item.TechLvl != 0 &&
-                    item.GalaxyValue != 0 &&
-                    item.IsBoundToCharacter == false &&
-                    item.IsRareShopItem == false &&
-                    item.IsUniqueReward == false)
+                    item.IsAvailableForTrading == true)
                     .ToList();
 
                 foreach (var item in discoveryItems)
