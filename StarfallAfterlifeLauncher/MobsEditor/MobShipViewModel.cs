@@ -1,5 +1,6 @@
 ﻿using Avalonia.Data.Converters;
 using StarfallAfterlife.Bridge.Database;
+using StarfallAfterlife.Bridge.Generators;
 using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Launcher.ViewModels;
 using System;
@@ -188,6 +189,8 @@ namespace StarfallAfterlife.Launcher.MobsEditor
 
         public DiscoveryMobShipData Ship { get; set; }
 
+        public MobFleetViewModel Mob { get; set; }
+
         public string GetShipName(int id)
         {
             string name = SfaDatabase.Instance.GetShipName(Ship.Data.Hull);
@@ -219,6 +222,17 @@ namespace StarfallAfterlife.Launcher.MobsEditor
                 data.Tags = newTags.ToList();
                 RaisePropertyChanged(oldTags, data.Tags, nameof(Tags));
             }
+        }
+
+        public void GenerateDrop()
+        {
+            var drop = new MobDropGenerator().GenerateForMobShip(Ship, Mob?.Info);
+            ServiceData.DropTree = drop;
+        }
+
+        public void ClearDrop()
+        {
+            ServiceData.DropTree = new DropTreeNode() { Type = DropTreeNodeType.And };
         }
     }
 }

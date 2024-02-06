@@ -17,6 +17,17 @@
 			<Label Content="{Binding Name}" FontSize="20" FontWeight="DemiBold" Margin="0 0 0 10"/>
 		</Panel>
 		<Panel DockPanel.Dock="Bottom">
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+				<Button Content="Generate Drop">
+					<Button.Flyout>
+						<MenuFlyout>
+							<MenuItem Header="Generate" Command="{Binding GenerateDrop}"/>
+							<MenuItem Header="Clear"  Command="{Binding ClearDrop}"/>
+							<MenuItem Header="Cancel"/>
+						</MenuFlyout>
+					</Button.Flyout>
+				</Button>
+			</StackPanel>
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 				<Button Content="Ok" Command="{Binding $parent[Window].Close}"/>
 			</StackPanel>

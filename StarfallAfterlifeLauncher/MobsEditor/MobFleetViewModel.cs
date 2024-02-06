@@ -227,7 +227,7 @@ namespace StarfallAfterlife.Launcher.MobsEditor
                 if (item is null)
                     continue;
 
-                Ships.Add(new() { Ship = item });
+                Ships.Add(new() { Ship = item, Mob = this });
             }
         }
 
