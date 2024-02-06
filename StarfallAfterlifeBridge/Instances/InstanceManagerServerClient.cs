@@ -104,7 +104,7 @@ namespace StarfallAfterlife.Bridge.Instances
             lock (Lockher)
             {
                 if ((string)doc?["sync_key"] is string syncKey &&
-                    GetInstanceWithSyncKey(syncKey) is DiscoveryBattleInstance instance)
+                    GetInstanceWithSyncKey(syncKey) is SfaInstance instance)
                 {
                     instance.Stop();
                     Instances.Remove(syncKey);
