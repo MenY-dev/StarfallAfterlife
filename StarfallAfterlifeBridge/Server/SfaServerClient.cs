@@ -192,7 +192,8 @@ namespace StarfallAfterlife.Bridge.Server
                         if (currentClient.IsConnected == false)
                         {
                             currentClient.TravelToClient(this);
-                            Server.RemoveClient(currentClient);
+                            Server?.RemoveClient(currentClient);
+                            Server?.RegisterPlayer(this);
                             SendSuccessAuth();
                         }
                         else
