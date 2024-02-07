@@ -52,6 +52,17 @@ namespace StarfallAfterlife.Bridge.Environment
 
         public event EventHandler<EventArgs> Exited;
 
+        protected List<string> DefaultConsoleCommands { get; } = new()
+        {
+            "p.NetUsePackedMovementRPCs 1",
+            "net.AllowAsyncLoading 1",
+            "net.DelayUnmappedRPCs 1",
+            "net.AllowEncryption 0",
+            "net.AllowReliableMulticastToNonRelevantChannels 0",
+            "net.DormancyValidate 1",
+            "net.EnableDetailedScopeCounters 0",
+        };
+
         public SfaProcess Start()
         {
             Sandbox?.Deploy();
@@ -177,8 +188,11 @@ namespace StarfallAfterlife.Bridge.Environment
             //sb.Append(" -fps=2");
             //sb.Append(" -AllowSoftwareRendering");
 
-            if (ConsoleCommands is not null && ConsoleCommands.Count > 0)
-                sb.Append($" -ExecCmds=\"{string.Join("; ", ConsoleCommands)}\"");
+            var commands = DefaultConsoleCommands?.ToList() ?? new();
+            commands.AddRange(ConsoleCommands ?? new());
+
+            if (commands.Count > 0)
+                sb.Append($" -ExecCmds=\"{string.Join(", ", commands)}\"");
 
             if (EnableLog == true && Listen == false)
                 sb.Append(" -log");
