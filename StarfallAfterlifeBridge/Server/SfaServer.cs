@@ -22,6 +22,7 @@ using System.Reflection;
 using System.Security.Cryptography;
 using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Networking;
+using StarfallAfterlife.Bridge.Diagnostics;
 
 namespace StarfallAfterlife.Bridge.Server
 {
@@ -356,10 +357,11 @@ namespace StarfallAfterlife.Bridge.Server
                     NatPuncher.Create(System.Net.Sockets.ProtocolType.Tcp, port, port, 0);
                 }
             }
-            catch
+            catch (Exception e)
             {
                 CompletionSource = new TaskCompletionSource();
                 CompletionSource.TrySetResult();
+                SfaDebug.Print(e, GetType().Name);
             }
         }
 
