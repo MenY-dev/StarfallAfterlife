@@ -187,6 +187,27 @@ namespace StarfallAfterlife.Bridge.Server
             }
         }
 
+        public virtual bool TravelPlayer(SfaServerClient from, SfaServerClient to)
+        {
+            if (from is null || to is null)
+                return false;
+
+            lock (ClientsLockher)
+            {
+                var id = Players.IdOf(from);
+
+                if (id < 0)
+                    return false;
+
+                Players[id] = to;
+                to.PlayerId = id;
+                to.IsPlayer = from.IsPlayer;
+                from.TravelToClient(to);
+                RemoveClient(from);
+                return true;
+            }
+        }
+
         public SfaServerClient GetPlayer(int id)
         {
             SfaServerClient player = null;

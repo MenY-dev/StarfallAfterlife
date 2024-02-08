@@ -189,11 +189,9 @@ namespace StarfallAfterlife.Bridge.Server
                     if ((string)authData["auth"] is string lastAuth &&
                         Server.GetClient(lastAuth) is SfaServerClient currentClient)
                     {
-                        if (currentClient.IsConnected == false)
+                        if (currentClient.IsConnected == false &&
+                            Server?.TravelPlayer(currentClient, this) is true)
                         {
-                            currentClient.TravelToClient(this);
-                            Server?.RemoveClient(currentClient);
-                            Server?.RegisterPlayer(this);
                             SendSuccessAuth();
                         }
                         else
@@ -472,12 +470,15 @@ namespace StarfallAfterlife.Bridge.Server
             client.Server = Server;
             client.Galaxy = Galaxy;
             client.DiscoveryClient = DiscoveryClient;
+            client.SelectedRankedFleet = SelectedRankedFleet;
+            client.RankedFleets = RankedFleets;
 
             DiscoveryClient?.TravelToClient(client);
 
             Server = null;
             Galaxy = null;
             DiscoveryClient = null;
+            RankedFleets = null;
         }
 
         protected override void Dispose(bool disposing)

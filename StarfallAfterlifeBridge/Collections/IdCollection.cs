@@ -30,6 +30,13 @@ namespace StarfallAfterlife.Bridge.Collections
 
                 return _innerList.GetValueAtIndex(index);
             }
+            set
+            {
+                if (id < StartId)
+                    return;
+
+                _innerList[id] = value;
+            }
         }
 
         void ICollection<T>.Add(T item) => Add(item);
