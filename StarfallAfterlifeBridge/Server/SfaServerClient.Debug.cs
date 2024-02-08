@@ -140,17 +140,32 @@ namespace StarfallAfterlife.Bridge.Server
                 }
             }
             else if (msg.StartsWith("add item ") &&
-                msg.Length > 9 &&
-                int.TryParse(msg[9..].Trim(), out int itemId))
+                msg.Length > 9)
             {
-                if (CurrentCharacter is ServerCharacter character &&
+                var info = msg[9..].Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                var itemIdText = info.ElementAtOrDefault(0)?.Trim();
+                var countText = info.ElementAtOrDefault(1)?.Trim();
+
+                if (string.IsNullOrWhiteSpace(itemIdText) == false &&
+                    int.TryParse(itemIdText, out int itemId) == true &&
+                    itemId > 0 &&
+                    CurrentCharacter is ServerCharacter character &&
                     (Server?.Realm?.Database ?? SfaDatabase.Instance)?.GetItem(itemId) is SfaItem item)
                 {
-                    character.DiscoveryClient?.Invoke(c =>
+                    var count = 1;
+
+                    if (string.IsNullOrWhiteSpace(countText) == false &&
+                        int.TryParse(countText, out count) == false)
+                        count = 0;
+
+                    if (count > 0)
                     {
-                        character.Inventory.AddItem(InventoryItem.Create(item));
-                        SendToChat(channel, label, $"{item.Name} added to inventory.");
-                    });
+                        character.DiscoveryClient?.Invoke(c =>
+                        {
+                            character.Inventory?.AddItem(InventoryItem.Create(item, count));
+                            SendToChat(channel, label, $"{item.Name}({count}) added to inventory.");
+                        });
+                    }
                 }
             }
             else if (msg.StartsWith("toast ") &&
