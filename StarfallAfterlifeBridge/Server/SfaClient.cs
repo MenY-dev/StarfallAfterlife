@@ -220,6 +220,7 @@ namespace StarfallAfterlife.Bridge.Server
             {
                 request["action"] = "restore_session";
                 request["password"] = password;
+                request["profile_id"] = Profile?.Id ?? Guid.Empty;
                 request["auth"] = lastAuth;
                 request["version"] = version.ToString(3);
             }

@@ -139,6 +139,15 @@ namespace StarfallAfterlife.Bridge.Server
                 return Clients.FirstOrDefault(c => c.Auth == auth);
         }
 
+        public SfaServerClient GetClient(Guid profileId)
+        {
+            if (profileId == Guid.Empty)
+                return null;
+
+            lock (ClientsLockher)
+                return Clients.FirstOrDefault(c => c.ProfileId == profileId);
+        }
+
         public void RemoveClient(SfaServerClient client)
         {
             if (client is null)

@@ -186,8 +186,13 @@ namespace StarfallAfterlife.Bridge.Server
 
                 if ("restore_session".Equals(action, comparsion) == true)
                 {
-                    if ((string)authData["auth"] is string lastAuth &&
-                        Server.GetClient(lastAuth) is SfaServerClient currentClient)
+                    var lastAuth = (string)authData["auth"];
+                    var profileId = (Guid?)authData["profile_id"];
+                    var currentClient =
+                        Server?.GetClient(lastAuth) ??
+                        Server?.GetClient(profileId ?? Guid.Empty);
+
+                    if (currentClient is not null)
                     {
                         if (currentClient.IsConnected == false &&
                             Server?.TravelPlayer(currentClient, this) is true)
