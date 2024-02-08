@@ -20,9 +20,9 @@ namespace StarfallAfterlife.Bridge.Instances
 
         public override void Init(InstanceManagerServerClient context)
         {
-            base.Init(context);
-
             RankedMap = Info?.Map ?? "r1_confrontation";
+
+            base.Init(context);
         }
 
         public override JsonNode CreateInstanceConfig()

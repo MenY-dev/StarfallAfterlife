@@ -83,22 +83,6 @@ namespace StarfallAfterlife.Bridge.Game
             RealmMgrServer.Start(new Uri("http://127.0.0.1:0/realmmgr/"));
             SfaDebug.Print($"RealmMgrServer Started! ({RealmMgrServer.Address})");
 
-            Process = new SfaProcess
-            {
-                Executable = ExeLocation,
-                MgrUrl = SfMgrServer.Address.ToString(),
-                Username = GameProfile.Nickname,
-                Auth = GameProfile.TemporaryPass,
-#if DEBUG
-                EnableLog = true,
-                Windowed = true,
-                DisableSplashScreen = true,
-                DisableLoadingScreen = true
-#endif
-            };
-
-            Process.Exited += OnProcessExited;
-
             SfaClient = new SfaClient(this);
             CompletionSource = new TaskCompletionSource<StartResult>();
 
@@ -165,9 +149,25 @@ namespace StarfallAfterlife.Bridge.Game
                     return new(false, "sync_player_data_error");
                 }
 
+                var process = Process = new SfaProcess
+                {
+                    Executable = ExeLocation,
+                    MgrUrl = SfMgrServer.Address.ToString(),
+                    Username = GameProfile.Nickname,
+                    Auth = GameProfile.TemporaryPass,
+#if DEBUG
+                    EnableLog = true,
+                    Windowed = true,
+                    DisableSplashScreen = true,
+                    DisableLoadingScreen = true
+#endif
+                };
+
+                Process.Exited += OnProcessExited;
 
                 progress?.Report("start_game");
-                Process.Start();
+                process.Start();
+
                 return new(true, null);
             }, TaskCreationOptions.LongRunning);
 
@@ -175,6 +175,7 @@ namespace StarfallAfterlife.Bridge.Game
             {
                 if (t.Result.IsSucces == false)
                     CompletionSource?.TrySetResult(new(false, t.Result.Reason));
+
             });
 
             startingTask.Start();

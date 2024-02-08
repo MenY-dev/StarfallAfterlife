@@ -1,4 +1,5 @@
 ﻿using StarfallAfterlife.Bridge.Instances;
+using StarfallAfterlife.Bridge.Primitives;
 using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Serialization;
 using System;
@@ -13,11 +14,21 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 {
     public class RankedBattle : MatchmakerBattle
     {
-        public List<SfaServerClient> Players { get; } = new();
+        public string Map { get; set; }
+
+        public List<RankedPlayerInfo> Players { get; } = new();
 
         protected Dictionary<int, JsonNode> Fleets { get; } = new();
 
         private readonly object _locker = new();
+
+        public virtual void AddPlayer(RankedPlayerInfo player)
+        {
+            lock (_locker)
+            {
+                Players.Add(player);
+            }
+        }
 
         public override void Start()
         {
@@ -28,23 +39,25 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 if (State is MatchmakerBattleState.Finished)
                     return;
 
-                int team = 0;
-
-                foreach (var player in Players)
+                foreach (var info in Players)
                 {
-                    player.SendRankedMatchMakingStage(MatchMakingStage.StartingInstance);
+                    var player = info?.Player;
 
+                    if (player is null ||
+                        info.Status != RankedLobbyUserStatus.Ready)
+                        continue;
+
+                    player.SendRankedMatchMakingStage(MatchMakingStage.StartingInstance);
+                    
                     InstanceInfo.Players.Add(new()
                     {
                         Id = player.PlayerId,
-                        FleetId = player.SelectedRankedFleet,
+                        FleetId = info.FleetId,
                         Name = player.UniqueName,
                         Auth = player.Auth,
-                        Team = team,
-                        IsSpectator = player.IsSpectator ? 1 : 0,
+                        Team = info.Team,
+                        IsSpectator = info.Team == -1 ? 1 : 0,
                     });
-
-                    team = team == 0 ? 1 : 0;
                 }
 
                 CreateFleets();
@@ -72,20 +85,33 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         protected virtual string CreateMap()
         {
-            return null;
+            Map ??= new Random128().Next(0, 8) switch
+            {
+                0 => "r1_confrontation",
+                1 => "r1_dom_corridor",
+                2 => "r1_dom_frontline",
+                3 => "r1_dom_pass",
+                4 => "r1_split",
+                5 => "r1_split_dom",
+                6 => "r2_cross",
+                7 => "r2_nebula",
+                _ => Map,
+            };
+
+            return Map;
         }
 
         protected virtual void CreateFleets()
         {
             lock (_locker)
             {
-                foreach (var player in Players.ToArray())
+                foreach (var info in Players.ToArray())
                 {
-                    if (player is null)
+                    if (info is null)
                         continue;
 
-                    var selectedFleetId = player.SelectedRankedFleet;
-                    var fleet = player.RankedFleets?.ToArray().FirstOrDefault(f => f?.Id == selectedFleetId);
+                    var selectedFleetId = info.FleetId;
+                    var fleet = info.Player?.RankedFleets?.ToArray().FirstOrDefault(f => f?.Id == selectedFleetId);
 
                     if (fleet?.Ships?.ToArray() is ShipConstructionInfo[] ships)
                     {
@@ -119,25 +145,27 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
                     foreach (var item in Players)
                     {
-                        item.SendStartBattle(
+                        item.Player?.SendStartBattle(
                             "ranked",
                             Matchmaker?.CreateBattleIpAddress(),
                             InstanceInfo?.Port ?? -1,
-                            item.Auth);
+                            item.Player?.Auth);
                     }
                 }
                 else if (state == InstanceState.Finished)
                 {
-                    State = MatchmakerBattleState.Finished;
-                    Players.Clear();
+                    Stop();
                 }
             }
         }
 
         public override bool ContainsUser(SfaServerClient user)
         {
+            if (user is null)
+                return false;
+
             lock (_locker)
-                return Players.Contains(user);
+                return Players.FirstOrDefault(p => p.Player?.PlayerId == user.PlayerId) is not null;
         }
 
         public override void UserStatusChanged(SfaServerClient user, UserInGameStatus status)
@@ -146,10 +174,11 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
             lock (_locker)
             {
-                if (State == MatchmakerBattleState.Started &&
+                if (user is not null &&
+                    State == MatchmakerBattleState.Started &&
                     status != UserInGameStatus.RankedInBattle)
                 {
-                    Players.RemoveAll(p => p == user);
+                    Players.RemoveAll(p => p.Player?.PlayerId == user.PlayerId);
 
                     if (Players.Count < 1)
                         Stop();

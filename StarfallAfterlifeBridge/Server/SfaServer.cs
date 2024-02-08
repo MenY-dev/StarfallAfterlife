@@ -113,9 +113,12 @@ namespace StarfallAfterlife.Bridge.Server
                 {
                     RemoveClient(client);
                 }
-                else if (client?.DiscoveryClient?.CurrentCharacter is ServerCharacter character)
+                else
                 {
-                    character.Party?.RemoveMember(character.UniqueId);
+                    Matchmaker?.RankedGameMode?.GetLobby(client.PlayerId)?.RemovePlayer(client.PlayerId);
+
+                    if (client?.DiscoveryClient?.CurrentCharacter is ServerCharacter character)
+                        character.Party?.RemoveMember(character.UniqueId);
                 }
 
                 var time = DateTime.Now;
@@ -126,7 +129,7 @@ namespace StarfallAfterlife.Bridge.Server
                     RemoveClient(item);
                 }
 
-                OnUserStatusChanged(client, UserInGameStatus.None);
+                ProcessNewUserStatus(client, UserInGameStatus.None);
             });
         }
 
@@ -296,7 +299,7 @@ namespace StarfallAfterlife.Bridge.Server
         {
             lock (ClientsLockher)
             {
-                return Clients
+                return Players
                     .Where(c => c.State == SfaClientState.InDiscoveryMod)
                     .ToList();
             }
@@ -306,10 +309,53 @@ namespace StarfallAfterlife.Bridge.Server
         {
             lock (ClientsLockher)
             {
-                return Clients
+                return Players
                     .Where(c => c.State == SfaClientState.InRankedMode)
                     .ToList();
             }
+        }
+
+        public void ProcessNewUserStatus(SfaServerClient client, UserInGameStatus status)
+        {
+            if (client is null ||
+                client.IsPlayer == false)
+                return;
+
+            OnUserStatusChanged(client, status);
+
+            if (client.State != SfaClientState.InRankedMode &&
+                status is UserInGameStatus.RankedMainMenu or
+                          UserInGameStatus.RankedSearchingForGame or
+                          UserInGameStatus.RankedInBattle)
+            {
+                client.State = SfaClientState.InRankedMode;
+            }
+
+            UseClients(_ =>
+            {
+                foreach (var item in Players)
+                {
+                    if (item != client &&
+                        item.IsConnected == true)
+                    {
+                        item.SendAcceptNewFriend($"@{client.UniqueName}", status);
+                        item.SendUserStatus($"@{client.UniqueName}", status);
+                    }
+                }
+
+                if (client.CurrentCharacter is ServerCharacter character)
+                {
+                    foreach (var item in Players)
+                    {
+                        if (item != client &&
+                            item.IsConnected == true)
+                        {
+                            item.SendAcceptNewFriend(character.UniqueName, status);
+                            item.SendUserStatus(character.UniqueName, status);
+                        }
+                    }
+                }
+            });
         }
 
         public void OnUserStatusChanged(SfaServerClient client, UserInGameStatus status)

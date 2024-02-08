@@ -49,44 +49,10 @@ namespace StarfallAfterlife.Bridge.Server
         private void HandleUserStatus(bool isCharChannel, SfReader reader)
         {
             var status = UserStatus = (UserInGameStatus)reader.ReadByte();
-            Server?.OnUserStatusChanged(this, status);
-
-            if (State != SfaClientState.InRankedMode &&
-                status is UserInGameStatus.RankedMainMenu or
-                          UserInGameStatus.RankedSearchingForGame or
-                          UserInGameStatus.RankedInBattle)
-            {
-                State = SfaClientState.InRankedMode;
-            }
-
-            Server?.UseClients(_ =>
-            {
-                foreach (var item in Server.Players)
-                {
-                    if (item != this &&
-                        item.IsConnected == true)
-                    {
-                        item.SendAcceptNewFriend($"@{UniqueName}", status);
-                        item.SendUserStatus($"@{UniqueName}", status);
-                    }
-                }
-
-                if (CurrentCharacter is ServerCharacter character)
-                {
-                    foreach (var item in Server.Players)
-                    {
-                        if (item != this &&
-                            item.IsConnected == true)
-                        {
-                            item.SendAcceptNewFriend(character.UniqueName, status);
-                            item.SendUserStatus(character.UniqueName, status);
-                        }
-                    }
-                }
-            });
+            Server?.ProcessNewUserStatus(this, status);
         }
 
-
+        
         public void SendServerPlayerStatuses()
         {
             Server?.UseClients(_ =>
