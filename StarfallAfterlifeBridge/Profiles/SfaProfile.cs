@@ -128,6 +128,9 @@ namespace StarfallAfterlife.Bridge.Profiles
                             realm.LoadInfo(path);
                             Realms.Add(new SfaRealmInfo() { Realm = realm, RealmDirectory = path });
                         }
+
+                        if (Info?.LastRealm is string lastRealmId)
+                            CurrentRealm = Realms.FirstOrDefault(r => r?.Realm?.Id == lastRealmId);
                     }
                 }
                 catch { }
@@ -216,6 +219,8 @@ namespace StarfallAfterlife.Bridge.Profiles
         public void SelectRealm(SfaRealmInfo realm)
         {
             CurrentRealm = realm;
+            (Info ??= new()).LastRealm = realm?.Realm?.Id;
+            SaveInfo(true);
         }
 
 

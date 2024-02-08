@@ -17,5 +17,8 @@ namespace StarfallAfterlife.Bridge.Profiles
 
         [JsonPropertyName("last_play")]
         public DateTime LastPlay { get; set; } = DateTime.MinValue;
+
+        [JsonPropertyName("last_realm")]
+        public string LastRealm { get; set; }
     }
 }
