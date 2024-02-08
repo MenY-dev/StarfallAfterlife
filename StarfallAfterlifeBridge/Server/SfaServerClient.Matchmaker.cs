@@ -130,10 +130,22 @@ namespace StarfallAfterlife.Bridge.Server
             if (player is not null &&
                 RankedGameMode?.GetLobbyByOwner(this) is RankedLobby lobby)
             {
-                if (RankedGameMode?.GetLobby(player.PlayerId) is not null)
+                var currentLobby = RankedGameMode?.GetLobby(player.PlayerId);
+
+                if (currentLobby is not null)
                 {
-                    SendRankedLobbyInviteResponse(player.UniqueName, RankedLobbyInviteResponse.AllreadyInLobby);
-                    return;
+                    var currentPlayer = currentLobby.GetPlayer(player.PlayerId);
+
+                    if (currentLobby.OwnerId != PlayerId ||
+                        currentPlayer is null)
+                    {
+                        SendRankedLobbyInviteResponse(player.UniqueName, RankedLobbyInviteResponse.AllreadyInLobby);
+                        return;
+                    }
+                    else if (currentPlayer is not null)
+                    {
+                        currentLobby.RemovePlayer(player.PlayerId);
+                    }
                 }
 
                 var team = lobby.GetTeam(0).Length < 1 ? 0 :
