@@ -15,6 +15,8 @@ namespace StarfallAfterlife.Bridge.Server
 {
     public partial class SfaServerClient
     {
+        protected bool DebugExploreAllSystemsUsed { get; set; } = false;
+
         public void HandleDebugConsoleInput(string channel, string msg)
         {
             string label = ">";
@@ -24,10 +26,10 @@ namespace StarfallAfterlife.Bridge.Server
                 msg.Length > 7 &&
                 int.TryParse(msg[7..].Trim(), out int jumps))
             {
-                if (jumps > 6)
+                if (jumps > 10)
                 {
-                    jumps = 6;
-                    SendToChat(channel, label, "Max radius: 6");
+                    jumps = 10;
+                    SendToChat(channel, label, "Max radius: 10");
                 }
 
                 foreach (var system in Map.GetSystemsArround(CurrentCharacter?.Fleet?.System?.Id ?? -1, jumps))
@@ -36,16 +38,35 @@ namespace StarfallAfterlife.Bridge.Server
                 }
             }
             else if (msg.StartsWith("explore ") &&
-                msg.Length > 7 &&
-                int.TryParse(msg[7..].Trim(), out int exploreRadius))
+                msg.Length > 7)
             {
-                if (exploreRadius > 6)
+                int exploreRadius = 0;
+
+                if ("all".Equals(msg[7..].Trim(), StringComparison.InvariantCultureIgnoreCase) == true)
                 {
-                    exploreRadius = 6;
-                    SendToChat(channel, label, "Max radius: 6");
+                    if (DebugExploreAllSystemsUsed == false)
+                    {
+                        DebugExploreAllSystemsUsed = true;
+                        exploreRadius = 1000;
+                    }
+                    else
+                    {
+                        exploreRadius = 0;
+                        SendToChat(channel, label, "All systems have already been explored!");
+                    }
+                }
+                else if (int.TryParse(msg[7..].Trim(), out exploreRadius) == true &&
+                    exploreRadius > 0)
+                {
+                    if (exploreRadius > 10)
+                    {
+                        exploreRadius = 10;
+                        SendToChat(channel, label, "Max radius: 10");
+                    }
                 }
 
-                if (CurrentCharacter is ServerCharacter character &&
+                if (exploreRadius > 0 &&
+                    CurrentCharacter is ServerCharacter character &&
                     character.Progress is CharacterProgress progress &&
                     character.Fleet?.System is StarSystem currentSystem)
                 {
