@@ -18,7 +18,7 @@ namespace StarfallAfterlife.Bridge.Launcher
 
             ActiveInstanceManager = new InstanceManager()
             {
-                GameExeLocation = GameExeLocation,
+                GameDirectory = GameDirectory,
                 WorkingDirectory = WorkingDirectory
             };
 

@@ -40,7 +40,7 @@ namespace StarfallAfterlife.Bridge.Game
 
         public SfaRealm Realm => Profile.CurrentRealm?.Realm;
 
-        protected string ExeLocation => Path.Combine(Location, "Msk", "starfall_game", "Starfall", "Binaries", "Win64", "Starfall.exe");
+        protected string ExeLocation => Path.Combine(Location, "Msk", "starfall_game", "Starfall.exe");
 
         protected string LogsLocation => Path.Combine(Location, "Msk", "starfall_game", "Starfall", "Saved", "Logs");
 

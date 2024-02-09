@@ -14,7 +14,9 @@ namespace StarfallAfterlife.Bridge.Instances
 {
     public partial class InstanceManager : MessagingServer<InstanceManagerServerClient>
     {
-        public string GameExeLocation { get; set; }
+        public string GameDirectory { get; set; }
+
+        public string GameExeLocation => Path.Combine(GameDirectory, "Msk", "starfall_game", "Starfall", "Binaries", "Win64", "Starfall.exe");
 
         public string WorkingDirectory { get; set; }
 

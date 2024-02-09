@@ -75,7 +75,8 @@ namespace StarfallAfterlife.Bridge.Launcher
         {
             if (string.IsNullOrEmpty(directory) ||
                 Directory.Exists(directory) == false ||
-                File.Exists(Path.Combine(directory, "Msk", "starfall_game", "Starfall", "Binaries", "Win64", "Starfall.exe")) == false)
+                File.Exists(Path.Combine(directory, "Msk", "starfall_game", "Starfall", "Binaries", "Win64", "Starfall.exe")) == false ||
+                File.Exists(Path.Combine(directory, "Msk", "starfall_game", "Starfall.exe")) == false)
                 return false;
 
             return true;
