@@ -108,6 +108,21 @@ namespace StarfallAfterlife.Launcher.ViewModels
             }
         }
 
+        public bool UseAutoUpdate
+        {
+            get => (bool?)Launcher?.SettingsStorage["launcher_use_auto_update"] ?? true;
+            set
+            {
+                if (Launcher is SfaLauncher launcher)
+                {
+                    SetAndRaise(UseAutoUpdate, value,
+                        v => launcher.SettingsStorage["launcher_use_auto_update"] = v);
+
+                    launcher.SaveSettings();
+                }
+            }
+        }
+
         public bool IsUpdatePanelVisible
         {
             get => _isUpdatePanelVisible;
@@ -183,6 +198,7 @@ namespace StarfallAfterlife.Launcher.ViewModels
         private bool _isGameStarted;
         private bool _isUpdatePanelVisible = false;
         private bool _isUpdateAvailable = false;
+        private bool _isAutoUpdateCheckCompleted = false;
         private Updater.Relese _latestRelese;
 
 
@@ -734,6 +750,17 @@ namespace StarfallAfterlife.Launcher.ViewModels
             Updater.GetLatestRelese().ContinueWith(t => Dispatcher.UIThread.Invoke(() =>
             {
                 LatestRelese = t.Result;
+
+                if (LatestRelese is not null &&
+                    UseAutoUpdate == true &&
+                    _isAutoUpdateCheckCompleted == false)
+                {
+#if !DEBUG
+                    InstallLatestRelese();
+#endif
+                }
+
+                _isAutoUpdateCheckCompleted = true;
             }));
         }
 

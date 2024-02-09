@@ -59,7 +59,8 @@
 	<sys:String x:Key="s_page_settings_header">SETTINGS</sys:String>
 	<sys:String x:Key="s_page_settings_launcher_header">LAUNCHER</sys:String>
 	<sys:String x:Key="s_page_settings_game_dir_lbl">Game Directory</sys:String>
-	<sys:String x:Key="s_page_settings_lang_lbl">Interface language</sys:String>
+	<sys:String x:Key="s_page_settings_lang_lbl">Interface Language</sys:String>
+	<sys:String x:Key="s_page_settings_launcher_use_auto_update_lbl">Auto Update</sys:String>
 	<sys:String x:Key="s_page_settings_game_header">GAME</sys:String>
 	<sys:String x:Key="s_page_settings_game_force_windowed_lbl">Force Windowed</sys:String>
 	<sys:String x:Key="s_page_settings_game_show_log_lbl">Show Log</sys:String>

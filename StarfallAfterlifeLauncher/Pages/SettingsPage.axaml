@@ -71,6 +71,10 @@
 								</Panel>
 							</c:SfaButton>
 						</c:Property>
+
+						<c:Property Text="{DynamicResource s_page_settings_launcher_use_auto_update_lbl}" LabelWidth="250" ContentWidth="*">
+							<c:SfaCheckBox IsChecked="{Binding UseAutoUpdate}"/>
+						</c:Property>
 						
 						<TextBlock Text="{DynamicResource s_page_settings_game_header}"
 								   Padding="0 20 0 0"
