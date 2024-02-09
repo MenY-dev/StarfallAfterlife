@@ -52,10 +52,10 @@ public partial class App : Application
 
         Launcher.Load();
 
-        if (Launcher.Localization is not null)
-            CurrentLocalization = Launcher.Localization;
+        if ((string)Launcher.SettingsStorage["localization"] is string currentLoc)
+            CurrentLocalization = currentLoc;
         else
-            Launcher.Localization = CurrentLocalization;
+            Launcher.SettingsStorage["localization"] = CurrentLocalization;
 
         AvaloniaXamlLoader.Load(this);
     }

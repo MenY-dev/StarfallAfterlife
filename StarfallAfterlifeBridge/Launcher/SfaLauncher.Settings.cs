@@ -15,6 +15,8 @@ namespace StarfallAfterlife.Bridge.Launcher
     {
         public string SettingsFile => Path.Combine(WorkingDirectory, "Launcher", "Settings.json");
 
+        public SettingsStorage SettingsStorage { get; } = new();
+
         public string ServerSettingsFile => Path.Combine(WorkingDirectory, "Launcher", "ServerSettings.json");
 
         public ServerSettings ServerSettings { get; set; } = new ServerSettings();
@@ -23,24 +25,18 @@ namespace StarfallAfterlife.Bridge.Launcher
 
         public string LastSelectedLocalRealmId { get; set; }
 
-        public string Localization { get; set; }
-
         public void SaveSettings()
         {
             try
             {
-                var doc = JsonHelpers.ParseNodeFromFileUnbuffered(SettingsFile)?
-                    .AsObjectSelf() ?? new JsonObject();
+                var storage = SettingsStorage;
+                storage.Path = SettingsFile;
 
-                doc.Override(new Dictionary<string, JsonNode>()
-                {
-                    ["game_dir"] = GameDirectory,
-                    ["last_selected_profile_id"] = LastSelectedProfileId,
-                    ["last_selected_local_realm_id"] = LastSelectedLocalRealmId,
-                    ["localization"] = Localization,
-                });
+                storage["game_dir"] = GameDirectory;
+                storage["last_selected_profile_id"] = LastSelectedProfileId;
+                storage["last_selected_local_realm_id"] = LastSelectedLocalRealmId;
 
-                doc.WriteToFileUnbuffered(SettingsFile, new() { WriteIndented = true });
+                storage.Save();
             }
             catch { }
         }
@@ -62,16 +58,13 @@ namespace StarfallAfterlife.Bridge.Launcher
         {
             try
             {
-                if (SettingsFile is string path &&
-                    File.Exists(path) == true &&
-                    File.ReadAllText(path) is string text &&
-                    JsonHelpers.ParseNodeUnbuffered(text) is JsonObject doc)
-                {
-                    GameDirectory = (string)doc["game_dir"];
-                    LastSelectedProfileId = (Guid?)doc["last_selected_profile_id"] ?? Guid.Empty;
-                    LastSelectedLocalRealmId = (string)doc["last_selected_local_realm_id"];
-                    Localization = (string)doc["localization"];
-                }
+                var storage = SettingsStorage;
+                storage.Path = SettingsFile;
+                storage.Load();
+
+                GameDirectory = (string)storage["game_dir"];
+                LastSelectedProfileId = (Guid?)storage["last_selected_profile_id"] ?? Guid.Empty;
+                LastSelectedLocalRealmId = (string)storage["last_selected_local_realm_id"];
             }
             catch { }
         }

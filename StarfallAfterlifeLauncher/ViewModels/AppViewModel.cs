@@ -119,17 +119,19 @@ namespace StarfallAfterlife.Launcher.ViewModels
 
         public string CurrentLocalization
         {
-            get => Launcher?.Localization;
+            get => (string)Launcher?.SettingsStorage["localization"];
             set
             {
                 if (Launcher is SfaLauncher launcher)
                 {
-                    if (launcher.Localization == value &&
+                    var localization = (string)launcher.SettingsStorage["localization"];
+
+                    if (localization == value &&
                         App.CurrentLocalization == value)
                         return;
 
-                    SetAndRaise(launcher.Localization, value,
-                        v => launcher.Localization = App.CurrentLocalization = v);
+                    SetAndRaise(localization, value,
+                        v => launcher.SettingsStorage["localization"] = App.CurrentLocalization = v);
 
                     launcher.SaveSettings();
                 }
