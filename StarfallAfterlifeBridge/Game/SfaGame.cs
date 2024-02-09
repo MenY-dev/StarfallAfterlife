@@ -50,6 +50,14 @@ namespace StarfallAfterlife.Bridge.Game
 
         public SfaProcess Process { get; protected set; }
 
+        public bool ShowLog { get; set; } 
+
+        public bool ForceWindowed { get; set; }
+
+        public bool HideLoadingScreen { get; set; }
+
+        public bool HideSplashScreen { get; set; }
+
         public Task<StartResult> StartingTask => CompletionSource?.Task ?? Task.FromResult<StartResult>(new(false, null));
 
         protected TaskCompletionSource<StartResult> CompletionSource { get; set; }
@@ -149,18 +157,24 @@ namespace StarfallAfterlife.Bridge.Game
                     return new(false, "sync_player_data_error");
                 }
 
+#if DEBUG
+                ShowLog = true;
+                ForceWindowed = true;
+                HideSplashScreen = true;
+                HideLoadingScreen = true;
+#endif
+
                 var process = Process = new SfaProcess
                 {
                     Executable = ExeLocation,
                     MgrUrl = SfMgrServer.Address.ToString(),
                     Username = GameProfile.Nickname,
                     Auth = GameProfile.TemporaryPass,
-#if DEBUG
-                    EnableLog = true,
-                    Windowed = true,
-                    DisableSplashScreen = true,
-                    DisableLoadingScreen = true
-#endif
+
+                    EnableLog = ShowLog,
+                    Windowed = ForceWindowed,
+                    DisableSplashScreen = HideSplashScreen,
+                    DisableLoadingScreen = HideLoadingScreen,
                 };
 
                 Process.Exited += OnProcessExited;

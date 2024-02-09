@@ -57,8 +57,15 @@
 	<sys:String x:Key="s_page_log_header">LOG</sys:String>
 
 	<sys:String x:Key="s_page_settings_header">SETTINGS</sys:String>
+	<sys:String x:Key="s_page_settings_launcher_header">LAUNCHER</sys:String>
 	<sys:String x:Key="s_page_settings_game_dir_lbl">Game Directory</sys:String>
 	<sys:String x:Key="s_page_settings_lang_lbl">Interface language</sys:String>
+	<sys:String x:Key="s_page_settings_game_header">GAME</sys:String>
+	<sys:String x:Key="s_page_settings_game_force_windowed_lbl">Force Windowed</sys:String>
+	<sys:String x:Key="s_page_settings_game_show_log_lbl">Show Log</sys:String>
+	<sys:String x:Key="s_page_settings_game_hide_splash_screen_lbl">Disable Splash Screen</sys:String>
+	<sys:String x:Key="s_page_settings_game_hide_loading_screen_lbl">Disable Loading Screen </sys:String>
+	<sys:String x:Key="s_page_settings_other_header">OTHER</sys:String>
 	<sys:String x:Key="s_page_settings_show_licenses_btn">LICENSES</sys:String>
 
 	<sys:String x:Key="s_page_pe_header">SELECT PROFILE</sys:String>

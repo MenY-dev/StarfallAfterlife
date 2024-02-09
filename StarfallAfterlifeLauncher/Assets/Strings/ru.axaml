@@ -57,8 +57,15 @@
 	<sys:String x:Key="s_page_log_header">ЛОГ</sys:String>
 
 	<sys:String x:Key="s_page_settings_header">НАСТРОЙКИ</sys:String>
+	<sys:String x:Key="s_page_settings_launcher_header">ЛАУНЧЕР</sys:String>
 	<sys:String x:Key="s_page_settings_game_dir_lbl">Директория Игры</sys:String>
 	<sys:String x:Key="s_page_settings_lang_lbl">Язык Интерфейса</sys:String>
+	<sys:String x:Key="s_page_settings_game_header">ИГРА</sys:String>
+	<sys:String x:Key="s_page_settings_game_force_windowed_lbl">В Окне</sys:String>
+	<sys:String x:Key="s_page_settings_game_show_log_lbl">Показывать Лог</sys:String>
+	<sys:String x:Key="s_page_settings_game_hide_splash_screen_lbl">Отключить Заставку</sys:String>
+	<sys:String x:Key="s_page_settings_game_hide_loading_screen_lbl">Отключить Экран Загрузки </sys:String>
+	<sys:String x:Key="s_page_settings_other_header">РАЗНОЕ</sys:String>
 	<sys:String x:Key="s_page_settings_show_licenses_btn">ЛИЦЕНЗИИ</sys:String>
 	
 	<sys:String x:Key="s_page_pe_header">ВЫБОР ПРОФИЛЯ</sys:String>

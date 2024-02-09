@@ -14,6 +14,15 @@
 			<c:Separator Height="2" Opacity="0.8" VerticalAlignment="Bottom"/>
 		</Panel>
 		<Panel DockPanel.Dock="Bottom" MinHeight="20">
+			<TextBlock Text="Made with Avalonia UI" FontSize="16" Opacity="0.5"
+				   Margin="10 5"
+				   HorizontalAlignment="Right"
+				   VerticalAlignment="Center"/>
+
+			<TextBlock Text="{Binding CurrentFullVersion}" FontSize="16" Opacity="0.5"
+					   Margin="10 5"
+					   HorizontalAlignment="Left"
+					   VerticalAlignment="Center"/>
 		</Panel>
 		<Panel>
 			<Rectangle Fill="Black" Opacity="0.8" IsHitTestVisible="False" >
@@ -24,51 +33,77 @@
 					</LinearGradientBrush>
 				</Rectangle.OpacityMask>
 			</Rectangle>
-			<Grid ColumnDefinitions="*" Margin="20">
-				<StackPanel Grid.Column="0" Spacing="3">
-					<c:Property Text="{DynamicResource s_page_settings_game_dir_lbl}" LabelWidth="200" ContentWidth="*">
-						<StackPanel Orientation="Horizontal" Spacing="6">
-							<c:SfaButton MinWidth="150" Content="{DynamicResource s_app_select_btn}" Command="{Binding ShowGameDirSelector}" HorizontalContentAlignment="Center"/>
-							<Label ClipToBounds="True" VerticalContentAlignment="Center" Content="{Binding GameDirectory}" Foreground="White" Opacity="0.75" />
-						</StackPanel>
-					</c:Property>
-					<c:Property Text="{DynamicResource s_page_settings_lang_lbl}" LabelWidth="200" ContentWidth="*">
-						<c:SfaButton MinWidth="150" HorizontalAlignment="Left">
-							<c:SfaButton.Flyout>
-								<c:SfaMenuFlyout Placement="BottomEdgeAlignedRight"
-												 ItemsSource="{Binding Localizations}"
-												 SelectedItem="{Binding CurrentLocalization}">
-									<c:SfaMenuFlyout.ItemTemplate>
-										<DataTemplate>
-											<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" MinWidth="100">
-												<Label Foreground="White" Content="{Binding Converter={x:Static c:SfaUtils.LocalizationKeyToNameConverter}}" Opacity="0.75"/>
-											</StackPanel>
-										</DataTemplate>
-									</c:SfaMenuFlyout.ItemTemplate>
-								</c:SfaMenuFlyout>
-							</c:SfaButton.Flyout>
-							<Panel>
-								<TextBlock Text="{Binding CurrentLocalization, Converter={x:Static c:SfaUtils.LocalizationKeyToNameConverter}}"/>
-								<c:DropdownIcon HorizontalAlignment="Right"/>
-							</Panel>
-						</c:SfaButton>
-					</c:Property>
-					<WrapPanel Name="DebugUtilsView" Margin="0 10 0 10">
-						<c:SfaButton Content="{DynamicResource s_page_settings_show_licenses_btn}"
-									 Command="{Binding ShowLicenses}"/>
-					</WrapPanel>
-				</StackPanel>
-			</Grid>
-			<TextBlock Text="Made with Avalonia UI" FontSize="16" Opacity="0.5"
-					   Margin="10"
-					   HorizontalAlignment="Right"
-					   VerticalAlignment="Bottom"/>
 
-			<TextBlock Text="{Binding CurrentFullVersion}" FontSize="16" Opacity="0.5"
-					   Margin="10"
-					   HorizontalAlignment="Left"
-					   VerticalAlignment="Bottom"/>
+			<ScrollViewer>
+				<Grid ColumnDefinitions="*" Margin="20">
+					<StackPanel Grid.Column="0" Spacing="3">
+						
+						<TextBlock Text="{DynamicResource s_page_settings_launcher_header}"
+								   Padding="0"
+								   FontSize="24"
+								   FontWeight="DemiBold"
+								   Foreground="{DynamicResource AccentColor}"/>
+						
+						<c:Property Text="{DynamicResource s_page_settings_game_dir_lbl}" LabelWidth="250" ContentWidth="*">
+							<StackPanel Orientation="Horizontal" Spacing="6">
+								<c:SfaButton MinWidth="150" Content="{DynamicResource s_app_select_btn}" Command="{Binding ShowGameDirSelector}" HorizontalContentAlignment="Center"/>
+								<Label ClipToBounds="True" VerticalContentAlignment="Center" Content="{Binding GameDirectory}" Foreground="White" Opacity="0.75" />
+							</StackPanel>
+						</c:Property>
+						<c:Property Text="{DynamicResource s_page_settings_lang_lbl}" LabelWidth="250" ContentWidth="*">
+							<c:SfaButton MinWidth="150" HorizontalAlignment="Left">
+								<c:SfaButton.Flyout>
+									<c:SfaMenuFlyout Placement="BottomEdgeAlignedRight"
+													 ItemsSource="{Binding Localizations}"
+													 SelectedItem="{Binding CurrentLocalization}">
+										<c:SfaMenuFlyout.ItemTemplate>
+											<DataTemplate>
+												<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" MinWidth="100">
+													<Label Foreground="White" Content="{Binding Converter={x:Static c:SfaUtils.LocalizationKeyToNameConverter}}" Opacity="0.75"/>
+												</StackPanel>
+											</DataTemplate>
+										</c:SfaMenuFlyout.ItemTemplate>
+									</c:SfaMenuFlyout>
+								</c:SfaButton.Flyout>
+								<Panel>
+									<TextBlock Text="{Binding CurrentLocalization, Converter={x:Static c:SfaUtils.LocalizationKeyToNameConverter}}"/>
+									<c:DropdownIcon HorizontalAlignment="Right"/>
+								</Panel>
+							</c:SfaButton>
+						</c:Property>
+						
+						<TextBlock Text="{DynamicResource s_page_settings_game_header}"
+								   Padding="0 20 0 0"
+								   FontSize="24"
+								   FontWeight="DemiBold"
+								   Foreground="{DynamicResource AccentColor}"/>
+						
+						<c:Property Text="{DynamicResource s_page_settings_game_force_windowed_lbl}" LabelWidth="250" ContentWidth="*">
+							<c:SfaCheckBox IsChecked="{Binding ForceGameWindowed}"/>
+						</c:Property>
+						<c:Property Text="{DynamicResource s_page_settings_game_show_log_lbl}" LabelWidth="250" ContentWidth="*">
+							<c:SfaCheckBox IsChecked="{Binding ShowGameLog}"/>
+						</c:Property>
+						<c:Property Text="{DynamicResource s_page_settings_game_hide_splash_screen_lbl}" LabelWidth="250" ContentWidth="*">
+							<c:SfaCheckBox IsChecked="{Binding HideGameSplashScreen}"/>
+						</c:Property>
+						<c:Property Text="{DynamicResource s_page_settings_game_hide_loading_screen_lbl}" LabelWidth="250" ContentWidth="*">
+							<c:SfaCheckBox IsChecked="{Binding HideGameLoadingScreen}"/>
+						</c:Property>
 
+						<TextBlock Text="{DynamicResource s_page_settings_other_header}"
+								   Padding="0 20 0 0"
+								   FontSize="24"
+								   FontWeight="DemiBold"
+								   Foreground="{DynamicResource AccentColor}"/>
+
+						<WrapPanel Name="DebugUtilsView" Margin="0 10 0 10">
+							<c:SfaButton Content="{DynamicResource s_page_settings_show_licenses_btn}"
+										 Command="{Binding ShowLicenses}"/>
+						</WrapPanel>
+					</StackPanel>
+				</Grid>
+			</ScrollViewer>
 			<c:Separator Height="2" Opacity="0.8" VerticalAlignment="Bottom"/>
 		</Panel>
 	</DockPanel>

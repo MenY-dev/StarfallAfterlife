@@ -29,6 +29,47 @@ namespace StarfallAfterlife.Bridge.Launcher
             }
         }
 
+
+        public bool ShowGameLog
+        {
+            get => (bool?)SettingsStorage["game_show_log"] ?? false;
+            set
+            {
+                SettingsStorage["game_show_log"] = value;
+                SaveSettings();
+            }
+        }
+
+        public bool ForceGameWindowed
+        {
+            get => (bool?)SettingsStorage["game_force_windowed"] ?? false;
+            set
+            {
+                SettingsStorage["game_force_windowed"] = value;
+                SaveSettings();
+            }
+        }
+
+        public bool HideGameLoadingScreen
+        {
+            get => (bool?)SettingsStorage["game_hide_loading_screen"] ?? false;
+            set
+            {
+                SettingsStorage["game_hide_loading_screen"] = value;
+                SaveSettings();
+            }
+        }
+
+        public bool HideGameSplashScreen
+        {
+            get => (bool?)SettingsStorage["game_hide_splash_screen"] ?? false;
+            set
+            {
+                SettingsStorage["game_hide_splash_screen"] = value;
+                SaveSettings();
+            }
+        }
+
         protected string GameExeLocation => Path.Combine(GameDirectory, "Msk", "starfall_game", "Starfall", "Binaries", "Win64", "Starfall.exe");
 
         public Task<SfaSession> StartGame(SfaProfile profile, string serverAddress, Func<string> passwordRequest = null) =>
@@ -47,6 +88,11 @@ namespace StarfallAfterlife.Bridge.Launcher
                 PasswordRequested = passwordRequest,
                 GameDirectory = GameDirectory,
             };
+
+            session.Game.ShowLog = ShowGameLog;
+            session.Game.ForceWindowed = ForceGameWindowed;
+            session.Game.HideSplashScreen = HideGameLoadingScreen;
+            session.Game.HideLoadingScreen = HideGameSplashScreen;
 
             return session;
         }
@@ -69,11 +115,7 @@ namespace StarfallAfterlife.Bridge.Launcher
 
                 SfaDebug.Print($"DiscoveryServer Started! ({server.Address})");
 
-                var session = new SfaSession()
-                {
-                    Profile = profile,
-                    GameDirectory = GameDirectory
-                };
+                var session = CreateGame(profile);
 
                 session.StartGame(server.Address).ContinueWith(task =>
                 {

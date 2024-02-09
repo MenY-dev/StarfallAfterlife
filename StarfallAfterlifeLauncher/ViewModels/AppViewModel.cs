@@ -68,6 +68,46 @@ namespace StarfallAfterlife.Launcher.ViewModels
             }
         }
 
+        public bool ForceGameWindowed
+        {
+            get => Launcher?.ForceGameWindowed ?? false;
+            set
+            {
+                if (Launcher is SfaLauncher launcher)
+                    SetAndRaise(launcher.ForceGameWindowed, value, v => launcher.ForceGameWindowed = v);
+            }
+        }
+
+        public bool ShowGameLog
+        {
+            get => Launcher?.ShowGameLog ?? false;
+            set
+            {
+                if (Launcher is SfaLauncher launcher)
+                    SetAndRaise(launcher.ShowGameLog, value, v => launcher.ShowGameLog = v);
+            }
+        }
+
+        public bool HideGameSplashScreen
+        {
+            get => Launcher?.HideGameSplashScreen ?? false;
+            set
+            {
+                if (Launcher is SfaLauncher launcher)
+                    SetAndRaise(launcher.HideGameSplashScreen, value, v => launcher.HideGameSplashScreen = v);
+            }
+        }
+
+        public bool HideGameLoadingScreen
+        {
+            get => Launcher?.HideGameLoadingScreen ?? false;
+            set
+            {
+                if (Launcher is SfaLauncher launcher)
+                    SetAndRaise(launcher.HideGameLoadingScreen, value, v => launcher.HideGameLoadingScreen = v);
+            }
+        }
+
         public bool IsUpdatePanelVisible
         {
             get => _isUpdatePanelVisible;
