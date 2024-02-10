@@ -11,6 +11,11 @@ namespace StarfallAfterlife.Bridge.Diagnostics
 {
     public class SfaDebug
     {
+        public delegate void NewDebugMsgDelegate(string msg, string channel, DateTime time);
+
+
+        public static event NewDebugMsgDelegate Update;
+
         public static void Print(object obj, string channel = null)
         {
             Print(obj?.ToString() ?? "NULL!", channel);
@@ -18,9 +23,13 @@ namespace StarfallAfterlife.Bridge.Diagnostics
 
         public static void Print(string msg, string channel = null)
         {
-            string line = $"[{DateTime.Now:T}][{channel ?? "Log"}] {msg ?? string.Empty}";
+            var time = DateTime.Now;
+            channel ??= "Log";
+            string line = $"[{time:T}][{channel}] {msg ?? string.Empty}";
+
             Console.WriteLine(line);
             Trace.WriteLine(line);
+            Update?.Invoke(msg, channel, time);
         }
 
 
@@ -30,10 +39,13 @@ namespace StarfallAfterlife.Bridge.Diagnostics
             [CallerMemberName]string member = null,
             [CallerLineNumber]int line = 0)
         {
+            var time = DateTime.Now;
             var tag = $"{Path.GetFileName(file ?? string.Empty)}.{member}:{line}";
             var text = $"[{DateTime.Now:T}][{tag}] {msg ?? string.Empty}";
+
             Console.WriteLine(text);
             Trace.WriteLine(text);
+            Update?.Invoke(msg, tag, time);
         }
     }
 }

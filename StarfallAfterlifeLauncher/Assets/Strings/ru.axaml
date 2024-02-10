@@ -12,6 +12,7 @@
 	<sys:String x:Key="s_app_select_btn">ВЫБРАТЬ</sys:String>
 	<sys:String x:Key="s_app_edit_btn">ИЗМЕНИТЬ</sys:String>
 	<sys:String x:Key="s_app_copy_btn">КОПИРОВАТЬ</sys:String>
+	<sys:String x:Key="s_app_save_btn">СОХРАНИТЬ</sys:String>
 	
 	<sys:String x:Key="s_page_sp_header">ОДИНОЧНАЯ ИГРА</sys:String>
 	<sys:String x:Key="s_page_sp_add_realm_btn">СОЗДАТЬ МИР</sys:String>

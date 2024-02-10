@@ -4,14 +4,16 @@
 			   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			   xmlns:c="using:StarfallAfterlife.Launcher.Controls"
 			   mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-			   x:Class="StarfallAfterlife.Launcher.Pages.LogPage"
-			   DataContext="{Binding $self}">
+			   x:Class="StarfallAfterlife.Launcher.Pages.LogPage">
 	
 	<DockPanel LastChildFill="True">
 		<Panel DockPanel.Dock="Top">
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="15 10" Spacing="5">
 				<Label Content="d" FontFamily="{StaticResource IconsFont}" Classes="h3" VerticalContentAlignment="Center"/>
 				<Label Content="{DynamicResource s_page_log_header}" Classes="h3" VerticalContentAlignment="Center" Margin="0 2" />
+			</StackPanel>
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="15 10" Spacing="5">
+				<c:SfaButton Content="{DynamicResource s_app_save_btn}" Command="{Binding SaveLog}"/>
 			</StackPanel>
 			<c:Separator Height="2" Opacity="0.8" VerticalAlignment="Bottom"/>
 		</Panel>
@@ -26,16 +28,28 @@
 					</LinearGradientBrush>
 				</Rectangle.OpacityMask>
 			</Rectangle>
-			<c:SfaTextBox Name="LogOutput"
-						  Text="Start of the log!&#xD;&#xA;"
-						  IsReadOnly="True"
-						  Background="Transparent"
-						  BorderThickness="0"
-						  BorderBrush=""
-						  AcceptsReturn="True"
-						  TextWrapping="Wrap"
-						  FontFamily="Consolas"
-						  FontSize="14"/>
+			<c:SfaListBox Grid.Column="1"
+						  Name="Output"
+						  Margin="5 0"
+						  ItemsSource="{Binding DebugMsgStorage}">
+				<c:SfaListBox.ItemTemplate>
+					<DataTemplate>
+						<c:LogMsg DataContext="{Binding}"/>
+					</DataTemplate>
+				</c:SfaListBox.ItemTemplate>
+				<c:SfaListBox.Styles>
+					<Style Selector="c|SfaListBox ListBoxItem:selected">
+						<Style Selector="^ Border.itembackground">
+							<Setter Property="Opacity" Value="0.1"/>
+						</Style>
+						<Style Selector="^ Border.itemhighlight">
+							<Setter Property="BorderBrush" Value="{DynamicResource AccentColor}"/>
+							<Setter Property="BorderThickness" Value="1"/>
+							<Setter Property="Opacity" Value="0.5"/>
+						</Style>
+					</Style>
+				</c:SfaListBox.Styles>
+			</c:SfaListBox>
 			<c:Separator Height="2" Opacity="0.8" VerticalAlignment="Bottom"/>
 		</Panel>
 	</DockPanel>

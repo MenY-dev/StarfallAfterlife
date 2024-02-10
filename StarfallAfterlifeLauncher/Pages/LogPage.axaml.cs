@@ -1,16 +1,22 @@
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
+using Avalonia.LogicalTree;
 using Avalonia.Media;
 using Avalonia.Media.TextFormatting;
+using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
+using StarfallAfterlife.Bridge.Diagnostics;
 using StarfallAfterlife.Launcher.Controls;
 using StarfallAfterlife.Launcher.ViewModels;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -21,99 +27,156 @@ namespace StarfallAfterlife.Launcher.Pages
 {
     public partial class LogPage : SidebarPage
     {
+        public static readonly StyledProperty<SfaDebugMsgStorage> DebugMsgStorageProperty =
+            AvaloniaProperty.Register<LogPage, SfaDebugMsgStorage>(nameof(DebugMsgStorage), new());
+
+        public static readonly StyledProperty<bool> IsNeedAutoscrollProperty =
+            AvaloniaProperty.Register<LogPage, bool>(nameof(IsNeedAutoscroll), false);
+
+        public SfaDebugMsgStorage DebugMsgStorage => GetValue(DebugMsgStorageProperty);
+
+        public bool IsNeedAutoscroll
+        {
+            get => GetValue(IsNeedAutoscrollProperty);
+            set => SetValue(IsNeedAutoscrollProperty, value);
+        }
+
         protected override Type StyleKeyOverride => typeof(SidebarPage);
 
-        protected SfaTextBox Output {  get; set; }
+        private ConcurrentQueue<SfaDebugMsgViewModel> _queue = new();
+        private object _locker = new();
+        private bool _releseStarted = false;
+        private VirtualizingStackPanel _virtualizingPanel;
+
 
         public LogPage()
         {
+            DataContext = this;
+
             InitializeComponent();
-            Output = this.Find<SfaTextBox>("LogOutput");
-            Trace.Listeners.Add(new SfaTraceListener(Output));
+
+            SfaDebug.Update += OnSfaDebugUpdate;
         }
 
-        public class SfaTraceListener : TraceListener
+        public void ScrollDown()
         {
-            public SfaTextBox Output { get; }
-            private ConcurrentQueue<string> _queue = new();
-            private object _locker = new();
-            private bool _releseStarted = false;
+            _virtualizingPanel ??= Output.FindDescendantOfType<VirtualizingStackPanel>(true);
 
-            public SfaTraceListener(SfaTextBox output)
+            if (_virtualizingPanel is null)
+                Output.ScrollIntoView(DebugMsgStorage.Count - 1);
+            else
             {
-                Output = output;
+                for (int i = 0; i < 100; i++)
+                {
+                    Output.ScrollIntoView(DebugMsgStorage.Count - 1);
+
+                    if (_virtualizingPanel.LastRealizedIndex >= (DebugMsgStorage.Count - 1))
+                        break;
+                }
+            }
+        }
+
+        public void SaveLog()
+        {
+            var sb = new StringBuilder();
+            var nl = Environment.NewLine;
+
+            foreach (var item in DebugMsgStorage)
+            {
+                if (item is null)
+                    continue;
+
+                sb.Append($"[{item.Time:T}][{item.Channel ?? "Log"}]");
+
+                if (item.Count > 1)
+                {
+                    sb.Append('[');
+                    sb.Append(item.Count);
+                    sb.Append('}');
+                }
+
+                sb.Append(' ');
+                sb.Append(item.Msg ?? "");
+                sb.Append(nl);
             }
 
-            public override void Write(string message)
+            App.MainWindow?.StorageProvider.SaveFilePickerAsync(new()
             {
-                _queue.Enqueue(message ?? string.Empty);
-                ReleseQueue();
+                DefaultExtension = ".txt",
+                SuggestedFileName = "log",
+                FileTypeChoices = new[] { new FilePickerFileType("TXT") { Patterns = new[] { "*.txt" } }  }
+            }).ContinueWith((Task<IStorageFile> t) =>
+            {
+                try
+                {
+                    var file = t.Result;
+                    using var stream = file?.OpenWriteAsync().Result;
+
+                    if (stream is not null)
+                    {
+                        using var writer = new StreamWriter(stream, Encoding.UTF8);
+                        writer.Write(sb.ToString());
+                    }
+                }
+                catch (Exception e)
+                {
+                    SfaDebug.Log(e.ToString());
+                }
+            });
+        }
+
+        private void OnSfaDebugUpdate(string msg, string channel, DateTime time)
+        {
+            _queue.Enqueue(new() { Msg = msg, Channel = channel, Time = time });
+            ReleseQueue();
+        }
+
+        private void ReleseQueue()
+        {
+            lock (_locker)
+            {
+                if (_releseStarted == true)
+                    return;
+
+                _releseStarted = true;
             }
 
-            public override void WriteLine(string message)
-            {
-                _queue.Enqueue((message ?? string.Empty) + Environment.NewLine);
-                ReleseQueue();
-            }
+            var result = new List<SfaDebugMsgViewModel>(10);
 
-            private void ReleseQueue()
+            Task.Factory.StartNew(() =>
             {
+                int appendCount = 0;
+
+                do
+                {
+                    while (_queue.TryDequeue(out var item))
+                    {
+                        appendCount++;
+                        result.Add(item);
+                    }
+
+                    Task.Delay(10).Wait();
+
+                } while (_queue.Count > 0 && appendCount < 10);
+
                 lock (_locker)
                 {
-                    if (_releseStarted == true)
-                        return;
-
-                    _releseStarted = true;
+                    _releseStarted = false;
                 }
 
-                var output = new StringBuilder();
-
-                Task.Factory.StartNew(() =>
+                try
                 {
-                    int appendCount = 0;
-
-                    do
+                    Dispatcher.UIThread.Invoke(() =>
                     {
-                        while (_queue.TryDequeue(out string item))
+                        if (DebugMsgStorage is SfaDebugMsgStorage output)
                         {
-                            appendCount++;
-                            output.Append(item);
+                            foreach (var item in result)
+                                output.Add(item);
                         }
-
-                        Task.Delay(10).Wait();
-
-                    } while (_queue.Count > 0 && appendCount < 100);
-
-                    lock (_locker)
-                    {
-                        _releseStarted = false;
-                    }
-
-                    try
-                    {
-                        Dispatcher.UIThread.Invoke(() => SendToOutput(output.ToString()));
-                    }
-                    catch { }
-                });
-            }
-
-            private void SendToOutput(string message)
-            {
-                if (Output != null)
-                {
-                    var text = Output.Text ?? string.Empty;
-                    var maxLength = 100000;
-                    text += message;
-
-                    if (text.Length > maxLength)
-                        text = text.Substring(text.Length - maxLength, maxLength);
-
-                    Output.Text = text;
-
-                    if (Output.FindDescendantOfType<TextPresenter>() is TextPresenter presenter)
-                        Output.ScrollToLine(Math.Max(0, (presenter.TextLayout?.TextLines?.Count ?? 1) - 1));
+                    });
                 }
-            }
+                catch { }
+            });
         }
     }
 }

@@ -12,6 +12,7 @@
 	<sys:String x:Key="s_app_select_btn">SELECT</sys:String>
 	<sys:String x:Key="s_app_edit_btn">EDIT</sys:String>
 	<sys:String x:Key="s_app_copy_btn">COPY</sys:String>
+	<sys:String x:Key="s_app_save_btn">SAVE</sys:String>
 	
 	<sys:String x:Key="s_page_sp_header">SINGLE PLAYER</sys:String>
 	<sys:String x:Key="s_page_sp_add_realm_btn">CREATE REALM</sys:String>

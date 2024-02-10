@@ -86,7 +86,7 @@
 					<p:SinglePlayerModePage Name="SinglePlayerPage" DataContext="{Binding SinglePlayerPageViewModel}"/>
 					<p:FindServerPage Name="FindServerPage" DataContext="{Binding FindServerPageViewModel}"/>
 					<p:CreateServerPage Name="CreateServerPage" DataContext="{Binding CreateServerPageViewModel}"/>
-					<p:LogPage Name="LogPage" DataContext="{Binding}"/>
+					<p:LogPage Name="LogPage"/>
 					<p:SettingsPage Name="SettingsPage"/>
 				</c:SidebarPageContainer>
 

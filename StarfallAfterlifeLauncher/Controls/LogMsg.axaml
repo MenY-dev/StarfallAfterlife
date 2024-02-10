@@ -1,0 +1,99 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:c="using:StarfallAfterlife.Launcher.Controls"
+             xmlns:vm="using:StarfallAfterlife.Launcher.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="StarfallAfterlife.Launcher.Controls.LogMsg"
+			 IsExpanded="{Binding Expanded}"
+			 NeedCollapse="{Binding NeedCollapse}"
+			 CollapsedHeight="100">
+	
+	<Design.DataContext>
+		<vm:SfaDebugMsgViewModel Channel="TestChannel"
+								 Msg="TestMsg"
+								 Count="10"/>
+	</Design.DataContext>
+
+	<Panel>
+		<Grid RowDefinitions="Auto *"
+			  ColumnDefinitions="Auto Auto Auto * Auto"
+			  Margin="5 1 15 1">
+
+			<TextBlock Text="{Binding Channel}"
+					   Foreground="{DynamicResource AccentColor}"
+					   FontSize="12"
+					   FontWeight="DemiBold"
+					   Padding="0 3 5 3"
+					   VerticalAlignment="Center"
+					   Grid.Row="0"
+					   Grid.Column="0"/>
+
+			<TextBlock Text="{Binding Time, StringFormat=T}"
+					   FontSize="12"
+					   Opacity="0.5"
+					   Padding="5 3 10 3"
+					   VerticalAlignment="Center"
+					   Grid.Row="0"
+					   Grid.Column="1"/>
+
+			<Rectangle Fill="{DynamicResource AccentColor}"
+					   IsVisible="{Binding СontainsDuplicates}"
+					   IsHitTestVisible="False"
+					   Opacity="0.25"
+					   RadiusX="8"
+					   RadiusY="8"
+					   Grid.Row="0"
+					   Grid.Column="2"/>
+			
+			<Label Content="{Binding Count}"
+				   IsVisible="{Binding СontainsDuplicates}"
+				   FontSize="12"
+				   Padding="5 0"
+				   MinWidth="24"
+				   HorizontalContentAlignment="Center"
+				   VerticalAlignment="Center"
+				   Grid.Row="0"
+				   Grid.Column="2"/>
+			
+			<c:SfaButton Content="⭿"
+						 Command="{Binding ToggleExpand}"
+						 IsVisible="{Binding NeedCollapse}"
+						 HorizontalAlignment="Right"
+						 FontSize="12"
+						 Padding="5 2"
+						 Grid.Row="0"
+						 Grid.Column="5"/>
+			
+			<SelectableTextBlock Text="{Binding Msg}"
+							     FontSize="12"
+							     FontFamily="Consolas"
+							     TextWrapping="Wrap"
+							     Margin="10 2 0 0"
+							     Grid.Row="1"
+							     Grid.Column="0"
+							     Grid.ColumnSpan="5"/>
+			
+			<Rectangle Fill="Black"
+					   IsHitTestVisible="False"
+					   Margin="10 2 0 0"
+					   Grid.Row="1"
+					   Grid.Column="0"
+					   Grid.ColumnSpan="5">
+				<Rectangle.IsVisible>
+					<MultiBinding Converter="{x:Static BoolConverters.And}">
+						<Binding Path="NeedCollapse" />
+						<Binding Path="!Expanded" />
+					</MultiBinding>
+				</Rectangle.IsVisible>
+				<Rectangle.OpacityMask>
+					<LinearGradientBrush StartPoint="0% 0%" EndPoint="0% 100%">
+						<GradientStop Offset="0.5" Color="#00FFFFFF"/>
+						<GradientStop Offset="1" Color="#AAFFFFFF"/>
+					</LinearGradientBrush>
+				</Rectangle.OpacityMask>
+			</Rectangle>
+		</Grid>
+	</Panel>
+</UserControl>
