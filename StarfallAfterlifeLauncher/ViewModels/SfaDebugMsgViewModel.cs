@@ -12,7 +12,12 @@ namespace StarfallAfterlife.Launcher.ViewModels
         public string Msg
         {
             get => _msg;
-            set => SetAndRaise(ref _msg, value);
+            set
+            {
+                var needCollapseOld = СontainsDuplicates;
+                SetAndRaise(ref _msg, value);
+                RaisePropertyChanged(needCollapseOld, NeedCollapse, nameof(NeedCollapse));
+            }
         }
 
         public string Channel
@@ -30,7 +35,16 @@ namespace StarfallAfterlife.Launcher.ViewModels
         public int Count
         {
             get => _count;
-            set => SetAndRaise(ref _count, value);
+            set
+            {
+                var containsDuplicatesOld = СontainsDuplicates;
+
+                SetAndRaise(ref _count, value);
+                RaisePropertyChanged(
+                    containsDuplicatesOld,
+                    СontainsDuplicates,
+                    nameof(СontainsDuplicates));
+            }
         }
 
         public bool СontainsDuplicates => Count > 1;
