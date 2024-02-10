@@ -13,6 +13,8 @@
 				<Label Content="{DynamicResource s_page_log_header}" Classes="h3" VerticalContentAlignment="Center" Margin="0 2" />
 			</StackPanel>
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="15 10" Spacing="5">
+				<c:SfaCheckBox Content="{DynamicResource s_page_log_autoscroll_btn}" Margin="0 0 5 0" IsChecked="{Binding UseAutoscroll}"/>
+				<c:SfaButton Content="{DynamicResource s_page_log_in_window_btn}" Command="{Binding OpenConsole}"/>
 				<c:SfaButton Content="{DynamicResource s_app_save_btn}" Command="{Binding SaveLog}"/>
 			</StackPanel>
 			<c:Separator Height="2" Opacity="0.8" VerticalAlignment="Bottom"/>
@@ -31,6 +33,7 @@
 			<c:SfaListBox Grid.Column="1"
 						  Name="Output"
 						  Margin="5 0"
+						  AutoScrollToSelectedItem="False"
 						  ItemsSource="{Binding DebugMsgStorage}">
 				<c:SfaListBox.ItemTemplate>
 					<DataTemplate>

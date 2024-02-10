@@ -64,5 +64,44 @@ namespace StarfallAfterlife.Launcher.ViewModels
             Expanded = !Expanded;
         }
 
+        public override string ToString() => ToString();
+
+        public string ToString(int maxMsgLength = -1)
+        {
+            var sb = new StringBuilder();
+
+            sb.Append($"[{Time:T}][{Channel ?? "Log"}]");
+
+            if (Count > 1)
+            {
+                sb.Append('[');
+                sb.Append(Count);
+                sb.Append('}');
+            }
+
+            if (Msg is not null)
+            {
+                sb.Append(' ');
+
+                if (maxMsgLength > -1)
+                {
+                    var length = Math.Min(maxMsgLength, Msg.Length);
+                    sb.Append(Msg ?? "", 0, length);
+
+                    if (length < Msg.Length)
+                    {
+                        sb.Append("...[");
+                        sb.Append(Msg.Length - length);
+                        sb.Append(" chars truncated]");
+                    }
+                }
+                else
+                {
+                    sb.Append(Msg ?? "");
+                }
+            }
+
+            return sb.ToString();
+        }
     }
 }

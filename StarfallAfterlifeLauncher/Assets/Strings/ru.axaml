@@ -56,6 +56,8 @@
 	<sys:String x:Key="s_page_cs_dialog_starting">Заруск сервера...</sys:String>
 
 	<sys:String x:Key="s_page_log_header">ЛОГ</sys:String>
+	<sys:String x:Key="s_page_log_autoscroll_btn">Автопрокрутка</sys:String>
+	<sys:String x:Key="s_page_log_in_window_btn">В ОКНЕ</sys:String>
 
 	<sys:String x:Key="s_page_settings_header">НАСТРОЙКИ</sys:String>
 	<sys:String x:Key="s_page_settings_launcher_header">ЛАУНЧЕР</sys:String>
