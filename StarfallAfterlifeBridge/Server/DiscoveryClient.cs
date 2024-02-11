@@ -309,27 +309,44 @@ namespace StarfallAfterlife.Bridge.Server
             character.Party?.SetMemberStarSystem(character.UniqueId, system);
 
             if (character.Fleet is UserFleet fleet &&
-                Server.Matchmaker is SfaMatchmaker matchmaker &&
-                matchmaker.GetBattle(character) is DiscoveryBattle battle &&
-                battle.SystemBattle is StarSystemBattle systemBattle)
+                fleet.System is not null &&
+                Server.Matchmaker is SfaMatchmaker matchmaker)
             {
-                if (battle.State != MatchmakerBattleState.Finished &&
-                    systemBattle.IsPossibleToJoin == true)
+                Galaxy?.BeginPreUpdateAction(g =>
                 {
-                    Galaxy.BeginPreUpdateAction(g => systemBattle.AddToBattle(fleet, BattleRole.Join, Vector2.Zero));
-                }
-                else
-                {
-                    Galaxy.BeginPreUpdateAction(g =>
-                    {
-                        systemBattle.Leave(
-                            fleet,
-                            systemBattle.System?.GetNearestSafeHex(fleet, systemBattle.Hex) ?? default,
-                            false);
+                    var systemBattle = fleet.GetBattle();
 
-                        fleet.State = FleetState.InGalaxy;
+                    Invoke(c =>
+                    {
+                        if (systemBattle is not null &&
+                            matchmaker.GetBattle(systemBattle) is DiscoveryBattle battle)
+                        {
+                            var battleChar = battle.GetCharacter(character);
+
+                            if (battleChar is not null &&
+                                battleChar.InBattle == true &&
+                                battle.State != MatchmakerBattleState.Finished &&
+                                systemBattle.IsPossibleToJoin == true)
+                            {
+                                Galaxy.BeginPreUpdateAction(g => systemBattle.AddToBattle(fleet, BattleRole.Join, Vector2.Zero));
+                            }
+                            else
+                            {
+                                battle.Leave(battleChar, systemBattle.Hex);
+
+                                Galaxy.BeginPreUpdateAction(g =>
+                                {
+                                    systemBattle.Leave(
+                                        fleet,
+                                        systemBattle.System?.GetNearestSafeHex(fleet, systemBattle.Hex) ?? default,
+                                        false);
+
+                                    fleet.State = FleetState.InGalaxy;
+                                });
+                            }
+                        }
                     });
-                }
+                });
             }
         }
 

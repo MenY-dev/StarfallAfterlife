@@ -45,11 +45,11 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
         public Dictionary<string, JsonArray> Drops { get; } = new();
 
         protected CancellationTokenSource _cts;
-        protected readonly object _lockher = new();
+        protected readonly object _locker = new();
 
         public virtual void AddToBattle(BattleMember member)
         {
-            lock (_lockher)
+            lock (_locker)
             {
                 if (member?.Fleet is null ||
                     PendingMembers.FirstOrDefault(m => m.Fleet == member.Fleet) is not null)
@@ -98,7 +98,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         protected virtual void AddToActiveBattle(BattleMember member)
         {
-            lock (_lockher)
+            lock (_locker)
             {
                 if (member?.Fleet is null)
                     return;
@@ -130,7 +130,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         public void Leave(DiscoveryBattleCharacterInfo character, SystemHex spawnHex)
         {
-            lock (_lockher)
+            lock (_locker)
             {
                 Characters.Remove(character);
                 Galaxy?.BeginPreUpdateAction(g => SystemBattle?.Leave(character.Member, spawnHex));
@@ -139,7 +139,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         public void Leave(DiscoveryBattleMobInfo mob, SystemHex spawnHex)
         {
-            lock (_lockher)
+            lock (_locker)
             {
                 Mobs.Remove(mob);
                 Galaxy?.BeginPreUpdateAction(g => SystemBattle?.Leave(mob.Member, spawnHex));
@@ -252,7 +252,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
         {
             base.Init();
 
-            lock (_lockher)
+            lock (_locker)
             {
                 InstanceInfo.Type = InstanceType.DiscoveryBattle;
 
@@ -273,7 +273,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         public override void Start()
         {
-            lock (_lockher)
+            lock (_locker)
             {
                 if (Characters.Count > 0)
                 {
@@ -297,7 +297,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         protected virtual void StartInstance()
         {
-            lock (_lockher)
+            lock (_locker)
             {
                 State = MatchmakerBattleState.PendingMatch;
                 InstanceInfo.Characters.AddRange(Characters.Select(c => c.InstanceCharacter));
@@ -308,7 +308,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         public override void Stop()
         {
-            lock (_lockher)
+            lock (_locker)
             {
                 State = MatchmakerBattleState.Finished;
 
@@ -452,7 +452,12 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         public DiscoveryBattleCharacterInfo GetCharacter(ServerCharacter character)
         {
-            return Characters.FirstOrDefault(c => c.ServerCharacter == character);
+            if (character is null)
+                return null;
+
+            return Characters.FirstOrDefault(c => c.ServerCharacter == character) ??
+                   Characters.FirstOrDefault(c => c.ServerCharacter?.UniqueId == character.UniqueId &&
+                                                  c.ServerCharacter?.Id == character.Id);
         }
 
         public DiscoveryBattleCharacterInfo GetCharacter(int id)
@@ -464,7 +469,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
         {
             base.InstanceStateChanged(state);
 
-            lock (_lockher)
+            lock (_locker)
             {
                 if (state == InstanceState.Started)
                 {
@@ -487,7 +492,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         public void OnFleetLeavesFromInstance(DiscoveryObjectType fleetType, int fleetId, SystemHex hex)
         {
-            lock (_lockher)
+            lock (_locker)
             {
                 if (fleetType is DiscoveryObjectType.UserFleet)
                 {
@@ -504,7 +509,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         public ServerCharacter GetCharByShipId(int shipId)
         {
-            lock ( _lockher)
+            lock ( _locker)
             {
                 return Characters
                     .Select(c => c?.ServerCharacter)
@@ -516,7 +521,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
         {
             if (request.IsCustom == false)
             {
-                lock (_lockher)
+                lock (_locker)
                 {
                     var isBoss = false;
                     var mob =
@@ -581,7 +586,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         public void JoinToInstance(DiscoveryBattleCharacterInfo character, string newAuth = null)
         {
-            lock (_lockher)
+            lock (_locker)
             {
                 if (character is null)
                     return;
@@ -602,7 +607,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         public void OnMobDestroyed(string data)
         {
-            lock (_lockher)
+            lock (_locker)
             {
                 if (JsonNode.Parse(data) is JsonObject doc &&
                 (DiscoveryObjectType?)(byte?)doc["killer_type"] == DiscoveryObjectType.UserFleet &&
@@ -672,7 +677,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
             if (character is null)
                 return false;
 
-            lock (_lockher)
+            lock (_locker)
                 return Characters?.Any(c => c?.ServerCharacter == character) == true;
         }
 
@@ -726,13 +731,13 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         public override JsonArray GetDropList(string dropName)
         {
-            lock (_lockher)
+            lock (_locker)
                 return Drops.GetValueOrDefault(dropName) ?? base.GetDropList(dropName);
         }
 
         public virtual void HandleInstanceObjectInteractEvent(string data)
         {
-            lock (_lockher)
+            lock (_locker)
             {
                 if (JsonHelpers.ParseNodeUnbuffered(data ?? "") is JsonObject doc &&
                     (DiscoveryObjectType?)(byte?)doc["obj_type"] is DiscoveryObjectType.UserFleet &&
@@ -748,7 +753,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         public virtual void HandleSecretObjectLooted(string data)
         {
-            lock (_lockher)
+            lock (_locker)
             {
                 if (JsonHelpers.ParseNodeUnbuffered(data ?? "") is JsonObject doc &&
                     (int?)doc["obj_id"] is int secretId)
@@ -761,7 +766,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         public virtual void HandleOreTaken(InventoryItem[] ores)
         {
-            lock (_lockher)
+            lock (_locker)
             {
                 if (ores is not null &&
                     SystemBattle.RichAsteroidField is StarSystemRichAsteroid field)
@@ -778,9 +783,31 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         public virtual void UpdatePartyMembers(int partyId, List<CharacterPartyMember> members)
         {
-            lock (_lockher)
+            lock (_locker)
             {
                 GameMode.InstanceManager.UpdatePartyMembers(InstanceInfo, partyId, members ?? new());
+            }
+        }
+
+        public override void CharStatusChanged(ServerCharacter character, UserInGameStatus status)
+        {
+            base.CharStatusChanged(character, status);
+
+            lock (_locker)
+            {
+                if (GetCharacter(character) is DiscoveryBattleCharacterInfo info)
+                {
+                    switch (status)
+                    {
+                        case UserInGameStatus.CharInBattle:
+                            info.InBattle = true;
+                            break;
+                        default:
+                            if (info.InBattle == false)
+                                Leave(info, new(0, 1));
+                            break;
+                    }
+                }
             }
         }
     }

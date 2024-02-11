@@ -342,6 +342,17 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
             }
         }
 
+        public MatchmakerBattle GetBattle(StarSystemBattle systemBattle)
+        {
+            if (systemBattle is null)
+                return null;
+
+            lock (Lockher)
+            {
+                return Battles.FirstOrDefault(b => (b as DiscoveryBattle)?.SystemBattle == systemBattle);
+            }
+        }
+
         public MatchmakerBattle GetBattle(string auth)
         {
             lock (Lockher)

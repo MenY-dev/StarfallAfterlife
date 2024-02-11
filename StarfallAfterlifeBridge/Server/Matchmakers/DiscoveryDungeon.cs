@@ -24,7 +24,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
     {
         public override void Start()
         {
-            lock (_lockher)
+            lock (_locker)
             {
                 InstanceInfo.Type = InstanceType.DiscoveryDungeon;
                 InstanceInfo.DungeonFaction = SystemBattle?.DungeonInfo?.Target?.Faction ?? Faction.None;
@@ -189,7 +189,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         public override JsonNode GetMobData(MobDataRequest request)
         {
-            lock (_lockher)
+            lock (_locker)
             {
                 if (SystemBattle?.IsDungeon == true &&
                     SystemBattle.DungeonInfo?.Target is SecretObject secret &&

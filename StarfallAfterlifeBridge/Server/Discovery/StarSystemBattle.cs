@@ -118,7 +118,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                 member.Fleet is null)
                 return;
 
-            Members.RemoveAll(m => m.Fleet == member.Fleet);
+            Members.RemoveAll(m => m.Fleet?.IsSystemObjectEquals(member.Fleet) == true);
 
             if (Members.Contains(member) == false)
                 Members.Add(member);
@@ -131,11 +131,16 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
         }
 
         public virtual void Leave(DiscoveryFleet fleet, SystemHex spawnHex, bool destroyed = false) =>
-            Leave(Members.FirstOrDefault(m => m.Fleet == fleet), spawnHex, destroyed);
+            Leave(GetMember(fleet), spawnHex, destroyed);
 
         public virtual void Leave(BattleMember member, SystemHex spawnHex, bool destroyed = false)
         {
-            if (member is not null && Members.Remove(member) == true && member.Fleet is DiscoveryFleet fleet)
+            if (Members.Contains(member) == false)
+                member = GetMember(member?.Fleet);
+
+            if (member is not null &&
+                Members.Remove(member) == true &&
+                member.Fleet is DiscoveryFleet fleet)
             {
                 if (fleet.System is StarSystem system)
                 {
@@ -178,8 +183,21 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             }
         }
 
-        public virtual BattleMember GetMember(DiscoveryFleet fleet) =>
-            Members?.FirstOrDefault(m => m.Fleet == fleet);
+        public virtual BattleMember GetMember(DiscoveryFleet fleet)
+        {
+            if (fleet is null)
+                return null;
+
+            return Members?.FirstOrDefault(m =>
+            {
+                if (m?.Fleet is DiscoveryFleet secondFleet &&
+                    secondFleet.Type == fleet.Type &&
+                    secondFleet.Id == fleet.Id)
+                    return true;
+
+                return false;
+            });
+        }
 
         public bool IsInBattle(StarSystemObject obj) => 
             obj is not null &&

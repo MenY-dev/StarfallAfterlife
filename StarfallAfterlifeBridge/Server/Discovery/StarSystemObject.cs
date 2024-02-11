@@ -89,5 +89,15 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             base.Broadcast(action, l => l is not IStarSystemListener && predicate.Invoke(l));
             System?.Broadcast(action, l => l is IStarSystemListener && predicate.Invoke(l));
         }
+
+        public bool IsSystemObjectEquals(StarSystemObject other)
+        {
+            if (other is null ||
+                other.Type != Type ||
+                other.Id != Id)
+                return false;
+
+            return true;
+        }
     }
 }
