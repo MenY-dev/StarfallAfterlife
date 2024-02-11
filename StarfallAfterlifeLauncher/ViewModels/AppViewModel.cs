@@ -752,6 +752,7 @@ namespace StarfallAfterlife.Launcher.ViewModels
                 LatestRelese = t.Result;
 
                 if (LatestRelese is not null &&
+                    LatestRelese.Version > SfaServer.Version &&
                     UseAutoUpdate == true &&
                     _isAutoUpdateCheckCompleted == false)
                 {
