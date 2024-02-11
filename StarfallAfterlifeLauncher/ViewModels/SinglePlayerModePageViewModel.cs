@@ -32,9 +32,34 @@ namespace StarfallAfterlife.Launcher.ViewModels
                 AppVM = new AppViewModel();
         }
 
+        public int SelectedLocalRealmIndex
+        {
+            get => AppVM?.Realms.IndexOf(AppVM?.SelectedLocalRealm) ?? 0;
+            set
+            {
+                if (AppVM is AppViewModel appVM)
+                    appVM.SelectedLocalRealm = appVM.Realms.ElementAtOrDefault(value);
+            }
+        }
+
+        private int _selectedLocalRealmIndex;
+
         public SinglePlayerModePageViewModel(AppViewModel mainWindowViewModel)
         {
             AppVM = mainWindowViewModel;
+
+            if (AppVM is AppViewModel appVM)
+            {
+                appVM.PropertyChanged += (o, e) =>
+                {
+                    if (e.PropertyName == nameof(appVM.SelectedLocalRealm))
+                    {
+                        var tmp = _selectedLocalRealmIndex;
+                        _selectedLocalRealmIndex = appVM.Realms.IndexOf(AppVM?.SelectedLocalRealm);
+                        RaisePropertyChanged(tmp, _selectedLocalRealmIndex, nameof(SelectedLocalRealmIndex));
+                    }
+                };
+            }
         }
 
         public Task CreateNewRealm()
