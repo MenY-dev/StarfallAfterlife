@@ -23,7 +23,7 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
     {
         public delegate void UseStreamDelegate(Stream stream);
 
-        public bool IsConnected => TcpClient?.Client?.Connected ?? false;
+        public bool IsConnected => (TcpClient?.Client?.Connected ?? false) && _readingAvailable;
 
         public event EventHandler<EventArgs> ConnectionEnd;
 
@@ -33,6 +33,8 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
 
         public DateTime LastInput { get; protected set; }
 
+        protected TaskCompletionSource<bool> ConnectionCompletion;
+
         protected readonly object _locker = new();
 
         protected bool disposed;
@@ -40,6 +42,8 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
         private Dictionary<Guid, MessagingResponse> _responses = new();
 
         private readonly object _requestsLockher = new();
+
+        private bool _readingAvailable = false;
 
         public MessagingClient() { }
 
@@ -53,6 +57,8 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
 
             lock (_locker)
             {
+                _readingAvailable = true;
+                ConnectionCompletion = new();
                 TcpClient = new TcpClient();
                 TcpClient.BeginConnect(address.Host, address.Port, OnClientConnected, TcpClient);
             }
@@ -60,15 +66,8 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
 
         public Task<bool> ConnectAsync(Uri address)
         {
-            var waiter = EventWaiter<EventArgs>
-                .Create()
-                .Subscribe(e => ConnectionEnd += e)
-                .Unsubscribe(e => ConnectionEnd -= e)
-                .Start()
-                .ContinueWith(t => IsConnected);
-
             Connect(address);
-            return waiter;
+            return ConnectionCompletion.Task;
         }
 
         public void Connect(TcpClient tcpClient)
@@ -81,10 +80,17 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
 
             lock (_locker)
             {
+                _readingAvailable = true;
+                ConnectionCompletion = new();
                 TcpClient = tcpClient;
             }
 
-            ConnectionEnd?.Invoke(this, EventArgs.Empty);
+            lock (_locker)
+            {
+                ConnectionEnd?.Invoke(this, new());
+                ConnectionCompletion?.TrySetResult(IsConnected);
+            }
+
             HandleInputStream();
         }
 
@@ -94,8 +100,12 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
             {
                 try
                 {
+                    _readingAvailable = false;
+
                     if (TcpClient?.Connected == true)
                         TcpClient.Close();
+
+                    ConnectionCompletion?.TrySetResult(IsConnected);
                 }
                 catch
                 {
@@ -114,11 +124,18 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
             }
             catch
             {
+                SfaDebug.Print($"Connection faled!", GetType().Name);
                 return;
             }
 
-            ConnectionEnd?.Invoke(this, EventArgs.Empty);
             SfaDebug.Print($"Connected to serveer!", GetType().Name);
+
+            lock (_locker)
+            {
+                ConnectionEnd?.Invoke(this, new());
+                ConnectionCompletion?.SetResult(IsConnected);
+            }
+
             HandleInputStream();
         }
 
@@ -147,40 +164,42 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
 
                 try
                 {
-                    var stream = TcpClient.GetStream();
-
-                    while (IsConnected == true)
+                    if (TcpClient is TcpClient client &&
+                        client?.GetStream() is NetworkStream stream)
                     {
-                        var header = MessagingHeader.ReadNext(stream);
-                        buffer.Seek(0, SeekOrigin.Begin);
-
-                        if (header.Method == MessagingMethod.Binary ||
-                            header.Method == MessagingMethod.Text ||
-                            header.Method == MessagingMethod.BinaryRequest ||
-                            header.Method == MessagingMethod.TextRequest)
+                        while (IsConnected == true)
                         {
-                            CopyToBuffer(stream, header.Length);
-                            buffer.SetLength(buffer.Position);
+                            var header = MessagingHeader.ReadNext(stream);
                             buffer.Seek(0, SeekOrigin.Begin);
-                        }
-                        else if (header.Method == MessagingMethod.HTTP && version == 0)
-                        {
-                            OnReceiveHttpInternal(header, stream);
-                            break;
-                        }
 
-                        version++;
-                        OnReceiveInternal(header, buffer, reader);
+                            if (header.Method == MessagingMethod.Binary ||
+                                header.Method == MessagingMethod.Text ||
+                                header.Method == MessagingMethod.BinaryRequest ||
+                                header.Method == MessagingMethod.TextRequest)
+                            {
+                                CopyToBuffer(stream, header.Length);
+                                buffer.SetLength(buffer.Position);
+                                buffer.Seek(0, SeekOrigin.Begin);
+                            }
+                            else if (header.Method == MessagingMethod.HTTP && version == 0)
+                            {
+                                OnReceiveHttpInternal(header, stream);
+                                break;
+                            }
 
-                        if (buffer.Length > 20480)
-                        {
-                            //buffer.SetLength(0);
-                            //buffer.TrimBufferToLength();
-                            //GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
-                            //GC.Collect(GC.MaxGeneration, GCCollectionMode.Optimized);
+                            version++;
+                            OnReceiveInternal(header, buffer, reader);
+
+                            if (buffer.Length > 20480)
+                            {
+                                //buffer.SetLength(0);
+                                //buffer.TrimBufferToLength();
+                                //GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
+                                //GC.Collect(GC.MaxGeneration, GCCollectionMode.Optimized);
+                            }
+
+                            LastInput = DateTime.Now;
                         }
-
-                        LastInput = DateTime.Now;
                     }
                 }
                 catch (Exception e)
@@ -190,6 +209,7 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
                 }
                 finally
                 {
+                    _readingAvailable = false;
                     Close();
                     OnDisconnected();
                     SfaDebug.Log("Disconnected!");
