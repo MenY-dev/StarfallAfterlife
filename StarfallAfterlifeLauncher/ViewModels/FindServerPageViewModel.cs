@@ -32,9 +32,13 @@ namespace StarfallAfterlife.Launcher.ViewModels
             set => SetAndRaise(ref _selectedServer, value);
         }
 
-        public bool IsUpdateStarted { get; protected set; }
+        public bool IsUpdateStarted
+        {
+            get => _isUpdateStarted;
+            protected set => SetAndRaise(ref _isUpdateStarted, value);
+        }
 
-        private Task _updateTask;
+        private CancellationTokenSource _updateCTS;
         private RemoteServerInfoViewModel _selectedServer;
 
         public string ServerAddress
@@ -47,6 +51,7 @@ namespace StarfallAfterlife.Launcher.ViewModels
         }
 
         private string _serverAddress;
+        private bool _isUpdateStarted;
 
         public FindServerPageViewModel(AppViewModel appVM)
         {
@@ -160,37 +165,32 @@ namespace StarfallAfterlife.Launcher.ViewModels
         {
             if (Launcher is SfaLauncher launcher)
             {
-                launcher.SaveServerList();
-
-                var oldTask = _updateTask;
-                var progress = new Progress<RemoteServerInfo>(info =>
+                if (_updateCTS?.IsCancellationRequested == false)
                 {
-                    Dispatcher.UIThread.Invoke(() =>
-                    {
-                        var vm = Servers.FirstOrDefault(vm => vm?.Info == info);
-
-                        if (vm is not null)
-                            vm.Info = info;
-                    });
-                });
-
-                var task = _updateTask = launcher.UpdateServerList(progress);
+                    _updateCTS?.Cancel();
+                    _updateCTS = null;
+                    IsUpdateStarted = false;
+                }
 
                 IsUpdateStarted = true;
-                RaisePropertyChanged(oldTask is not null, IsUpdateStarted, nameof(IsUpdateStarted));
+                var cts = _updateCTS = new();
 
-                _updateTask.ContinueWith(t => Dispatcher.UIThread.Invoke(() => 
+                var results = Servers.Select(s => s.Update(cts.Token)).ToArray();
+
+                Task.Factory.StartNew(() =>
                 {
-                    launcher.SaveServerList();
-                    UpdateList();
-
-                    if (_updateTask == task)
+                    try
                     {
-                        IsUpdateStarted = false;
-                        RaisePropertyChanged(true, false, nameof(IsUpdateStarted));
-                        _updateTask = null;
+                        Task.WhenAll(results).Wait(6000, cts.Token);
+
+                        Dispatcher.UIThread.Invoke(() =>
+                        {
+                            IsUpdateStarted = false;
+                        });
                     }
-                }));
+                    catch { }
+                    
+                }, cts.Token);
             }
         }
 
