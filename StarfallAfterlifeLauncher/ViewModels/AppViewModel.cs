@@ -143,12 +143,12 @@ namespace StarfallAfterlife.Launcher.ViewModels
 
         public string CurrentFullVersion
         {
-            get => $"v {SfaServer.Version.ToString(3)} (alpha)";
+            get => $"v{SfaServer.Version.ToString(3)}";
         }
 
         public string CurrentVersion
         {
-            get => $"v {SfaServer.Version.ToString(2)} (alpha)";
+            get => $"v{SfaServer.Version.ToString(2)}";
         }
 
         public string CurrentBuild
