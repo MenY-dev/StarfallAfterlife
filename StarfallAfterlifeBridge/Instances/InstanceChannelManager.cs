@@ -25,7 +25,6 @@ namespace StarfallAfterlife.Bridge.Instances
             if (instance is not null)
             {
                 instance.ConnectChannels(client);
-                instance.SetInstanceReady();
             }
         }
     }

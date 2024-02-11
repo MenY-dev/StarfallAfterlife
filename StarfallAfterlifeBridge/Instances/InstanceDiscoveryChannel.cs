@@ -23,6 +23,12 @@ namespace StarfallAfterlife.Bridge.Instances
         {
         }
 
+        public override void Register(ChannelClient client)
+        {
+            base.Register(client);
+            Instance?.SetInstanceReady();
+        }
+
         public override void Input(ChannelClient client, byte[] data)
         {
             base.Input(client, data);
