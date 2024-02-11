@@ -157,6 +157,9 @@ namespace StarfallAfterlife.Bridge.Server
             {
                 UseClients(clients =>
                 {
+                    clients.Remove(client);
+                    Players.Remove(client);
+
                     var clientCharacters = client.DiscoveryClient?.Characters;
 
                     if (clientCharacters is not null)
@@ -171,8 +174,6 @@ namespace StarfallAfterlife.Bridge.Server
                         }
                     }
 
-                    clients.Remove(client);
-                    Players.Remove(client);
                     client.Close();
                     client.Dispose();
                 });

@@ -192,16 +192,25 @@ namespace StarfallAfterlife.Bridge.Server
 
                     return client.ConnectAsync(new Uri($"tcp://{address}")).ContinueWith(_ =>
                     {
-                        return client.SendRequest(SfaServerAction.GetServerInfo, timeout).ContinueWith(t =>
+                        try
                         {
-                            if (t.Result is SfaClientResponse response &&
-                                response.IsSuccess == true &&
-                                response.Text is string text &&
-                                JsonHelpers.ParseNodeUnbuffered(text) is JNode node)
-                                return node;
+                            var result = client.SendRequest(SfaServerAction.GetServerInfo, timeout).ContinueWith(t =>
+                            {
+                                if (t.Result is SfaClientResponse response &&
+                                    response.IsSuccess == true &&
+                                    response.Text is string text &&
+                                    JsonHelpers.ParseNodeUnbuffered(text) is JNode node)
+                                    return node;
 
+                                return null;
+                            }).Result;
+                            client.Close();
+                            return result;
+                        }
+                        catch
+                        {
                             return null;
-                        }).Result;
+                        }
                     }).Result;
                 }
                 catch

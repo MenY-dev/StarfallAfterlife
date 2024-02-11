@@ -17,6 +17,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -196,6 +197,15 @@ namespace StarfallAfterlife.Launcher.ViewModels
 
         public void ConnectToServer()
         {
+            var gameLoadingPopup = new SfaMessageBox()
+            {
+                Title = App.GetString("s_dialog_game_starting_title"),
+                Text = App.GetString("s_dialog_game_starting_loading"),
+                Buttons = MessageBoxButton.Undefined,
+            };
+
+            gameLoadingPopup.ShowDialog();
+
             if (ServerStarted == true &&
                 Launcher is SfaLauncher launcher &&
                 Server is SfaServer server &&
@@ -214,12 +224,64 @@ namespace StarfallAfterlife.Launcher.ViewModels
                     try
                     {
                         if (address.Equals(IPAddress.Any) == true)
-                            address = Interfaces.FirstOrDefault()?.Address;
+                        {
+                            address = null;
 
-                        if (address is null)
-                            return;
+                            Task.Factory.StartNew(() =>
+                            {
+                                IPAddress newAddress = null;
+                                AutoResetEvent monitor = new(true);
+                                object locker = new();
 
-                        appVM.StartGame(profile, new IPEndPoint(address, ServerPort).ToString(), () => server.Password);
+                                try
+                                {
+                                    monitor.Reset();
+
+                                    var interfaces = Interfaces
+                                        .ToArray()
+                                        .Where(i => i is not null &&
+                                               i.Address is not null &&
+                                               IPAddress.Any.Equals(i.Address) == false);
+
+                                    foreach (var item in interfaces)
+                                    {
+                                        SfaClient
+                                            .GetServerInfo(
+                                                new IPEndPoint(item.Address, ServerPort).ToString(), 4000)
+                                            .ContinueWith(t =>
+                                            {
+                                                if (t.IsCanceled == true || t.Result is null)
+                                                    return;
+
+
+                                                lock (locker)
+                                                {
+                                                    if (newAddress is null)
+                                                    {
+                                                        newAddress = item.Address;
+                                                        monitor.Set();
+                                                    }
+                                                }
+                                            });
+                                    }
+                                }
+                                catch
+                                {
+                                    monitor.Set();
+                                }
+
+                                monitor.WaitOne(4000);
+                                address = newAddress;
+                            }).ContinueWith(t =>
+                            {
+                                Dispatcher.UIThread.Invoke(() => gameLoadingPopup?.Close());
+
+                                if (address is null)
+                                    return;
+
+                                appVM.StartGame(profile, new IPEndPoint(address, ServerPort).ToString(), () => server.Password);
+                            });
+                        }
                     }
                     catch { }
                 });
