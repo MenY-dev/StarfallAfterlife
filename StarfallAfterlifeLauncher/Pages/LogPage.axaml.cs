@@ -49,6 +49,8 @@ namespace StarfallAfterlife.Launcher.Pages
         private bool _releseStarted = false;
         private VirtualizingStackPanel _virtualizingPanel;
         private ScrollViewer _scroll;
+        private bool _fullScrollStarted;
+        private int _fullScrollTakeCount;
         private Process _currentConsole;
 
 
@@ -66,47 +68,54 @@ namespace StarfallAfterlife.Launcher.Pages
             _virtualizingPanel ??= Output.FindDescendantOfType<VirtualizingStackPanel>(true);
             _scroll ??= Output.FindDescendantOfType<ScrollViewer>(true);
 
-            if (_virtualizingPanel is not null &&
-                _scroll is not null &&
-                IsEffectivelyVisible == true)
+            try
             {
-                var takeCount = 0;
-
-                void FullScrollDown()
+                if (_virtualizingPanel is not null &&
+                    _scroll is not null &&
+                    IsEffectivelyVisible == true)
                 {
-                    try
-                    {
-                        if (takeCount > 3)
-                            return;
-
-                        var scroll = _scroll;
-
-                        EventWaiter<ScrollChangedEventArgs>
-                            .Create()
-                            .Subscribe(e => scroll.ScrollChanged += e)
-                            .Unsubscribe(e => scroll.ScrollChanged -= e)
-                            .Start(1000)
-                            .ContinueWith(t => Dispatcher.UIThread.Invoke(() =>
-                            {
-                                if (t.Result == true)
-                                {
-                                    var needScroll = Math.Abs(scroll.Offset.Y - scroll.Extent.Height + scroll.Viewport.Height) != 0;
-
-                                    if (needScroll == true &&
-                                        UseAutoscroll == true)
-                                    {
-                                        takeCount++;
-                                        FullScrollDown();
-                                    }
-                                }
-                            }));
-
-                        _scroll.ScrollToEnd();
-                    }
-                    catch { }
+                    _fullScrollTakeCount = 0;
+                    _fullScrollStarted = true;
+                    _scroll.ScrollChanged -= OnLogScrollChanged;
+                    _scroll.ScrollChanged += OnLogScrollChanged;
+                    _scroll.ScrollToEnd();
                 }
+            }
+            catch
+            {
+                _fullScrollTakeCount = 0;
+                _fullScrollStarted = false;
+            }
+        }
 
-                FullScrollDown();
+        private void OnLogScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            if (_fullScrollStarted == false ||
+                _scroll is null)
+                return;
+
+            try
+            {
+                var needScroll = Math.Abs(_scroll.Offset.Y - _scroll.Extent.Height + _scroll.Viewport.Height) != 0;
+
+                if (needScroll == true &&
+                    UseAutoscroll == true &&
+                    _fullScrollTakeCount < 4)
+                {
+                    _fullScrollTakeCount++;
+                    _scroll.ScrollToEnd();
+                }
+                else
+                {
+                    _fullScrollStarted = false;
+                    _fullScrollTakeCount = 0;
+                    _scroll.ScrollChanged -= OnLogScrollChanged;
+                }
+            }
+            catch
+            {
+                _fullScrollTakeCount = 0;
+                _fullScrollStarted = false;
             }
         }
 
