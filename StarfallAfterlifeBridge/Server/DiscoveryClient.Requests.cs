@@ -570,7 +570,9 @@ namespace StarfallAfterlife.Bridge.Server
                 {
                     Invoke(() =>
                     {
-                        var cost = SfaDatabase.GetWarpingCost(g?.Map?.GetSystem(systemId)?.Level ?? 0);
+                        var systemInfo = g?.Map?.GetSystem(systemId);
+                        var cost = systemInfo?.Faction == fleet.Faction ?
+                            0 : SfaDatabase.GetWarpingCost(systemInfo?.Level ?? 0);
                         CurrentCharacter?.AddCharacterCurrencies(igc: -cost);
 
                         Galaxy.BeginPostUpdateAction(g =>
@@ -592,7 +594,8 @@ namespace StarfallAfterlife.Bridge.Server
                 if (CurrentCharacter is ServerCharacter character)
                 {
                     var ships = character.Ships;
-                    var cost = SfaDatabase.GetWarpingCost(Galaxy?.Map?.GetSystem(systemId)?.Level ?? 0);
+                    var system = Galaxy?.Map?.GetSystem(systemId);
+                    var cost = SfaDatabase.GetWarpingCost(system?.Level ?? 0);
                     var dst = CargoTransactionEndPoint.CreateForCharacterInventory(character);
                     var result = 0;
 
@@ -620,7 +623,8 @@ namespace StarfallAfterlife.Bridge.Server
 
                     if (result > 0)
                     {
-                        character.AddCharacterCurrencies(igc: -cost);
+                        if (character.Faction != system?.Faction)
+                            character.AddCharacterCurrencies(igc: -cost);
 
                         SynckSessionFleetInfo();
                         SendFleetCargo();
