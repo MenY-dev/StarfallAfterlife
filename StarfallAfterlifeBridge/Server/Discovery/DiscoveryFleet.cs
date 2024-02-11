@@ -237,10 +237,13 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
         protected virtual void OnAttackTargetObjectReached(StarSystemObject target)
         {
-            if (target is null || target.System != System)
+            if (System is null || target is null || target.System != System)
                 return;
 
-            if (System?.GetBattle(target) is StarSystemBattle currentBattle)
+            var currentBattle = System.GetBattle(target) ?? System.GetBattle(Hex);
+
+            if (currentBattle is not null &&
+                currentBattle.IsPossibleToJoin == true)
             {
                 currentBattle.AddToBattle(this, BattleRole.Join, CreateHexOffset());
                 return;
@@ -285,6 +288,13 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
         public virtual void ExploreCurrentHex()
         {
+            if (System?.GetBattle(Hex) is StarSystemBattle currentBattle &&
+                currentBattle.IsPossibleToJoin == true)
+            {
+                currentBattle.AddToBattle(this, BattleRole.Join, CreateHexOffset());
+                return;
+            }
+
             var battle = new StarSystemBattle
             {
                 Hex = Hex,
@@ -302,6 +312,13 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
         public virtual void ExploreSecretObject(SecretObject secret)
         {
+            if (System?.GetBattle(Hex) is StarSystemBattle currentBattle &&
+                currentBattle.IsPossibleToJoin == true)
+            {
+                currentBattle.AddToBattle(this, BattleRole.Join, CreateHexOffset());
+                return;
+            }
+
             if (secret is null || secret.System != System)
                 return;
 

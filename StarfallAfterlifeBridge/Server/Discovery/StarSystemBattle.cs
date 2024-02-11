@@ -158,7 +158,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                 else
                 {
                     if (fleet is UserFleet)
-                        fleet.AddEffect(new(){Duration = 10, Logic = GameplayEffectType.Immortal});
+                        fleet.AddEffect(new() { Duration = 10, Logic = GameplayEffectType.Immortal });
 
                     fleet.SetFleetState(FleetState.InGalaxy);
                     fleet.System?.Broadcast<IStarSystemObjectListener>(l => l.OnObjectSpawned(member.Fleet));
@@ -199,11 +199,16 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             });
         }
 
-        public bool IsInBattle(StarSystemObject obj) => 
-            obj is not null &&
-            (
-                GetMember(obj as DiscoveryFleet) is not null ||
-                DungeonInfo?.Target == obj
-            );
+        public bool IsInBattle(StarSystemObject obj)
+        {
+            if (obj is null)
+                return false;
+
+            if (GetMember(obj as DiscoveryFleet) is not null ||
+                DungeonInfo?.Target?.IsSystemObjectEquals(obj) is true)
+                return true;
+
+            return false;
+        }
     }
 }

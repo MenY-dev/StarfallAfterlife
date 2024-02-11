@@ -475,13 +475,13 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 {
                     State = MatchmakerBattleState.Started;
 
+                    foreach (var character in Characters)
+                        JoinToInstance(character);
+
                     foreach (var member in PendingMembers)
                         AddToActiveBattle(member);
 
                     PendingMembers.Clear();
-
-                    foreach (var character in Characters)
-                        JoinToInstance(character);
                 }
                 else if (state == InstanceState.Finished)
                 {
