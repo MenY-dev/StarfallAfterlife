@@ -21,7 +21,7 @@ class Program
     {
         if (args.Any(i => i?.Contains("-LogConsole", StringComparison.InvariantCultureIgnoreCase) == true))
         {
-            StartAsLogConsole();
+            LogConsoleProgram.Start(args);
             return;
         }
 
@@ -42,67 +42,4 @@ class Program
             .UsePlatformDetect()
             .WithInterFont()
             .LogToTrace();
-
-    private static void StartAsLogConsole()
-    {
-        try
-        {
-            AllocConsole();
-
-            var nl = Environment.NewLine;
-            long skipped = 0;
-            var monitor = new ManualResetEvent(false);
-            var bufferSize = 1000;
-            var buffer = new Queue<string>();
-            using var stdin = Console.OpenStandardInput();
-            using var reader = new StreamReader(
-                Console.OpenStandardInput(),
-                Console.InputEncoding,
-                false,
-                2048);
-
-            Task.Factory.StartNew(() =>
-            {
-                try
-                {
-                    while (true)
-                    {
-                        monitor.WaitOne();
-                        
-                        if (buffer.TryDequeue(out var line) == true &&
-                            line is not null)
-                        {
-                            Console.WriteLine(line);
-                            skipped = 0;
-                        }
-                    }
-                }
-                catch { }
-            });
-
-            while (true)
-            {
-                var line = reader.ReadLine();
-
-                monitor.Reset();
-
-                if (line is not null)
-                    buffer.Enqueue(line);
-
-                if (buffer.Count >= bufferSize)
-                {
-                    skipped += bufferSize;
-                    buffer.Clear();
-                    buffer.Enqueue($"{nl}[Skipped {skipped} lines!]{nl}");
-                }
-
-                monitor.Set();
-            }
-        }
-        catch { }
-    }
-
-    [DllImport("kernel32.dll", SetLastError = true)]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool AllocConsole();
 }
