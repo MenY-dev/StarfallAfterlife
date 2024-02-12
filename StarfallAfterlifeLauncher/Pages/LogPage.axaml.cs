@@ -123,10 +123,12 @@ namespace StarfallAfterlife.Launcher.Pages
         {
             base.OnPropertyChanged(change);
 
-            if (change.Property == UseAutoscrollProperty &&
-                (change.NewValue as bool?) == true)
+            if (change.Property == UseAutoscrollProperty ||
+                change.Property == IsShowProperty)
             {
-                ScrollDown();
+                if (UseAutoscroll == true &&
+                    IsShow == true)
+                    Dispatcher.UIThread.Post(() => ScrollDown());
             }
         }
 
