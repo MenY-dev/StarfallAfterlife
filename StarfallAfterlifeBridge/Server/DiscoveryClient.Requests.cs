@@ -681,7 +681,8 @@ namespace StarfallAfterlife.Bridge.Server
             Galaxy?.BeginPreUpdateAction(g =>
             {
                 if (fleet?.System is StarSystem system &&
-                system.GetObject(id, type) is StarSystemObject obj)
+                    system.GetObject(id, type) is StarSystemObject obj &&
+                    fleet.GetBattle() is null)
                 {
                     fleet.DockObjectId = id;
                     fleet.DockObjectType = type;
