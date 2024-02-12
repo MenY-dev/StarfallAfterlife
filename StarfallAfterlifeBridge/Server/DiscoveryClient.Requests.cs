@@ -495,7 +495,9 @@ namespace StarfallAfterlife.Bridge.Server
                 var fleetHex = SystemHexMap.SystemPointToHex(fleet.Location);
                 var currentSystem = fleet.System;
 
-                if (currentSystem is null || currentSystem.Id != systemId)
+                if (currentSystem is null ||
+                    currentSystem.Id != systemId ||
+                    fleet.GetBattle() is not null)
                     return;
 
                 var portal = currentSystem.GetObjectAt(fleet.Hex, DiscoveryObjectType.WarpBeacon) as WarpBeacon;
@@ -519,10 +521,10 @@ namespace StarfallAfterlife.Bridge.Server
                     {
                         var newLocation = SystemHexMap.HexToSystemPoint(portal.Hex).GetNegative();
 
+                        fleet.AddEffect(new() { Duration = 6, Logic = GameplayEffectType.Immortal });
                         currentSystem.RemoveFleet(fleet);
                         Invoke(() => SendFleetWarpedGateway(currentSystem.Id, fleet.Type, fleet.Id));
                         newSystem.AddFleet(fleet, newLocation);
-                        fleet.AddEffect(new() { Duration = 5, Logic = GameplayEffectType.Immortal });
                     }
                 }
             });
@@ -542,7 +544,11 @@ namespace StarfallAfterlife.Bridge.Server
 
             Galaxy?.BeginPreUpdateAction(g =>
             {
-                if (fleet.System?.Id != systemId)
+                var currentSystem = fleet.System;
+
+                if (currentSystem is null ||
+                    currentSystem.Id != systemId ||
+                    fleet.GetBattle() is not null)
                     return;
 
                 if (Map?.GetSystem(targetSystem) is GalaxyMapStarSystem mapSystem &&
@@ -558,7 +564,6 @@ namespace StarfallAfterlife.Bridge.Server
                     return;
                 }
 
-                var currentSystem = fleet.System;
                 var newSystem = g.ActivateStarSystem(targetSystem);
 
                 if (newSystem is null || currentSystem is null)
@@ -566,24 +571,22 @@ namespace StarfallAfterlife.Bridge.Server
 
                 var gate = newSystem.QuickTravelGates?.FirstOrDefault();
 
-                if (gate is not null)
-                {
-                    Invoke(() =>
-                    {
-                        var systemInfo = g?.Map?.GetSystem(systemId);
-                        var cost = systemInfo?.Faction == fleet.Faction ?
-                            0 : SfaDatabase.GetWarpingCost(systemInfo?.Level ?? 0);
-                        CurrentCharacter?.AddCharacterCurrencies(igc: -cost);
+                if (gate is null)
+                    return;
 
-                        Galaxy.BeginPostUpdateAction(g =>
-                        {
-                            currentSystem.RemoveFleet(fleet);
-                            newSystem.AddFleet(fleet, gate.Location);
-                            Invoke(() => SendFleetWarpedMothership(currentSystem.Id, fleet.Type, fleet.Id));
-                            newSystem.AddFleet(fleet);
-                        });
-                    });
-                }
+                currentSystem.RemoveFleet(fleet);
+
+                Invoke(() =>
+                {
+                    var systemInfo = g?.Map?.GetSystem(systemId);
+                    var cost = systemInfo?.Faction == fleet.Faction ?
+                        0 : SfaDatabase.GetWarpingCost(systemInfo?.Level ?? 0);
+
+                    CurrentCharacter?.AddCharacterCurrencies(igc: -cost);
+                    SendFleetWarpedMothership(currentSystem.Id, fleet.Type, fleet.Id);
+                });
+
+                g.BeginPostUpdateAction(g => newSystem.AddFleet(fleet, gate.Location));
             });
         }
 
