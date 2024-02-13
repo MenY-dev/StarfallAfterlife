@@ -33,6 +33,10 @@
 	<StyleInclude Source="/Styles/SfaButtonStyle.axaml"/>
 	<StyleInclude Source="/Styles/SfaListBoxStyle.axaml"/>
 
+	<Style Selector="Window">
+		<Setter Property="FontFamily" Value="system"/>
+	</Style>
+	
 	<!-- Root -->
 	<Style Selector="DockPanel.root">
 		<Setter Property="Background">
