@@ -96,25 +96,38 @@ namespace StarfallAfterlife.Launcher.ViewModels
 
         public Task<bool> Update(CancellationToken ct)
         {
-            UpdateTasksCount++;
-            RaisePropertyChanged(IsUpdateStarted, nameof(IsUpdateStarted));
-
-            return Info?.Update(5000, ct).ContinueWith(t =>
+            if (Info is RemoteServerInfo serverInfo)
             {
-                Dispatcher.UIThread.Invoke(() =>
-                {
-                    Info = Info;
-                    Page?.UpdateList();
-                });
-
-                UpdateTasksCount--;
+                UpdateTasksCount++;
                 RaisePropertyChanged(IsUpdateStarted, nameof(IsUpdateStarted));
 
-                if (ct.IsCancellationRequested)
-                    return false;
+                return serverInfo.Update(5000, ct).ContinueWith(t =>
+                {
+                    UpdateTasksCount--;
+                    RaisePropertyChanged(IsUpdateStarted, nameof(IsUpdateStarted));
 
-                return t.Result;
-            });
+                    if (ct.IsCancellationRequested)
+                        return false;
+
+                    Dispatcher.UIThread.Invoke(() =>
+                    {
+                        Info = Info;
+
+                        if (Page is FindServerPageViewModel page)
+                        {
+                            page.UpdateList();
+                            page.Launcher?.SaveServerList();
+                        }
+                    });
+
+                    if (ct.IsCancellationRequested)
+                        return false;
+
+                    return t.Result;
+                });
+            }
+
+            return Task.FromResult(false);
         }
 
         protected override void OnPropertyChanged(object oldValue, object newValue, string name)
