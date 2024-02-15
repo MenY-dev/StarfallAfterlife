@@ -312,7 +312,8 @@ namespace StarfallAfterlife.Bridge.Generators
                         addedMobs.Contains(item.MobId))
                         continue;
 
-                    if (Realm.MobsDatabase.GetMob(item?.MobId ?? -1) is DiscoveryMobInfo mob)
+                    if (Realm.MobsDatabase.GetMob(item?.MobId ?? -1) is DiscoveryMobInfo mob &&
+                        mob.Faction.IsPirates() == true)
                     {
                         condition["target_mob_id"] = mob.Id;
                         condition["target_mob_internal_name"] = mob.InternalName;
@@ -353,7 +354,8 @@ namespace StarfallAfterlife.Bridge.Generators
                     if (addedMobs.Contains(item.FactionGroup))
                         continue;
 
-                    if (Realm.MobsDatabase.GetMob(item?.MobId ?? -1) is DiscoveryMobInfo mob)
+                    if (Realm.MobsDatabase.GetMob(item?.MobId ?? -1) is DiscoveryMobInfo mob &&
+                        mob.Faction.IsPirates() == true)
                     {
                         var factionGroup = item.FactionGroup;
 
@@ -547,7 +549,8 @@ namespace StarfallAfterlife.Bridge.Generators
                     {
                         if (item is not null &&
                             addedBosses.Contains(item.FleetId) == false &&
-                            Realm.MobsDatabase.GetMob(item.MobId) is DiscoveryMobInfo mobInfo)
+                            Realm.MobsDatabase.GetMob(item.MobId) is DiscoveryMobInfo mobInfo &&
+                            mobInfo.Faction.IsPirates() == true)
                         {
                             condition["target_mob_id"] = item.FleetId;
                             condition["target_mob_internal_name"] = mobInfo.InternalName;
@@ -646,6 +649,7 @@ namespace StarfallAfterlife.Bridge.Generators
                         continue;
 
                     if (Realm.MobsDatabase.GetMob(item?.MobId ?? -1) is DiscoveryMobInfo mob &&
+                        mob.Faction.IsPirates() == true &&
                         mob.IsElite() == true &&
                         mob.Ships?.Any(s => s?.IsElite() == true) == true)
                     {
