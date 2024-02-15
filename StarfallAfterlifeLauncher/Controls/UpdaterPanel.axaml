@@ -80,7 +80,7 @@
 									<TextBlock Foreground="White" TextWrapping="Wrap"
 											   Text="{Binding LatestRelese.ReleseName}"/>
 
-									<TextBlock Foreground="White" TextWrapping="Wrap" Opacity="0.75"
+									<c:MarkdownView Foreground="White" Opacity="1"
 											   Text="{Binding LatestRelese.Description}"
 											   Padding="5 0 0 5"/>
 								</StackPanel>
