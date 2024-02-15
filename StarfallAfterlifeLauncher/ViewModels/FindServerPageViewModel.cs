@@ -102,6 +102,7 @@ namespace StarfallAfterlife.Launcher.ViewModels
                 var result = launcher.AddServer(address);
                 UpdateList();
                 UpdateStatuses();
+                launcher.SaveServerList();
                 return result;
             }
 
