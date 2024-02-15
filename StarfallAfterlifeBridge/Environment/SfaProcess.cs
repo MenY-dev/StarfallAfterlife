@@ -191,6 +191,8 @@ namespace StarfallAfterlife.Bridge.Environment
             var commands = DefaultConsoleCommands?.ToList() ?? new();
             commands.AddRange(ConsoleCommands ?? new());
 
+            sb.Append($" -LogCmds=\"LogOutputDevice error\"");
+
             if (commands.Count > 0)
                 sb.Append($" -ExecCmds=\"{string.Join(", ", commands)}\"");
 
