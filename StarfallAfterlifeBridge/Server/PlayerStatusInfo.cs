@@ -16,5 +16,7 @@ namespace StarfallAfterlife.Bridge.Server
         public string CharacterName;
         public Faction CharacterFaction;
         public UserInGameStatus Status;
+        public int CurrentSystemId;
+        public string CurrentSystemName;
     }
 }

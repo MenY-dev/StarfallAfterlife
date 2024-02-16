@@ -33,6 +33,14 @@ namespace StarfallAfterlife.Bridge.Server
                     SynckSessionSystemInfo(system, fleet.Location);
                     SendEnterToStarSystem(system, fleet.Location);
 
+                    if (Client is SfaServerClient client)
+                    {
+                        var systemInfo = Map?.GetSystem(system);
+                        client.CurrentSystemId = system;
+                        client.CurrentSystemName = systemInfo?.Name;
+                        Server.ProcessNewUserStatus(Client, UserInGameStatus.CharInDiscovery);
+                    }
+
                     character.UpdateQuestLines();
                     character.Party?.SetMemberStarSystem(character.UniqueId, system);
 

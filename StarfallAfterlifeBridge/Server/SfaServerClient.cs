@@ -45,6 +45,10 @@ namespace StarfallAfterlife.Bridge.Server
 
         public UserInGameStatus UserStatus { get; set; } = UserInGameStatus.None;
 
+        public int CurrentSystemId { get; set; } = -1;
+
+        public string CurrentSystemName { get; set; } = null;
+
         public List<RankedFleetInfo> RankedFleets { get; set; } = new();
 
         public int SelectedRankedFleet { get; set; } = 0;

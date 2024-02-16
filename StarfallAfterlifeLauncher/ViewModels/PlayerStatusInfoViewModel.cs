@@ -20,6 +20,10 @@ namespace StarfallAfterlife.Launcher.ViewModels
 
         public Faction CharacterFaction => Info.CharacterFaction;
 
+        public int CurrentSystemId => Info.CurrentSystemId;
+
+        public string CurrentSystemName => Info.CurrentSystemName;
+
         public UserInGameStatus Status => Info.Status;
 
         public bool IsOnline => Info.Status != UserInGameStatus.None;
@@ -35,6 +39,8 @@ namespace StarfallAfterlife.Launcher.ViewModels
                 RaisePropertyChanged(CharacterId, nameof(CharacterId));
                 RaisePropertyChanged(CharacterName, nameof(CharacterName));
                 RaisePropertyChanged(CharacterFaction, nameof(CharacterFaction));
+                RaisePropertyChanged(CurrentSystemId, nameof(CurrentSystemId));
+                RaisePropertyChanged(CurrentSystemName, nameof(CurrentSystemName));
                 RaisePropertyChanged(Status, nameof(Status));
                 RaisePropertyChanged(IsOnline, nameof(IsOnline));
             }

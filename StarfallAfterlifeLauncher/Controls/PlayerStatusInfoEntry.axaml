@@ -18,7 +18,12 @@
 			<TextBlock Text="{Binding CharacterName, StringFormat='({0})'}" VerticalAlignment="Center"
 					   IsVisible="{Binding !!CharacterName}" FontWeight="DemiBold"
 					   Foreground="{Binding CharacterFaction, Converter={x:Static c:SfaUtils.FactionToBrushConverter}}"/>
-
+			
+			<TextBlock Text="{Binding CurrentSystemName, StringFormat='[{0}]'}"
+					   VerticalAlignment="Center"
+					   IsVisible="{Binding CurrentSystemName, Converter={x:Static ObjectConverters.IsNotNull}}"
+					   Foreground="White"
+					   Opacity="0.5"/>
 
 		</StackPanel>
 		<StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Right" VerticalAlignment="Center">

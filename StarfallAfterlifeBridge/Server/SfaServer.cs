@@ -332,7 +332,6 @@ namespace StarfallAfterlife.Bridge.Server
                 return;
 
             client.UserStatus = status;
-            OnUserStatusChanged(client, status);
 
             if (client.State != SfaClientState.InRankedMode &&
                 status is UserInGameStatus.RankedMainMenu or
@@ -340,7 +339,11 @@ namespace StarfallAfterlife.Bridge.Server
                           UserInGameStatus.RankedInBattle)
             {
                 client.State = SfaClientState.InRankedMode;
+                client.CurrentSystemName = null;
+                client.CurrentSystemId = -1;
             }
+
+            OnUserStatusChanged(client, status);
 
             UseClients(_ =>
             {
@@ -387,7 +390,9 @@ namespace StarfallAfterlife.Bridge.Server
                     CharacterId = character?.UniqueId ?? -1,
                     CharacterName = character?.UniqueName,
                     CharacterFaction = character?.Faction ?? Faction.None,
-                    Status = status
+                    CurrentSystemId = client.CurrentSystemId,
+                    CurrentSystemName = client.CurrentSystemName,
+                    Status = status,
                 }));
             });
         }

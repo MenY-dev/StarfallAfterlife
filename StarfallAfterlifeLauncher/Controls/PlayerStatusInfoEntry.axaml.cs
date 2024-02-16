@@ -21,6 +21,8 @@ namespace StarfallAfterlife.Launcher.Controls
                     CharacterName = "TestCharacter",
                     CharacterFaction = Faction.Eclipse,
                     Status = UserInGameStatus.CharInDiscovery,
+                    CurrentSystemId = 1235,
+                    CurrentSystemName = "System 1235",
                 });
             }
         }

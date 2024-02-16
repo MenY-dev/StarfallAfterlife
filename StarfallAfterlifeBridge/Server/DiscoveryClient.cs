@@ -168,6 +168,13 @@ namespace StarfallAfterlife.Bridge.Server
 
             if (CurrentCharacter is ServerCharacter character)
             {
+                if (Client is SfaServerClient client)
+                {
+                    client.CurrentSystemId = -1;
+                    client.CurrentSystemName = null;
+                    Server.ProcessNewUserStatus(Client, UserInGameStatus.CharInDiscovery);
+                }
+
                 character.Party?.SetMemberStarSystem(character.UniqueId, -1);
 
                 if (character.Fleet is UserFleet fleet)
@@ -307,6 +314,14 @@ namespace StarfallAfterlife.Bridge.Server
             });
 
             character.Party?.SetMemberStarSystem(character.UniqueId, system);
+
+            if (Client is SfaServerClient client)
+            {
+                var systemInfo = Map?.GetSystem(system);
+                client.CurrentSystemId = system;
+                client.CurrentSystemName = systemInfo?.Name;
+                Server.ProcessNewUserStatus(Client, UserInGameStatus.CharInDiscovery);
+            }
 
             if (character.Fleet is UserFleet fleet &&
                 fleet.System is not null &&
