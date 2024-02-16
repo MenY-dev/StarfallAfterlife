@@ -331,6 +331,7 @@ namespace StarfallAfterlife.Bridge.Server
                 client.IsPlayer == false)
                 return;
 
+            client.UserStatus = status;
             OnUserStatusChanged(client, status);
 
             if (client.State != SfaClientState.InRankedMode &&

@@ -48,7 +48,7 @@ namespace StarfallAfterlife.Bridge.Server
 
         private void HandleUserStatus(bool isCharChannel, SfReader reader)
         {
-            var status = UserStatus = (UserInGameStatus)reader.ReadByte();
+            var status = (UserInGameStatus)reader.ReadByte();
             Server?.ProcessNewUserStatus(this, status);
         }
 
@@ -61,13 +61,15 @@ namespace StarfallAfterlife.Bridge.Server
                 {
                     if (item != this)
                     {
-                        SendAcceptNewFriend($"@{item.UniqueName}", item.UserStatus);
-                        SendUserStatus($"@{item.UniqueName}", item.UserStatus);
+                        var status = item.IsConnected == true ? item.UserStatus : UserInGameStatus.None;
+
+                        SendAcceptNewFriend($"@{item.UniqueName}", status);
+                        SendUserStatus($"@{item.UniqueName}", status);
 
                         if (item.CurrentCharacter is ServerCharacter character)
                         {
-                            SendAcceptNewFriend(character.UniqueName, item.UserStatus);
-                            SendUserStatus(character.UniqueName, item.UserStatus);
+                            SendAcceptNewFriend(character.UniqueName, status);
+                            SendUserStatus(character.UniqueName, status);
                         }
                     }
                 }
