@@ -344,7 +344,7 @@ namespace StarfallAfterlife.Bridge.Server
             {
                 if (Server?.GetCharacter(id) is ServerCharacter character)
                 {
-                    character.Party?.RemoveMember(character.Id);
+                    character.Party?.RemoveMember(character.UniqueId);
                     Server.UseClients(_ => Server.Characters.RemoveId(character.UniqueId));
                     DiscoveryClient?.Characters?.Remove(character);
                 }
