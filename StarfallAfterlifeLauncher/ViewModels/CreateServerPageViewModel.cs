@@ -293,7 +293,7 @@ namespace StarfallAfterlife.Launcher.ViewModels
             Dispatcher.UIThread.Invoke(() =>
             {
                 var newInfo = e.Info;
-                var vm = Players.FirstOrDefault(p => p.Info.Auth == newInfo.Auth);
+                var vm = Players.FirstOrDefault(p => p.Info.ProfileId == newInfo.ProfileId);
 
                 if (vm is null)
                     Players.Add(new(newInfo));

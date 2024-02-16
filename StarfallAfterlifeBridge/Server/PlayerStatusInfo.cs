@@ -12,6 +12,7 @@ namespace StarfallAfterlife.Bridge.Server
     {
         public string Auth;
         public string Name;
+        public Guid ProfileId;
         public int CharacterId;
         public string CharacterName;
         public Faction CharacterFaction;
