@@ -73,7 +73,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                 if (system is not null)
                 {
                     system.AddFleet(fleet);
-                    fleet.State = FleetState.InGalaxy;
+                    fleet.SetFleetState(FleetState.InGalaxy);
                 }
             }
         }

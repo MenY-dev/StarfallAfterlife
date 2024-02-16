@@ -81,7 +81,7 @@ namespace StarfallAfterlife.Bridge.Server
                 {
                     Galaxy?.BeginPreUpdateAction(g =>
                     {
-                        fleet.State = FleetState.InGalaxy;
+                        fleet.SetFleetState(FleetState.InGalaxy);
                         Invoke(() => EnterToStarSystem(character.Fleet?.System?.Id ?? GetCharactDefaultSystem()?.Id ?? 0));
                     });
                 }
@@ -341,7 +341,7 @@ namespace StarfallAfterlife.Bridge.Server
                                         systemBattle.System?.GetNearestSafeHex(fleet, systemBattle.Hex) ?? default,
                                         false);
 
-                                    fleet.State = FleetState.InGalaxy;
+                                    fleet.SetFleetState(FleetState.InGalaxy);
                                 });
                             }
                         }
