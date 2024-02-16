@@ -325,7 +325,11 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
                 Bosses?.Clear();
 
-                GameMode.InstanceManager.StopInstance(InstanceInfo);
+                Task.Delay(TimeSpan.FromSeconds(5)).ContinueWith(t =>
+                {
+                    GameMode?.InstanceManager?.StopInstance(InstanceInfo);
+                });
+
                 Matchmaker.RemoveBattle(this);
                 Galaxy?.BeginPreUpdateAction(g => SystemBattle.Finish());
             }
