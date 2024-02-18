@@ -352,8 +352,11 @@ namespace StarfallAfterlife.Bridge.Server
                     if (item != client &&
                         item.IsConnected == true)
                     {
-                        item.SendAcceptNewFriend($"@{client.UniqueName}", status);
-                        item.SendUserStatus($"@{client.UniqueName}", status);
+                        item.Invoke(c =>
+                        {
+                            c.SendAcceptNewFriend($"@{client.UniqueName}", status);
+                            c.SendUserStatus($"@{client.UniqueName}", status);
+                        });
                     }
                 }
 
@@ -364,8 +367,11 @@ namespace StarfallAfterlife.Bridge.Server
                         if (item != client &&
                             item.IsConnected == true)
                         {
-                            item.SendAcceptNewFriend(character.UniqueName, status);
-                            item.SendUserStatus(character.UniqueName, status);
+                            item.Invoke(c =>
+                            {
+                                c.SendAcceptNewFriend(character.UniqueName, status);
+                                c.SendUserStatus(character.UniqueName, status);
+                            });
                         }
                     }
                 }
@@ -377,25 +383,20 @@ namespace StarfallAfterlife.Bridge.Server
             if (client is null)
                 return;
 
-            Matchmaker?.OnUserStatusChanged(client, status);
+            var character = client.CurrentCharacter;
 
-            UseClients(_ =>
+            PlayerStatusUpdated?.Invoke(this, new(new()
             {
-                var character = client.CurrentCharacter;
-
-                PlayerStatusUpdated?.Invoke(this, new(new()
-                {
-                    Auth = client.Auth,
-                    Name = client.UniqueName,
-                    ProfileId = client.ProfileId,
-                    CharacterId = character?.UniqueId ?? -1,
-                    CharacterName = character?.UniqueName,
-                    CharacterFaction = character?.Faction ?? Faction.None,
-                    CurrentSystemId = client.CurrentSystemId,
-                    CurrentSystemName = client.CurrentSystemName,
-                    Status = status,
-                }));
-            });
+                Auth = client.Auth,
+                Name = client.UniqueName,
+                ProfileId = client.ProfileId,
+                CharacterId = character?.UniqueId ?? -1,
+                CharacterName = character?.UniqueName,
+                CharacterFaction = character?.Faction ?? Faction.None,
+                CurrentSystemId = client.CurrentSystemId,
+                CurrentSystemName = client.CurrentSystemName,
+                Status = status,
+            }));
         }
 
         public ObjectShops GetObjectShops(int objectId, GalaxyMapObjectType objectType)

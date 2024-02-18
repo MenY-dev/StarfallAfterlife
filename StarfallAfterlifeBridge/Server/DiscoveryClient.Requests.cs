@@ -290,8 +290,11 @@ namespace StarfallAfterlife.Bridge.Server
                             if (item is null || item.State == FleetState.Destroyed)
                                 continue;
 
-                            RequestDiscoveryObjectSync(item);
-                            SyncFleetData(item);
+                            Invoke(() =>
+                            {
+                                RequestDiscoveryObjectSync(item);
+                                SyncFleetData(item);
+                            });
                         }
 
                         foreach (var obj in system.GetAllObjects(false))
@@ -300,12 +303,15 @@ namespace StarfallAfterlife.Bridge.Server
                                 dungeon.IsDungeonVisible == false)
                                 continue;
 
-                            if (obj is SecretObject secret &&
-                                CurrentCharacter?.Progress?.SecretLocs?.Contains(secret.Id) == true)
-                                continue;
+                            Invoke(() =>
+                            {
+                                if (obj is SecretObject secret &&
+                                    CurrentCharacter?.Progress?.SecretLocs?.Contains(secret.Id) == true)
+                                    return;
 
-                            RequestDiscoveryObjectSync(obj);
-                            SyncDiscoveryObject(systemId, obj.Type, obj.Id);
+                                RequestDiscoveryObjectSync(obj);
+                                SyncDiscoveryObject(systemId, obj.Type, obj.Id);
+                            });
                         }
                     }
                 }

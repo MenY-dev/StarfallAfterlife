@@ -325,10 +325,10 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
                 Bosses?.Clear();
 
-                Task.Delay(TimeSpan.FromSeconds(5)).ContinueWith(t =>
+                Matchmaker?.Invoke(() =>
                 {
                     GameMode?.InstanceManager?.StopInstance(InstanceInfo);
-                });
+                }, TimeSpan.FromSeconds(10));
 
                 Matchmaker.RemoveBattle(this);
                 Galaxy?.BeginPreUpdateAction(g => SystemBattle.Finish());
@@ -808,7 +808,12 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                             break;
                         default:
                             if (info.InBattle == false)
-                                Leave(info, new(0, 1));
+                            {
+                                Matchmaker?.Invoke(() =>
+                                {
+                                    Leave(info, new(0, 1));
+                                }, TimeSpan.FromSeconds(5));
+                            }
                             break;
                     }
                 }

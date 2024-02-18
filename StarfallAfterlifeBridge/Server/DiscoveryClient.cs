@@ -38,16 +38,14 @@ namespace StarfallAfterlife.Bridge.Server
 
         public ServerCharacter CurrentCharacter { get; set; }
 
-        protected ActionBuffer ActionBuffer { get; set; } = new();
-
         public DiscoveryClient(SfaServerClient client)
         {
             Client = client;
         }
 
-        public void Invoke(Action action) => ActionBuffer?.Invoke(action);
+        public void Invoke(Action action) => Client?.Invoke(action);
 
-        public void Invoke(Action<DiscoveryClient> action) => ActionBuffer?.Invoke(() => action?.Invoke(this));
+        public void Invoke(Action<DiscoveryClient> action) => Client?.Invoke(() => action?.Invoke(this));
 
         public void ProcessCharacterSelect(JsonNode authData, SfaClientRequest request)
         {
@@ -315,14 +313,6 @@ namespace StarfallAfterlife.Bridge.Server
 
             character.Party?.SetMemberStarSystem(character.UniqueId, system);
 
-            if (Client is SfaServerClient client)
-            {
-                var systemInfo = Map?.GetSystem(system);
-                client.CurrentSystemId = system;
-                client.CurrentSystemName = systemInfo?.Name;
-                Server.ProcessNewUserStatus(Client, UserInGameStatus.CharInDiscovery);
-            }
-
             if (character.Fleet is UserFleet fleet &&
                 fleet.System is not null &&
                 Server.Matchmaker is SfaMatchmaker matchmaker)
@@ -513,8 +503,6 @@ namespace StarfallAfterlife.Bridge.Server
             Characters?.Clear();
             CurrentCharacter = null;
             CurrentCharacter?.Fleet?.RemoveListener(this);
-            ActionBuffer?.Dispose();
-            ActionBuffer = null;
         }
     }
 }

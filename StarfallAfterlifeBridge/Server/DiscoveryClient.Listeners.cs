@@ -38,7 +38,7 @@ namespace StarfallAfterlife.Bridge.Server
                         var systemInfo = Map?.GetSystem(system);
                         client.CurrentSystemId = system;
                         client.CurrentSystemName = systemInfo?.Name;
-                        Server.ProcessNewUserStatus(Client, UserInGameStatus.CharInDiscovery);
+                        Server.OnUserStatusChanged(client, client.UserStatus);
                     }
 
                     character.UpdateQuestLines();

@@ -24,6 +24,7 @@ using System.Reflection;
 using System.Text.Json.Nodes;
 using System.IO.Compression;
 using StarfallAfterlife.Bridge.Diagnostics;
+using StarfallAfterlife.Bridge.Tasks;
 
 namespace StarfallAfterlife.Bridge.Server
 {
@@ -67,36 +68,46 @@ namespace StarfallAfterlife.Bridge.Server
 
         public DiscoveryClient DiscoveryClient { get; set; }
 
+        public ActionBuffer ActionBuffer { get; set; } = new();
+
+
         protected override void OnBinaryInput(SfReader reader, SfaServerAction action)
         {
             base.OnBinaryInput(reader, action);
 
-            switch (action)
+            try
             {
-                case SfaServerAction.DiscoveryChannel:
-                    DiscoveryClient?.InputFromDiscoveryChannel(reader);
-                    break;
-                case SfaServerAction.GalacticChannel:
-                    DiscoveryClient?.InputFromGalacticChannel(reader);
-                    break;
-                case SfaServerAction.BattleGroundChannel:
-                    DiscoveryClient?.InputFromBattleGroundChannel(reader);
-                    break;
-                case SfaServerAction.QuickMatchChannel:
-                    DiscoveryClient?.InputFromQuickMatchChannel(reader);
-                    break;
-                case SfaServerAction.UserFriendChannel:
-                    InputFromFriendChannel(reader, false);
-                    break;
-                case SfaServerAction.CharacterFriendChannel:
-                    InputFromFriendChannel(reader, true);
-                    break;
-                case SfaServerAction.CharacterPartyChannel:
-                    DiscoveryClient?.InputFromCharacterPartyChannel(reader);
-                    break;
-                case SfaServerAction.MatchmakerChannel:
-                    InputFromMatchmakerChannel(reader);
-                    break;
+                switch (action)
+                {
+                    case SfaServerAction.DiscoveryChannel:
+                        DiscoveryClient?.InputFromDiscoveryChannel(reader);
+                        break;
+                    case SfaServerAction.GalacticChannel:
+                        DiscoveryClient?.InputFromGalacticChannel(reader);
+                        break;
+                    case SfaServerAction.BattleGroundChannel:
+                        DiscoveryClient?.InputFromBattleGroundChannel(reader);
+                        break;
+                    case SfaServerAction.QuickMatchChannel:
+                        DiscoveryClient?.InputFromQuickMatchChannel(reader);
+                        break;
+                    case SfaServerAction.UserFriendChannel:
+                        InputFromFriendChannel(reader, false);
+                        break;
+                    case SfaServerAction.CharacterFriendChannel:
+                        InputFromFriendChannel(reader, true);
+                        break;
+                    case SfaServerAction.CharacterPartyChannel:
+                        DiscoveryClient?.InputFromCharacterPartyChannel(reader);
+                        break;
+                    case SfaServerAction.MatchmakerChannel:
+                        InputFromMatchmakerChannel(reader);
+                        break;
+                }
+            }
+            catch (Exception e) when (e is not IOException)
+            {
+                SfaDebug.Log(e.ToString());
             }
         }
 
@@ -104,31 +115,38 @@ namespace StarfallAfterlife.Bridge.Server
         {
             base.OnTextInput(text, action);
 
-            switch (action)
+            try
             {
-                case SfaServerAction.DeleteCharacter:
-                    ProcessDeleteChar(JsonHelpers.ParseNodeUnbuffered(text));
-                    break;
+                switch (action)
+                {
+                    case SfaServerAction.DeleteCharacter:
+                        ProcessDeleteChar(JsonHelpers.ParseNodeUnbuffered(text));
+                        break;
 
-                case SfaServerAction.SyncCharacterCurrencies:
-                    ProcessSyncCharacterCurrencies(JsonHelpers.ParseNodeUnbuffered(text));
-                    break;
+                    case SfaServerAction.SyncCharacterCurrencies:
+                        ProcessSyncCharacterCurrencies(JsonHelpers.ParseNodeUnbuffered(text));
+                        break;
 
-                case SfaServerAction.SyncCharacterNewResearch:
-                    ProcessSyncCharacterNewResearch(JsonHelpers.ParseNodeUnbuffered(text));
-                    break;
+                    case SfaServerAction.SyncCharacterNewResearch:
+                        ProcessSyncCharacterNewResearch(JsonHelpers.ParseNodeUnbuffered(text));
+                        break;
 
-                case SfaServerAction.SyncRankedFleets:
-                    ProcessSyncRankedFleets(JsonHelpers.ParseNodeUnbuffered(text));
-                    break;
+                    case SfaServerAction.SyncRankedFleets:
+                        ProcessSyncRankedFleets(JsonHelpers.ParseNodeUnbuffered(text));
+                        break;
 
-                default:
+                    default:
 
-                    if (action == SfaServerAction.RegisterChannel)
-                        ProcessRegisterChannel(JsonHelpers.ParseNodeUnbuffered(text));
+                        if (action == SfaServerAction.RegisterChannel)
+                            ProcessRegisterChannel(JsonHelpers.ParseNodeUnbuffered(text));
 
-                    DiscoveryClient?.OnTextReceive(text, action);
-                    break;
+                        DiscoveryClient?.OnTextReceive(text, action);
+                        break;
+                }
+            }
+            catch (Exception e) when (e is not IOException)
+            {
+                SfaDebug.Log(e.ToString());
             }
         }
 
@@ -136,35 +154,42 @@ namespace StarfallAfterlife.Bridge.Server
         {
             base.OnRequestInput(request);
 
-            switch (request.Action)
+            try
             {
-                case SfaServerAction.Auth:
-                    ProcessAuth(JsonHelpers.ParseNodeUnbuffered(request.Text)?.AsObjectSelf(), request);
-                    break;
+                switch (request.Action)
+                {
+                    case SfaServerAction.Auth:
+                        ProcessAuth(JsonHelpers.ParseNodeUnbuffered(request.Text)?.AsObjectSelf(), request);
+                        break;
 
-                case SfaServerAction.GetServerInfo:
-                    ProcessGetServerInfo(request);
-                    break;
+                    case SfaServerAction.GetServerInfo:
+                        ProcessGetServerInfo(request);
+                        break;
 
-                case SfaServerAction.LoadGalaxyMap:
-                    ProcessLoadGalaxyMap(request);
-                    break;
+                    case SfaServerAction.LoadGalaxyMap:
+                        ProcessLoadGalaxyMap(request);
+                        break;
 
-                case SfaServerAction.LoadVariableMap:
-                    ProcessLoadVariableMap(request);
-                    break;
+                    case SfaServerAction.LoadVariableMap:
+                        ProcessLoadVariableMap(request);
+                        break;
 
-                case SfaServerAction.RegisterPlayer:
-                    ProcessRegisterPlayer(JsonHelpers.ParseNodeUnbuffered(request.Text)?.AsObjectSelf(), request);
-                    break;
+                    case SfaServerAction.RegisterPlayer:
+                        ProcessRegisterPlayer(JsonHelpers.ParseNodeUnbuffered(request.Text)?.AsObjectSelf(), request);
+                        break;
 
-                case SfaServerAction.RegisterNewCharacters:
-                    ProcessRegisterNewChars(JsonHelpers.ParseNodeUnbuffered(request.Text)?.AsObjectSelf(), request);
-                    break;
+                    case SfaServerAction.RegisterNewCharacters:
+                        ProcessRegisterNewChars(JsonHelpers.ParseNodeUnbuffered(request.Text)?.AsObjectSelf(), request);
+                        break;
 
-                default: 
-                    DiscoveryClient?.OnRequestReceive(request);
-                    break;
+                    default:
+                        DiscoveryClient?.OnRequestReceive(request);
+                        break;
+                }
+            }
+            catch (Exception e) when (e is not IOException)
+            {
+                SfaDebug.Log(e.ToString());
             }
         }
 
@@ -198,8 +223,7 @@ namespace StarfallAfterlife.Bridge.Server
 
                     if (currentClient is not null)
                     {
-                        if (currentClient.IsConnected == false &&
-                            Server?.TravelPlayer(currentClient, this) is true)
+                        if (Server?.TravelPlayer(currentClient, this) is true)
                         {
                             SendSuccessAuth();
                         }
@@ -446,7 +470,7 @@ namespace StarfallAfterlife.Bridge.Server
             var channelName = (string)doc?["name"];
 
             if ("UserFriends".Equals(channelName, StringComparison.InvariantCultureIgnoreCase) == true)
-                SendServerPlayerStatuses();
+                Invoke(c => c.SendServerPlayerStatuses());
         }
 
         public void SendStartBattle(
@@ -464,6 +488,10 @@ namespace StarfallAfterlife.Bridge.Server
                 ["char_id"] = charId,
             }, SfaServerAction.StartBattle);
         }
+
+        public void Invoke(Action action) => ActionBuffer?.Invoke(action);
+
+        public void Invoke(Action<SfaServerClient> action) => ActionBuffer?.Invoke(() => action?.Invoke(this));
 
         public void TravelToClient(SfaServerClient client)
         {
@@ -499,6 +527,8 @@ namespace StarfallAfterlife.Bridge.Server
             CurrentCharacter?.Fleet?.RemoveListener(DiscoveryClient);
             DiscoveryClient?.Dispose();
             DiscoveryClient = null;
+            ActionBuffer?.Dispose();
+            ActionBuffer = null;
         }
     }
 }

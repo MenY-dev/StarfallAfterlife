@@ -39,17 +39,22 @@ namespace StarfallAfterlife.Bridge.Server
         {
             var name = reader.ReadShortString(Encoding.UTF8);
 
-            SendFriendChannelMessage(isCharChannel, FriendChannelServerAction.ReciveFriendRequestResult, writer =>
+            Invoke(c => SendFriendChannelMessage(isCharChannel, FriendChannelServerAction.ReciveFriendRequestResult, writer =>
             {
                 writer.WriteByte(1);
                 writer.WriteShortString(name, -1, true, Encoding.UTF8);
-            });
+            }));
         }
 
         private void HandleUserStatus(bool isCharChannel, SfReader reader)
         {
             var status = (UserInGameStatus)reader.ReadByte();
-            Server?.ProcessNewUserStatus(this, status);
+
+            Invoke(c =>
+            {
+                Server?.ProcessNewUserStatus(this, status);
+                Server?.Matchmaker?.OnUserStatusChanged(this, status);
+            });
         }
 
         
@@ -106,12 +111,12 @@ namespace StarfallAfterlife.Bridge.Server
             if (friend is null)
                 return;
 
-            SendFriendChannelMessage(isCharChannel, FriendChannelServerAction.AcceptNewFriend, writer =>
+            Invoke(c => SendFriendChannelMessage(isCharChannel, FriendChannelServerAction.AcceptNewFriend, writer =>
             {
                 writer.WriteShortString(friend, -1, true, Encoding.UTF8);
                 writer.WriteByte((byte)(status != UserInGameStatus.None ? 1 : 0));
                 writer.WriteByte((byte)status);
-            });
+            }));
         }
 
         public void SendFriendChannelMessage(bool isCharChannel, FriendChannelServerAction action, Action<SfWriter> writeAction = null)
