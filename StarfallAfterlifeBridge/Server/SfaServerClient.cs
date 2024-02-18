@@ -489,9 +489,19 @@ namespace StarfallAfterlife.Bridge.Server
             }, SfaServerAction.StartBattle);
         }
 
-        public void Invoke(Action action) => ActionBuffer?.Invoke(action);
+        public void Invoke(Action<SfaServerClient> action) => Invoke(() => action?.Invoke(this));
 
-        public void Invoke(Action<SfaServerClient> action) => ActionBuffer?.Invoke(() => action?.Invoke(this));
+        public void Invoke(Action action)
+        {
+            try
+            {
+                ActionBuffer?.Invoke(action);
+            }
+            catch (Exception e) when (e is not IOException) 
+            {
+                SfaDebug.Log(e.ToString());
+            }
+        }
 
         public void TravelToClient(SfaServerClient client)
         {
