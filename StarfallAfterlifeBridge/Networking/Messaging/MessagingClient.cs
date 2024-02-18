@@ -23,7 +23,7 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
     {
         public delegate void UseStreamDelegate(Stream stream);
 
-        public bool IsConnected => (TcpClient?.Client?.Connected ?? false) && _readingAvailable;
+        public bool IsConnected => CheckStatus();
 
         public event EventHandler<EventArgs> ConnectionEnd;
 
@@ -139,6 +139,20 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
             HandleInputStream();
         }
 
+        public bool CheckStatus()
+        {
+            if (_readingAvailable == false)
+                return false;
+
+            try
+            {
+                return TcpClient?.Client?.Connected ?? false;
+            }
+            catch { }
+
+            return false;
+        }
+
         protected virtual void HandleInputStream()
         {
             Task.Run(() =>
@@ -204,8 +218,7 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
                 }
                 catch (Exception e)
                 {
-                    SfaDebug.Log(e.Message);
-                    SfaDebug.Log(e.StackTrace);
+                    SfaDebug.Log(e.ToString());
                 }
                 finally
                 {
