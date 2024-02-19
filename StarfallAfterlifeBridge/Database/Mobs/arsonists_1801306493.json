@@ -7,11 +7,7 @@
   "Speed": 0.7,
   "BehaviorTreeName": "",
   "MainShipIndex": 0,
-  "Tags": [
-    "Mob.Role.Boss",
-    "Mob.Role.Outpost",
-    "Mob.Role.Station"
-  ],
+  "Tags": [],
   "Ships": [
     {
       "Data": {

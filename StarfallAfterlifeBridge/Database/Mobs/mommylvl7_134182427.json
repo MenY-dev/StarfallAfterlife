@@ -8,10 +8,10 @@
   "BehaviorTreeName": "/Game/gameplay/ai/fleets/screechers/BT_ScreechersFleet.BT_ScreechersFleet",
   "MainShipIndex": 0,
   "Tags": [
-    "Mob.Role",
     "Mob.Role.Boss",
     "Mob.Role.Outpost",
-    "Mob.Role.Station"
+    "Mob.Role.Station",
+    "Mob.Role.Elite"
   ],
   "Ships": [
     {

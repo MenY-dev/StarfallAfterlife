@@ -10,7 +10,8 @@
   "Tags": [
     "Mob.Role.Boss",
     "Mob.Role.Outpost",
-    "Mob.Role.Station"
+    "Mob.Role.Station",
+    "Mob.Role.Elite"
   ],
   "Ships": [
     {
