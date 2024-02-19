@@ -65,6 +65,52 @@ namespace StarfallAfterlife.Bridge.Instances
             Sandbox = new SfaProcessSandbox()
             {
                 WorkingDirectory = Directory,
+                GameIni = new()
+                {
+                    new(@"/script/engine.gamenetworkmanager")
+                    {
+                        "MAXPOSITIONERRORSQUARED=32.00f",
+                        "MAXCLIENTUPDATEINTERVAL=0.8f",
+                        "MaxMoveDeltaTime=0.4f",
+                        "ClientNetSendMoveDeltaTime=0,0665f",
+                        "CLIENTADJUSTUPDATECOST=256.0f",
+                        "MaxClientForcedUpdateDuration=1.0f",
+                        "MoveRepSize=128",
+                        "ServerForcedUpdateHitchThreshold=5.0f"
+                    },
+                },
+                EngineIni = new()
+                {
+                    new(@"CrashReportClient")
+                    {
+                        "bAgreeToCrashUpload=false",
+                        "bImplicitSend=false",
+                    },
+                    new(@"Engine.ErrorHandling")
+                    {
+                        "bPromptForRemoteDebugging=false",
+                        "bPromptForRemoteDebugOnEnsure=false",
+                    },
+                    new(@"/script/onlinesubsystemutils.ipnetdriver")
+                    {
+                        "LanServerMaxTickRate=15",
+                        "NetServerMaxTickRate=15",
+                    },
+                    new(@"/script/onlinesubsystemutils.ipnetdriver")
+                    {
+                        "bSmoothFrameRate=true",
+                        "bUseFixedFrameRate=false",
+                        "SmoothedFrameRateRange=(LowerBound=(Type=Inclusive,Value=5.000000),UpperBound=(Type=Exclusive,Value=15.000000))",
+                        "MinDesiredFrameRate=5",
+                        "FixedFrameRate=15",
+                        "NetClientTicksPerSecond=15",
+                    },
+                    new(@"/script/engine.networksettings")
+                    {
+                        "net.MaxRepArraySize=65535",
+                        "net.MaxRepArrayMemory=65535",
+                    },
+                },
             };
 
             Process = new SfaProcess()
