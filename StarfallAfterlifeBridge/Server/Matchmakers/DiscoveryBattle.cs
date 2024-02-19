@@ -183,7 +183,8 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                         ship.ServiceData ??= new();
 
                         if (ship.IsBoss() == true && 
-                            string.IsNullOrWhiteSpace(ship.ServiceData.BT))
+                            string.IsNullOrWhiteSpace(ship.ServiceData.BT) ||
+                            ship.ServiceData.BT.StartsWith("/Game/gameplay/ai/boss/", StringComparison.InvariantCultureIgnoreCase))
                         {
                             ship.ServiceData.BT = "/Game/gameplay/ai/ships/BT_ShipForceFindEnemy.BT_ShipForceFindEnemy";
                         }
