@@ -202,6 +202,25 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 int fleetId = fleet.FleetId;
                 int shipId = fleetId * 1000;
 
+                if (mob.IsBoss() == false ||
+                    mob.Ships?.Any(s => s.IsBoss()) is not true)
+                {
+                    var replacement = Server?.Realm?.MobsDatabase
+                        .GetCircleMobs(SfaDatabase.LevelToAccessLevel(mob.Level))
+                        .Where(m => m.Faction == mob.Faction)
+                        .Where(m => m.IsBoss() && m.Ships?.Any(s => s.IsBoss()) == true)
+                        .OrderBy(m => Bosses.Count(b => b.Mob?.Id == m.Id))
+                        .FirstOrDefault()?
+                        .Clone();
+
+                    if (replacement is not null)
+                    {
+                        replacement.InternalName = mob.InternalName;
+                        replacement.BehaviorTreeName = mob.BehaviorTreeName;
+                        mob = replacement;
+                    }
+                }
+
                 foreach (var ship in mob.Ships?
                     .Select(s => s.Data)
                     .Where(s => s is not null) ??
@@ -217,35 +236,6 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
             }
 
             return null;
-        }
-
-        protected virtual DiscoveryBattleBossInfo CreateBossInfo(DiscoveryMobInfo mobInfo)
-        {
-            if (mobInfo is null)
-                return null;
-
-            int fleetId = 2000000;
-
-            foreach (var item in Bosses ?? new())
-                if (item is not null)
-                    fleetId = Math.Max(fleetId, item.FleetId);
-
-            fleetId++;
-
-            var mob = mobInfo.Clone();
-            int shipId = fleetId * 1000;
-
-            foreach (var ship in mob.Ships?
-                .Select(s => s.Data)
-                .Where(s => s is not null) ??
-                Enumerable.Empty<ShipConstructionInfo>())
-            {
-                ship.Id = shipId;
-                ship.FleetId = fleetId;
-                shipId++;
-            }
-
-            return new DiscoveryBattleBossInfo(fleetId, mob);
         }
 
         public override void Init()
