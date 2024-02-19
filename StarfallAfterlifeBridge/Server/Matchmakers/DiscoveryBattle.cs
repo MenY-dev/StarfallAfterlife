@@ -174,12 +174,20 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                     int shipId = fleetId * 1000;
 
                     foreach (var ship in mob.Ships?
-                        .Select(s => s.Data)
                         .Where(s => s is not null) ??
-                        Enumerable.Empty<ShipConstructionInfo>())
+                        Enumerable.Empty<DiscoveryMobShipData>())
                     {
-                        ship.Id = shipId;
-                        ship.FleetId = fleetId;
+                        ship.Data ??= new();
+                        ship.Data.Id = shipId;
+                        ship.Data.FleetId = fleetId;
+                        ship.ServiceData ??= new();
+
+                        if (ship.IsBoss() == true && 
+                            string.IsNullOrWhiteSpace(ship.ServiceData.BT))
+                        {
+                            ship.ServiceData.BT = "/Game/gameplay/ai/ships/BT_ShipForceFindEnemy.BT_ShipForceFindEnemy";
+                        }
+
                         shipId++;
                     }
 
@@ -222,12 +230,20 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 }
 
                 foreach (var ship in mob.Ships?
-                    .Select(s => s.Data)
-                    .Where(s => s is not null) ??
-                    Enumerable.Empty<ShipConstructionInfo>())
+                        .Where(s => s is not null) ??
+                        Enumerable.Empty<DiscoveryMobShipData>())
                 {
-                    ship.Id = shipId;
-                    ship.FleetId = fleetId;
+                    ship.Data ??= new();
+                    ship.Data.Id = shipId;
+                    ship.Data.FleetId = fleetId;
+                    ship.ServiceData ??= new();
+
+                    if (ship.IsBoss() == true &&
+                        string.IsNullOrWhiteSpace(ship.ServiceData.BT))
+                    {
+                        ship.ServiceData.BT = "/Game/gameplay/ai/boss/BtRamBoss.BtRamBoss";
+                    }
+
                     shipId++;
                 }
 
