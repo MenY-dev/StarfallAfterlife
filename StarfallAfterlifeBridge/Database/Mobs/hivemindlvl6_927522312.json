@@ -195,7 +195,10 @@
         "drop_state": true,
         "role": 0,
         "bt": "/Game/gameplay/ai/boss/BtSniperBoss.BtSniperBoss",
-        "tags": [],
+        "tags": [
+          "Mob.SpecialShip.Boss",
+          "Mob.SpecialShip.Elite"
+        ],
         "drop_tree": {
           "type": 1,
           "chance": 1,
