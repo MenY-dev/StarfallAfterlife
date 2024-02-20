@@ -172,7 +172,7 @@
         "fleet_max": -1,
         "drop_state": true,
         "role": 0,
-        "bt": "",
+        "bt": "/Game/gameplay/ai/boss/BtRamBoss.BtRamBoss",
         "tags": [
           "mob.specialship.boss",
           "mob.specialship.elite"

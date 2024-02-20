@@ -36,7 +36,7 @@
               {
                 "eq": 2032592200,
                 "id": 0,
-                "x": 0,
+                "x": 3,
                 "y": 6,
                 "destroyed": 0
               },
@@ -71,7 +71,7 @@
               {
                 "eq": 2032592200,
                 "id": 0,
-                "x": 3,
+                "x": 0,
                 "y": 6,
                 "destroyed": 0
               },
@@ -87,19 +87,19 @@
                 "id": 0,
                 "x": 3,
                 "y": 7,
-                "destroyed": 0
-              },
-              {
-                "eq": 538134357,
-                "id": 0,
-                "x": 2,
-                "y": 0,
                 "destroyed": 0
               },
               {
                 "eq": 538134357,
                 "id": 0,
                 "x": 4,
+                "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 538134357,
+                "id": 0,
+                "x": 2,
                 "y": 0,
                 "destroyed": 0
               },
@@ -200,13 +200,6 @@
               {
                 "eq": 1724954193,
                 "id": 0,
-                "x": 2,
-                "y": 2,
-                "destroyed": 0
-              },
-              {
-                "eq": 1724954193,
-                "id": 0,
                 "x": 1,
                 "y": 2,
                 "destroyed": 0
@@ -223,6 +216,13 @@
                 "id": 0,
                 "x": 0,
                 "y": 0,
+                "destroyed": 0
+              },
+              {
+                "eq": 1724954193,
+                "id": 0,
+                "x": 2,
+                "y": 2,
                 "destroyed": 0
               },
               {
@@ -249,14 +249,14 @@
               {
                 "eq": 1640790496,
                 "id": 0,
-                "x": 3,
+                "x": 4,
                 "y": 3,
                 "destroyed": 0
               },
               {
                 "eq": 1640790496,
                 "id": 0,
-                "x": 4,
+                "x": 3,
                 "y": 3,
                 "destroyed": 0
               }
@@ -285,20 +285,23 @@
         "fleet_max": -1,
         "drop_state": true,
         "role": 0,
-        "bt": "",
-        "tags": [],
+        "bt": "/Game/gameplay/ai/boss/BtBoardingBoss.BtBoardingBoss",
+        "tags": [
+          "mob.specialship.boss",
+          "mob.specialship.elite"
+        ],
         "drop_tree": {
           "type": 1,
           "chance": 1,
           "weight": 1,
           "item_id": 0,
           "item_type": 0,
-          "item_min": 1,
-          "item_max": 1,
+          "item_min": 0,
+          "item_max": 0,
           "childs": [
             {
               "type": 2,
-              "chance": 0.16000001,
+              "chance": 0.16,
               "weight": 1,
               "item_id": 706008177,
               "item_type": 1,
@@ -318,7 +321,7 @@
             },
             {
               "type": 2,
-              "chance": 0.060000002,
+              "chance": 0.06,
               "weight": 1,
               "item_id": 538134357,
               "item_type": 2,
@@ -328,7 +331,7 @@
             },
             {
               "type": 2,
-              "chance": 0.080000006,
+              "chance": 0.08,
               "weight": 1,
               "item_id": 1555856161,
               "item_type": 1,
@@ -338,7 +341,7 @@
             },
             {
               "type": 2,
-              "chance": 0.030000001,
+              "chance": 0.03,
               "weight": 1,
               "item_id": 1280464671,
               "item_type": 2,
@@ -348,7 +351,7 @@
             },
             {
               "type": 2,
-              "chance": 0.16000001,
+              "chance": 0.16,
               "weight": 1,
               "item_id": 1137747723,
               "item_type": 1,
@@ -368,7 +371,7 @@
             },
             {
               "type": 2,
-              "chance": 0.16000001,
+              "chance": 0.16,
               "weight": 1,
               "item_id": 613576797,
               "item_type": 1,
@@ -388,7 +391,7 @@
             },
             {
               "type": 2,
-              "chance": 0.120000005,
+              "chance": 0.12,
               "weight": 1,
               "item_id": 423302871,
               "item_type": 1,
@@ -398,7 +401,7 @@
             },
             {
               "type": 2,
-              "chance": 0.040000003,
+              "chance": 0.04,
               "weight": 1,
               "item_id": 576507715,
               "item_type": 2,
@@ -408,7 +411,7 @@
             },
             {
               "type": 2,
-              "chance": 0.16000001,
+              "chance": 0.16,
               "weight": 1,
               "item_id": 1149257221,
               "item_type": 1,
@@ -595,12 +598,12 @@
           "weight": 1,
           "item_id": 0,
           "item_type": 0,
-          "item_min": 1,
-          "item_max": 1,
+          "item_min": 0,
+          "item_max": 0,
           "childs": [
             {
               "type": 2,
-              "chance": 0.08400001,
+              "chance": 0.084,
               "weight": 1,
               "item_id": 1875891642,
               "item_type": 1,
@@ -640,7 +643,7 @@
             },
             {
               "type": 2,
-              "chance": 0.08400001,
+              "chance": 0.084,
               "weight": 1,
               "item_id": 1263084448,
               "item_type": 1,
@@ -660,7 +663,7 @@
             },
             {
               "type": 2,
-              "chance": 0.08400001,
+              "chance": 0.084,
               "weight": 1,
               "item_id": 1132815486,
               "item_type": 1,
@@ -847,12 +850,12 @@
           "weight": 1,
           "item_id": 0,
           "item_type": 0,
-          "item_min": 1,
-          "item_max": 1,
+          "item_min": 0,
+          "item_max": 0,
           "childs": [
             {
               "type": 2,
-              "chance": 0.08400001,
+              "chance": 0.084,
               "weight": 1,
               "item_id": 1875891642,
               "item_type": 1,
@@ -892,7 +895,7 @@
             },
             {
               "type": 2,
-              "chance": 0.08400001,
+              "chance": 0.084,
               "weight": 1,
               "item_id": 1263084448,
               "item_type": 1,
@@ -912,7 +915,7 @@
             },
             {
               "type": 2,
-              "chance": 0.08400001,
+              "chance": 0.084,
               "weight": 1,
               "item_id": 1132815486,
               "item_type": 1,
@@ -1099,12 +1102,12 @@
           "weight": 1,
           "item_id": 0,
           "item_type": 0,
-          "item_min": 1,
-          "item_max": 1,
+          "item_min": 0,
+          "item_max": 0,
           "childs": [
             {
               "type": 2,
-              "chance": 0.08400001,
+              "chance": 0.084,
               "weight": 1,
               "item_id": 1875891642,
               "item_type": 1,
@@ -1144,7 +1147,7 @@
             },
             {
               "type": 2,
-              "chance": 0.08400001,
+              "chance": 0.084,
               "weight": 1,
               "item_id": 1263084448,
               "item_type": 1,
@@ -1164,7 +1167,7 @@
             },
             {
               "type": 2,
-              "chance": 0.08400001,
+              "chance": 0.084,
               "weight": 1,
               "item_id": 1132815486,
               "item_type": 1,
@@ -1351,12 +1354,12 @@
           "weight": 1,
           "item_id": 0,
           "item_type": 0,
-          "item_min": 1,
-          "item_max": 1,
+          "item_min": 0,
+          "item_max": 0,
           "childs": [
             {
               "type": 2,
-              "chance": 0.08400001,
+              "chance": 0.084,
               "weight": 1,
               "item_id": 1875891642,
               "item_type": 1,
@@ -1396,7 +1399,7 @@
             },
             {
               "type": 2,
-              "chance": 0.08400001,
+              "chance": 0.084,
               "weight": 1,
               "item_id": 1263084448,
               "item_type": 1,
@@ -1416,7 +1419,7 @@
             },
             {
               "type": 2,
-              "chance": 0.08400001,
+              "chance": 0.084,
               "weight": 1,
               "item_id": 1132815486,
               "item_type": 1,
@@ -1603,12 +1606,12 @@
           "weight": 1,
           "item_id": 0,
           "item_type": 0,
-          "item_min": 1,
-          "item_max": 1,
+          "item_min": 0,
+          "item_max": 0,
           "childs": [
             {
               "type": 2,
-              "chance": 0.08400001,
+              "chance": 0.084,
               "weight": 1,
               "item_id": 1875891642,
               "item_type": 1,
@@ -1648,7 +1651,7 @@
             },
             {
               "type": 2,
-              "chance": 0.08400001,
+              "chance": 0.084,
               "weight": 1,
               "item_id": 1263084448,
               "item_type": 1,
@@ -1668,7 +1671,7 @@
             },
             {
               "type": 2,
-              "chance": 0.08400001,
+              "chance": 0.084,
               "weight": 1,
               "item_id": 1132815486,
               "item_type": 1,
@@ -1855,12 +1858,12 @@
           "weight": 1,
           "item_id": 0,
           "item_type": 0,
-          "item_min": 1,
-          "item_max": 1,
+          "item_min": 0,
+          "item_max": 0,
           "childs": [
             {
               "type": 2,
-              "chance": 0.08400001,
+              "chance": 0.084,
               "weight": 1,
               "item_id": 1875891642,
               "item_type": 1,
@@ -1900,7 +1903,7 @@
             },
             {
               "type": 2,
-              "chance": 0.08400001,
+              "chance": 0.084,
               "weight": 1,
               "item_id": 1263084448,
               "item_type": 1,
@@ -1920,7 +1923,7 @@
             },
             {
               "type": 2,
-              "chance": 0.08400001,
+              "chance": 0.084,
               "weight": 1,
               "item_id": 1132815486,
               "item_type": 1,

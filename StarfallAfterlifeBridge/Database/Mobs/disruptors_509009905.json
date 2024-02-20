@@ -206,7 +206,7 @@
         "fleet_max": -1,
         "drop_state": true,
         "role": 0,
-        "bt": "",
+        "bt": "/Game/gameplay/ai/ships/BT_ScreechersRammingShip.BT_ScreechersRammingShip",
         "tags": [],
         "drop_tree": {
           "type": 1,
@@ -688,7 +688,7 @@
         "fleet_max": -1,
         "drop_state": true,
         "role": 0,
-        "bt": "",
+        "bt": "/Game/gameplay/ai/ships/BT_ScreechersRammingShip.BT_ScreechersRammingShip",
         "tags": [],
         "drop_tree": {
           "type": 1,
@@ -1166,7 +1166,7 @@
         "fleet_max": -1,
         "drop_state": true,
         "role": 0,
-        "bt": "",
+        "bt": "/Game/gameplay/ai/BtScout.BtScout",
         "tags": [],
         "drop_tree": {
           "type": 1,
@@ -1494,7 +1494,7 @@
         "fleet_max": -1,
         "drop_state": true,
         "role": 0,
-        "bt": "",
+        "bt": "/Game/gameplay/ai/BtScout.BtScout",
         "tags": [],
         "drop_tree": {
           "type": 1,
@@ -1822,7 +1822,7 @@
         "fleet_max": -1,
         "drop_state": true,
         "role": 0,
-        "bt": "",
+        "bt": "/Game/gameplay/ai/BtSniper.BtSniper",
         "tags": [],
         "drop_tree": {
           "type": 1,
@@ -2150,7 +2150,7 @@
         "fleet_max": -1,
         "drop_state": true,
         "role": 0,
-        "bt": "",
+        "bt": "/Game/gameplay/ai/BtSniper.BtSniper",
         "tags": [],
         "drop_tree": {
           "type": 1,

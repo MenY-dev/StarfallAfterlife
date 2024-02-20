@@ -290,7 +290,7 @@
         "fleet_max": -1,
         "drop_state": true,
         "role": 0,
-        "bt": "",
+        "bt": "/Game/gameplay/ai/boss/BtRedShieldBoss.BtRedShieldBoss",
         "tags": [],
         "drop_tree": {
           "type": 1,
