@@ -79,16 +79,16 @@ namespace StarfallAfterlife.Launcher.ViewModels
 
         public void RaiseModelChanged()
         {
-            RaisePropertyChanged(Info?.Address, nameof(Address));
-            RaisePropertyChanged(Info?.Id, nameof(Id));
-            RaisePropertyChanged(Info?.Name, nameof(Name));
-            RaisePropertyChanged(Info?.Description, nameof(Description));
-            RaisePropertyChanged(Info?.Version, nameof(Version));
-            RaisePropertyChanged(Info?.IsOnline ?? false, nameof(IsOnline));
-            RaisePropertyChanged(Info?.NeedPassword ?? false, nameof(NeedPassword));
-            RaisePropertyChanged(Sessions, nameof(Sessions));
-            RaisePropertyChanged(IsActiveSession, nameof(IsActiveSession));
-            RaisePropertyChanged(ActiveSessionChars, nameof(ActiveSessionChars));
+            RaisePropertyUpdate(Info?.Address, nameof(Address));
+            RaisePropertyUpdate(Info?.Id, nameof(Id));
+            RaisePropertyUpdate(Info?.Name, nameof(Name));
+            RaisePropertyUpdate(Info?.Description, nameof(Description));
+            RaisePropertyUpdate(Info?.Version, nameof(Version));
+            RaisePropertyUpdate(Info?.IsOnline ?? false, nameof(IsOnline));
+            RaisePropertyUpdate(Info?.NeedPassword ?? false, nameof(NeedPassword));
+            RaisePropertyUpdate(Sessions, nameof(Sessions));
+            RaisePropertyUpdate(IsActiveSession, nameof(IsActiveSession));
+            RaisePropertyUpdate(ActiveSessionChars, nameof(ActiveSessionChars));
         }
 
         public Task<bool> Update() =>
@@ -99,12 +99,12 @@ namespace StarfallAfterlife.Launcher.ViewModels
             if (Info is RemoteServerInfo serverInfo)
             {
                 UpdateTasksCount++;
-                RaisePropertyChanged(IsUpdateStarted, nameof(IsUpdateStarted));
+                RaisePropertyUpdate(IsUpdateStarted, nameof(IsUpdateStarted));
 
                 return serverInfo.Update(5000, ct).ContinueWith(t =>
                 {
                     UpdateTasksCount--;
-                    RaisePropertyChanged(IsUpdateStarted, nameof(IsUpdateStarted));
+                    RaisePropertyUpdate(IsUpdateStarted, nameof(IsUpdateStarted));
 
                     if (ct.IsCancellationRequested)
                         return false;

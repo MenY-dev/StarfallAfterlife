@@ -47,11 +47,11 @@ namespace StarfallAfterlife.Launcher.ViewModels
         {
             Name = SfaDatabase.Instance.GetShipName(Data?.Hull ?? -1);
 
-            RaisePropertyChanged(Name, nameof(Name));
-            RaisePropertyChanged(Level, nameof(Info));
-            RaisePropertyChanged(Xp, nameof(Xp));
-            RaisePropertyChanged(IsFavorite, nameof(IsFavorite));
-            RaisePropertyChanged(Data, nameof(Data));
+            RaisePropertyUpdate(Name, nameof(Name));
+            RaisePropertyUpdate(Level, nameof(Info));
+            RaisePropertyUpdate(Xp, nameof(Xp));
+            RaisePropertyUpdate(IsFavorite, nameof(IsFavorite));
+            RaisePropertyUpdate(Data, nameof(Data));
         }
     }
 }

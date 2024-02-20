@@ -44,9 +44,9 @@ namespace StarfallAfterlife.Launcher.ViewModels
         {
             UpdateCharacters();
 
-            RaisePropertyChanged(Name, nameof(Name));
-            RaisePropertyChanged(LastPlay, nameof(LastPlay));
-            RaisePropertyChanged(LastPlayAvailable, nameof(LastPlayAvailable));
+            RaisePropertyUpdate(Name, nameof(Name));
+            RaisePropertyUpdate(LastPlay, nameof(LastPlay));
+            RaisePropertyUpdate(LastPlayAvailable, nameof(LastPlayAvailable));
 
             foreach (var item in Chars.ToArray())
                 item?.Update();

@@ -53,12 +53,12 @@ namespace StarfallAfterlife.Launcher.ViewModels
         {
             UpdateShips();
 
-            RaisePropertyChanged(Name, nameof(Info));
-            RaisePropertyChanged(Faction, nameof(Faction));
-            RaisePropertyChanged(Level, nameof(Level));
-            RaisePropertyChanged(AccessLevel, nameof(AccessLevel));
-            RaisePropertyChanged(IGC, nameof(IGC));
-            RaisePropertyChanged(BGC, nameof(BGC));
+            RaisePropertyUpdate(Name, nameof(Info));
+            RaisePropertyUpdate(Faction, nameof(Faction));
+            RaisePropertyUpdate(Level, nameof(Level));
+            RaisePropertyUpdate(AccessLevel, nameof(AccessLevel));
+            RaisePropertyUpdate(IGC, nameof(IGC));
+            RaisePropertyUpdate(BGC, nameof(BGC));
             
             foreach (var item in Ships.ToArray())
                 item?.Update();

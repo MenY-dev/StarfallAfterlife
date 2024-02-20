@@ -53,9 +53,9 @@ namespace StarfallAfterlife.Launcher.ViewModels
 
         public void Update()
         {
-            RaisePropertyChanged(Name, nameof(Name));
-            RaisePropertyChanged(Description, nameof(Description));
-            RaisePropertyChanged(Seed, nameof(Seed));
+            RaisePropertyUpdate(Name, nameof(Name));
+            RaisePropertyUpdate(Description, nameof(Description));
+            RaisePropertyUpdate(Seed, nameof(Seed));
 
             if (AppVM is AppViewModel app &&
                 app.Launcher is SfaLauncher launcher)
@@ -80,10 +80,10 @@ namespace StarfallAfterlife.Launcher.ViewModels
                 LockedByServer = false;
             }
 
-            RaisePropertyChanged(Sessions, nameof(Sessions));
-            RaisePropertyChanged(IsActiveSession, nameof(IsActiveSession));
-            RaisePropertyChanged(ActiveSessionChars, nameof(ActiveSessionChars));
-            RaisePropertyChanged(LockedByServer, nameof(LockedByServer));
+            RaisePropertyUpdate(Sessions, nameof(Sessions));
+            RaisePropertyUpdate(IsActiveSession, nameof(IsActiveSession));
+            RaisePropertyUpdate(ActiveSessionChars, nameof(ActiveSessionChars));
+            RaisePropertyUpdate(LockedByServer, nameof(LockedByServer));
         }
     }
 }

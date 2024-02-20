@@ -37,10 +37,10 @@ namespace StarfallAfterlife.Launcher.ViewModels
             return true;
         }
 
-        protected void RaisePropertyChanged(object value, [CallerMemberName] string name = null) =>
+        protected void RaisePropertyUpdate<T>(T value, [CallerMemberName] string name = null) =>
             RaisePropertyChanged(value, value, name);
 
-        protected void RaisePropertyChanged(object oldValue, object newValue, [CallerMemberName] string name = null)
+        protected void RaisePropertyChanged<T>(T oldValue, T newValue, [CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
             OnPropertyChanged(oldValue, newValue, name);

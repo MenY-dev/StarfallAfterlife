@@ -34,15 +34,15 @@ namespace StarfallAfterlife.Launcher.ViewModels
             set
             {
                 SetAndRaise(ref _info, value);
-                RaisePropertyChanged(Auth, nameof(Auth));
-                RaisePropertyChanged(Name, nameof(Name));
-                RaisePropertyChanged(CharacterId, nameof(CharacterId));
-                RaisePropertyChanged(CharacterName, nameof(CharacterName));
-                RaisePropertyChanged(CharacterFaction, nameof(CharacterFaction));
-                RaisePropertyChanged(CurrentSystemId, nameof(CurrentSystemId));
-                RaisePropertyChanged(CurrentSystemName, nameof(CurrentSystemName));
-                RaisePropertyChanged(Status, nameof(Status));
-                RaisePropertyChanged(IsOnline, nameof(IsOnline));
+                RaisePropertyUpdate(Auth, nameof(Auth));
+                RaisePropertyUpdate(Name, nameof(Name));
+                RaisePropertyUpdate(CharacterId, nameof(CharacterId));
+                RaisePropertyUpdate(CharacterName, nameof(CharacterName));
+                RaisePropertyUpdate(CharacterFaction, nameof(CharacterFaction));
+                RaisePropertyUpdate(CurrentSystemId, nameof(CurrentSystemId));
+                RaisePropertyUpdate(CurrentSystemName, nameof(CurrentSystemName));
+                RaisePropertyUpdate(Status, nameof(Status));
+                RaisePropertyUpdate(IsOnline, nameof(IsOnline));
             }
         }
 
