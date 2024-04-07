@@ -23,13 +23,14 @@
     </Design.PreviewWith>
 
 	<Style Selector="c|SfaPanel">
+		<Setter Property="AccentColor" Value="{DynamicResource AccentColor}"/>
 		<Setter Property="Template">
 			<ControlTemplate>
 				<Panel Classes="sfapanelroot" Background="Transparent" Margin="0">
 					<Rectangle Classes="background"/>
 					<Rectangle Classes="highlight"/>
 					<DockPanel Classes="wrapper" LastChildFill="True">
-						<Panel Classes="header" ZIndex="1" IsVisible="{TemplateBinding  ShowHeader}" DockPanel.Dock="Top">
+						<Panel Classes="header" ZIndex="1" IsVisible="{TemplateBinding ShowHeader}" DockPanel.Dock="Top">
 							<Rectangle Classes="background"/>
 							<Rectangle Classes="shadow"/>
 							<Label Classes="text" Content="{TemplateBinding HeaderText}"/>
@@ -54,9 +55,16 @@
 
 		<Style Selector="^ > Panel.sfapanelroot">
 			<Style Selector="^ > DockPanel.wrapper > Panel.header">
+				<Setter Property="Background" Value="#10FFFFFF"/>
 				<Style Selector="^ Rectangle.background">
-					<Setter Property="Opacity" Value="0.1"/>
-					<Setter Property="Fill" Value="White"/>
+					<Setter Property="Fill" Value="{Binding $parent[UserControl].AccentColor}"/>
+					<Setter Property="Opacity" Value="0.2"/>
+					<Setter Property="OpacityMask">
+						<RadialGradientBrush>
+							<GradientStop Offset="0" Color="#FFFFFFFF"/>
+							<GradientStop Offset="1" Color="#00FFFFFF"/>
+						</RadialGradientBrush>
+					</Setter>
 				</Style>
 
 				<Style Selector="^ Label.text">
@@ -96,7 +104,7 @@
 			</Style>
 			
 			<Style Selector="^ > Rectangle.highlight">
-				<Setter Property="Fill" Value="{DynamicResource AccentColor}"/>
+				<Setter Property="Fill" Value="{Binding $parent[UserControl].AccentColor}"/>
 				<Setter Property="Opacity" Value="0.3"/>
 				<Setter Property="OpacityMask">
 					<RadialGradientBrush  Center="50% 100%" GradientOrigin="50% 100%" Radius="1">
@@ -110,7 +118,7 @@
 				<Setter Property="Opacity" Value="0.50"/>
 				<Setter Property="IsHitTestVisible" Value="False"/>
 				<Setter Property="Background" Value="Transparent"/>
-				<Setter Property="BorderBrush" Value="{DynamicResource AccentColor}"/>
+				<Setter Property="BorderBrush" Value="{Binding $parent[UserControl].AccentColor}"/>
 				<Setter Property="BorderThickness" Value="1"/>
 				<Setter Property="CornerRadius" Value="0"/>
 			</Style>

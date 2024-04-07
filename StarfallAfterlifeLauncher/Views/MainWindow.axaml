@@ -86,6 +86,7 @@
 					<p:SinglePlayerModePage Name="SinglePlayerPage" DataContext="{Binding SinglePlayerPageViewModel}"/>
 					<p:FindServerPage Name="FindServerPage" DataContext="{Binding FindServerPageViewModel}"/>
 					<p:CreateServerPage Name="CreateServerPage" DataContext="{Binding CreateServerPageViewModel}"/>
+					<p:CodexPage Name="CodexPage" DataContext="{Binding CodexPageViewModel}"/>
 					<p:LogPage Name="LogPage"/>
 					<p:SettingsPage Name="SettingsPage"/>
 				</c:SidebarPageContainer>
@@ -123,6 +124,15 @@
 						</StackPanel>
 
 						<StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Spacing="0">
+							<c:SidebarTab PageName="CodexPage" HorizontalAlignment="Stretch">
+								<StackPanel Orientation="Horizontal">
+									<Label Content="h"  FontSize="25" FontFamily="{StaticResource IconsFont}"
+										   HorizontalContentAlignment="Center"
+										   VerticalContentAlignment="Center"
+										   Width="50" Height="50"/>
+									<Label Content="{DynamicResource s_page_codex_header}" VerticalAlignment="Center"/>
+								</StackPanel>
+							</c:SidebarTab>
 							<c:SidebarTab PageName="LogPage" HorizontalAlignment="Stretch">
 								<StackPanel Orientation="Horizontal">
 									<Label Content="d"  FontSize="25" FontFamily="{StaticResource IconsFont}"

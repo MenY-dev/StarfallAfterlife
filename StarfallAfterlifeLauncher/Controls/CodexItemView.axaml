@@ -1,0 +1,245 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:c="using:StarfallAfterlife.Launcher.Controls"
+			 xmlns:vm="using:StarfallAfterlife.Launcher.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="500"
+             x:Class="StarfallAfterlife.Launcher.Controls.CodexItemView">
+
+	<Design.DataContext>
+		<vm:CodexItemViewModel Name="Test Item" TechLevel="3">
+			<vm:CodexItemViewModel.Properties>
+				<vm:CodexItemPropertyViewModel Name="Text Property" Value="Text Value"/>
+				<vm:CodexItemPropertyViewModel Name="Number Value">
+					<vm:CodexItemPropertyViewModel.Value>
+						<x:Single>250.65</x:Single>
+					</vm:CodexItemPropertyViewModel.Value>
+				</vm:CodexItemPropertyViewModel>
+			</vm:CodexItemViewModel.Properties>
+		</vm:CodexItemViewModel>
+	</Design.DataContext>
+	
+	<UserControl.Resources>
+		<DataTemplate x:Key="PropsTemplate">
+			<ItemsControl ItemsSource="{Binding}" Margin="10 10" HorizontalAlignment="Stretch">
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<StackPanel Orientation="Vertical" Spacing="1"/>
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<Grid HorizontalAlignment="Stretch">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="2*"/>
+								<ColumnDefinition Width="6"/>
+								<ColumnDefinition Width="3*"/>
+							</Grid.ColumnDefinitions>
+
+							<c:CodexItemValuePresenter
+								Grid.Column="0"
+								DataContext="{Binding}"
+								HorizontalContentAlignment="Right"/>
+
+							<SelectableTextBlock
+								Grid.Column="2"
+								Text="{Binding Name}"
+								Opacity="0.75"
+								VerticalAlignment="Top"
+								FontSize="14"
+								FontWeight="DemiBold"
+								TextWrapping="Wrap"/>
+						</Grid>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+		</DataTemplate>
+	</UserControl.Resources>
+
+	<ContentControl Content="{Binding}">
+		<ContentControl.DataTemplates>
+			<DataTemplate DataType="vm:CodexItemViewModel">
+				<Panel>
+					<Rectangle Fill="Black" Opacity="0.5"/>
+					<Rectangle Fill="{Binding TechLevel, Converter={x:Static c:SfaUtils.TechLevelToBrushConverter}}"
+									   Opacity="0.3">
+						<Rectangle.OpacityMask>
+							<LinearGradientBrush StartPoint="0% 0%" EndPoint="0% 100%">
+								<GradientStop Offset="0" Color="#00FFFFFF"/>
+								<GradientStop Offset="1" Color="#FFFFFFFF"/>
+							</LinearGradientBrush>
+						</Rectangle.OpacityMask>
+					</Rectangle>
+					<Grid RowDefinitions="Auto 2 *">
+						<Panel Grid.Row="0">
+							<Rectangle Fill="{DynamicResource PageMainColor}" Opacity="0.25"/>
+							<Rectangle Fill="{Binding TechLevel, Converter={x:Static c:SfaUtils.TechLevelToBrushConverter}}"
+									   Opacity="0.3">
+								<Rectangle.OpacityMask>
+									<LinearGradientBrush StartPoint="0% 0%" EndPoint="100% 0%">
+										<GradientStop Offset="0" Color="#FFFFFFFF"/>
+										<GradientStop Offset="1" Color="#00FFFFFF"/>
+									</LinearGradientBrush>
+								</Rectangle.OpacityMask>
+							</Rectangle>
+							<Grid ColumnDefinitions="* Auto" Margin="10 0">
+								<StackPanel>
+									<SelectableTextBlock Text="{Binding Name}"
+														 FontWeight="DemiBold"
+														 FontSize="24"
+														 VerticalAlignment="Center"
+														 Padding="5 5"/>
+
+									<ItemsControl ItemsSource="{Binding Tags}"
+												  Padding="5 0 5 5"
+												  IsVisible="{Binding Tags.Count}">
+										<ItemsControl.ItemsPanel>
+											<ItemsPanelTemplate>
+												<StackPanel Orientation="Horizontal" Spacing="3"/>
+											</ItemsPanelTemplate>
+										</ItemsControl.ItemsPanel>
+										<ItemsControl.ItemTemplate>
+											<DataTemplate>
+												<Border Background="#20FFFFFF" CornerRadius="2">
+													<SelectableTextBlock FontSize="12" Opacity="0.75" Margin="3 1" Text="{Binding}"/>
+												</Border>
+											</DataTemplate>
+										</ItemsControl.ItemTemplate>
+									</ItemsControl>
+								</StackPanel>
+
+								<Border Grid.Column="1"
+										Background="#20FFFFFF"
+										CornerRadius="2"
+										VerticalAlignment="Center">
+									<StackPanel Margin="5 5"
+												VerticalAlignment="Center"
+												IsVisible="{Binding ItemSlots, Converter={x:Static ObjectConverters.IsNotNull}}">
+										<ItemsControl HorizontalAlignment="Center"
+													  VerticalAlignment="Center"
+													  ItemsSource="{Binding ItemSlots}">
+											<ItemsControl.ItemsPanel>
+												<ItemsPanelTemplate>
+													<StackPanel Orientation="Horizontal" Spacing="2"/>
+												</ItemsPanelTemplate>
+											</ItemsControl.ItemsPanel>
+											<ItemsControl.ItemTemplate>
+												<DataTemplate>
+													<ItemsControl ItemsSource="{Binding}">
+														<ItemsControl.ItemsPanel>
+															<ItemsPanelTemplate>
+																<StackPanel Orientation="Vertical" Spacing="2"/>
+															</ItemsPanelTemplate>
+														</ItemsControl.ItemsPanel>
+														<ItemsControl.ItemTemplate>
+															<DataTemplate>
+																<Rectangle Width="6" Height="6"
+																		   Fill="{Binding $parent[UserControl].DataContext.TechLevel, Converter={x:Static c:SfaUtils.TechLevelToBrushConverter}}"/>
+															</DataTemplate>
+														</ItemsControl.ItemTemplate>
+													</ItemsControl>
+												</DataTemplate>
+											</ItemsControl.ItemTemplate>
+										</ItemsControl>
+
+										<SelectableTextBlock FontSize="12"
+															 Opacity="0.75"
+															 HorizontalAlignment="Center"
+															 VerticalAlignment="Center">
+											<SelectableTextBlock.Text>
+												<MultiBinding StringFormat="{}{0}-{1}">
+													<Binding Path="ItemWidth"/>
+													<Binding Path="ItemHeight"/>
+												</MultiBinding>
+											</SelectableTextBlock.Text>
+										</SelectableTextBlock>
+									</StackPanel>
+								</Border>
+							</Grid>
+						</Panel>
+						
+						<Rectangle Grid.Row="1"
+								   Fill="{Binding TechLevel, Converter={x:Static c:SfaUtils.TechLevelToBrushConverter}}"
+								   Opacity="0.75">
+							<Rectangle.OpacityMask>
+								<LinearGradientBrush StartPoint="0% 0%" EndPoint="100% 0%">
+									<GradientStop Offset="0" Color="#60FFFFFF"/>
+									<GradientStop Offset="1" Color="#FFFFFFFF"/>
+								</LinearGradientBrush>
+							</Rectangle.OpacityMask>
+						</Rectangle>
+
+						<Rectangle Grid.Row="2" Height="40"
+								   VerticalAlignment="Top"
+								   Fill="Black" Opacity="0.5"
+								   IsHitTestVisible="False" >
+							<Rectangle.OpacityMask>
+								<LinearGradientBrush StartPoint="0% 0%" EndPoint="0% 100%">
+									<GradientStop Color="#FFFFFFFF" Offset="0"/>
+									<GradientStop Color="#00FFFFFF" Offset="1"/>
+								</LinearGradientBrush>
+							</Rectangle.OpacityMask>
+						</Rectangle>
+						
+						<ScrollViewer Grid.Row="2">
+							<StackPanel>
+								<c:StaggeredPanel MaxColumns="3" ColumnWidth="300"
+												  HorizontalAlignment="Stretch" Margin="5">
+									<c:SfaPanel HeaderText="{DynamicResource s_codex_item_group_summary_lbl}" ShowHeader="True" Margin="5"
+												AccentColor="{Binding TechLevel, Converter={x:Static c:SfaUtils.TechLevelToBrushConverter}}"
+												IsVisible="{Binding Properties.Count}">
+										<StackPanel>
+											<ItemsControl ItemsSource="{Binding DamageTypeDetails}"
+														  IsVisible="{Binding DamageTypeDetails.Count}"
+														  Background="#20FFFFFF"
+														  Padding="10 5"
+														  Margin="10 10 10 0">
+												<ItemsControl.ItemTemplate>
+													<DataTemplate>
+														<SelectableTextBlock Text="{Binding}" FontWeight="DemiBold" FontSize="14"/>
+													</DataTemplate>
+												</ItemsControl.ItemTemplate>
+											</ItemsControl>
+											<ContentControl Content="{Binding Properties}"
+															ContentTemplate="{StaticResource PropsTemplate}"/>
+										</StackPanel>
+									</c:SfaPanel>
+									<c:SfaPanel HeaderText="{DynamicResource s_codex_item_group_slots_lbl}" ShowHeader="True" Margin="5"
+												AccentColor="{Binding TechLevel, Converter={x:Static c:SfaUtils.TechLevelToBrushConverter}}"
+												IsVisible="{Binding Slots.Count}">
+										<c:ShipSlotsView Slots="{Binding Slots}"
+														 Padding="10 20" FitSlots="True"
+														 FontSize="10" FontWeight="DemiBold"/>
+									</c:SfaPanel>
+									<c:SfaPanel HeaderText="{DynamicResource s_codex_item_group_trade_lbl}" ShowHeader="True" Margin="5"
+											    AccentColor="{Binding TechLevel, Converter={x:Static c:SfaUtils.TechLevelToBrushConverter}}"
+											    IsVisible="{Binding TradeProperties.Count}">
+										<ContentControl Content="{Binding TradeProperties}"
+														ContentTemplate="{StaticResource PropsTemplate}"/>
+									</c:SfaPanel>
+									<c:SfaPanel HeaderText="{DynamicResource s_codex_item_group_production_lbl}" ShowHeader="True" Margin="5"
+												AccentColor="{Binding TechLevel, Converter={x:Static c:SfaUtils.TechLevelToBrushConverter}}"
+												IsVisible="{Binding ProductionProperties.Count}">
+										<ContentControl Content="{Binding ProductionProperties}"
+														ContentTemplate="{StaticResource PropsTemplate}"/>
+									</c:SfaPanel>
+									<c:SfaPanel HeaderText="{DynamicResource s_codex_item_group_disassembly_lbl}" ShowHeader="True" Margin="5"
+												AccentColor="{Binding TechLevel, Converter={x:Static c:SfaUtils.TechLevelToBrushConverter}}"
+												IsVisible="{Binding DisassemblyProperties.Count}">
+										<ContentControl Content="{Binding DisassemblyProperties}"
+														ContentTemplate="{StaticResource PropsTemplate}"/>
+									</c:SfaPanel>
+								</c:StaggeredPanel>
+								<SelectableTextBlock Text="{Binding Description}"
+													 TextWrapping="Wrap"
+													 Padding="10 20"
+													 FontSize="16"/>
+							</StackPanel>
+						</ScrollViewer>
+					</Grid>
+				</Panel>
+			</DataTemplate>
+		</ContentControl.DataTemplates>
+	</ContentControl>
+</UserControl>

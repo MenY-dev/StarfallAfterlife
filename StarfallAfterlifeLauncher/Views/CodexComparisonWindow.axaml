@@ -1,0 +1,127 @@
+<c:SfaWindow xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:c="using:StarfallAfterlife.Launcher.Controls"
+			 xmlns:vm="using:StarfallAfterlife.Launcher.ViewModels"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 Width="800" Height="450"
+			 x:Class="StarfallAfterlife.Launcher.Views.CodexComparisonWindow"
+			 WindowStartupLocation="CenterOwner"
+			 c:ShiftPressedBehav.DownCommand="{Binding ShiftStateChanged}"
+			 c:ShiftPressedBehav.UpCommand="{Binding ShiftStateChanged}"
+			 Title="{DynamicResource s_window_codex_compare_header_lbl}">
+	<Panel>
+		<Rectangle Fill="Black" Opacity="0.5"/>
+		<DataGrid ItemsSource="{Binding Rows}"
+				  c:DataGridColumnsBehav.Columns="{Binding Columns}"
+				  AutoGenerateColumns="False"
+				  FrozenColumnCount="1"
+				  GridLinesVisibility="All"
+				  SelectionMode="Single"
+				  CanUserResizeColumns="True"
+				  CanUserReorderColumns="False"
+				  CanUserSortColumns="False">
+			<DataGrid.Styles>
+				<Style Selector="DataGridColumnHeader">
+					<Setter Property="Background" Value="#90000000"/>
+					<Style Selector="^ Border#HeaderBorder">
+						<Setter Property="Background" Value="Transparent"/>
+						<Style Selector="^ TextBlock">
+							<Setter Property="TextWrapping" Value="Wrap"/>
+							<Setter Property="Foreground" Value="#E0FFFFFF"/>
+						</Style>
+					</Style>
+				</Style>
+				
+				<Style Selector="c|CodexItemValuePresenter">
+					<Setter Property="VerticalAlignment" Value="Stretch"/>
+					<Setter Property="VerticalContentAlignment" Value="Stretch"/>
+					<Setter Property="Padding" Value="10 3"/>
+					<Setter Property="FontSize" Value="14"/>
+				</Style>
+
+				<Style Selector="Button#PropertyHeader">
+					<Setter Property="Padding" Value="0"/>
+					<Setter Property="Margin" Value="0"/>
+					<Setter Property="Background" Value="Transparent"/>
+					<Setter Property="CornerRadius" Value="0"/>
+					<Setter Property="HorizontalAlignment" Value="Stretch"/>
+					<Setter Property="VerticalAlignment" Value="Stretch"/>
+					<Style Selector="^ Grid#PropertyHeaderWrapper">
+						<Setter Property="Margin" Value="10 3"/>
+						<Setter Property="HorizontalAlignment" Value="Stretch"/>
+						<Setter Property="VerticalAlignment" Value="Stretch"/>
+						<Style Selector="^ TextBlock#PropertyName">
+							<Setter Property="VerticalAlignment" Value="Center"/>
+							<Setter Property="HorizontalAlignment" Value="Stretch"/>
+							<Setter Property="Padding" Value="0"/>
+							<Setter Property="FontSize" Value="14"/>
+							<Setter Property="TextWrapping" Value="Wrap"/>
+							<Setter Property="Foreground" Value="#E0FFFFFF"/>
+						</Style>
+						<Style Selector="^ TextBlock#SortingLabel">
+							<Setter Property="VerticalAlignment" Value="Center"/>
+							<Setter Property="HorizontalAlignment" Value="Right"/>
+							<Setter Property="TextAlignment" Value="End"/>
+							<Setter Property="Padding" Value="0"/>
+							<Setter Property="Margin" Value="5 0 0 0"/>
+							<Setter Property="FontSize" Value="10"/>
+							<Setter Property="MinWidth" Value="15"/>
+							<Setter Property="TextWrapping" Value="NoWrap"/>
+							<Setter Property="Foreground" Value="{DynamicResource AccentColor}"/>
+							<Setter Property="FontFamily" Value="{StaticResource IconsFont}"/>
+							<Setter Property="Text" Value="{x:Null}"/>
+						</Style>
+						<Style Selector="^ TextBlock#SortingLabel.mintomax">
+							<Setter Property="Text" Value="E"/>
+						</Style>
+						<Style Selector="^ TextBlock#SortingLabel.maxtomin">
+							<Setter Property="Text" Value="G"/>
+						</Style>
+					</Style>
+				</Style>
+				
+				<Style Selector="DataGridRow">
+					<Style Selector="^:pointerover">
+						<Style Selector="^ Rectangle#BackgroundRectangle">
+							<Setter Property="Fill" Value="{DynamicResource AccentColor}"/>
+							<Setter Property="Opacity" Value="0.25"/>
+						</Style>
+					</Style>
+					<Style Selector="^:selected">
+						<Style Selector="^ Rectangle#BackgroundRectangle">
+							<Setter Property="Fill" Value="{x:Null}"/>
+							<Setter Property="Opacity" Value="1"/>
+						</Style>
+					</Style>
+					<Style Selector="^:selected:pointerover">
+						<Style Selector="^ Rectangle#BackgroundRectangle">
+							<Setter Property="Fill" Value="{DynamicResource AccentColor}"/>
+							<Setter Property="Opacity" Value="0.25"/>
+						</Style>
+					</Style>
+				</Style>
+
+				<Style Selector="DataGridCell">
+					<Style Selector="^ /template/ ContentPresenter Control">
+						<Setter Property="HorizontalAlignment" Value="Stretch"/>
+						<Setter Property="VerticalAlignment" Value="Stretch"/>
+						<Setter Property="Margin" Value="0"/>
+					</Style>
+					<Style Selector="^:nth-child(1) > Border">
+						<Setter Property="Background" Value="#20FFFFFF"/>
+						<Setter Property="Padding" Value="0"/>
+					</Style>
+					<Style Selector="^:nth-child(1):pressed > Border">
+						<Setter Property="Background" Value="#00FFFFFF"/>
+					</Style>
+					<Style Selector="^:current Grid#FocusVisual Rectangle">
+						<Setter Property="Stroke" Value="{x:Null}"/>
+						<Setter Property="StrokeThickness" Value="0"/>
+					</Style>
+				</Style>
+			</DataGrid.Styles>
+		</DataGrid>
+	</Panel>
+</c:SfaWindow>

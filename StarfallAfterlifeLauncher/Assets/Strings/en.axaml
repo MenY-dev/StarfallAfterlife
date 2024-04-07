@@ -54,6 +54,58 @@
 	<sys:String x:Key="s_page_cs_stop_btn">STOP</sys:String>
 	<sys:String x:Key="s_page_cs_connect_btn">CONNECT</sys:String>
 	<sys:String x:Key="s_page_cs_dialog_starting">Starting the server...</sys:String>
+	
+	<sys:String x:Key="s_page_codex_header">CODEX</sys:String>
+	<sys:String x:Key="s_page_codex_search_lbl">Search...</sys:String>
+	<sys:String x:Key="s_page_codex_loading_lbl">LOADING...</sys:String>
+	<sys:String x:Key="s_page_codex_reload_codex_btn">RELOAD CODEX</sys:String>
+	<sys:String x:Key="s_page_codex_add_to_compare_btn">ADD TO COMPARE</sys:String>
+	<sys:String x:Key="s_page_codex_comparison_btn">COMPARSION</sys:String>
+	<sys:String x:Key="s_page_codex_compare_btn">COMPARE</sys:String>
+	<sys:String x:Key="s_page_codex_clear_comparison_btn">CLEAR</sys:String>
+	<sys:String x:Key="s_page_codex_select_game_btn">SELECT GAME FOLDER</sys:String>
+
+	<sys:String x:Key="s_page_codex_group_ships_lbl">Spips</sys:String>
+	<sys:String x:Key="s_page_codex_group_equipment_lbl">Equipment</sys:String>
+	<sys:String x:Key="s_page_codex_group_items_lbl">Items</sys:String>
+	<sys:String x:Key="s_page_codex_group_items_cargo_lbl">Cargo</sys:String>
+	<sys:String x:Key="s_page_codex_group_items_projects_lbl">Projects</sys:String>
+
+	<sys:String x:Key="s_codex_item_group_summary_lbl">SUMMARY</sys:String>
+	<sys:String x:Key="s_codex_item_group_slots_lbl">SLOTS</sys:String>
+	<sys:String x:Key="s_codex_item_group_trade_lbl">TRADE</sys:String>
+	<sys:String x:Key="s_codex_item_group_production_lbl">PRODUCTION</sys:String>
+	<sys:String x:Key="s_codex_item_group_disassembly_lbl">DISASSEMBLY</sys:String>
+
+	<sys:String x:Key="codex_name_override_xlsMaxAimingError">Aiming error</sys:String>
+	<sys:String x:Key="codex_name_override_xlsShootsPeriod">Salvo reloading </sys:String>
+	<sys:String x:Key="codex_name_override_xlsProjectileSpeed">Projectile speed</sys:String>
+	<sys:String x:Key="codex_name_override_ProjectileSpeed">Projectile speed</sys:String>
+	<sys:String x:Key="codex_name_override_xlsProjectileLifeTime">Projectile lifetime</sys:String>
+	<sys:String x:Key="codex_name_override_xlsOnDestructionExplodeChance">Сhance of damage upon destruction</sys:String>
+	<sys:String x:Key="codex_name_override_xlsOnDestructionExplodeDamage">Damage on destruction</sys:String>
+	<sys:String x:Key="codex_name_override_ArmorCorrosiveDamagePercent">Armor damage percentage</sys:String>
+	<sys:String x:Key="codex_name_override_xlsIGCPrice">IGC</sys:String>
+	<sys:String x:Key="codex_name_override_IGCToProduce">IGC</sys:String>
+	<sys:String x:Key="codex_name_override_HullIGCPrice">Project cost</sys:String>
+	<sys:String x:Key="codex_name_override_BGCPrice">BGC</sys:String>
+	<sys:String x:Key="codex_name_override_ProductionPoints">Production points</sys:String>
+	<sys:String x:Key="codex_name_override_ProductionPointsOnDisassemble">Production points</sys:String>
+	<sys:String x:Key="codex_name_override_bCharacterBound">Character bound</sys:String>
+	<sys:String x:Key="codex_name_override_MinGalaxyLvl">Min access level</sys:String>
+	<sys:String x:Key="codex_name_override_MaxGalaxyLvl">Max access level</sys:String>
+	<sys:String x:Key="codex_name_override_RequiredItems">Required Items</sys:String>
+	<sys:String x:Key="codex_name_override_DropItemsOnDisassemble">Items</sys:String>
+	<sys:String x:Key="codex_name_override_HullFullRepairTime">Repair time</sys:String>
+	<sys:String x:Key="codex_name_override_MaxRoll">Max acceleration</sys:String>
+	<sys:String x:Key="codex_name_override_xlsIsSpecialEquipment">Special equipment</sys:String>
+	<sys:String x:Key="codex_name_override_xlsIsActiveEquipment">Active equipment</sys:String>
+	<sys:String x:Key="codex_name_override_ProjectToOpen">Opens the project</sys:String>
+	<sys:String x:Key="codex_name_override_ProjectToOpenXp">Project progress</sys:String>
+	<sys:String x:Key="codex_name_override_ProductCount">Number of items</sys:String>
+
+	<sys:String x:Key="s_window_codex_compare_header_lbl">Comparison</sys:String>
+	<sys:String x:Key="s_window_codex_compare_name_lbl">Name</sys:String>
 
 	<sys:String x:Key="s_page_log_header">LOG</sys:String>
 	<sys:String x:Key="s_page_log_autoscroll_btn">Autoscroll</sys:String>
@@ -166,6 +218,19 @@
 
 	<sys:String x:Key="s_type_bool_true">Yes</sys:String>
 	<sys:String x:Key="s_type_bool_false">No</sys:String>
+
+	<sys:String x:Key="s_type_tech_type_Unknown">Unknown</sys:String>
+	<sys:String x:Key="s_type_tech_type_Ship">Ship</sys:String>
+	<sys:String x:Key="s_type_tech_type_Engine">Engine</sys:String>
+	<sys:String x:Key="s_type_tech_type_Shield">Shields</sys:String>
+	<sys:String x:Key="s_type_tech_type_Beam">Beam</sys:String>
+	<sys:String x:Key="s_type_tech_type_Missile">Missile</sys:String>
+	<sys:String x:Key="s_type_tech_type_Ballistic">Ballistic</sys:String>
+	<sys:String x:Key="s_type_tech_type_Engineering">Engineering</sys:String>
+	<sys:String x:Key="s_type_tech_type_Carrier">Hangar</sys:String>
+	<sys:String x:Key="s_type_tech_type_Weapons">Guns</sys:String>
+	<sys:String x:Key="s_type_tech_type_Ammo">Ammo</sys:String>
+	<sys:String x:Key="s_type_tech_type_Armor">Armor</sys:String>
 
 	<sys:String x:Key="s_type_user_game_status_char_main_menu">In shipyard</sys:String>
 	<sys:String x:Key="s_type_user_game_status_char_searching_game">Search BG</sys:String>

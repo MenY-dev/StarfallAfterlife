@@ -224,7 +224,10 @@ namespace StarfallAfterlife.Launcher.ViewModels
 
         public CreateServerPageViewModel CreateServerPageViewModel { get; }
 
+        public CodexViewModel CodexPageViewModel { get; }
+
         public ProfilesEditorViewModel ProfilesEditorViewModel { get; }
+
 
         private string currentProfileName;
 
@@ -243,6 +246,7 @@ namespace StarfallAfterlife.Launcher.ViewModels
             SinglePlayerPageViewModel = new SinglePlayerModePageViewModel(this);
             FindServerPageViewModel = new FindServerPageViewModel(this);
             CreateServerPageViewModel = new CreateServerPageViewModel(this);
+            CodexPageViewModel = new CodexViewModel(this);
             ProfilesEditorViewModel = new ProfilesEditorViewModel(this);
             UpdateRealms();
         }

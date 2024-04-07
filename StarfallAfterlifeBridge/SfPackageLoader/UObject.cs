@@ -76,6 +76,14 @@ namespace StarfallAfterlife.Bridge.SfPackageLoader
             return default;
         }
 
+        public T GetValue<T>(string name, T defaultValue)
+        {
+            if (TryGetValue(name, out T value) == true)
+                return value;
+
+            return defaultValue;
+        }
+
         public bool TryGetValue<T>(string name, out T value)
         {
             if (Properties.TryGetValue(name, out var prop) == true &&

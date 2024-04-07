@@ -54,7 +54,59 @@
 	<sys:String x:Key="s_page_cs_stop_btn">СТОП</sys:String>
 	<sys:String x:Key="s_page_cs_connect_btn">ПОДКЛЮЧИТЬСЯ</sys:String>
 	<sys:String x:Key="s_page_cs_dialog_starting">Заруск сервера...</sys:String>
+	
+	<sys:String x:Key="s_page_codex_header">КОДЕКС</sys:String>
+	<sys:String x:Key="s_page_codex_search_lbl">Поиск...</sys:String>
+	<sys:String x:Key="s_page_codex_loading_lbl">ЗАГРУЗКА...</sys:String>
+	<sys:String x:Key="s_page_codex_reload_codex_btn">ПЕРЕЗАГРУЗИТЬ КОДЕКС</sys:String>
+	<sys:String x:Key="s_page_codex_add_to_compare_btn">ДОБАВИТЬ К СРАВНЕНИЮ</sys:String>
+	<sys:String x:Key="s_page_codex_comparison_btn">СРАВНЕНИЕ</sys:String>
+	<sys:String x:Key="s_page_codex_compare_btn">СРАВНИТЬ</sys:String>
+	<sys:String x:Key="s_page_codex_clear_comparison_btn">ОЧИСТИТЬ</sys:String>
+	<sys:String x:Key="s_page_codex_select_game_btn">ВЫБРАТЬ РАСПОЛОЖЕНИЕ ИГРЫ</sys:String>
 
+	<sys:String x:Key="s_page_codex_group_ships_lbl">Корабли</sys:String>
+	<sys:String x:Key="s_page_codex_group_equipment_lbl">Снаряжение</sys:String>
+	<sys:String x:Key="s_page_codex_group_items_lbl">Предметы</sys:String>
+	<sys:String x:Key="s_page_codex_group_items_cargo_lbl">Груз</sys:String>
+	<sys:String x:Key="s_page_codex_group_items_projects_lbl">Проекты</sys:String>
+
+	<sys:String x:Key="s_codex_item_group_summary_lbl">ОСНОВНОЕ</sys:String>
+	<sys:String x:Key="s_codex_item_group_slots_lbl">СЛОТЫ</sys:String>
+	<sys:String x:Key="s_codex_item_group_trade_lbl">ТОРГОВЛЯ</sys:String>
+	<sys:String x:Key="s_codex_item_group_production_lbl">ПРОИЗВОДСТВО</sys:String>
+	<sys:String x:Key="s_codex_item_group_disassembly_lbl">РАЗБОРКА</sys:String>
+
+	<sys:String x:Key="codex_name_override_xlsMaxAimingError">Точность наведения</sys:String>
+	<sys:String x:Key="codex_name_override_xlsShootsPeriod">Перезарядка в залпе</sys:String>
+	<sys:String x:Key="codex_name_override_xlsProjectileSpeed">Скорость снаряда</sys:String>
+	<sys:String x:Key="codex_name_override_ProjectileSpeed">Скорость снаряда</sys:String>
+	<sys:String x:Key="codex_name_override_xlsProjectileLifeTime">Время жизни снаряда</sys:String>
+	<sys:String x:Key="codex_name_override_xlsOnDestructionExplodeChance">Шанс урона при уничтожении</sys:String>
+	<sys:String x:Key="codex_name_override_xlsOnDestructionExplodeDamage">Урон при уничтожении</sys:String>
+	<sys:String x:Key="codex_name_override_ArmorCorrosiveDamagePercent">Процент урона по броне</sys:String>
+	<sys:String x:Key="codex_name_override_xlsIGCPrice">IGC</sys:String>
+	<sys:String x:Key="codex_name_override_IGCToProduce">IGC</sys:String>
+	<sys:String x:Key="codex_name_override_HullIGCPrice">Стоимость чертежа</sys:String>
+	<sys:String x:Key="codex_name_override_BGCPrice">BGC</sys:String>
+	<sys:String x:Key="codex_name_override_ProductionPoints">Очки производства</sys:String>
+	<sys:String x:Key="codex_name_override_ProductionPointsOnDisassemble">Очки производства</sys:String>
+	<sys:String x:Key="codex_name_override_bCharacterBound">Привязан к персонажу</sys:String>
+	<sys:String x:Key="codex_name_override_MinGalaxyLvl">Мин. уровень доступа</sys:String>
+	<sys:String x:Key="codex_name_override_MaxGalaxyLvl">Макс. уровень доступа</sys:String>
+	<sys:String x:Key="codex_name_override_RequiredItems">Необходимые предметы</sys:String>
+	<sys:String x:Key="codex_name_override_DropItemsOnDisassemble">Предметы</sys:String>
+	<sys:String x:Key="codex_name_override_HullFullRepairTime">Время ремонта</sys:String>
+	<sys:String x:Key="codex_name_override_MaxRoll">Максимальное ускорение</sys:String>
+	<sys:String x:Key="codex_name_override_xlsIsSpecialEquipment">Специальное снаряжение</sys:String>
+	<sys:String x:Key="codex_name_override_xlsIsActiveEquipment">Активное снаряжение</sys:String>
+	<sys:String x:Key="codex_name_override_ProjectToOpen">Открывает проект</sys:String>
+	<sys:String x:Key="codex_name_override_ProjectToOpenXp">Прогресс проекта</sys:String>
+	<sys:String x:Key="codex_name_override_ProductCount">Количество предметов</sys:String>
+	
+	<sys:String x:Key="s_window_codex_compare_header_lbl">Сравнение</sys:String>
+	<sys:String x:Key="s_window_codex_compare_name_lbl">Название</sys:String>
+	
 	<sys:String x:Key="s_page_log_header">ЛОГ</sys:String>
 	<sys:String x:Key="s_page_log_autoscroll_btn">Автопрокрутка</sys:String>
 	<sys:String x:Key="s_page_log_in_window_btn">В ОКНЕ</sys:String>
@@ -167,6 +219,19 @@
 	
 	<sys:String x:Key="s_type_bool_true">Да</sys:String>
 	<sys:String x:Key="s_type_bool_false">Нет</sys:String>
+
+	<sys:String x:Key="s_type_tech_type_Unknown">Неизвестный</sys:String>
+	<sys:String x:Key="s_type_tech_type_Ship">Корабль</sys:String>
+	<sys:String x:Key="s_type_tech_type_Engine">Двигатель</sys:String>
+	<sys:String x:Key="s_type_tech_type_Shield">Щиты</sys:String>
+	<sys:String x:Key="s_type_tech_type_Beam">Лучевое</sys:String>
+	<sys:String x:Key="s_type_tech_type_Missile">Ракеты</sys:String>
+	<sys:String x:Key="s_type_tech_type_Ballistic">Баллистика</sys:String>
+	<sys:String x:Key="s_type_tech_type_Engineering">Инженерный</sys:String>
+	<sys:String x:Key="s_type_tech_type_Carrier">Ангар</sys:String>
+	<sys:String x:Key="s_type_tech_type_Weapons">Орудия</sys:String>
+	<sys:String x:Key="s_type_tech_type_Ammo">Боеприпасы</sys:String>
+	<sys:String x:Key="s_type_tech_type_Armor">Броня</sys:String>
 
 	<sys:String x:Key="s_type_user_game_status_char_main_menu">На верфи</sys:String>
 	<sys:String x:Key="s_type_user_game_status_char_searching_game">Поиск БГ</sys:String>

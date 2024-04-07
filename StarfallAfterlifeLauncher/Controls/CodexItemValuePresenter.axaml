@@ -1,0 +1,80 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:c="using:StarfallAfterlife.Launcher.Controls"
+             mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="50"
+             x:Class="StarfallAfterlife.Launcher.Controls.CodexItemValuePresenter"
+			 Name="RootPresenter">
+
+	<Design.PreviewWith>
+		
+	</Design.PreviewWith>
+
+	<UserControl.Resources>
+		<c:CodexItemValueTemplateSelector x:Key="ValueTemplate">
+			<DataTemplate DataType="x:Array">
+				<ItemsControl Name="Wrapper" ItemsSource="{Binding Value}" DataContext="{Binding}">
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<StackPanel Orientation="Vertical" Spacing="5"/>
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<ContentControl ContentTemplate="{StaticResource ValueTemplate}">
+								<ContentControl.Content>
+									<c:CodexItemValueTemplateContext Value="{Binding}" Info="{Binding #Wrapper.DataContext}"/>
+								</ContentControl.Content>
+							</ContentControl>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+			</DataTemplate>
+			<DataTemplate DataType="x:Single">
+				<SelectableTextBlock Text="{Binding Value, StringFormat='{}{0:0.##}'}"
+									 TextWrapping="Wrap"/>
+			</DataTemplate>
+			<DataTemplate DataType="x:Double">
+				<SelectableTextBlock Text="{Binding Value, StringFormat='{}{0:0.##}'}"
+									 TextWrapping="Wrap"/>
+			</DataTemplate>
+			<DataTemplate DataType="x:Boolean">
+				<c:Switch Value="{Binding Value}">
+					<SelectableTextBlock c:Switch.Case="{x:True}" Text="{DynamicResource s_type_bool_true}" TextWrapping="Wrap"/>
+					<SelectableTextBlock c:Switch.Case="{x:False}" Text="{DynamicResource s_type_bool_false}" TextWrapping="Wrap"/>
+				</c:Switch>
+			</DataTemplate>
+			<DataTemplate>
+				<SelectableTextBlock Text="{Binding Value}"
+									 TextWrapping="Wrap"/>
+			</DataTemplate>
+		</c:CodexItemValueTemplateSelector>
+	</UserControl.Resources>
+
+	<Panel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+		<Panel HorizontalAlignment="{Binding #RootPresenter.HorizontalContentAlignment}"
+			   VerticalAlignment="Center">
+			<Grid ColumnDefinitions="* Auto"
+				  HorizontalAlignment="Left">
+				<TextBlock Grid.Column="1"
+						   IsVisible="{Binding IsMaxValue, FallbackValue={x:False}}"
+						   Text="F"
+						   Foreground="Green"
+						   Margin="5 0 0 0"
+						   FontFamily="{StaticResource IconsFont}"
+						   FontSize="10"
+						   VerticalAlignment="Center"
+						   TextWrapping="NoWrap"/>
+
+				<ContentControl Grid.Column="0"
+								HorizontalAlignment="Left"
+								VerticalAlignment="Center"
+								Content="{Binding}"
+								ContentTemplate="{StaticResource ValueTemplate}"
+								FontSize="14"
+								FontWeight="DemiBold"/>
+			</Grid>
+		</Panel>
+	</Panel>
+</UserControl>

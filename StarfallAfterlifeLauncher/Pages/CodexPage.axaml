@@ -1,0 +1,386 @@
+<c:SidebarPage xmlns="https://github.com/avaloniaui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			   xmlns:c="using:StarfallAfterlife.Launcher.Controls"
+			   xmlns:vm="using:StarfallAfterlife.Launcher.ViewModels"
+			   xmlns:sys="using:System"
+               mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+               x:Class="StarfallAfterlife.Launcher.Pages.CodexPage"
+			   ShowCommand="{Binding OnPageShow}">
+
+	<Design.DataContext>
+		<vm:CodexViewModel ComparisonAvailable="True"
+						   ComparisonAddAvailable="True"/>
+	</Design.DataContext>
+	
+	<Panel>
+		<DockPanel LastChildFill="True">
+			<Panel DockPanel.Dock="Top">
+				<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="15 10" Spacing="5">
+					<Label Content="h" FontFamily="{StaticResource IconsFont}" Classes="h3" VerticalContentAlignment="Center"/>
+					<Label Content="{DynamicResource s_page_codex_header}" Classes="h3" VerticalContentAlignment="Top" Margin="0 2" />
+				</StackPanel>
+				<StackPanel Orientation="Horizontal"
+							HorizontalAlignment="Right"
+							VerticalAlignment="Center"
+							Margin="15 10" Spacing="5">
+					<c:SfaButton IsVisible="{Binding ComparisonAddAvailable}"
+								 MinWidth="32"
+								 Command="{Binding AddToComparison}"
+								 VerticalAlignment="Stretch"
+								 HorizontalContentAlignment="Center"
+								 VerticalContentAlignment="Center"
+								 ToolTip.Tip="{DynamicResource s_page_codex_add_to_compare_btn}">
+						<StackPanel Orientation="Horizontal" Spacing="5">
+							<TextBlock Text="N"
+									   FontFamily="{StaticResource IconsFont}"
+									   VerticalAlignment="Center"/>
+							<TextBlock Text="{DynamicResource s_page_codex_add_to_compare_btn}"
+									   VerticalAlignment="Center"
+									   IsVisible="{Binding !ComparisonAvailable}"/>
+						</StackPanel>
+					</c:SfaButton>
+					
+					<c:SfaButton MinWidth="32"
+								 Command="{Binding SetComparisonPanelState}"
+								 CommandParameter="{Binding !ComparisonPanelVisible}"
+								 IsVisible="{Binding ComparisonAvailable}"
+								 VerticalAlignment="Stretch"
+								 HorizontalContentAlignment="Center"
+								 VerticalContentAlignment="Center"
+								 ToolTip.Tip="{DynamicResource s_page_codex_comparison_btn}">
+						<StackPanel Orientation="Horizontal" Spacing="5">
+							<TextBlock Text="M"
+									   FontFamily="{StaticResource IconsFont}"
+									   VerticalAlignment="Center"/>
+							<TextBlock Text="{DynamicResource s_page_codex_comparison_btn}"
+									   VerticalAlignment="Center"/>
+							<Panel>
+								<Rectangle RadiusX="2" RadiusY="2" Opacity="0.5" Fill="{DynamicResource AccentColor}"/>
+								<TextBlock Text="{Binding Comparison.Count}"
+										   FontSize="12"
+										   VerticalAlignment="Center"
+										   Padding="4 0 4 1 "/>
+							</Panel>
+						</StackPanel>
+					</c:SfaButton>
+					
+					<c:SfaButton Content="☰" MinWidth="32"
+								 VerticalAlignment="Stretch"
+								 HorizontalContentAlignment="Center"
+								 VerticalContentAlignment="Center">
+						<c:SfaButton.Flyout>
+							<c:SfaMenuFlyout Placement="BottomEdgeAlignedRight" VerticalOffset="10">
+								<c:SfaMenuItem Header="{DynamicResource s_page_codex_reload_codex_btn}"
+											   Command="{Binding FullLoadCodex}"/>
+							</c:SfaMenuFlyout>
+						</c:SfaButton.Flyout>
+					</c:SfaButton>
+				</StackPanel>
+				<c:Separator Height="2" Opacity="0.8" VerticalAlignment="Bottom"/>
+			</Panel>
+
+			<Panel DockPanel.Dock="Bottom" MinHeight="20">
+				<c:Separator Height="2" Opacity="0.8" VerticalAlignment="Top"/>
+			</Panel>
+
+			<Panel>
+				<Rectangle Fill="Black" Opacity="0.8" IsHitTestVisible="False" >
+					<Rectangle.OpacityMask>
+						<LinearGradientBrush StartPoint="0% 0%" EndPoint="0% 100%">
+							<GradientStop Color="#FFFFFFFF" Offset="0"/>
+							<GradientStop Color="#20FFFFFF" Offset="1"/>
+						</LinearGradientBrush>
+					</Rectangle.OpacityMask>
+				</Rectangle>
+				<Panel IsVisible="{Binding ShowGameSelector}">
+					<c:SfaButton Content="{DynamicResource s_page_codex_select_game_btn}"
+								 Command="{Binding ShowGameDirSelector}"
+								 HorizontalAlignment="Center"
+								 VerticalAlignment="Center"/>
+				</Panel>
+				<Grid IsVisible="{Binding !ShowGameSelector}">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="1*" MinWidth="200"/>
+						<ColumnDefinition Width="2"/>
+						<ColumnDefinition Width="2*" MinWidth="400"/>
+					</Grid.ColumnDefinitions>
+					<Grid Grid.Column="0" RowDefinitions="Auto 2 *">
+						<Panel Grid.Row="0">
+							<Rectangle Fill="{DynamicResource HoloColor}" Opacity="0.4">
+								<Rectangle.OpacityMask>
+									<RadialGradientBrush Center="50% -100%" GradientOrigin="50% -100%"  Radius="0.5" >
+										<GradientStop Offset="0" Color="#FFFFFFFF"/>
+										<GradientStop Offset="1" Color="#00FFFFFF"/>
+									</RadialGradientBrush>
+								</Rectangle.OpacityMask>
+							</Rectangle>
+							<c:SfaTextBox Margin="10"
+										  Text="{Binding Filter}"
+										  Watermark="{DynamicResource s_page_codex_search_lbl}"/>
+						</Panel>
+						<c:Separator Grid.Row="1" Opacity="0.4"/>
+						<Rectangle Grid.Row="2" Fill="Black" Opacity="0.5" IsHitTestVisible="False" >
+							<Rectangle.OpacityMask>
+								<LinearGradientBrush StartPoint="0% 0%" EndPoint="0% 100%">
+									<GradientStop Color="#FFFFFFFF" Offset="0"/>
+									<GradientStop Color="#20FFFFFF" Offset="1"/>
+								</LinearGradientBrush>
+							</Rectangle.OpacityMask>
+						</Rectangle>
+						<c:SfaTreeView Grid.Row="2" ItemsSource="{Binding Entries}" SelectedItem="{Binding TreeSelectedEntry}">
+							<c:SfaTreeView.DataTemplates>
+
+								<TreeDataTemplate DataType="vm:CodexEntryGroupViewModel" ItemsSource="{Binding Items}">
+									<Border Background="{x:Null}"
+											BorderBrush="{DynamicResource AccentColor}"
+											BorderThickness="4 0 0 0"
+											Padding="5 3"
+											VerticalAlignment="Stretch">
+										<StackPanel Orientation="Horizontal" Spacing="5">
+											<TextBlock Text="{Binding Name}"
+													   FontWeight="DemiBold"
+													   FontSize="16"/>
+											<TextBlock Text="{Binding Count, StringFormat=({0})}"
+													   FontWeight="Normal"
+													   FontSize="16"
+													   Opacity="0.5"/>
+										</StackPanel>
+									</Border>
+								</TreeDataTemplate>
+
+								<TreeDataTemplate DataType="vm:CodexEntryViewModel">
+									<TextBlock Text="{Binding Name}"
+											   FontWeight="Normal"
+											   FontSize="16"
+											   Padding="5 3"/>
+								</TreeDataTemplate>
+
+							</c:SfaTreeView.DataTemplates>
+
+							<c:SfaTreeView.Styles>
+								<Style Selector="TreeViewItem">
+
+									<Style.Resources>
+										<x:Double x:Key="TreeViewItemMinHeight">0</x:Double>
+										<x:Double x:Key="TreeViewItemIndent">8</x:Double>
+										<x:Double x:Key="TreeViewItemExpandCollapseChevronSize">10</x:Double>
+										<Thickness x:Key="TreeViewItemExpandCollapseChevronMargin">5, 0, 5, 0</Thickness>
+									</Style.Resources>
+
+									<Setter Property="IsVisible" Value="{ReflectionBinding IsVisible}" />
+									<Setter Property="IsExpanded" Value="{ReflectionBinding IsExpanded}"/>
+									<Setter Property="Padding" Value="0"/>
+									<Setter Property="Margin" Value="0"/>
+
+									<Style Selector="^:selected">
+										<Style Selector="^ /template/ Border#PART_LayoutRoot">
+
+											<Setter Property="Background">
+												<DrawingBrush Opacity="0.5" DestinationRect="0 0 16 16" TileMode="Tile" Stretch="None">
+													<DrawingBrush.Drawing>
+														<GeometryDrawing Brush="{DynamicResource AccentColor}">
+															<RectangleGeometry Rect="0 0 16 16"/>
+														</GeometryDrawing>
+													</DrawingBrush.Drawing>
+												</DrawingBrush>
+											</Setter>
+
+											<Style Selector="^:pointerover">
+												<Setter Property="Background">
+													<DrawingBrush Opacity="0.75" DestinationRect="0 0 16 16" TileMode="Tile" Stretch="None">
+														<DrawingBrush.Drawing>
+															<GeometryDrawing Brush="{DynamicResource AccentColor}">
+																<RectangleGeometry Rect="0 0 16 16"/>
+															</GeometryDrawing>
+														</DrawingBrush.Drawing>
+													</DrawingBrush>
+												</Setter>
+											</Style>
+
+										</Style>
+									</Style>
+
+									<Style Selector="^:empty:nth-child(2n+1)">
+										<Setter Property="Background" Value="#0CFFFFFF"/>
+									</Style>
+								</Style>
+
+							</c:SfaTreeView.Styles>
+						</c:SfaTreeView>
+
+						<Rectangle Grid.Row="2" Height="20"
+								   VerticalAlignment="Top"
+								   Fill="Black" Opacity="0.5" IsHitTestVisible="False">
+							<Rectangle.OpacityMask>
+								<LinearGradientBrush StartPoint="0% 0%" EndPoint="0% 100%">
+									<GradientStop Color="#FFFFFFFF" Offset="0"/>
+									<GradientStop Color="#20FFFFFF" Offset="1"/>
+								</LinearGradientBrush>
+							</Rectangle.OpacityMask>
+						</Rectangle>
+					</Grid>
+					
+					<c:Separator Grid.Column="1" Classes="vertical" Opacity="0.5"/>
+					<GridSplitter Grid.Column="1" Background="Transparent"
+								  HorizontalAlignment="Stretch"/>
+					
+					<Panel Grid.Column="2">
+						<c:CodexItemView DataContext="{Binding SelectedItem}"/>
+					</Panel>
+				</Grid>
+
+				<Grid Classes.visible="{Binding ComparisonPanelVisible}"
+					  ColumnDefinitions="* Auto"
+					  Name="ComparisonPanel"
+					  Background="#60000000"
+					  IsHitTestVisible="True">
+					<Button Grid.Column="0"
+							Grid.ColumnSpan="2"
+							Opacity="0"
+							IsHitTestVisible="True"
+							HorizontalAlignment="Stretch"
+							VerticalAlignment="Stretch"
+							Command="{Binding SetComparisonPanelState}"
+							CommandParameter="{x:False}"/>
+					
+					<Panel Grid.Column="1"
+						   Classes="sidebar"
+						   Width="320"
+						   HorizontalAlignment="Right">
+						<Grid ColumnDefinitions="20 *">
+							<Rectangle Grid.Column="0" Fill="Black" Opacity="0.75" IsHitTestVisible="False" >
+								<Rectangle.OpacityMask>
+									<LinearGradientBrush StartPoint="100% 0%" EndPoint="0% 0%">
+										<GradientStop Color="#FFFFFFFF" Offset="0"/>
+										<GradientStop Color="#00FFFFFF" Offset="1"/>
+									</LinearGradientBrush>
+								</Rectangle.OpacityMask>
+							</Rectangle>
+							<Panel Grid.Column="1" IsHitTestVisible="True" Background="Transparent">
+								<Rectangle Opacity="0.9" Fill="{DynamicResource PageSecondaryColor}"/>
+								<Rectangle Opacity="0.05" Fill="{DynamicResource AccentColor}"/>
+								<Grid RowDefinitions="* Auto Auto">
+									<ScrollViewer Grid.Row="0">
+										<ItemsControl Margin="5" ItemsSource="{Binding Comparison}">
+											<ItemsControl.ItemTemplate>
+												<DataTemplate>
+													<Panel Classes="item">
+														<TextBlock Text="{Binding Name}"
+																   FontSize="16"
+																   TextWrapping="Wrap"
+																   Padding="10 5 30 5"/>
+														<c:SfaButton Classes="clear delete"
+																	 Command="{Binding $parent[ItemsControl].DataContext.RemoveFromComparison}"
+																	 CommandParameter="{Binding}"
+																	 Content="🗙"
+																	 FontSize="12"
+																	 HorizontalAlignment="Right"
+																	 VerticalAlignment="Stretch"
+																	 VerticalContentAlignment="Center"/>
+													</Panel>
+												</DataTemplate>
+											</ItemsControl.ItemTemplate>
+											<ItemsControl.Styles>
+												<Style Selector="Panel.item">
+													<Setter Property="IsHitTestVisible" Value="True"/>
+													<Setter Property="Background" Value="Transparent"/>
+													<Style Selector="^ c|SfaButton.delete">
+														<Setter Property="Foreground" Value="Red"/>
+														<Setter Property="IsVisible" Value="False"/>
+													</Style>
+													<Style Selector="^:pointerover">
+														<Setter Property="Background" Value="#20FFFFFF"/>
+														<Style Selector="^ c|SfaButton.delete">
+															<Setter Property="IsVisible" Value="True"/>
+														</Style>
+													</Style>
+												</Style>
+											</ItemsControl.Styles>
+										</ItemsControl>
+									</ScrollViewer>
+									<c:SfaButton Grid.Row="1"
+												 Margin="5"
+												 Command="{Binding Compare}"
+												 IsEnabled="{Binding Comparison.Count}"
+												 Content="{DynamicResource s_page_codex_compare_btn}"
+												 HorizontalAlignment="Stretch"
+												 HorizontalContentAlignment="Center"/>
+
+									<c:SfaButton Grid.Row="2"
+												 Margin="5"
+												 Command="{Binding ClearComparison}"
+												 IsEnabled="{Binding Comparison.Count}"
+												 Content="{DynamicResource s_page_codex_clear_comparison_btn}"
+												 Background="Red"
+												 BorderBrush="Red"
+												 HorizontalAlignment="Stretch"
+												 HorizontalContentAlignment="Center"/>
+								</Grid>
+								<Rectangle Fill="Black" Opacity="0.5" IsHitTestVisible="False"
+										   VerticalAlignment="Top" Height="20">
+									<Rectangle.OpacityMask>
+										<LinearGradientBrush StartPoint="0% 0%" EndPoint="0% 100%">
+											<GradientStop Color="#FFFFFFFF" Offset="0"/>
+											<GradientStop Color="#00FFFFFF" Offset="1"/>
+										</LinearGradientBrush>
+									</Rectangle.OpacityMask>
+								</Rectangle>
+								<Rectangle Fill="Black" Opacity="0.3" IsHitTestVisible="False"
+										   VerticalAlignment="Bottom" Height="15">
+									<Rectangle.OpacityMask>
+										<LinearGradientBrush StartPoint="0% 100%" EndPoint="0% 00%">
+											<GradientStop Color="#FFFFFFFF" Offset="0"/>
+											<GradientStop Color="#00FFFFFF" Offset="1"/>
+										</LinearGradientBrush>
+									</Rectangle.OpacityMask>
+								</Rectangle>
+							</Panel>
+						</Grid>
+					</Panel>
+					<Panel.Styles>
+						<Style Selector="Grid#ComparisonPanel">
+							<Setter Property="IsVisible" Value="False"/>
+							<Setter Property="Opacity" Value="0"/>
+
+							<Style Selector="^ Panel.sidebar">
+								<Setter Property="RenderTransform" Value="translateX(50px)"/>
+								<Setter Property="Transitions">
+									<Transitions>
+										<TransformOperationsTransition Property="RenderTransform" Duration="0:0:.2" Easing="SineEaseIn"/>
+									</Transitions>
+								</Setter>
+							</Style>
+
+							<Style Selector="^.visible">
+								<Setter Property="IsVisible" Value="True"/>
+								<Setter Property="Opacity" Value="1"/>
+								<Style Selector="^ Panel.sidebar">
+									<Setter Property="RenderTransform" Value="translateX(0px)"/>
+								</Style>
+							</Style>
+
+							<Setter Property="Transitions">
+								<Transitions>
+									<c:BoolTransition Property="IsVisible" Duration="0:0:.2"/>
+									<DoubleTransition Property="Opacity" Duration="0:0:.2" Easing="CircularEaseIn"/>
+								</Transitions>
+							</Setter>
+						</Style>
+					</Panel.Styles>
+				</Grid>
+			</Panel>
+		</DockPanel>
+		<Panel IsVisible="{Binding LoadingStarted}"
+			   Background="#90000000"
+			   IsHitTestVisible="True">
+			<TextBlock Text="{DynamicResource s_page_codex_loading_lbl}"
+					   FontSize="32"
+					   FontWeight="DemiBold"
+					   Foreground="{DynamicResource AccentColor}"
+					   HorizontalAlignment="Center"
+					   VerticalAlignment="Center"/>
+		</Panel>
+	</Panel>
+</c:SidebarPage>

@@ -215,6 +215,9 @@ namespace StarfallAfterlife.Bridge.SfPackageLoader
         public FObjectExport? GetExport(int index) =>
             Exports?.ElementAtOrDefault(index) ?? default;
 
+        public FObjectExport? GetExport(UObject obj) =>
+            Exports?.ElementAtOrDefault(Objects?.IndexOf(obj) ?? -1) ?? default;
+
         public FObjectImport? GetImport(int index) =>
             Imports?.ElementAtOrDefault(index) ?? default;
 

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -17,7 +18,7 @@ namespace StarfallAfterlife.Bridge.Codex
 
         public Type Type { get; private set; }
 
-        public bool IsHidden { get; private set; } = false;
+        public SfCodexPropertyFlags Flags { get; private set; } = SfCodexPropertyFlags.None;
 
         public Func<UProperty, SfCodex.UPropertyConverterContext, object> Converter { get; private set; }
 
@@ -28,13 +29,13 @@ namespace StarfallAfterlife.Bridge.Codex
         public static SfCodexPropertyInfo Create<T>(
             string name, SfCodexTextKey displayName = default,
             Func<UProperty, SfCodex.UPropertyConverterContext, object> uPropConverter = null,
-            bool isHidden = false)
+            SfCodexPropertyFlags flags = SfCodexPropertyFlags.None)
         {
             var prop = new SfCodexPropertyInfo
             {
                 Name = name,
                 DisplayName = displayName,
-                IsHidden = false,
+                Flags = flags,
                 Type = typeof(T),
                 Converter = uPropConverter,
                 JsonGetter = n =>
@@ -109,6 +110,15 @@ namespace StarfallAfterlife.Bridge.Codex
             return false;
         }
 
-        public object GetValue(JsonNode node) => JsonGetter?.Invoke(node);
+        public object GetValue(JsonNode node)
+        {
+            try
+            {
+                return JsonGetter?.Invoke(node) ?? Activator.CreateInstance(Type);
+            }
+            catch { }
+
+            return null;
+        }
     }
 }

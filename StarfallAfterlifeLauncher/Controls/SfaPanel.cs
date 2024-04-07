@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
+using Avalonia.Media;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,9 @@ namespace StarfallAfterlife.Launcher.Controls
                 unsetValue: null,
                 defaultBindingMode: BindingMode.TwoWay);
 
+        public static readonly StyledProperty<IBrush> AccentColorProperty =
+            AvaloniaProperty.Register<SfaPanel, IBrush>(nameof(AccentColor));
+
         public bool ShowHeader
         {
             get => showHeader;
@@ -44,6 +48,8 @@ namespace StarfallAfterlife.Launcher.Controls
                 SetAndRaise(HeaderTextProperty, ref headerText, value);
             }
         }
+
+        public IBrush AccentColor { get => GetValue(AccentColorProperty); set => SetValue(AccentColorProperty, value); }
 
         private bool showHeader = false;
         private string headerText = null;

@@ -1,4 +1,5 @@
 ﻿using Avalonia.Data.Converters;
+using Avalonia.Layout;
 using Avalonia.Media;
 using StarfallAfterlife.Bridge.Database;
 using System;
@@ -25,6 +26,12 @@ namespace StarfallAfterlife.Launcher.Controls
         public static readonly Brush MineworkerUnionFactionBrush = new SolidColorBrush(Color.FromArgb(255, 150, 150, 150));
         public static readonly Brush CriterionFactionBrush = new SolidColorBrush(Color.FromArgb(255, 100, 80, 170));
 
+        public static readonly Brush EmptyTechLevelBrush = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));
+        public static readonly Brush NormalTechLevelBrush = new SolidColorBrush(Color.FromArgb(255, 176, 214, 255));
+        public static readonly Brush RareTechLevelBrush = new SolidColorBrush(Color.FromArgb(255, 0, 234, 84));
+        public static readonly Brush EpicTechLevelBrush = new SolidColorBrush(Color.FromArgb(255, 207, 105, 255));
+        public static readonly Brush LegendaryTechLevelBrush = new SolidColorBrush(Color.FromArgb(255, 255, 186, 0));
+
         public static Brush GetFactionBrush(Faction faction) => faction switch
         {
             Faction.Deprived => DeprivedFactionBrush,
@@ -41,6 +48,15 @@ namespace StarfallAfterlife.Launcher.Controls
             _ => NoneFactionBrush
         };
 
+        public static Brush GetTechLevelBrush(int lvl) => lvl switch
+        {
+            < 1 => EmptyTechLevelBrush,
+            1 => NormalTechLevelBrush,
+            2 => RareTechLevelBrush,
+            3 => EpicTechLevelBrush,
+            _ => LegendaryTechLevelBrush
+        };
+
 
         public static IEnumerable<Faction> FactionValues => Enum.GetValues<Faction>();
 
@@ -50,6 +66,9 @@ namespace StarfallAfterlife.Launcher.Controls
 
         public static readonly IValueConverter FactionToBrushConverter =
             new FuncValueConverter<Faction, Brush>(GetFactionBrush);
+
+        public static readonly IValueConverter TechLevelToBrushConverter =
+            new FuncValueConverter<int, Brush>(GetTechLevelBrush);
 
         public static readonly IValueConverter LocalizationKeyToNameConverter =
             new FuncValueConverter<object, string>(v =>
@@ -71,6 +90,17 @@ namespace StarfallAfterlife.Launcher.Controls
             .GroupBy(h => h.Type)
             .Select(g => g.Key.ToString())
             .ToArray());
+
+
+        public static readonly IValueConverter HorizontalAlignmentToTextAligmentConverter =
+            new FuncValueConverter<HorizontalAlignment, TextAlignment>(ha => ha switch
+            {
+                HorizontalAlignment.Center => TextAlignment.Center,
+                HorizontalAlignment.Left => TextAlignment.Left,
+                HorizontalAlignment.Right => TextAlignment.Right,
+                HorizontalAlignment.Stretch => TextAlignment.Justify,
+                _ => TextAlignment.DetectFromContent,
+            });
     }
 
 }

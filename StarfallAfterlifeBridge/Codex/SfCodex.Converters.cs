@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using StarfallAfterlife.Bridge.SfPackageLoader.FileSysten;
+using StarfallAfterlife.Bridge.Database;
 
 namespace StarfallAfterlife.Bridge.Codex
 {
@@ -86,6 +87,17 @@ namespace StarfallAfterlife.Bridge.Codex
             return null;
         }
 
+        public static object ConvertImportIndexToObjectName(UProperty prop, UPropertyConverterContext context)
+        {
+            if (prop.Value is int index &&
+                index < 0)
+            {
+                return context.Asset?.GetName(context.Asset?.GetImport(-index - 1)?.ObjectName);
+            }
+
+            return null;
+        }
+
         public static object ConvertToTextKey(UProperty prop, UPropertyConverterContext context)
         {
             if (prop.Value is FText text)
@@ -115,5 +127,23 @@ namespace StarfallAfterlife.Bridge.Codex
 
             return default;
         }
+
+        public static object ConvertTextToFaction(UProperty prop, UPropertyConverterContext context) => prop.Value switch
+        {
+            "EStarfallFaction::SRDeprived" => Faction.Deprived,
+            "EStarfallFaction::SREclipse" => Faction.Eclipse,
+            "EStarfallFaction::SRVanguard" => Faction.Vanguard,
+            "EStarfallFaction::SRScreechers" => Faction.Screechers,
+            "EStarfallFaction::SRNebulords" => Faction.Nebulords,
+            "EStarfallFaction::SRPyramid" => Faction.Pyramid,
+            "EStarfallFaction::SRNoxophytes" => Faction.Noxophytes,
+            "EStarfallFaction::SRCriterion" => Faction.Criterion,
+            "EStarfallFaction::SRMineworkerUnion" => Faction.MineworkerUnion,
+            "EStarfallFaction::SRFreeTraders" => Faction.FreeTraders,
+            "EStarfallFaction::SRSmugglers" => Faction.Smugglers,
+            "EStarfallFaction::SRNeutralPlanets" => Faction.NeutralPlanets,
+            "EStarfallFaction::SRScientists" => Faction.Scientists,
+            _ => Faction.None
+        };
     }
 }

@@ -8,147 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.IO;
+using StarfallAfterlife.Bridge.Database;
 
 namespace StarfallAfterlife.Bridge.Codex
 {
     public partial class SfCodex
     {
-        protected static readonly UPropertyFilter[] GamePropertyFilters = new UPropertyFilter[]
-        {
-            new("*"),
-            new("xls*"),
-            new("Materials"),
-            new("EquipmentTags"),
-            new("Internal_ID"),
-            new("EquipmentLineupIndentity"),
-            new("QualityData", UPropertyType.Map,
-                p => (p.Value as List<KeyValuePair<UProperty, UProperty>>)?
-                    .Where(i => i.Key.Value is string && i.Value.Value is string)
-                    .Select(i => KeyValuePair.Create((string)i.Key, (string)i.Value))
-                    .ToDictionary(i => i.Key, i => i.Value)),
-            new("BlueprintEqImage"),
-            new("BlueprintCardImage"),
-            new("Thumbnail"),
-            new("DropItemsOnDisassemble", UPropertyType.Array,
-                p => (p.Value as UProperty[])?
-                    .Where(i => i.Value is DropItemOnDisassembly)
-                    .Select(i => (DropItemOnDisassembly)i.Value)
-                    .ToArray()),
-            new("RequiredItem"),
-            new("IGCToProduce"),
-            new("ProductionPoints"),
-            new("ProjectToOpen"),
-            new("ProjectToOpenXp"),
-            new("RequiredProjectToOpenXp"),
-            new("ProductionPointsOnDisassemble"),
-            new("DiscoveryItemTags"),
-            new("ItemTechLevel"),
-            new("MinGalaxyLvl"),
-            new("MaxGalaxyLvl"),
-            new("GalaxyValue"),
-            new("Cargo"),
-            new("Width"),
-            new("Height"),
-            new("Race"),
-            new("ShowInCodex"),
-            new("ModIcon"),
-            new("DamageTypeClass"),
-            new("ShootRange"),
-            new("bCharacterBound"),
-            new("Damage"),
-            new("Duration"),
-            new("UseAllAtOnce"),
-            new("Radius"),
-            new("BaseArmorPoints"),
-            new("BaseShieldPoints"),
-            new("IGCPrice"),
-            new("BGCPrice"),
-            new("Range"),
-            new("WeaponDamageDistanceDependence"),
-            new("HasChargingTime"),
-            new("ArmorType"),
-            new("Area"),
-            new("RepairPoints"),
-            new("RepairTime"),
-            new("HeatDamageDivider"),
-            new("HeatingTime"),
-            new("InterferenceChance"),
-            new("BaseShieldRegenRate"),
-            new("MaxCharges"),
-            new("ArmorCorrosiveDamagePercent"),
-            new("ManeuverabilityIncrease"),
-            new("ModuleDamage"),
-            new("SAmount"),
-            new("MinerPoints"),
-            new("MinerTime"),
-            new("BaseDelayActive"),
-            new("BaseDelayDeactive"),
-            new("ShieldPoints"),
-            new("Pods"),
-            new("JumpRange"),
-            new("BreakShipStealth"),
-            new("ShieldSegmentRegenValue"),
-            new("DroneNumber"),
-            new("BarriersNumber"),
-            new("Capacity"),
-            new("Period"),
-            new("ChargesPerRound"),
-            new("ActivationMethod"),
-            new("UsageTime"),
-            new("DamagePerSecond"),
-            new("DamageInterval"),
-            new("Floating"),
-            new("DamageMultiplier"),
-            new("ModuleRange"),
-            new("BeamSpeed"),
-            new("HideTime"),
-            new("damageModifierSelf"),
-            new("timeToCharge"),
-            new("chargeImpulseForce"),
-            new("ramDumping"),
-            new("IsDefaultEquipment"),
-            new("SalvageDronesCount"),
-            new("ShootingPeriodTime"),
-            new("ShootTime"),
-            new("WallMaxWidth"),
-            new("RepairPerSecond"),
-            new("ShipStructurePenaltyDamage"),
-            new("ShipImpulseRadius"),
-            new("ImpulseStrength"),
-            new("WallMinWidth"),
-            new("ActivationTimer"),
-            new("CoolingTime"),
-            new("ShieldDamageMultiplier"),
-            new("CooldownDecreasePerTime"),
-            new("RegenShieldPerTime"),
-            new("SubMissileDamage"),
-            new("MaxDetectionShipSpeed"),
-            new("DetectionRange"),
-            new("RoundPerUsage"),
-            new("RepairPointsPerDrone"),
-            new("RepairTimePerDrone"),
-            new("WarpArea"),
-            new("AreaRange"),
-            new("PercentageRepairOfDamage"),
-            new("RepairPerTime"),
-            new("TimeToRepair"),
-            new("ArmorRepair"),
-            new("Cooldown"),
-            new("ShieldDamagePerTime"),
-            new("TimeToDamage"),
-            new("AffectOnlyEnemy"),
-            new("RegenTimer"),
-            new("bCanHealAlly"),
-            new("HealFactor"),
-            new("OverclockingTime"),
-            new("StartShootingPeriod"),
-            new("StartHorizontalSpread"),
-        };
-
         public static SfCodex LoadFromGame(string path)
         {
-            var codex = new SfCodex();
-
             try
             {
                 var packs = Directory.GetFiles(path, "*-WindowsNoEditor.pak");
@@ -157,14 +24,11 @@ namespace StarfallAfterlife.Bridge.Codex
                 foreach (var pack in packs)
                     uefs.LoadPack(pack);
 
-                LoadFromGame(uefs);
+                return LoadFromGame(uefs);
             }
-            catch
-            {
-                return null;
-            }
+            catch { }
 
-            return codex;
+            return null;
         }
 
         public static SfCodex LoadFromGame(UEFileSystem uefs)
@@ -175,6 +39,7 @@ namespace StarfallAfterlife.Bridge.Codex
             {
                 codex.LoadLocalizationFromGame(uefs);
                 codex.LoadItemsFromGame(uefs);
+                codex.LoadDamageTypesFromGame(uefs);
             }
             catch
             {
@@ -274,18 +139,23 @@ namespace StarfallAfterlife.Bridge.Codex
             SfCodexItem AddItem(UAsset asset, UObject obj, Dictionary<int, SfCodexItem> dtb)
             {
                 var itenId = (int?)obj["StarfallItemId"] ?? (int?)obj["Internal_ID"] ?? 0;
-                var itemClass = obj.Name;
+                var export = asset.GetExport(obj);
+                var itemClass = asset.GetClassName(export?.ObjectIndex ?? 0);
+                var itemBaseClass = asset.GetClassName(export?.TemplateIndex ?? 0);
 
                 if (itenId == 0 || itemClass is null)
                     return null;
 
                 var fields = new Dictionary<string, object>();
                 var context = new UPropertyConverterContext(this, obj, asset, uefs);
+                var nameText = ((FText?)obj["ItemFullName"]) ?? ((FText?)obj["m_ShipName"]) ?? default;
                 var item = new SfCodexItem()
                 {
                     Id = itenId,
                     Class = itemClass,
-                    NameKey = ((FText?)obj["ItemFullName"])?.Key ?? ((FText?)obj["m_ShipName"])?.Key,
+                    BaseClass = itemBaseClass,
+                    Name = nameText.Text,
+                    NameKey = nameText.Key,
                     DescriptionKey = ((FText?)obj["ItemFullDescription"])?.Key ?? ((FText?)obj["HullFullDiscription"])?.Key,
                     Fields = fields,
                 };
@@ -326,8 +196,8 @@ namespace StarfallAfterlife.Bridge.Codex
                 {
                     if (((int?)obj["StarfallItemId"] ?? (int?)obj["Internal_ID"]) is int id)
                     {
-                        if (obj.Name is not null)
-                            ClassToIdMap[obj.Name] = id;
+                        if (asset.GetClassName(asset.GetExport(obj)?.ObjectIndex ?? 0) is string name)
+                            ClassToIdMap[name] = id;
 
                         break;
                     }
@@ -343,21 +213,31 @@ namespace StarfallAfterlife.Bridge.Codex
                     (obj = GetItemObject(asset)) is null)
                     continue;
 
-                AddItem(asset, obj, Equipment);
+                if (AddItem(asset, obj, Equipment) is SfCodexItem newItem)
+                {
+                    // Patch for empty cooling time
+                    if (newItem.Fields is not null &&
+                        newItem.Fields.ContainsKey("xlsCooldownTime") == false)
+                    {
+                        var comparison = StringComparison.OrdinalIgnoreCase;
+                        var fields = newItem.Fields.ToList();
+
+                        var index = fields.FindIndex(i => i.Key.Equals("xlsOnDestructionExplodeDamage", comparison));
+
+                        if (index < 0)
+                            index = fields.FindIndex(i => i.Key.Equals("xlsEqStructurePoints", comparison));
+
+                        if (index > -1)
+                        {
+                            newItem.Fields.Clear();
+                            fields.Insert(index + 1, new("xlsCooldownTime", 5f));
+
+                            foreach (var field in fields)
+                                newItem.Fields[field.Key] = field.Value;
+                        }
+                    }
+                }
             }
-
-
-            var hardpointsTypes = new string[]
-            {
-                "HardpointComponent",
-                "EngineHardpointComponent",
-                "WeaponHardpointComponent",
-                "CarrierHardpointComponent",
-                "LensHardpointComponent",
-                "SingleTurretHardpointComponent",
-                "MultiTurretHardpointComponent",
-                "RocketsHardpointComponent",
-            };
 
             foreach (var item in shipsFiles)
             {
@@ -370,6 +250,10 @@ namespace StarfallAfterlife.Bridge.Codex
 
                 if (AddItem(asset, obj, Ships) is SfCodexItem newItem)
                 {
+                    if (newItem.Fields is not null &&
+                        newItem.Fields.ContainsKey("ShipFaction") == false)
+                        newItem.Fields["ShipFaction"] = Faction.Deprived;
+
                     (FObjectExport Export, UObject Object, string Type) GetHardpointInfo(UAsset asset, FObjectExport export)
                     {
                         var obj = asset.GetObject(export);
@@ -417,7 +301,16 @@ namespace StarfallAfterlife.Bridge.Codex
                         codexHardpoints.Add(new()
                         {
                             Name = hp.Object.Name?.Split("_GEN_VARIABLE").FirstOrDefault(),
-                            Type = hp.Type,
+                            Type = hp.Type switch
+                            {
+                                "ETechType::TTBallisticWeapon" => TechType.Ballistic,
+                                "ETechType::TTBeamWeapon" => TechType.Beam,
+                                "ETechType::TTMissileWeapon" => TechType.Missile,
+                                "ETechType::TTCarrier" => TechType.Carrier,
+                                "ETechType::TTEngineering" => TechType.Engineering,
+                                "ETechType::TTEngine" => TechType.Engine,
+                                _ => TechType.Unknown,
+                            },
                             Width = (int?)hp.Object["Width"] ?? 0,
                             Height = (int?)hp.Object["Height"] ?? 0,
                             GridX = (int?)hp.Object["GridPositionX"] ?? 0,
@@ -442,6 +335,44 @@ namespace StarfallAfterlife.Bridge.Codex
                     continue;
 
                 AddItem(asset, obj, DiscoveryItems);
+            }
+        }
+        private void LoadDamageTypesFromGame(UEFileSystem uefs)
+        {
+            var sfConverters = SfObjectPropertyConverters.Converters.ToList();
+
+            DamageTypes ??= new();
+
+            foreach (var fileInfo in uefs
+                .GetDirectory("/Starfall/Content/gameplay/equipment/weapon").GetFiles()
+                .Where(f => f.Path.EndsWith(".uasset")))
+            {
+                if (fileInfo.Path?.EndsWith(".uasset") != true)
+                    continue;
+
+                using var assetReader = fileInfo.Open();
+                using var uexpReader = uefs.GetFile(fileInfo.Path[..(fileInfo.Path.Length - 7)] + ".uexp")?.Open();
+                var asset = new UAsset();
+
+                if (uexpReader is null)
+                    continue;
+
+                assetReader.Read(asset);
+                asset.LoadObjectsData(uexpReader, new() { Converters = sfConverters });
+
+                var dataExport = asset.Exports?.FirstOrDefault(o => o.ObjectFlags.HasFlag(
+                    EObjectFlags.ClassDefaultObject | EObjectFlags.ArchetypeObject)) ?? default;
+
+                if ("StarfallDamageType".Equals(asset.GetClassName(dataExport.TemplateIndex)) == false)
+                    continue;
+
+                if (asset.GetClassName(dataExport.ObjectIndex) is string name &&
+                    asset.GetObject(dataExport) is UObject obj &&
+                    SfCodexTypes.DamageType.Load(obj) is SfCodexTypes.DamageType damageType)
+                {
+                    damageType.Class = name;
+                    DamageTypes[name] = damageType;
+                }
             }
         }
 
