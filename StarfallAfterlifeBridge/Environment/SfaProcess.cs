@@ -178,6 +178,7 @@ namespace StarfallAfterlife.Bridge.Environment
 
             sb.Append(" -unattended");
             sb.Append(" -nopause");
+            sb.Append(" -handleensurepercent=0");
 
             //sb.Append(" -forcelogflush");
             //sb.Append(" -dx10");
