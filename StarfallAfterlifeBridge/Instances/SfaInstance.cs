@@ -78,6 +78,10 @@ namespace StarfallAfterlife.Bridge.Instances
                         "MoveRepSize=128",
                         "ServerForcedUpdateHitchThreshold=5.0f"
                     },
+                    new("DefaultPlayer")
+                    {
+                        "Name=Server" + Auth,
+                    },
                 },
                 EngineIni = new()
                 {
@@ -161,6 +165,7 @@ namespace StarfallAfterlife.Bridge.Instances
 
             return new JsonObject
             {
+                ["map"] = Map,
                 ["sfmgr"] = new JsonObject
                 {
                     ["url"] = Context.MgrServer?.Address?.ToString(),
