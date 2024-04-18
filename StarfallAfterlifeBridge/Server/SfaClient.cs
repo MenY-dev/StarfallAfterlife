@@ -43,8 +43,6 @@ namespace StarfallAfterlife.Bridge.Server
 
         public string AsteroidsMapHash { get; protected set; }
 
-        public JNode VariableMap { get; protected set; }
-
         public List<InventoryItem> RankedEquipmentLimit { get; protected set; }
 
         protected SfaGame Game { get; set; }
@@ -150,6 +148,10 @@ namespace StarfallAfterlife.Bridge.Server
 
                 case SfaServerAction.AddNewCharacterStats:
                     ProcessAddNewCharacterStats(JsonHelpers.ParseNodeUnbuffered(text));
+                    break;
+
+                case SfaServerAction.SyncVariableMap:
+                    SyncVariableMap(JsonHelpers.ParseNodeUnbuffered(text));
                     break;
             }
         }
@@ -421,36 +423,88 @@ namespace StarfallAfterlife.Bridge.Server
 
         public Task<bool> LoadVariableMap()
         {
-            return SendRequest(SfaServerAction.LoadVariableMap, default).ContinueWith(t =>
+            return SendRequest(SfaServerAction.LoadVariableMap, default, 2000).ContinueWith(t =>
             {
                 var result = false;
-                JNode map = new JObject();
 
                 if (t.Result is SfaClientResponse response &&
                     response.IsSuccess == true &&
                     response.Action == SfaServerAction.LoadVariableMap)
                 {
-                    map = JsonHelpers.ParseNodeUnbuffered(response.Text);
-                    result = map is JObject;
+                    var doc = JsonHelpers.ParseNodeUnbuffered(response.Text);
+                    var map = new SfaRealmVariable();
+
+                    if (doc is JObject obj &&
+                        map.Load(doc) == true)
+                    {
+                        if (Game?.Profile?.CurrentRealm?.Realm is SfaRealm realm)
+                            realm.Variable = map;
+
+                        result = true;
+                    }
                 }
 
-                if (map is not JObject)
-                    map = new JObject();
-
-                if (map["renamedsystems"]?.AsArraySelf() is null)
-                    map["renamedsystems"] = new JArray();
-
-                if (map["renamedplanets"]?.AsArraySelf() is null)
-                    map["renamedplanets"] = new JArray();
-
-                if (map["faction_event"]?.AsArraySelf() is null)
-                    map["faction_event"] = new JArray();
-
-                VariableMap = map;
                 return result;
             });
         }
 
+        private void SyncVariableMap(JNode doc)
+        {
+            if (doc is not JObject)
+                return;
+
+            Game?.Profile?.CurrentRealm?.Use(r =>
+            {
+                var map = r.Realm.Variable ??= new();
+
+                if (doc["renamed_systems"]?.AsArraySelf() is JArray renamedSystems)
+                {
+                    map.RenamedSystems ??= new();
+
+                    foreach (var item in renamedSystems)
+                    {
+                        var info = item?.DeserializeUnbuffered<RealmObjectRenameInfo>();
+
+                        if (info is null)
+                            continue;
+
+                        if (info.Name is null ||
+                            info.Char is null)
+                        {
+                            map.RenamedSystems.Remove(info.Id);
+                        }
+                        else
+                        {
+                            map.RenamedSystems[info.Id] = info;
+                        }
+                    }
+                }
+
+                if (doc["renamed_planets"]?.AsArraySelf() is JArray renamedPlanets)
+                {
+
+                    map.RenamedPlanets ??= new();
+
+                    foreach (var item in renamedPlanets)
+                    {
+                        var info = item?.DeserializeUnbuffered<RealmObjectRenameInfo>();
+
+                        if (info is null)
+                            continue;
+
+                        if (info.Name is null ||
+                            info.Char is null)
+                        {
+                            map.RenamedPlanets.Remove(info.Id);
+                        }
+                        else
+                        {
+                            map.RenamedPlanets[info.Id] = info;
+                        }
+                    }
+                }
+            });
+        }
         public void ProcessStartSession(JNode entryData, SfaClientRequest request)
         {
             var charId = (int?)entryData["character_id"] ?? -1;

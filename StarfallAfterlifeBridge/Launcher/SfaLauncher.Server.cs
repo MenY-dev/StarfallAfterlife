@@ -99,13 +99,18 @@ namespace StarfallAfterlife.Bridge.Launcher
             StopServer();
 
             if (ServerRealm is SfaRealmInfo realm &&
-                realm.Realm.CreateServer() is SfaServer server &&
+                realm.CreateServer() is SfaServer server &&
                 IPAddress.TryParse(ServerAddress, out IPAddress address) == true)
             {
                 if (ActiveInstanceManager?.IsStarted != true)
                     StartInstanceManager();
 
-                realm.LoadDatabase();
+                realm.Use(r =>
+                {
+                    r.LoadDatabase();
+                    r.LoadVariable();
+                });
+
                 server.InstanceManagerAddress = ActiveInstanceManager.Address;
                 server.Address = new Uri($"tcp://{address}:{ServerPort}");
 

@@ -5,6 +5,7 @@ using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Serialization;
 using StarfallAfterlife.Bridge.Server.Characters;
 using StarfallAfterlife.Bridge.Server.Discovery;
+using StarfallAfterlife.Bridge.Server.Galaxy;
 using StarfallAfterlife.Bridge.Server.Inventory;
 using StarfallAfterlife.Bridge.Server.Quests;
 using StarfallAfterlife.Bridge.Server.Quests.Conditions;
@@ -211,7 +212,7 @@ namespace StarfallAfterlife.Bridge.Server
                         {
                             ["info_type"] = "planet_base",
                             ["phase"] = phase,
-                            ["planet_name"] = planet.Name,
+                            ["planet_name"] = Server.Variable?.RenamedPlanets?.GetValueOrDefault(planet.Id)?.Name ?? planet.Name,
                             ["planet_type"] = (int)planet.PlanetType,
                         });
 
@@ -320,6 +321,40 @@ namespace StarfallAfterlife.Bridge.Server
                         ["obj_info"] = objInfo,
                     });
                 }
+            }
+
+            if (selection.Star is GalaxyMapStarSystem star)
+            {
+                var starInfo = new JsonObject
+                {
+                    ["info_type"] = "star",
+                    ["name"] = star.Name,
+                    ["star_id"] = star.Id,
+                    ["phase"] = 0,
+                };
+
+                var objInfo = new JsonObject
+                {
+                    ["id"] = star.Id,
+                    ["type"] = (int)DiscoveryObjectType.None,
+                    ["obj_info"] = new JsonArray(starInfo),
+                };
+
+                var renameInfo = Server?.Realm?.Variable?.RenamedSystems?.GetValueOrDefault(star.Id);
+
+                if (renameInfo is not null)
+                {
+                    starInfo["name"] = renameInfo.Name;
+                    starInfo["renamed_by_user_id"] = 123;
+                    starInfo["renamed_by_user_name"] = renameInfo.Char;
+                    objInfo["actions"] = new JsonArray { "report_star_name" };
+                }
+                else
+                {
+                    objInfo["actions"] = new JsonArray { "rename_star" };
+                }
+
+                info.Add(objInfo);
             }
 
             if (selection.ScanningStarted == true)
@@ -690,6 +725,19 @@ namespace StarfallAfterlife.Bridge.Server
                     writer.WriteShortString(address, -1, true, Encoding.ASCII);
                     writer.WriteUInt16((ushort)port);
                     writer.WriteShortString(auth, -1, true, Encoding.ASCII);
+                });
+        }
+
+        public void SendStarRenamed(int starId, string newName, string charName)
+        {
+            SendGalaxyMessage(
+                DiscoveryServerGalaxyAction.StarRenamed,
+                writer =>
+                {
+                    var name = newName ?? Galaxy?.Map?.GetSystem(starId)?.Name ?? string.Empty;
+                    writer.WriteInt32(starId);
+                    writer.WriteShortString(name, -1, true, Encoding.UTF8);
+                    writer.WriteShortString(charName ?? string.Empty, -1, true, Encoding.UTF8);
                 });
         }
 

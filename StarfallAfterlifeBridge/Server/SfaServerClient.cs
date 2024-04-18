@@ -340,7 +340,9 @@ namespace StarfallAfterlife.Bridge.Server
 
         private void ProcessLoadVariableMap(SfaClientRequest request)
         {
-            request.SendResponce("{}", SfaServerAction.LoadVariableMap);
+            JNode doc = null;
+            Server?.RealmInfo?.Use(r => doc = r.Realm?.Variable?.ToJson());
+            request.SendResponce(doc ?? new JObject(), SfaServerAction.LoadVariableMap);
         }
 
         public void ProcessRegisterPlayer(JNode doc, SfaClientRequest request)

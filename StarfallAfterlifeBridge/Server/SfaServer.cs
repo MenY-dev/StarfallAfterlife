@@ -30,7 +30,11 @@ namespace StarfallAfterlife.Bridge.Server
     {
         //public string RealmId { get; set; } = "3af8cc9c641f452fbf69b9c99d6f2569";
 
-        public SfaRealm Realm { get; set; }
+        public SfaRealm Realm => RealmInfo?.Realm;
+
+        public SfaRealmVariable Variable => Realm?.Variable;
+
+        public SfaRealmInfo RealmInfo { get; set; }
 
         public string Password { get; set; }
 
@@ -74,9 +78,9 @@ namespace StarfallAfterlife.Bridge.Server
 
         }
 
-        public SfaServer(SfaRealm realm)
+        public SfaServer(SfaRealmInfo realm)
         {
-            Realm = realm;
+            RealmInfo = realm;
         }
 
         protected override SfaServerClient CreateNewClient()
@@ -475,25 +479,6 @@ namespace StarfallAfterlife.Bridge.Server
             {
 
             };
-        }
-
-        public void Save(string directory)
-        {
-            if (Directory.Exists(directory) == false)
-                Directory.CreateDirectory(directory);
-
-            string configPath = Path.Combine(directory, "Config.json");
-            File.WriteAllText(configPath, ToJson()?.ToJsonString() ?? "", Encoding.UTF8);
-
-            string realmDirectory = Path.Combine(directory, "Realm");
-            Realm?.Save(realmDirectory);
-        }
-
-        public void Load(string directory)
-        {
-            string configPath = Path.Combine(directory, "Config.json");
-            LoadFromJson(JsonNode.Parse(File.ReadAllText(configPath)));
-            (Realm ??= new()).Load(Path.Combine(directory, "Realm"));
         }
 
         public static bool IsVersionCompatible(Version target)

@@ -1,5 +1,6 @@
 ﻿using StarfallAfterlife.Bridge.Mathematics;
 using StarfallAfterlife.Bridge.Server.Discovery;
+using StarfallAfterlife.Bridge.Server.Galaxy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,8 @@ namespace StarfallAfterlife.Bridge.Server.Characters
         public float ScanningTime { get; set; }
 
         public bool Scanned { get; set; }
+
+        public GalaxyMapStarSystem Star { get; set; }
 
         public List<ObjectSelectionInfo> Objects { get; } = new();
 

@@ -1,5 +1,6 @@
 ﻿using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Serialization;
+using StarfallAfterlife.Bridge.Server;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -21,6 +22,8 @@ namespace StarfallAfterlife.Bridge.Realms
 
         public string ProgressDirectory => Path.Combine(RealmDirectory, "Progress");
 
+        private object Locker { get; } = new();
+
         public void Save()
         {
             Realm?.Save(RealmDirectory);
@@ -30,6 +33,8 @@ namespace StarfallAfterlife.Bridge.Realms
         public void SaveInfo() => Realm?.SaveInfo(RealmDirectory);
 
         public void SaveDatabase() => Realm?.SaveDatabase(RealmDirectory);
+
+        public void SaveVariable() => Realm?.SaveVariable(RealmDirectory);
 
         public void SaveProgress()
         {
@@ -46,6 +51,8 @@ namespace StarfallAfterlife.Bridge.Realms
         public bool LoadInfo() => (Realm ??= new()).LoadInfo(RealmDirectory);
 
         public bool LoadDatabase() => (Realm ??= new()).LoadDatabase(RealmDirectory);
+
+        public bool LoadVariable() => (Realm ??= new()).LoadVariable(RealmDirectory);
 
         public CharacterProgress CreateProgress(int charId)
         {
@@ -99,6 +106,28 @@ namespace StarfallAfterlife.Bridge.Realms
                     Directory.Delete(RealmDirectory, true);
             }
             catch { }
+        }
+
+        public SfaServer CreateServer()
+        {
+            return new SfaServer(this);
+        }
+
+
+        public void Use(Action<SfaRealmInfo> action)
+        {
+            lock (Locker)
+            {
+                action.Invoke(this);
+            }
+        }
+
+        public void Use<TState>(Action<SfaRealmInfo, TState> action, TState state)
+        {
+            lock (Locker)
+            {
+                action.Invoke(this, state);
+            }
         }
     }
 }

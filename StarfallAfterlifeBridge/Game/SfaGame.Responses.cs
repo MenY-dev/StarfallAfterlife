@@ -632,17 +632,45 @@ namespace StarfallAfterlife.Bridge.Game
             if (onlyVariableMap == false)
                 galaxyMap = (realm.GalaxyMapCache ??= JsonHelpers.SerializeUnbuffered(realm.GalaxyMap));
 
+            var renamedSystems = new JsonArray();
+            var renamedPlanets = new JsonArray();
+            var factionEvents = new JsonArray();
+
+            if (Realm?.Variable is SfaRealmVariable variableMap)
+            {
+                void AddToVariableMap(RealmObjectRenameInfo info, JsonArray doc)
+                {
+                    if (info is null ||
+                        info.Id < 0 ||
+                        info.Name is null)
+                        return;
+
+                    doc.Add(new JsonObject
+                    {
+                        ["id"] = SValue.Create(info.Id),
+                        ["name"] = SValue.Create(info.Name),
+                        ["char"] = SValue.Create(info.Char),
+                    });
+                }
+
+                if (variableMap.RenamedSystems is not null)
+                    foreach (var item in variableMap.RenamedSystems)
+                        AddToVariableMap(item.Value, renamedSystems);
+
+                if (variableMap.RenamedPlanets is not null)
+                    foreach (var item in variableMap.RenamedPlanets)
+                        AddToVariableMap(item.Value, renamedPlanets);
+            }
+
             JsonNode doc = new JsonObject()
             {
                 ["galaxymap"] = SValue.Create(galaxyMap),
-
-                ["variablemap"] = SfaClient?.VariableMap?.Clone() ?? new JsonObject
+                ["variablemap"] = new JsonObject()
                 {
-                    ["renamedsystems"] = new JsonArray(),
-                    ["renamedplanets"] = new JsonArray(),
-                    ["faction_event"] = new JsonArray(),
+                    ["renamedsystems"] = renamedSystems,
+                    ["renamedplanets"] = renamedPlanets,
+                    ["faction_event"] = factionEvents,
                 },
-
                 ["charactmap"] = new JsonObject
                 {
                     ["exploredsystems"] = exploredSystems ?? new(),

@@ -103,12 +103,17 @@ namespace StarfallAfterlife.Bridge.Launcher
         {
             if (profile is not null &&
                 CurrentLocalRealm is SfaRealmInfo realm &&
-                realm.Realm.CreateServer() is SfaServer server)
+                realm.CreateServer() is SfaServer server)
             {
                 if (ActiveInstanceManager?.IsStarted != true)
                     StartInstanceManager();
 
-                realm.LoadDatabase();
+                realm.Use(r =>
+                {
+                    r.LoadDatabase();
+                    r.LoadVariable();
+                });
+
                 server.InstanceManagerAddress = ActiveInstanceManager.Address;
                 server.UsePortForwarding = false;
                 server.Start();

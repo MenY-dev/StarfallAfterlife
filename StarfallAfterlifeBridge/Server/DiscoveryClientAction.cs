@@ -97,5 +97,7 @@ namespace StarfallAfterlife.Bridge.Server
         StartDoctrineAction = 802697001,
         TakeHouseTaskFromPool = 1593423169,
         ChangeRankLevelAction = 784106495,
+        RenamePlanet = 1378814300,
+        RenameStar = 186428696,
     }
 }

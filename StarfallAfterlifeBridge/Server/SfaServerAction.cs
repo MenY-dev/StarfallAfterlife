@@ -28,6 +28,7 @@ namespace StarfallAfterlife.Bridge.Server
         RequestCharacterDiscoveryData = 141,
         SyncCharacterData = 142,
         RequestCharacterShipData = 143,
+        SyncVariableMap = 144,
 
         CharacterInventory = 150,
 

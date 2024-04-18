@@ -58,15 +58,13 @@ namespace StarfallAfterlife.Bridge.Realms
 
         public List<BGShopItem> BGShop { get; set; } = new();
 
-        public SfaServer CreateServer()
-        {
-            return new SfaServer(this);
-        }
+        public SfaRealmVariable Variable { get; set; }
 
         public virtual void Load(string directory)
         {
             LoadInfo(directory);
             LoadDatabase(directory);
+            LoadVariable(directory);
         }
 
         public virtual bool LoadInfo(string directory)
@@ -168,10 +166,28 @@ namespace StarfallAfterlife.Bridge.Realms
             return true;
         }
 
+        public virtual bool LoadVariable(string directory)
+        {
+            Variable = new();
+
+            if (Directory.Exists(directory) == false)
+                return false;
+
+            string variablePath = Path.Combine(directory, "Variable.json");
+
+            if (File.Exists(variablePath) == true)
+            {
+                return Variable.Load(variablePath);
+            }
+
+            return false;
+        }
+
         public virtual void Save(string directory)
         {
             SaveInfo(directory);
             SaveDatabase(directory);
+            SaveVariable(directory);
         }
 
         public virtual void SaveInfo(string directory)
@@ -243,80 +259,19 @@ namespace StarfallAfterlife.Bridge.Realms
                 File.WriteAllText(bgShopPath, JsonHelpers.SerializeUnbuffered(BGShop), Encoding.UTF8);
         }
 
-        public JsonNode CreateGalaxyMapResponse(bool onlyVariableMap)
+        public virtual void SaveVariable(string directory)
         {
-            JsonArray exploredSystems = new JsonArray();
-            JsonArray exploredPortals = new JsonArray();
-            JsonArray exploredPlanets = new JsonArray();
-            JsonArray exploredQuickTravelGates = new JsonArray();
-            JsonArray exploredMotherships = new JsonArray();
-
-            //foreach (var system in GalaxyMap.Systems)
-            //{
-            //    exploredSystems.Add(new JsonObject
-            //    {
-            //        ["id"] = SValue.Create(system.Id),
-            //        ["mask"] = SValue.Create("/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////w==")
-            //    });
-
-            //    foreach (var item in system.Planets ?? new())
-            //    {
-            //        exploredPlanets.Add(SValue.Create(item.Id));
-            //    }
-
-            //    foreach (var item in system.Portals ?? new())
-            //    {
-            //        exploredPortals.Add(SValue.Create(item.Id));
-            //    }
-
-            //    foreach (var item in system.QuickTravalGates ?? new())
-            //    {
-            //        exploredQuickTravelGates.Add(SValue.Create(item.Id));
-            //    }
-
-            //    foreach (var item in system.Motherships ?? new())
-            //    {
-            //        exploredMotherships.Add(SValue.Create(item.Id));
-            //    }
-            //}
-
-            string galaxyMap = null;
-
-            if (onlyVariableMap == false)
-                galaxyMap = (GalaxyMapCache ??= JsonHelpers.SerializeUnbuffered(GalaxyMap));
-
-            JsonNode doc = new JsonObject()
+            try
             {
-                ["galaxymap"] = SValue.Create(galaxyMap),
+                string variablePath = Path.Combine(directory, "Variable.json");
+                var newData = Variable?.ToJson();
+                var doc = JsonHelpers.ParseNodeFromFileUnbuffered(variablePath)?
+                    .AsObjectSelf() ?? new JsonObject();
 
-                ["variablemap"] = new JsonObject
-                {
-                    ["renamedsystems"] = new JsonArray(),
-                    ["renamedplanets"] = new JsonArray(),
-                    ["faction_event"] = new JsonArray(),
-                },
-
-                ["charactmap"] = new JsonObject
-                {
-                    ["exploredneutralplanets"] = exploredPlanets,
-                    ["exploredportals"] = exploredPortals,
-                    ["exploredmotherships"] = exploredMotherships,
-                    ["exploredrepairstations"] = new JsonArray(),
-                    ["exploredfuelstations"] = new JsonArray(),
-                    ["exploredtradestations"] = new JsonArray(),
-                    ["exploredmms"] = new JsonArray(),
-                    ["exploredscs"] = new JsonArray(),
-                    ["exploredpiratesstations"] = new JsonArray(),
-                    ["exploredquicktravelgate"] = exploredQuickTravelGates,
-                    ["exploredsystems"] = exploredSystems,
-                    ["exploredsecretloc"] = new JsonArray(),
-                },
-            };
-
-            if (onlyVariableMap == true)
-                doc["ok"] = 1;
-
-            return doc;
+                doc.Override((newData ?? new JsonObject()) as JsonObject);
+                doc.WriteToFileUnbuffered(variablePath, new() { WriteIndented = true });
+            }
+            catch { }
         }
     }
 }

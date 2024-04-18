@@ -216,7 +216,6 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
         public virtual void UpdateNavigationMap()
         {
-            var starSize = Info?.Size / 150f ?? 1;
             List<Vector2> centers = new();
             List<float> radiuses = new();
             var objects = Enumerable.Empty<StarSystemObject>()
@@ -234,9 +233,9 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                 .Where(i => (i as StarSystemDungeon)?.IsDungeonVisible is not false);
 
             centers.Add(Vector2.Zero);
-            radiuses.Add(starSize);
+            radiuses.Add(GetStarRadius());
 
-            ObstacleMap = new SystemHexMap(h => SystemHexMap.HexToSystemPoint(h).GetSize() < starSize);
+            ObstacleMap = new SystemHexMap(IsStarHex);
 
             foreach (var obj in objects)
             {
@@ -255,6 +254,12 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             PiratesOutpost or ScienceStation or RepairStation or TradeStation => 1.75f,
             _ => 1f
         };
+
+        public float GetStarRadius() => Info is GalaxyMapStarSystem info ?
+            info.Size / 150f : SystemHexMap.SystemHexSizeX;
+
+        public bool IsStarHex(SystemHex hex) =>
+            SystemHexMap.HexToSystemPoint(hex).GetSize() < GetStarRadius();
 
         public void AddFleet(DiscoveryFleet fleet, Vector2? location = null)
         {

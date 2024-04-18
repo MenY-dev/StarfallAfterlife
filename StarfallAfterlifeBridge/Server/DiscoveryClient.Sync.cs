@@ -264,8 +264,18 @@ namespace StarfallAfterlife.Bridge.Server
                     planet,
                     writer =>
                     {
-                        writer.WriteShortString(planet.Name, -1, true, Encoding.UTF8); // PlanetName
-                        writer.WriteShortString("", -1, true, Encoding.UTF8); // RenamedByUsername
+                        var renameInfo = Server?.Realm?.Variable?.RenamedPlanets?.GetValueOrDefault(planetId);
+                        var name = planet.Name;
+                        var renamedBy = string.Empty;
+
+                        if (renameInfo is not null)
+                        {
+                            name = renameInfo.Name ?? name;
+                            renamedBy = renameInfo.Char ?? renamedBy;
+                        }
+
+                        writer.WriteShortString(name, -1, true, Encoding.UTF8); // PlanetName
+                        writer.WriteShortString(renamedBy, -1, true, Encoding.UTF8); // RenamedByUsername
                         writer.WriteShortString("", -1, true, Encoding.UTF8); // ColonizedByUsername
                         writer.WriteBoolean(false); // HasSupplyColony
                         writer.WriteBoolean(false); // HasMiningColony

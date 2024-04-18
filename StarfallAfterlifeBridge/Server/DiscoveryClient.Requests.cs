@@ -160,6 +160,18 @@ namespace StarfallAfterlife.Bridge.Server
 
                 case DiscoveryClientAction.CreateNewHouse:
                     HandleCreateNewHouse(reader, systemId, objectType, objectId); break;
+
+                case DiscoveryClientAction.RenamePlanet:
+                    HandleRenamePlanet(reader, systemId, objectType, objectId); break;
+
+                case DiscoveryClientAction.RenameStar:
+                    HandleRenameStar(reader, systemId, objectType, objectId); break;
+
+                case DiscoveryClientAction.ReportPlanetName:
+                    HandleReportPlanetName(reader, systemId, objectType, objectId); break;
+
+                case DiscoveryClientAction.ReportStarName:
+                    HandleReportStarName(reader, systemId, objectType, objectId); break;
             }
         }
 
@@ -458,7 +470,7 @@ namespace StarfallAfterlife.Bridge.Server
 
                     info.Objects.Add(new() { Target = selectedObject });
                 }
-                else if (CurrentCharacter?.Fleet?.System?.GetObjectsAt(hex) is IEnumerable<StarSystemObject> objects)
+                else if (Galaxy?.GetActiveSystem(systenId) is StarSystem system)
                 {
                     info = new SelectionInfo()
                     {
@@ -466,13 +478,21 @@ namespace StarfallAfterlife.Bridge.Server
                         SystemId = systenId,
                     };
 
-                    foreach (var item in objects)
+                    if (system.GetObjectsAt(hex) is IEnumerable<StarSystemObject> objects)
                     {
-                        if (item is SecretObject secret &&
-                            CurrentCharacter?.Progress?.SecretLocs?.Contains(secret.Id) == true)
-                            continue;
+                        foreach (var item in objects)
+                        {
+                            if (item is SecretObject secret &&
+                                CurrentCharacter?.Progress?.SecretLocs?.Contains(secret.Id) == true)
+                                continue;
 
-                        info.Objects.Add(new() { Target = item });
+                            info.Objects.Add(new() { Target = item });
+                        }
+                    }
+
+                    if (system.IsStarHex(hex) == true)
+                    {
+                        info.Star = system.Info ?? Map?.GetSystem(systenId);
                     }
                 }
 
@@ -1097,6 +1117,58 @@ namespace StarfallAfterlife.Bridge.Server
             {
                 SendGalaxyMessage(DiscoveryServerGalaxyAction.CreatedHouse, writer => writer.WriteByte(3));
             });
+        }
+
+        private void HandleRenamePlanet(SfReader reader, int systemId, DiscoveryObjectType objectType, int objectId)
+        {
+            var newName = reader.ReadShortString(Encoding.UTF8);
+            var charName = CurrentCharacter?.Name;
+
+            if (string.IsNullOrWhiteSpace(newName) ||
+                string.IsNullOrWhiteSpace(charName))
+                return;
+
+            if (string.IsNullOrWhiteSpace(newName) == false &&
+                Server?.RenamePlanet(objectId, newName, charName) == true)
+            {
+                CurrentCharacter?.AddCharacterCurrencies(igc: -5000);
+            }
+            else
+            {
+                SendDiscoveryMessage(systemId, objectType, objectId, DiscoveryServerAction.PlanetNamingFailed);
+                RequestDiscoveryObjectSync(systemId, objectType, objectId);
+                SyncDiscoveryObject(systemId, objectType, objectId);
+            }
+        }
+
+        private void HandleRenameStar(SfReader reader, int systemId, DiscoveryObjectType objectType, int objectId)
+        {
+            var newName = reader.ReadShortString(Encoding.UTF8);
+            var charName = CurrentCharacter?.Name;
+
+            if (string.IsNullOrWhiteSpace(newName) ||
+                string.IsNullOrWhiteSpace(charName))
+                return;
+
+            if (string.IsNullOrWhiteSpace(newName) == false &&
+                Server?.RenameSystem(systemId, newName, charName) == true)
+            {
+                CurrentCharacter?.AddCharacterCurrencies(igc: -10000);
+            }
+            else
+            {
+                SendDiscoveryMessage(systemId, objectType, objectId, DiscoveryServerAction.NamingFailed);
+            }
+        }
+
+        private void HandleReportPlanetName(SfReader reader, int systemId, DiscoveryObjectType objectType, int objectId)
+        {
+
+        }
+
+        private void HandleReportStarName(SfReader reader, int systemId, DiscoveryObjectType objectType, int objectId)
+        {
+
         }
     }
 }
