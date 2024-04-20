@@ -327,6 +327,7 @@ namespace StarfallAfterlife.Bridge.Profiles
             } while (profile.Chars.Any(c => c.Id == newId));
 
             character.Id = newId;
+            character.Guid = Guid.NewGuid();
             profile.Chars.Add(character);
             return character;
         }

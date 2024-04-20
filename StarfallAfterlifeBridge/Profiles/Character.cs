@@ -15,6 +15,9 @@ namespace StarfallAfterlife.Bridge.Profiles
         [JsonPropertyName("id")]
         public int Id { get; set; } = 0;
 
+        [JsonPropertyName("guid")]
+        public Guid Guid { get; set; } = Guid.Empty;
+
         [JsonPropertyName("name")]
         public string Name { get; set; } = "NewCharacter";
 

@@ -18,6 +18,7 @@ namespace StarfallAfterlife.Bridge.Profiles
                 chars.Add(new JsonObject
                 {
                     ["id"] = item.Id,
+                    ["guid"] = item.Guid,
                     ["name"] = item.Name,
                     ["faction"] = (int)item.Faction,
                 });

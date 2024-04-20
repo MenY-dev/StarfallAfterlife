@@ -321,6 +321,27 @@ namespace StarfallAfterlife.Bridge.Server
 
         public Task<bool> SyncPlayerData()
         {
+            Game?.Profile?.Use(p =>
+            {
+                var needSave = false;
+
+                if (p.GameProfile?.DiscoveryModeProfile?.Chars is List<Character> chars)
+                {
+                    foreach (var character in chars)
+                    {
+                        if (character is not null &&
+                            character.Guid == Guid.Empty)
+                        {
+                            character.Guid = Guid.NewGuid();
+                            needSave = true;
+                        }
+                    }
+                }
+
+                if (needSave == true)
+                    p.SaveGameProfile();
+            });
+
             return SendRequest(
                 SfaServerAction.RegisterPlayer,
                 Profile.CreatePlayerDataRequest().ToJsonString()

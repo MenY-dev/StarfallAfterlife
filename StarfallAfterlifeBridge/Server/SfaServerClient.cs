@@ -430,6 +430,7 @@ namespace StarfallAfterlife.Bridge.Server
                             {
                                 DiscoveryClient = DiscoveryClient,
                                 Id = (int?)item["id"] ?? -1,
+                                Guid = (Guid?)item["guid"] ?? Guid.Empty,
                                 Name = (string)item["name"] ?? "RenamedCharacter",
                                 Faction = (Faction?)(byte?)item["faction"] ?? Faction.None
                             };

@@ -29,6 +29,8 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
         public int Id { get; set; } = -1;
 
+        public Guid Guid { get; set; } = Guid.Empty;
+
         public string Name { get; set; }
 
         public int UniqueId { get; set; } = -1;
