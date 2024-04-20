@@ -1,0 +1,101 @@
+<c:SfaWindow xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:c="using:StarfallAfterlife.Launcher.Controls"
+			 xmlns:vm="using:StarfallAfterlife.Launcher.ViewModels"
+			 mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="400"
+			 Width="640" Height="400"
+			 x:Class="StarfallAfterlife.Launcher.Views.RealmNameReportsWindow"
+			 WindowStartupLocation="CenterOwner">
+	
+	<c:SfaWindow.Title>
+		<MultiBinding StringFormat="{}{0} {1}">
+			<DynamicResource ResourceKey="s_window_realm_name_reports_title"/>
+			<Binding Path="RealmName"/>
+		</MultiBinding>
+	</c:SfaWindow.Title>
+	
+	<c:SfaWindow.DataTemplates>
+		<DataTemplate DataType="vm:RealmNameReportsViewModel">
+			<ScrollViewer>
+				<Panel>
+					<TextBlock Text="{DynamicResource s_window_realm_name_reports_no_reports_lbl}"
+							   HorizontalAlignment="Center" VerticalAlignment="Center"
+							   Opacity="0.75" FontSize="16" FontWeight="DemiBold"
+							   IsVisible="{Binding !Reports.Count}"/>
+					
+					<StackPanel Orientation="Vertical" Spacing="0">
+						<StackPanel HorizontalAlignment="Right" Orientation="Horizontal"
+									Spacing="10" Margin="10 10 10 0"
+									IsVisible="{Binding Reports.Count}">
+							<c:SfaButton Content="{DynamicResource s_window_realm_name_reports_submit_all_btn}"
+										 Background="Red" BorderBrush="Red"
+										 Command="{Binding SubmitAllReports}"/>
+							<c:SfaButton Content="{DynamicResource s_window_realm_name_reports_reject_all_btn}"
+										 Command="{Binding RejectAllReports}"/>
+						</StackPanel>
+
+						<ItemsControl ItemsSource="{Binding Reports}" Margin="10 5">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate DataType="vm:ObjectNameReportsViewModel">
+									<Panel Margin="0 5">
+										<Rectangle Fill="White" Opacity="0.15"
+												   RadiusX="5" RadiusY="5"/>
+										<Grid RowDefinitions="Auto Auto" ColumnDefinitions="* Auto" Margin="10 5">
+											<StackPanel Grid.Column="0" Grid.Row="0" Spacing="0" Orientation="Horizontal" HorizontalAlignment="Stretch">
+												<TextBlock Text="{DynamicResource s_window_realm_name_reports_system_lbl}"
+														   IsVisible="{Binding IsSystem}"/>
+												<TextBlock Text="{DynamicResource s_window_realm_name_reports_planet_lbl}"
+														   IsVisible="{Binding IsPlanet}"/>
+												<TextBlock Text="{Binding Name}" FontWeight="DemiBold"
+														   IsVisible="{Binding Name, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+												<TextBlock Text="{Binding Author, StringFormat=' ({0})'}" Opacity="0.75"
+														   IsVisible="{Binding Author, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+											</StackPanel>
+
+											<Grid Grid.Column="0" Grid.Row="1" ColumnDefinitions="Auto *" HorizontalAlignment="Stretch">
+												<TextBlock Grid.Column="0"
+														   Text="{DynamicResource s_window_realm_name_reports_reports_lbl}"
+														   VerticalAlignment="Center"/>
+												<ItemsControl Grid.Column="1" ItemsSource="{Binding Reports}"
+															  HorizontalAlignment="Stretch" VerticalAlignment="Center">
+													<ItemsControl.ItemsPanel>
+														<ItemsPanelTemplate>
+															<WrapPanel/>
+														</ItemsPanelTemplate>
+													</ItemsControl.ItemsPanel>
+													<ItemsControl.ItemTemplate>
+														<DataTemplate>
+															<Border Background="#20FFFFFF"
+																	CornerRadius="5"
+																	Padding="3 1"
+																	Margin="3">
+																<TextBlock Text="{Binding}"/>
+															</Border>
+														</DataTemplate>
+													</ItemsControl.ItemTemplate>
+												</ItemsControl>
+											</Grid>
+
+											<StackPanel Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Spacing="10"
+														Orientation="Horizontal" VerticalAlignment="Center">
+												<c:SfaButton Content="{DynamicResource s_window_realm_name_reports_submit_btn}"
+															 Background="Red" BorderBrush="Red"
+															 Command="{Binding $parent[ItemsControl].DataContext.SubmitReport}"
+															 CommandParameter="{Binding}"/>
+												<c:SfaButton Content="{DynamicResource s_window_realm_name_reports_reject_btn}"
+															 Command="{Binding $parent[ItemsControl].DataContext.RejectReport}"
+															 CommandParameter="{Binding}"/>
+											</StackPanel>
+										</Grid>
+									</Panel>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</StackPanel>
+				</Panel>
+			</ScrollViewer>
+		</DataTemplate>
+	</c:SfaWindow.DataTemplates>
+</c:SfaWindow>

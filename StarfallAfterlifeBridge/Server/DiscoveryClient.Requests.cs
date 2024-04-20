@@ -1163,12 +1163,12 @@ namespace StarfallAfterlife.Bridge.Server
 
         private void HandleReportPlanetName(SfReader reader, int systemId, DiscoveryObjectType objectType, int objectId)
         {
-
+            Server?.ReportPlanetName(objectId, Client);
         }
 
         private void HandleReportStarName(SfReader reader, int systemId, DiscoveryObjectType objectType, int objectId)
         {
-
+            Server?.ReportSystemName(systemId, Client);
         }
     }
 }

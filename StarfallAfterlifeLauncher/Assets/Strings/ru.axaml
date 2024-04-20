@@ -49,6 +49,7 @@
 	<sys:String x:Key="s_page_cs_controls_headet">УПРАВЛЕНИЕ</sys:String>
 	<sys:String x:Key="s_page_cs_controls_bg_editor_btn">РЕДАКТОР ПОЛЕЙ СРАЖЕНИЙ</sys:String>
 	<sys:String x:Key="s_page_cs_controls_show_curr_address">ПОКАЗАТЬ АДРЕС</sys:String>
+	<sys:String x:Key="s_page_cs_controls_show_name_reports">ЖАЛОБЫ НА НАЗВАНИЯ</sys:String>
 	<sys:String x:Key="s_page_cs_players_headet">ИГРОКИ</sys:String>
 	<sys:String x:Key="s_page_cs_start_btn">СТАРТ</sys:String>
 	<sys:String x:Key="s_page_cs_stop_btn">СТОП</sys:String>
@@ -210,8 +211,18 @@
 	<sys:String x:Key="s_bg_editor_field_income_lbl">Доход Космопорта</sys:String>
 	<sys:String x:Key="s_bg_editor_field_freighter_spawn_lbl">Варп Грузовиков (с)</sys:String>
 	<sys:String x:Key="s_bg_editor_field_neutralizer_spawn_lbl">Варп Нейтрализаторов (с)</sys:String>
-	
+
 	<sys:String x:Key="s_licenses_window_title">Лицензии</sys:String>
+
+	<sys:String x:Key="s_window_realm_name_reports_title">Жалобы</sys:String>
+	<sys:String x:Key="s_window_realm_name_reports_submit_btn">ПРИНЯТЬ</sys:String>
+	<sys:String x:Key="s_window_realm_name_reports_submit_all_btn">ПРИНЯТЬ ВСЕ</sys:String>
+	<sys:String x:Key="s_window_realm_name_reports_reject_btn">ОТКЛОНИТЬ</sys:String>
+	<sys:String x:Key="s_window_realm_name_reports_reject_all_btn">ОТКЛОНИТЬ ВСЕ</sys:String>
+	<sys:String x:Key="s_window_realm_name_reports_system_lbl">Система: </sys:String>
+	<sys:String x:Key="s_window_realm_name_reports_planet_lbl">Планета: </sys:String>
+	<sys:String x:Key="s_window_realm_name_reports_reports_lbl">Жалобы: </sys:String>
+	<sys:String x:Key="s_window_realm_name_reports_no_reports_lbl">ЖАЛОБЫ ОТСУТСТВУЮТ</sys:String>
 
 	<sys:String x:Key="s_tooltip_password_required">Требуется пароль</sys:String>
 	<sys:String x:Key="s_tooltip_bad_server_version">Несовместимая версия сервера</sys:String>

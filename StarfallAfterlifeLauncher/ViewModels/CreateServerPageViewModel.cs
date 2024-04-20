@@ -375,5 +375,10 @@ namespace StarfallAfterlife.Launcher.ViewModels
                 Server = this,
             }.ShowDialog();
         }
+
+        public void ShowNameReports()
+        {
+            AppVM?.SelectedServerRealm?.ShowNameReports();
+        }
     }
 }

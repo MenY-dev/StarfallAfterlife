@@ -291,8 +291,16 @@ namespace StarfallAfterlife.Bridge.Server
                         AsteroidsMapHash = (string)doc["asteroids_map_hash"];
 
                         p.SelectRealm(realmInfo);
-                        p.CurrentRealm.LoadDatabase();
-                        p.CurrentRealm.LoadProgress();
+                        realmInfo = p.CurrentRealm;
+
+                        if (realmInfo is not null)
+                        {
+                            realmInfo.LoadDatabase();
+                            realmInfo.LoadProgress();
+
+                            if (realmInfo.Realm is SfaRealm realm)
+                                realm.Variable = null;
+                        }
                     });
 
                     return (true, null);

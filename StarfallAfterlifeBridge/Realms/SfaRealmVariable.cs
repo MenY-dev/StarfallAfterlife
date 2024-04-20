@@ -16,6 +16,10 @@ namespace StarfallAfterlife.Bridge.Realms
 
         public Dictionary<int, RealmObjectRenameInfo> RenamedPlanets { get; set; } = new();
 
+        public Dictionary<int, RealmObjectNameReport> SystemNameReports { get; set; } = new();
+
+        public Dictionary<int, RealmObjectNameReport> PlanetNameReports { get; set; } = new();
+
         public virtual bool Load(string path)
         {
             return Load(JsonHelpers.ParseNodeFromFile(path));
@@ -36,37 +40,45 @@ namespace StarfallAfterlife.Bridge.Realms
                 if (doc is not JsonObject)
                     return false;
 
-                if (doc["renamedsystems"]?.AsArraySelf() is JsonArray systems)
+                void DeserializeItems<TKey, TValue>(Dictionary<TKey, TValue> items, JsonArray node, Func<TValue, TKey> keyGetter)
                 {
-                    foreach (var item in systems)
+                    if (keyGetter is null)
+                        return;
+
+                    foreach (var item in node)
                     {
-                        if (item is not JsonObject)
-                            continue;
+                        try
+                        {
+                            if (item is not JsonObject)
+                                continue;
 
-                        var info = item.DeserializeUnbuffered<RealmObjectRenameInfo>();
+                            var info = item.DeserializeUnbuffered<TValue>();
 
-                        if (info is null)
-                            continue;
+                            if (info is null)
+                                continue;
 
-                        RenamedSystems[info.Id] = info;
+                            var key = keyGetter(info);
+
+                            if (info is null)
+                                continue;
+
+                            items[key] = info;
+                        }
+                        catch { }
                     }
                 }
 
-                if (doc["renamedplanets"]?.AsArraySelf() is JsonArray planets)
-                {
-                    foreach (var item in planets)
-                    {
-                        if (item is not JsonObject)
-                            continue;
+                if (doc["renamed_systems"]?.AsArraySelf() is JsonArray systems)
+                    DeserializeItems(RenamedSystems, systems, i => i.Id);
 
-                        var info = item.DeserializeUnbuffered<RealmObjectRenameInfo>();
+                if (doc["renamed_planets"]?.AsArraySelf() is JsonArray planets)
+                    DeserializeItems(RenamedPlanets, planets, i => i.Id);
 
-                        if (info is null)
-                            continue;
+                if (doc["system_name_reports"]?.AsArraySelf() is JsonArray systemReports)
+                    DeserializeItems(SystemNameReports, systemReports, i => i.Id);
 
-                        RenamedPlanets[info.Id] = info;
-                    }
-                }
+                if (doc["planet_name_reports"]?.AsArraySelf() is JsonArray planetReports)
+                    DeserializeItems(PlanetNameReports, planetReports, i => i.Id);
 
                 return true;
             }
@@ -75,18 +87,68 @@ namespace StarfallAfterlife.Bridge.Realms
             return false;
         }
 
-        public JsonNode ToJson()
+        public JsonNode ToJson() => ToJson(false);
+
+        public JsonNode ToJson(bool ignoreReports)
         {
-            return new JsonObject
+            var doc = new JsonObject
             {
-                ["renamedsystems"] = RenamedSystems?.Values
+                ["renamed_systems"] = RenamedSystems?.Values
                     .Where(r => r is not null)
                     .Select(r => JsonHelpers.ParseNodeUnbuffered(r)).ToJsonArray(),
 
-                ["renamedplanets"] = RenamedPlanets?.Values
+                ["renamed_planets"] = RenamedPlanets?.Values
                     .Where(r => r is not null)
                     .Select(r => JsonHelpers.ParseNodeUnbuffered(r)).ToJsonArray(),
             };
+
+            if (ignoreReports == false)
+            {
+                doc["system_name_reports"] = SystemNameReports?.Values
+                    .Where(r => r is not null)
+                    .Select(r => JsonHelpers.ParseNodeUnbuffered(r)).ToJsonArray();
+
+                doc["planet_name_reports"] = PlanetNameReports?.Values
+                    .Where(r => r is not null)
+                    .Select(r => JsonHelpers.ParseNodeUnbuffered(r)).ToJsonArray();
+            }
+
+            return doc;
+        }
+
+        public void ReportSystem(int id, string profileId, string profileName)
+        {
+            if (id > -1 && profileId is not null)
+                Report(SystemNameReports ??= new(), id, profileId, profileName);
+        }
+
+        public void ReportPlanet(int id, string profileId, string profileName)
+        {
+            if (id > -1 && profileId is not null)
+                Report(PlanetNameReports ??= new(), id, profileId, profileName);
+        }
+
+        protected void Report(Dictionary<int, RealmObjectNameReport> collection, int id, string profileId, string profileName)
+        {
+            if (collection is null || profileId is null)
+                return;
+
+            var report = collection.GetValueOrDefault(id);
+
+            if (report is null)
+                collection[id] = report = new() { Id = id };
+
+            var reportAuthor = (report.Authors ??= new()).FirstOrDefault(
+                a => profileId.Equals(a.PlayerId, StringComparison.OrdinalIgnoreCase));
+
+            if (reportAuthor is null)
+            {
+                reportAuthor = new() { PlayerId = profileId };
+                report.Authors.Add(reportAuthor);
+            }
+
+            if (profileName is not null)
+                reportAuthor.PlayerName = profileName;
         }
     }
 }

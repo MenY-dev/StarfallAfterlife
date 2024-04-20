@@ -1,6 +1,9 @@
-﻿using StarfallAfterlife.Bridge.Launcher;
+﻿using Avalonia.Controls;
+using Avalonia.Threading;
+using StarfallAfterlife.Bridge.Launcher;
 using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Realms;
+using StarfallAfterlife.Launcher.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +29,10 @@ namespace StarfallAfterlife.Launcher.ViewModels
 
         public bool LockedByServer { get; protected set; }
 
+        public RealmNameReportsViewModel NameReports { get; protected set; }
+
+        public RealmNameReportsWindow NameReportsWindow { get; protected set; }
+        
         public SfaRealmInfo RealmInfo
         {
             get => _realmInfo;
@@ -84,6 +91,55 @@ namespace StarfallAfterlife.Launcher.ViewModels
             RaisePropertyUpdate(IsActiveSession, nameof(IsActiveSession));
             RaisePropertyUpdate(ActiveSessionChars, nameof(ActiveSessionChars));
             RaisePropertyUpdate(LockedByServer, nameof(LockedByServer));
+            RaisePropertyUpdate(NameReports, nameof(NameReports));
+
+            UpdateNameReports();
+        }
+
+        public void UpdateNameReports()
+        {
+            var realm = RealmInfo;
+
+            if (realm is null)
+                return;
+
+            realm?.Use(r =>
+            {
+                if (r?.Realm?.Variable is null)
+                    r.LoadVariable();
+            });
+
+            (NameReports ??= new(realm))?.UpdateReports();
+        }
+
+        public void ShowNameReports()
+        {
+            UpdateNameReports();
+
+            if (NameReportsWindow is RealmNameReportsWindow currentWindow)
+            {
+                try
+                {
+                    currentWindow.Activate();
+
+                    if (currentWindow.WindowState == WindowState.Minimized)
+                        currentWindow.WindowState = WindowState.Normal;
+
+                    return;
+                }
+                catch { }
+            }
+
+            if (NameReports is not null)
+            {
+                NameReportsWindow = new RealmNameReportsWindow()
+                {
+                    Content = NameReports,
+                };
+
+                NameReportsWindow.Closed += (o, e) => Dispatcher.UIThread.Invoke(() => NameReportsWindow = null);
+                NameReportsWindow.Show(App.MainWindow);
+            }
         }
     }
 }

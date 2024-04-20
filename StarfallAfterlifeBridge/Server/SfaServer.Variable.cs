@@ -103,14 +103,38 @@ namespace StarfallAfterlife.Bridge.Server
             return info is not null;
         }
 
-        public void ReportSystemName(int id)
+        public void ReportSystemName(int id, SfaServerClient author)
         {
+            if (author is null)
+                return;
 
+            RealmInfo?.Use(r =>
+            {
+                if (r.Realm?.Variable is SfaRealmVariable variable &&
+                    variable.RenamedSystems?.GetValueOrDefault(id) is not null)
+                {
+                    var authorId = author.ProfileId.ToString("N");
+                    variable.ReportSystem(id, authorId, author.Name);
+                    r.SaveVariable();
+                }
+            });
         }
 
-        public void ReportPlanetName(int id)
+        public void ReportPlanetName(int id, SfaServerClient author)
         {
+            if (author is null)
+                return;
 
+            RealmInfo?.Use(r =>
+            {
+                if (r.Realm?.Variable is SfaRealmVariable variable &&
+                    variable.RenamedPlanets?.GetValueOrDefault(id) is not null)
+                {
+                    var authorId = author.ProfileId.ToString("N");
+                    variable.ReportPlanet(id, authorId, author.Name);
+                    r.SaveVariable();
+                }
+            });
         }
 
         public void SyncVariableMap(

@@ -49,6 +49,7 @@
 	<sys:String x:Key="s_page_cs_controls_headet">Controls</sys:String>
 	<sys:String x:Key="s_page_cs_controls_bg_editor_btn">BATTLEGROUNDS EDITOR</sys:String>
 	<sys:String x:Key="s_page_cs_controls_show_curr_address">SHOW ADDRESS</sys:String>
+	<sys:String x:Key="s_page_cs_controls_show_name_reports">NAME REPORTS</sys:String>
 	<sys:String x:Key="s_page_cs_players_headet">PLAYERS</sys:String>
 	<sys:String x:Key="s_page_cs_start_btn">START</sys:String>
 	<sys:String x:Key="s_page_cs_stop_btn">STOP</sys:String>
@@ -211,7 +212,17 @@
 	<sys:String x:Key="s_bg_editor_field_neutralizer_spawn_lbl">Neutralizer Period (s)</sys:String>
 
 	<sys:String x:Key="s_licenses_window_title">Licenses</sys:String>
-
+	
+	<sys:String x:Key="s_window_realm_name_reports_title">Reports</sys:String>
+	<sys:String x:Key="s_window_realm_name_reports_submit_btn">SUBMIT</sys:String>
+	<sys:String x:Key="s_window_realm_name_reports_submit_all_btn">SUBMIT ALL</sys:String>
+	<sys:String x:Key="s_window_realm_name_reports_reject_btn">REJECT</sys:String>
+	<sys:String x:Key="s_window_realm_name_reports_reject_all_btn">REJECT ALL</sys:String>
+	<sys:String x:Key="s_window_realm_name_reports_system_lbl">System: </sys:String>
+	<sys:String x:Key="s_window_realm_name_reports_planet_lbl">Planet: </sys:String>
+	<sys:String x:Key="s_window_realm_name_reports_reports_lbl">Reports: </sys:String>
+	<sys:String x:Key="s_window_realm_name_reports_no_reports_lbl">NO REPORTS</sys:String>
+	
 	<sys:String x:Key="s_tooltip_password_required">Password required</sys:String>
 	<sys:String x:Key="s_tooltip_bad_server_version">Incompatible server version</sys:String>
 	<sys:String x:Key="s_tooltip_active_session">Active session</sys:String>

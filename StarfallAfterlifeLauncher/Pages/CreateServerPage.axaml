@@ -163,14 +163,21 @@
 				</c:SfaPanel>
 				<c:SfaPanel Grid.Row="2" Grid.Column="0" HeaderText="{DynamicResource s_page_cs_controls_headet}" ShowHeader="True"
 							Margin="10 5 5 10">
-					<ScrollViewer Padding="10">
-						<WrapPanel IsEnabled="{Binding ServerStarted}">
+					<ScrollViewer>
+						<WrapPanel Margin="10">
 							<c:SfaButton Content="{DynamicResource s_page_cs_controls_show_curr_address}"
 										 Command="{Binding ShowCurrentAddress}"
+										 IsEnabled="{Binding ServerStarted}"
 										 Margin="3"/>
-							
+
 							<c:SfaButton Content="{DynamicResource s_page_cs_controls_bg_editor_btn}"
 										 Command="{Binding ShowBattlegroundsEditor}"
+										 IsEnabled="{Binding ServerStarted}"
+										 Margin="3"/>
+							
+							<c:SfaButton Content="{DynamicResource s_page_cs_controls_show_name_reports}"
+										 Command="{Binding ShowNameReports}"
+										 IsEnabled="{Binding AppVM.SelectedServerRealm, Converter={x:Static ObjectConverters.IsNotNull}}"
 										 Margin="3"/>
 						</WrapPanel>
 					</ScrollViewer>
