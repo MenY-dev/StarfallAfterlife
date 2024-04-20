@@ -142,6 +142,34 @@ namespace StarfallAfterlife.Bridge.IO
 
         public virtual void WriteChar(char value) => Writer.Write(value);
 
+        public virtual void WriteArray<T>(IList<T> array, Action<T, SfWriter> itemWriter)
+        {
+            if (array is null || itemWriter is null)
+            {
+                WriteUInt32(0);
+                return;
+            }
+
+            WriteUInt32((uint)array.Count);
+
+            foreach (var item in array)
+                itemWriter(item, this);
+        }
+
+        public virtual void WriteShortArray<T>(IList<T> array, Action<T, SfWriter> itemWriter)
+        {
+            if (array is null || itemWriter is null)
+            {
+                WriteUInt16(0);
+                return;
+            }
+
+            WriteUInt16((ushort)array.Count);
+
+            foreach (var item in array)
+                itemWriter(item, this);
+        }
+
         public virtual void WriteVector2(Vector2 value)
         {
             WriteSingle(value.X);
