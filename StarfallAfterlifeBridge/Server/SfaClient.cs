@@ -47,6 +47,8 @@ namespace StarfallAfterlife.Bridge.Server
 
         protected SfaGame Game { get; set; }
 
+        public string Localization { get; set; } = "en";
+
         protected SfaGameProfile Profile => Game?.GameProfile;
 
         protected DiscoveryChannel DiscoveryChannel => Game?.DiscoveryChannel;
@@ -234,6 +236,7 @@ namespace StarfallAfterlife.Bridge.Server
                 request["profile_id"] = Profile?.Id ?? Guid.Empty;
                 request["auth"] = lastAuth;
                 request["version"] = version.ToString(3);
+                request["locale"] = Localization;
             }
             else
             {
@@ -242,6 +245,7 @@ namespace StarfallAfterlife.Bridge.Server
                 request["profile_id"] = Profile?.Id ?? Guid.Empty;
                 request["profile_name"] = profile.Nickname;
                 request["version"] = version.ToString(3);
+                request["locale"] = Localization;
             }
 
             return SendRequest(SfaServerAction.Auth, request).ContinueWith(t =>

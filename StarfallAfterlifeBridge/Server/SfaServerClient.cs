@@ -58,6 +58,8 @@ namespace StarfallAfterlife.Bridge.Server
 
         public bool IsPlayer { get; set; }
 
+        public string Localization { get; set; }
+
         public SfaServer Server { get; set; }
 
         public DiscoveryGalaxy Galaxy { get; set; }
@@ -195,6 +197,8 @@ namespace StarfallAfterlife.Bridge.Server
 
         public void ProcessAuth(JNode authData, SfaClientRequest request)
         {
+            Localization = (string)authData["locale"] ?? "en";
+
             if ((string)authData["action"] is string action)
             {
                 var comparsion = StringComparison.InvariantCultureIgnoreCase;

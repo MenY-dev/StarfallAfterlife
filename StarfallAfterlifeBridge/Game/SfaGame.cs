@@ -21,6 +21,8 @@ using StarfallAfterlife.Bridge.Generators;
 using StarfallAfterlife.Bridge.Realms;
 using StarfallAfterlife.Bridge.Diagnostics;
 using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace StarfallAfterlife.Bridge.Game
 {
@@ -43,6 +45,10 @@ namespace StarfallAfterlife.Bridge.Game
         protected string ExeLocation => Path.Combine(Location, "Msk", "starfall_game", "Starfall.exe");
 
         protected string LogsLocation => Path.Combine(Location, "Msk", "starfall_game", "Starfall", "Saved", "Logs");
+
+        protected string GameUserSettingsLocation => Path.Combine(
+            Location, "Msk", "starfall_game", "Starfall", "Saved",
+            "Config", "WindowsNoEditor", "GameUserSettings.ini");
 
         protected static JsonNode EmptyMgrResponse => new JsonObject { ["ok"] = 1 };
 
@@ -91,7 +97,35 @@ namespace StarfallAfterlife.Bridge.Game
             RealmMgrServer.Start(new Uri("http://127.0.0.1:0/realmmgr/"));
             SfaDebug.Print($"RealmMgrServer Started! ({RealmMgrServer.Address})");
 
-            SfaClient = new SfaClient(this);
+            string locale = null;
+
+            try
+            {
+                if (File.Exists(GameUserSettingsLocation) == true)
+                {
+                    var text = File.ReadAllText(GameUserSettingsLocation);
+
+                    if (Regex.IsMatch(text, @"\[Internationalization\][^\[]*?Language\s*?\=",
+                        RegexOptions.Multiline | RegexOptions.IgnoreCase))
+                    {
+                        if (Regex.IsMatch(
+                            text,
+                            @"\[Internationalization\][^\[]*?Language\s*?\=[^\[\r\n]*?ru(?>\-|\s+)",
+                            RegexOptions.Multiline | RegexOptions.IgnoreCase))
+                            locale = "ru";
+                    }
+                }
+            }
+            catch { }
+
+            if (locale is null &&
+                CultureInfo.CurrentCulture.Name is string culture &&
+                Regex.IsMatch(culture, @"^ru(?>$|\-)", RegexOptions.IgnoreCase))
+            {
+                locale = "ru";
+            }
+
+            SfaClient = new SfaClient(this) { Localization = locale };
             CompletionSource = new TaskCompletionSource<StartResult>();
 
             (bool IsSucces, string Reason) Auth(string lastAuth = null)
