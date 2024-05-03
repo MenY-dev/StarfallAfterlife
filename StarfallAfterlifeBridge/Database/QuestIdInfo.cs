@@ -32,6 +32,7 @@ namespace StarfallAfterlife.Bridge.Database
         public Faction Faction;
         public Faction TargetFaction;
         public bool IsLevelingQuest;
+        public bool IsDynamicQuest;
 
         public bool IsValidId => LocalId >= 0 && this switch
         {
@@ -48,17 +49,20 @@ namespace StarfallAfterlife.Bridge.Database
                     LocalId & (-1 >>> 14) |
                     ((IsLevelingQuest ? 1 : 0) << 18) |
                     ((int)Faction << 20) |
-                    ((int)Type << 28),
+                    ((int)Type << 28) |
+                    ((IsDynamicQuest ? 1 : 0) << 31),
 
                 QuestType.UniqueQuestLine =>
                     LocalId & (-1 >>> 20) |
                     ((int)TargetFaction << 12) |
                     ((int)Faction << 20) |
-                    ((int)Type << 28),
+                    ((int)Type << 28) |
+                    ((IsDynamicQuest ? 1 : 0) << 31),
 
                 _ =>
                     LocalId & (-1 >>> 4) |
-                    ((int)Type << 28),
+                    ((int)Type << 28) |
+                    ((IsDynamicQuest ? 1 : 0) << 31),
             };
         }
 
@@ -66,7 +70,8 @@ namespace StarfallAfterlife.Bridge.Database
         {
             var quest = new QuestIdInfo()
             {
-                Type = (QuestType)(id >>> 28)
+                Type = (QuestType)(id >>> 28),
+                IsDynamicQuest = (byte)(id >>> 31) > 0
             };
 
             switch (quest.Type)

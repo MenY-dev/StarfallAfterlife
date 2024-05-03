@@ -241,33 +241,70 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                 Progress.ActiveQuests.ContainsKey(questId) == true)
                 return;
 
-            if (checkQuestLimits == true)
+            if (checkQuestLimits == true && CheckQuestLimitsReached() == true)
             {
-                var countPredicate = (QuestListener q) => q?.Info?.Type is
-                    QuestType.Task or QuestType.HouseTask;
-
-                if (ActiveQuests.ToArray().Count(countPredicate) >= 30)
-                {
-                    DiscoveryClient.Invoke(c => c.SendOnScreenNotification(new SfaNotification
-                    {
-                        Id = "accept_quest" + questId,
-                        Header = "ReachedQuestLimit",
-                        Format = new()
-                    }));
-                    return;
-                }
+                DiscoveryClient.Invoke(c => c.SendQuestLimitNotification(questId));
+                return;
             }
 
             var questProgress = new QuestProgress();
 
-            if (QuestListener.Create(questId, this) is QuestListener quest)
+            if (QuestListener.Create(questId, this) is QuestListener listener)
             {
                 Progress.ActiveQuests[questId] = questProgress;
-                ActiveQuests.Add(quest);
-                quest.StartListening();
-                DiscoveryClient?.SyncAcceptNewQuest(questId);
-                quest.RaiseInitialActions();
+                ActiveQuests.Add(listener);
+                listener.StartListening();
+                DiscoveryClient?.SyncAcceptNewQuest(questId, questProgress);
+                listener.RaiseInitialActions();
             }
+        }
+
+        public bool AcceptDynamicQuest(DiscoveryQuest quest, bool checkQuestLimits = false)
+        {
+            if (quest is null)
+                return false;
+
+            var activeQuests = Progress.ActiveQuests ??= new();
+            var questId = Enumerable
+                .Range(0, activeQuests.Count + 1)
+                .Select(i => new QuestIdInfo
+                {
+                    LocalId = i,
+                    Type = quest.Type,
+                    Faction = quest.ObjectFaction,
+                    IsDynamicQuest = true,
+                }.ToId())
+                .FirstOrDefault(i => activeQuests.ContainsKey(i) == false);
+
+            if (questId < 1)
+                return false;
+
+            if (checkQuestLimits == true && CheckQuestLimitsReached() == true)
+            {
+                DiscoveryClient.Invoke(c => c.SendQuestLimitNotification(questId));
+                return false;
+            }
+
+            var questProgress = new QuestProgress() { QuestData = quest };
+
+            if (QuestListener.Create(questId, this) is QuestListener listener)
+            {
+                Progress.ActiveQuests[questId] = questProgress;
+                ActiveQuests.Add(listener);
+                listener.StartListening();
+                DiscoveryClient?.SyncAcceptNewQuest(questId, questProgress);
+                listener.RaiseInitialActions();
+            }
+
+            return true;
+        }
+
+        protected bool CheckQuestLimitsReached()
+        {
+            var countPredicate = (QuestListener q) =>
+                q?.Info?.Type is QuestType.Task or QuestType.HouseTask;
+
+            return ActiveQuests.ToArray().Count(countPredicate) >= 30;
         }
 
         public void AbandoneQuest(int questId)
@@ -308,10 +345,17 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                 quest.StopListening();
                 quest.State = QuestState.Done;
                 ActiveQuests.Remove(quest);
-                Progress.ActiveQuests.Remove(questId);
-                Progress.CompletedQuests.Add(questId);
-                DiscoveryClient?.SendQuestCompleteData(quest);
-                DiscoveryClient?.SyncQuestCompleted(questId);
+                Progress.ActiveQuests.Remove(questId, out var progress);
+                
+                if ((progress?.IsDynamic ?? QuestIdInfo.Create(questId).IsDynamicQuest) == false)
+                    Progress.CompletedQuests.Add(questId);
+
+                DiscoveryClient?.Invoke(c =>
+                {
+                    c.SendQuestCompleteData(quest);
+                    c.SyncQuestCompleted(questId);
+                });
+
                 Events?.Broadcast<ICharacterListener>(l => l.OnQuestCompleted(this, quest));
 
                 if (quest.Info?.Reward is QuestReward reward)
@@ -327,7 +371,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                     if (reward.Items is not null &&
                         (Database ?? SfaDatabase.Instance) is SfaDatabase database)
                     {
-                        DiscoveryClient.Invoke(c =>
+                        DiscoveryClient?.Invoke(c =>
                         {
                             var addedItems = new List<InventoryItem>();
 
@@ -353,7 +397,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                     if (xp is not null)
                         notification += $"\r\n+{xp} XP";
 
-                    DiscoveryClient.Invoke(c => c.SendOnScreenNotification(new SfaNotification
+                    DiscoveryClient?.Invoke(c => c.SendOnScreenNotification(new SfaNotification
                     {
                         Id = "finish_quest" + quest.Id,
                         Header = "QuestComplete",

@@ -12,11 +12,11 @@ namespace StarfallAfterlife.Bridge.Profiles
         [JsonPropertyName("prog")]
         public int Progress { get; set; }
 
-        [JsonPropertyName("extra")]
-        public Dictionary<string, int> ExtraOptions { get; set; } = new();
+        [JsonPropertyName("extra"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public Dictionary<string, int> ExtraOptions { get; set; }
 
         public int GetOption(string name) =>
-            ExtraOptions.GetValueOrDefault(name);
+            ExtraOptions?.GetValueOrDefault(name) ?? 0;
 
         public void SetOption(string name, int value) =>
             ExtraOptions[name ?? string.Empty] = value;

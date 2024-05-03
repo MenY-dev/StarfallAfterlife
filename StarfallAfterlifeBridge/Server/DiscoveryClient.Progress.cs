@@ -18,13 +18,14 @@ namespace StarfallAfterlife.Bridge.Server
 {
     public partial class DiscoveryClient
     {
-        public void SyncAcceptNewQuest(int questId)
+        public void SyncAcceptNewQuest(int questId, QuestProgress progress)
         {
             Client?.Send(new JsonObject()
             {
                 ["new_active_quests"] = new JsonArray(new JsonObject
                 {
                     ["id"] = questId,
+                    ["progress"] = JsonHelpers.ParseNodeUnbuffered(progress)
                 })
             }, SfaServerAction.SyncProgress);
         }

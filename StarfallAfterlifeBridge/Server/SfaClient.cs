@@ -675,8 +675,10 @@ namespace StarfallAfterlife.Bridge.Server
                     {
                         if ((int?)item is int quest)
                         {
-                            progress.ActiveQuests.Remove(quest);
-                            progress.CompletedQuests.Add(quest);
+                            progress.ActiveQuests.Remove(quest, out var questProgress);
+
+                            if ((questProgress?.IsDynamic ?? QuestIdInfo.Create(quest).IsDynamicQuest) == false)
+                                progress.CompletedQuests.Add(quest);
                         }
                     }
                 }

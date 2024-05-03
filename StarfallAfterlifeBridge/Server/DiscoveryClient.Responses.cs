@@ -621,6 +621,15 @@ namespace StarfallAfterlife.Bridge.Server
                 });
         }
 
+        public void SendQuestLimitNotification(int questId = 0)
+        {
+            SendOnScreenNotification(new SfaNotification
+            {
+                Id = "accept_quest" + questId,
+                Header = "ReachedQuestLimit",
+                Format = new()
+            });
+        }
 
         public void SendTalkingHead(SfaNotification notification)
         {

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using StarfallAfterlife.Bridge.Database;
+using StarfallAfterlife.Bridge.Server.Quests;
+using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
@@ -8,6 +10,12 @@ namespace StarfallAfterlife.Bridge.Profiles
     {
         [JsonPropertyName("conditions")]
         public Dictionary<string, ConditionProgress> Conditions { get; set; } = new();
+
+        [JsonPropertyName("quest_data"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public DiscoveryQuest QuestData { get; set; }
+
+        public bool IsDynamic => QuestData is DiscoveryQuest quest &&
+                                 QuestIdInfo.Create(quest.Id).IsDynamicQuest;
 
         public ConditionProgress GetProgress(string conditionName) =>
             Conditions.GetValueOrDefault(conditionName);
