@@ -39,6 +39,17 @@ namespace StarfallAfterlife.Bridge.Database
 
         public Dictionary<int, AbilityInfo> Abilities { get; } = new();
 
+        public Dictionary<int, HouseRankInfo> HouseRanks { get; } = new();
+
+        public Dictionary<int, HouseLevelInfo> HouseLevels { get; } = new();
+
+        public Dictionary<int, HouseUpgradeInfo> HouseUpgrades { get; } = new();
+
+        public Dictionary<int, HouseEffectInfo> HouseEffects { get; } = new();
+
+        public Dictionary<int, HouseDoctrineInfo> HouseDoctrines { get; } = new();
+
+
         public TagNode MobTags { get; } = new();
 
         public Dictionary<int, SfaCircleData> CircleDatabase { get; } = new()
@@ -348,6 +359,67 @@ namespace StarfallAfterlife.Bridge.Database
                 }
             }
 
+            if (doc["house_levels"]?.AsArray() is JsonArray houseLevels)
+            {
+                foreach (var node in houseLevels)
+                {
+                    try
+                    {
+                        if (JsonHelpers.DeserializeUnbuffered<HouseLevelInfo?>(node) is HouseLevelInfo info)
+                            dtb.HouseLevels[info.Level] = info;
+                    }
+                    catch { }
+                }
+            }
+
+            if (doc["house_upgrades"]?.AsArray() is JsonArray houseUpgrades)
+            {
+                foreach (var node in houseUpgrades)
+                {
+                    try
+                    {
+                        if (JsonHelpers.DeserializeUnbuffered<HouseUpgradeInfo?>(node) is HouseUpgradeInfo info)
+                            dtb.HouseUpgrades[info.Id] = info;
+                    }
+                    catch { }
+                }
+            }
+
+            if (doc["house_effects"]?.AsArray() is JsonArray houseEffects)
+            {
+                foreach (var node in houseEffects)
+                {
+                    try
+                    {
+                        if (JsonHelpers.DeserializeUnbuffered<HouseEffectInfo?>(node) is HouseEffectInfo info)
+                            dtb.HouseEffects[info.Id] = info;
+                    }
+                    catch { }
+                }
+            }
+
+            if (doc["house_doctrines"]?.AsArray() is JsonArray houseDoctrines)
+            {
+                foreach (var node in houseDoctrines)
+                {
+                    try
+                    {
+                        if (JsonHelpers.DeserializeUnbuffered<HouseDoctrineInfo?>(node) is HouseDoctrineInfo info)
+                            dtb.HouseDoctrines[info.Id] = info;
+                    }
+                    catch { }
+                }
+            }
+
+            if (doc["house_ranks"]?.AsArray() is JsonArray houseRanks)
+            {
+                foreach (var node in houseRanks)
+                {
+                    if (JsonHelpers.DeserializeUnbuffered<HouseRankInfo?>(node) is HouseRankInfo rank)
+                        dtb.HouseRanks[rank.Id] = rank;
+                }
+            }
+
             return dtb;
         }
 
@@ -416,6 +488,22 @@ namespace StarfallAfterlife.Bridge.Database
         {
             if (QuestLines?.TryGetValue(id, out QuestLineInfo line) == true)
                 return line;
+
+            return null;
+        }
+
+        public HouseRankInfo? GetRank(int id)
+        {
+            if (HouseRanks.TryGetValue(id, out HouseRankInfo rank) == true)
+                return rank;
+
+            return null;
+        }
+
+        public HouseUpgradeInfo? GetHouseUpgrade(int id)
+        {
+            if (HouseUpgrades.TryGetValue(id, out HouseUpgradeInfo upgrade) == true)
+                return upgrade;
 
             return null;
         }
@@ -532,10 +620,42 @@ namespace StarfallAfterlife.Bridge.Database
 
             for (int i = 0; i < Levels.Count; i++)
             {
-                currentLevel = GetLevelInfo(i);
+                if (GetLevelInfo(i) is LevelInfo lvl)
+                {
+                    if (lvl.Xp > xp)
+                        return currentLevel;
 
-                if (currentLevel.Xp > xp)
-                    return GetLevelInfo(Math.Max(0, i - 1));
+                    currentLevel = lvl;
+                }
+            }
+
+            return currentLevel;
+        }
+
+        public HouseLevelInfo? GetHouseLevelInfo(int lvl)
+        {
+            if (HouseLevels?.TryGetValue(lvl, out HouseLevelInfo info) == true)
+                return info;
+
+            return null;
+        }
+
+        public HouseLevelInfo? GetHouseLevelInfoForXp(long xp)
+        {
+            HouseLevelInfo? currentLevel = null;
+
+            if (HouseLevels.Count < 1)
+                return null;
+
+            for (int i = 0; i < HouseLevels.Count; i++)
+            {
+                if (GetHouseLevelInfo(i) is HouseLevelInfo lvl)
+                {
+                    if (lvl.Xp > xp)
+                        return currentLevel;
+
+                    currentLevel = lvl;
+                }
             }
 
             return currentLevel;

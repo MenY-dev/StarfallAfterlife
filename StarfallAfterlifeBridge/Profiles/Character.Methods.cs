@@ -1,4 +1,5 @@
 ﻿using StarfallAfterlife.Bridge.Database;
+using StarfallAfterlife.Bridge.Mathematics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace StarfallAfterlife.Bridge.Profiles
     {
         public void AddXp(int xp)
         {
-            Xp += xp;
+            Xp = Xp.AddWithoutOverflow(xp);
             UpdateLevels();
         }
 

@@ -142,7 +142,7 @@ namespace StarfallAfterlife.Bridge.IO
 
         public virtual void WriteChar(char value) => Writer.Write(value);
 
-        public virtual void WriteArray<T>(IList<T> array, Action<T, SfWriter> itemWriter)
+        public virtual void WriteArray<T>(ICollection<T> array, Action<T, SfWriter> itemWriter)
         {
             if (array is null || itemWriter is null)
             {
@@ -156,7 +156,7 @@ namespace StarfallAfterlife.Bridge.IO
                 itemWriter(item, this);
         }
 
-        public virtual void WriteShortArray<T>(IList<T> array, Action<T, SfWriter> itemWriter)
+        public virtual void WriteShortArray<T>(ICollection<T> array, Action<T, SfWriter> itemWriter)
         {
             if (array is null || itemWriter is null)
             {

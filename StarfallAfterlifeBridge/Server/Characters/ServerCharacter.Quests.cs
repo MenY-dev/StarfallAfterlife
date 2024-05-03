@@ -1,4 +1,5 @@
 ﻿using StarfallAfterlife.Bridge.Database;
+using StarfallAfterlife.Bridge.Mathematics;
 using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Realms;
 using StarfallAfterlife.Bridge.Server.Inventory;
@@ -45,7 +46,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                     var currentProgress = progress.SeasonsProgress ??= new();
                     var currentRewards = progress.SeasonsRewards ??= new();
                     var currentXp = progress.SeasonsProgress?.GetValueOrDefault(currentSeason.Id) ?? 0;
-                    var totalXp = Math.Max(0, currentXp + newXp);
+                    var totalXp = Math.Max(0, currentXp.AddWithoutOverflow(newXp));
                     var completedStages = seasonsInfo.GetStages(currentSeason.Id, totalXp);
                     var newRewards = seasonsInfo.Rewards?.Where(r =>
                                      completedStages.Any(s => s.Id == r.Stage) == true &&

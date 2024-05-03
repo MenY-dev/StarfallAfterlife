@@ -16,6 +16,10 @@ using StarfallAfterlife.Bridge.Instances;
 using System.Collections;
 using System.Text.Json.Nodes;
 using StarfallAfterlife.Bridge.Realms;
+using StarfallAfterlife.Bridge.Server.Discovery.AI;
+using System.Reflection.Emit;
+using static StarfallAfterlife.Bridge.Native.Windows.Win32;
+using StarfallAfterlife.Bridge.Houses;
 
 namespace StarfallAfterlife.Bridge.Server.Characters
 {
@@ -31,6 +35,8 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
         public Guid Guid { get; set; } = Guid.Empty;
 
+        public Guid ProfileId => DiscoveryClient?.Client?.ProfileId ?? Guid.Empty;
+
         public string Name { get; set; }
 
         public int UniqueId { get; set; } = -1;
@@ -45,7 +51,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
         public int AccessLevel { get; set; }
 
-        public float Xp { get; set; }
+        public int Xp { get; set; }
 
         public float XpFactor { get; set; }
 
@@ -62,6 +68,8 @@ namespace StarfallAfterlife.Bridge.Server.Characters
         public List<ShipConstructionInfo> Ships { get; protected set; } = new();
 
         public UserFleet Fleet { get; set; }
+
+        public bool IsOnline { get; protected set; }
 
         public Dictionary<int, SystemHexMap> ExplorationProgress => Progress.Systems;
 
@@ -447,7 +455,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                 DiscoveryClient?.Invoke(c =>
                 {
                     c.SendFleetCargo();
-                    c.SynckSessionFleetInfo();
+                    c.SyncSessionFleetInfo();
                 });
 
                 return result;
@@ -468,31 +476,35 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
         public UserFleet CreateNewFleet()
         {
+            Fleet = new UserFleet();
+            UpdateFleetInfo();
+            return Fleet;
+        }
+
+        public void UpdateFleetInfo()
+        {
             var mainShip = GetMainShip() ?? new();
 
-            Fleet = new UserFleet()
+            if (Fleet is UserFleet fleet)
             {
-                Id = UniqueId,
-                Name = UniqueName,
-                Faction = Faction,
-                Level = Level,
-                BaseVision = 5,
-                BaseSpeed = 5,
-                State = FleetState.None,
-                Hull = mainShip.Hull,
-                Skin = mainShip.ShipSkin,
-                SkinColor1 = mainShip.SkinColor1,
-                SkinColor2 = mainShip.SkinColor2,
-                SkinColor3 = mainShip.SkinColor3,
-                Decal = mainShip.ShipDecal,
-            };
+                fleet.Id = UniqueId;
+                fleet.Name = string.IsNullOrWhiteSpace(HouseTag) ? UniqueName : $"[{HouseTag}] {UniqueName}";
+                fleet.Faction = Faction;
+                fleet.Level = Level;
+                fleet.BaseVision = 5;
+                fleet.BaseSpeed = 5;
+                fleet.Hull = mainShip.Hull;
+                fleet.Skin = mainShip.ShipSkin;
+                fleet.SkinColor1 = mainShip.SkinColor1;
+                fleet.SkinColor2 = mainShip.SkinColor2;
+                fleet.SkinColor3 = mainShip.SkinColor3;
+                fleet.Decal = mainShip.ShipDecal;
+            }
 
             foreach (var item in Abilities)
                 Ability.ApplyPassiveEffects(Fleet, item);
-
-            return Fleet;
         }
-        
+
         public void UpdateShipStatus(int shipId, string shipData = null, string shipStats = null)
         {
             if (Ships?.FirstOrDefault(s => s.Id == shipId) is ShipConstructionInfo ship &&
@@ -506,7 +518,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                     isShipdDestroyed != 0)
                 {
                     Ships.RemoveAll(s => s.Id == shipId);
-                    DiscoveryClient?.Invoke(k => k.SynckShipDestroyed(shipId));
+                    DiscoveryClient?.Invoke(k => k.SyncShipDestroyed(shipId));
 
                     if (Ships.Count < 1)
                         DiscoveryClient?.Invoke(k => k.FinishGalaxySession());
@@ -537,7 +549,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                     }
                 }
 
-                DiscoveryClient?.SynckSessionFleetInfo();
+                DiscoveryClient?.SyncSessionFleetInfo();
                 DiscoveryClient?.SendFleetCargo();
             }
         }
@@ -562,7 +574,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                     }
                 }
 
-                DiscoveryClient.Invoke(c => c.SynckSessionFleetInfo());
+                DiscoveryClient.Invoke(c => c.SyncSessionFleetInfo());
             }
         }
 
@@ -609,7 +621,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                         ship.CargoHoldSize = database.GetShipCargo(ship.Hull);
 
                     Ships.Add(ship);
-                    DiscoveryClient?.SynckSessionFleetInfo();
+                    DiscoveryClient?.SyncSessionFleetInfo();
                     DiscoveryClient?.SendFleetCargo();
                     DiscoveryClient?.SendFleetRecallStateUpdate(FleetRecallState.Done, 0, slotId);
                 }
@@ -658,15 +670,16 @@ namespace StarfallAfterlife.Bridge.Server.Characters
             Dictionary<int, int> shipsXp = null)
         {
             if (igc is not null)
-                IGC += (int)igc;
+                IGC = IGC.AddWithoutOverflow((int)igc);
 
             if (bgc is not null)
-                BGC += (int)bgc;
+                BGC = BGC.AddWithoutOverflow((int)bgc);
 
             if (xp is not null)
             {
-                Xp += (int)xp;
+                Xp = Xp.AddWithoutOverflow((int)xp);
                 AddXpToSeasons((int)xp);
+                DiscoveryClient?.AddXpToHouse((long)xp);
             }
 
             if (shipsXp is not null)
@@ -676,7 +689,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                     var ship = Ships.FirstOrDefault(s => s?.Id == item.Key);
 
                     if (ship is not null)
-                        ship.Xp += item.Value;
+                        ship.Xp = ship.Xp.AddWithoutOverflow(item.Value);
                 }
             }
 
@@ -710,11 +723,16 @@ namespace StarfallAfterlife.Bridge.Server.Characters
             if (doc is not JsonObject)
                 return;
 
+            var previousLevel = Level;
+
             Xp = (int?)doc["xp"] ?? 0;
             Level = (int?)doc["level"] ?? 0;
             AccessLevel = (int?)doc["access_level"] ?? 0;
             IGC = (int?)doc["igc"] ?? 0;
             BGC = (int?)doc["bgc"] ?? 0;
+
+            if (Level != previousLevel)
+                DiscoveryClient?.Invoke(c => c.UpdateHouseMemberInfo());
 
             Events?.Broadcast<ICharacterListener>(l => l.OnCurrencyUpdated(this));
         }
@@ -819,6 +837,15 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                 Progress?.AddSecretObject(secretId);
                 DiscoveryClient.SyncSecretObject(secretId);
             });
+        }
+
+        public void SetOnlineStatus(bool isOnline)
+        {
+            if (isOnline != IsOnline)
+            {
+                IsOnline = isOnline;
+                DiscoveryClient?.Invoke(c => c.BroadcastHouseCharacterOnlineStatus(isOnline));
+            }
         }
     }
 }

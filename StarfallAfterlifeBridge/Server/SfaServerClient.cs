@@ -25,6 +25,7 @@ using System.Text.Json.Nodes;
 using System.IO.Compression;
 using StarfallAfterlife.Bridge.Diagnostics;
 using StarfallAfterlife.Bridge.Tasks;
+using StarfallAfterlife.Bridge.Houses;
 
 namespace StarfallAfterlife.Bridge.Server
 {
@@ -426,7 +427,10 @@ namespace StarfallAfterlife.Bridge.Server
                 {
                     if ((int?)item?["id"] is int id)
                     {
-                        var character = DiscoveryClient.Characters.FirstOrDefault(c => c.Id == id);
+                        var guid = (Guid?)item["guid"] ?? Guid.Empty;
+                        var character = guid != Guid.Empty ?
+                            DiscoveryClient.Characters.FirstOrDefault(c => c.Guid == guid) :
+                            DiscoveryClient.Characters.FirstOrDefault(c => c.Id == id);
 
                         if (character is null)
                         {
@@ -434,7 +438,7 @@ namespace StarfallAfterlife.Bridge.Server
                             {
                                 DiscoveryClient = DiscoveryClient,
                                 Id = (int?)item["id"] ?? -1,
-                                Guid = (Guid?)item["guid"] ?? Guid.Empty,
+                                Guid = guid,
                                 Name = (string)item["name"] ?? "RenamedCharacter",
                                 Faction = (Faction?)(byte?)item["faction"] ?? Faction.None
                             };
@@ -446,6 +450,8 @@ namespace StarfallAfterlife.Bridge.Server
                         {
                             character.Faction = (Faction?)(byte?)item["faction"] ?? Faction.None;
                         }
+
+                        DiscoveryClient.Invoke(c => c.UpdateHouseMemberInfo());
 
                         doc.Add(new JObject
                         {
@@ -476,8 +482,21 @@ namespace StarfallAfterlife.Bridge.Server
         {
             var channelName = (string)doc?["name"];
 
-            if ("UserFriends".Equals(channelName, StringComparison.InvariantCultureIgnoreCase) == true)
+            if ("UserFriends".Equals(channelName, StringComparison.OrdinalIgnoreCase) == true)
                 Invoke(c => c.SendServerPlayerStatuses());
+            else if ("Galactic".Equals(channelName, StringComparison.OrdinalIgnoreCase) == true)
+            {
+                Invoke(c =>
+                {
+                    if (DiscoveryClient is DiscoveryClient discoveryClient &&
+                        discoveryClient.CurrentCharacter is ServerCharacter character &&
+                        character.GetHouseInfo()?.House is SfHouse house)
+                    {
+                        discoveryClient.SendHouseFullInfo(house);
+                        discoveryClient.UpdateHouseMemberInfo();
+                    }
+                });
+            }
         }
 
         public void SendStartBattle(

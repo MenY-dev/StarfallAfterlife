@@ -1,4 +1,5 @@
 ﻿using StarfallAfterlife.Bridge.Database;
+using StarfallAfterlife.Bridge.Houses;
 using StarfallAfterlife.Bridge.Instances;
 using StarfallAfterlife.Bridge.IO;
 using StarfallAfterlife.Bridge.Mathematics;
@@ -23,7 +24,7 @@ namespace StarfallAfterlife.Bridge.Server
     public partial class DiscoveryClient : IDisposable
     {
         public SfaServerClient Client { get; protected set; }
-
+        
         public SfaCharacterState State { get; set; }
 
         public bool IsPlayer => Client.IsPlayer;
@@ -53,10 +54,15 @@ namespace StarfallAfterlife.Bridge.Server
             {
                 if (Characters.FirstOrDefault(c => c.UniqueId == id) is ServerCharacter character)
                 {
+                    CurrentCharacter?.SetOnlineStatus(false);
                     CurrentCharacter = character;
                     var progress = new CharacterProgress();
                     progress.LoadFromJson(authData["progress"]);
                     character.LoadProgress(progress);
+                    character.Level = (int?)authData?["lvl"] ?? 0;
+                    character.AccessLevel = (int?)authData?["access_lvl"] ?? 0;
+                    character.HouseTag = character.GetHouse()?.Tag;
+                    character.UpdateFleetInfo();
                     character.UpdateQuestLines();
                 }
             }
@@ -66,6 +72,8 @@ namespace StarfallAfterlife.Bridge.Server
                 SfaServerAction.SyncCharacterSelect);
 
             Client.State = SfaClientState.InDiscoveryMod;
+            CurrentCharacter?.SetOnlineStatus(true);
+            UpdateHouseMemberInfo();
         }
 
         public void EnterToGalaxy()
@@ -137,8 +145,8 @@ namespace StarfallAfterlife.Bridge.Server
                             var spawnPos = spawnSystem.GetDefaultSpawnPosition(CurrentCharacter?.Faction ?? Faction.None);
                             character.LoadFromCharacterData(charData);
 
-                            SynckSessionFleetInfo();
-                            SynckSessionSystemInfo(spawnSystem.Id, spawnPos);
+                            SyncSessionFleetInfo();
+                            SyncSessionSystemInfo(spawnSystem.Id, spawnPos);
                         }
                     }
                 });
@@ -161,7 +169,7 @@ namespace StarfallAfterlife.Bridge.Server
 
         public void FinishGalaxySession()
         {
-            SynckSessionFleetInfo();
+            SyncSessionFleetInfo();
             State = SfaCharacterState.InShipyard;
 
             if (CurrentCharacter is ServerCharacter character)
@@ -212,7 +220,7 @@ namespace StarfallAfterlife.Bridge.Server
                 if (doc["active_session"]?["ships"] is JsonArray ships)
                     character.LoadActiveShips(ships);
 
-                SynckSessionFleetInfo();
+                SyncSessionFleetInfo();
 
                 character.CreateNewFleet();
                 character.Fleet?.AddListener(this);
@@ -365,7 +373,7 @@ namespace StarfallAfterlife.Bridge.Server
             return CurrentCharacter?.Ships.LastOrDefault()?.Hull ?? 0;
         }
 
-        public void SynckSessionSystemInfo(int systemId, Vector2 location)
+        public void SyncSessionSystemInfo(int systemId, Vector2 location)
         {
             Client?.Send(new JsonObject
             {
@@ -374,7 +382,7 @@ namespace StarfallAfterlife.Bridge.Server
             }, SfaServerAction.SyncGalaxySessionData);
         }
 
-        public void SynckSessionFleetInfo()
+        public void SyncSessionFleetInfo()
         {
             Client?.Send(new JsonObject
             {
@@ -382,7 +390,7 @@ namespace StarfallAfterlife.Bridge.Server
             }, SfaServerAction.SyncGalaxySessionData);
         }
 
-        public void SynckShipDestroyed(params int[] ships)
+        public void SyncShipDestroyed(params int[] ships)
         {
             Client?.Send(new JsonObject
             {

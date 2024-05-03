@@ -23,6 +23,7 @@ using System.Security.Cryptography;
 using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Networking;
 using StarfallAfterlife.Bridge.Diagnostics;
+using StarfallAfterlife.Bridge.Houses;
 
 namespace StarfallAfterlife.Bridge.Server
 {
@@ -122,7 +123,10 @@ namespace StarfallAfterlife.Bridge.Server
                     Matchmaker?.RankedGameMode?.GetLobby(client.PlayerId)?.RemovePlayer(client.PlayerId);
 
                     if (client?.DiscoveryClient?.CurrentCharacter is ServerCharacter character)
+                    {
                         character.Party?.RemoveMember(character.UniqueId);
+                        character.SetOnlineStatus(false);
+                    }
                 }
 
                 var time = DateTime.Now;
@@ -299,6 +303,23 @@ namespace StarfallAfterlife.Bridge.Server
                 return Characters[id];
         }
 
+        public ServerCharacter GetCharacter(Guid profileId, Guid charId)
+        {
+            lock (ClientsLockher)
+                return Characters.FirstOrDefault(
+                    c => c?.Guid == charId && c.ProfileId == profileId);
+        }
+
+        public ServerCharacter GetCharacter(HouseMember member)
+        {
+            if (member is null)
+                return null;
+
+            lock (ClientsLockher)
+                return Characters.FirstOrDefault(
+                    c => c?.Guid == member.CharacterId && c.ProfileId == member.PlayerId);
+        }
+
         public ServerCharacter GetCharacter(DiscoveryFleet fleet)
         {
             if (fleet is null)
@@ -345,6 +366,7 @@ namespace StarfallAfterlife.Bridge.Server
                 client.State = SfaClientState.InRankedMode;
                 client.CurrentSystemName = null;
                 client.CurrentSystemId = -1;
+                client.CurrentCharacter?.SetOnlineStatus(false);
             }
 
             OnUserStatusChanged(client, status);

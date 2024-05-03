@@ -83,7 +83,7 @@ namespace StarfallAfterlife.Bridge.Server
         RequestFuelStationInfo = 618993061,
         RequestRepairStationInfo = 193897554,
         DestroyHouseAction = 459353014,
-        PurchaseHouseUpgradAction = 1380866307,
+        PurchaseHouseUpgradeAction = 1380866307,
         SendHouseUpdateAction = 1199682850,
         HouseInviteCharacterAction = 772872048,
         HouseInviteResponseAction = 1091353911,

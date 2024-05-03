@@ -1,4 +1,5 @@
 ﻿using StarfallAfterlife.Bridge.Database;
+using StarfallAfterlife.Bridge.Houses;
 using StarfallAfterlife.Bridge.Primitives;
 using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Serialization;
@@ -60,6 +61,8 @@ namespace StarfallAfterlife.Bridge.Realms
 
         public SfaRealmVariable Variable { get; set; }
 
+        public SfHouseDatabase HouseDatabase { get; set; }
+
         public virtual void Load(string directory)
         {
             LoadInfo(directory);
@@ -110,6 +113,7 @@ namespace StarfallAfterlife.Bridge.Realms
             string questsDatabasePath = Path.Combine(directory, "QuestsDatabase.json");
             string seasonsPath = Path.Combine(directory, "Seasons.json");
             string bgShopPath = Path.Combine(directory, "BGShop.json");
+            string housesDir = Path.Combine(directory, "Houses");
 
             static JsonNode ReadJson(string path) =>
                 JsonHelpers.ParseNodeUnbuffered(File.ReadAllText(path));
@@ -162,6 +166,8 @@ namespace StarfallAfterlife.Bridge.Realms
                 var text = File.ReadAllText(bgShopPath);
                 BGShop = JsonHelpers.DeserializeUnbuffered<List<BGShopItem>>(text);
             }
+
+            (HouseDatabase ??= new())?.Load(housesDir);
 
             return true;
         }

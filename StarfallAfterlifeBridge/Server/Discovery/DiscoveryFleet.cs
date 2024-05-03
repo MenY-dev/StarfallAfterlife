@@ -137,7 +137,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                 AI?.StopCurrentAction();
             }
 
-            Broadcast<IFleetListener>(l => l.OnFleetDataChanged(this));
+            BroadcastFleetDataChanged();
             OnFleetStateChanged(State, state);
         }
 
@@ -429,6 +429,11 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
         protected virtual void OnFleetStateChanged(FleetState oldState, FleetState newState)
         {
 
+        }
+
+        public void BroadcastFleetDataChanged()
+        {
+            Broadcast<IFleetListener>(l => l.OnFleetDataChanged(this));
         }
     }
 }

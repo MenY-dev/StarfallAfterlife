@@ -158,9 +158,6 @@ namespace StarfallAfterlife.Bridge.Server
                 case DiscoveryClientAction.SecretObjectLooted:
                     HandleSecretObjectLooted(reader, systemId, objectType, objectId); break;
 
-                case DiscoveryClientAction.CreateNewHouse:
-                    HandleCreateNewHouse(reader, systemId, objectType, objectId); break;
-
                 case DiscoveryClientAction.RenamePlanet:
                     HandleRenamePlanet(reader, systemId, objectType, objectId); break;
 
@@ -172,6 +169,10 @@ namespace StarfallAfterlife.Bridge.Server
 
                 case DiscoveryClientAction.ReportStarName:
                     HandleReportStarName(reader, systemId, objectType, objectId); break;
+
+                default:
+                    InputFromDiscoveryHousesChannel(reader, action, systemId, objectType, objectId);
+                    break;
             }
         }
 
@@ -655,7 +656,7 @@ namespace StarfallAfterlife.Bridge.Server
                         if (character.Faction != system?.Faction)
                             character.AddCharacterCurrencies(igc: -cost);
 
-                        SynckSessionFleetInfo();
+                        SyncSessionFleetInfo();
                         SendFleetCargo();
                     }
                 }
@@ -877,7 +878,7 @@ namespace StarfallAfterlife.Bridge.Server
                         SendObjectStock(obj, shop.Items, srcStockName);
                     }
 
-                    SynckSessionFleetInfo();
+                    SyncSessionFleetInfo();
                 }
             });
         }
@@ -932,7 +933,7 @@ namespace StarfallAfterlife.Bridge.Server
                        .FirstOrDefault(q => q.Id == entityId)?
                        .DeliverQuestItems();
 
-                    SynckSessionFleetInfo();
+                    SyncSessionFleetInfo();
                 });
             }
         }
@@ -1108,14 +1109,6 @@ namespace StarfallAfterlife.Bridge.Server
             Invoke(() =>
             {
 
-            });
-        }
-
-        private void HandleCreateNewHouse(SfReader reader, int systemId, DiscoveryObjectType objectType, int objectId)
-        {
-            Invoke(() =>
-            {
-                SendGalaxyMessage(DiscoveryServerGalaxyAction.CreatedHouse, writer => writer.WriteByte(3));
             });
         }
 

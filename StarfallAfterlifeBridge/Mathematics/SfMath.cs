@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -69,5 +70,37 @@ namespace StarfallAfterlife.Bridge.Mathematics
         public static float Pow(float value) => value * value;
 
         public static float Acos(float value) => MathF.Acos(value);
+
+        public static T AddWithoutOverflow<T>(this T self, T value)
+            where T : IMinMaxValue<T>, IAdditionOperators<T, T, T>
+        {
+            try
+            {
+                checked
+                {
+                    return self + value;
+                }
+            }
+            catch
+            {
+                return T.MaxValue;
+            }
+        }
+
+        public static T SubtractWithoutOverflow<T>(this T self, T value)
+            where T : IMinMaxValue<T>, ISubtractionOperators<T, T, T>
+        {
+            try
+            {
+                checked
+                {
+                    return self - value;
+                }
+            }
+            catch
+            {
+                return T.MinValue;
+            }
+        }
     }
 }

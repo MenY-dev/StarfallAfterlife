@@ -30,7 +30,7 @@ namespace StarfallAfterlife.Bridge.Server
                 {
                     var system = fleet.System?.Id ?? 0;
 
-                    SynckSessionSystemInfo(system, fleet.Location);
+                    SyncSessionSystemInfo(system, fleet.Location);
                     SendEnterToStarSystem(system, fleet.Location);
 
                     if (Client is SfaServerClient client)
@@ -68,7 +68,7 @@ namespace StarfallAfterlife.Bridge.Server
         void IFleetListener.OnFleetMoved(DiscoveryFleet fleet) => Invoke(() =>
         {
             if (CurrentCharacter?.Fleet == fleet)
-                SynckSessionSystemInfo(fleet?.System?.Id ?? 0, fleet?.Location ?? Vector2.Zero);
+                SyncSessionSystemInfo(fleet?.System?.Id ?? 0, fleet?.Location ?? Vector2.Zero);
 
             SyncMove(fleet);
         });

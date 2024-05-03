@@ -1,5 +1,6 @@
 ﻿using StarfallAfterlife.Bridge.Game;
 using StarfallAfterlife.Bridge.IO;
+using StarfallAfterlife.Bridge.Mathematics;
 using StarfallAfterlife.Bridge.Networking.Channels;
 using StarfallAfterlife.Bridge.Networking.Messaging;
 using StarfallAfterlife.Bridge.Profiles;
@@ -20,7 +21,6 @@ using JArray = System.Text.Json.Nodes.JsonArray;
 using JValue = System.Text.Json.Nodes.JsonValue;
 using StarfallAfterlife.Bridge.Serialization;
 using System.Diagnostics;
-using StarfallAfterlife.Bridge.Mathematics;
 using StarfallAfterlife.Bridge.Server.Discovery;
 using StarfallAfterlife.Bridge.Database;
 using System.Net;
@@ -591,7 +591,10 @@ namespace StarfallAfterlife.Bridge.Server
                     var doc = new JObject
                     {
                         ["id"] = character.Id,
+                        ["guid"] = character.Guid,
                         ["unique_id"] = character.UniqueId,
+                        ["lvl"] = character.Level,
+                        ["access_lvl"] = character.AccessLevel,
                         ["progress"] = JsonHelpers.ParseNodeUnbuffered(Game?.Profile.CurrentProgress.ToJsonString(false))
                     };
 
@@ -1070,10 +1073,10 @@ namespace StarfallAfterlife.Bridge.Server
                     chars.FirstOrDefault(c => c.UniqueId == charId) is Character character)
                 {
                     if ((int?)doc["igc"] is int igc)
-                        character.IGC += igc;
+                        character.IGC = character.IGC.AddWithoutOverflow(igc);
 
                     if ((int?)doc["bgc"] is int bgc)
-                        character.BGC += bgc;
+                        character.BGC = character.BGC.AddWithoutOverflow(bgc);
 
                     if ((int?)doc["xp"] is int xp)
                         character.AddXp(xp);
@@ -1085,7 +1088,7 @@ namespace StarfallAfterlife.Bridge.Server
                             if (character.GetShip(item.Key - character.IndexSpace) is FleetShipInfo fleetShip &&
                                 fleetShip.Data is ShipConstructionInfo ship)
                             {
-                                var newXp = Math.Max(fleetShip.Xp, ship.Xp) + item.Value;
+                                var newXp = Math.Max(fleetShip.Xp, ship.Xp).AddWithoutOverflow(item.Value);
                                 var newLevel = SfaDatabase.Instance.GetLevelForShipXp(ship.Hull, newXp);
                                 fleetShip.Xp = ship.Xp = newXp;
                                 fleetShip.Level = Math.Max(fleetShip.Level, newLevel);

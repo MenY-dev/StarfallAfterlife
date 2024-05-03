@@ -57,7 +57,33 @@ namespace StarfallAfterlife.Bridge.IO
                     if (dirs.MoveNext() == false)
                         break;
                 }
-                catch (UnauthorizedAccessException) { }
+                catch (UnauthorizedAccessException)
+                {
+                    continue;
+                }
+
+                yield return dirs.Current;
+            }
+        }
+
+        public static string[] GetFilesSelf(string path) =>
+            EnumerateFilesSelf(path).ToArray();
+
+        public static IEnumerable<string> EnumerateFilesSelf(string path)
+        {
+            var dirs = Directory.EnumerateFiles(path).GetEnumerator();
+
+            while (true)
+            {
+                try
+                {
+                    if (dirs.MoveNext() == false)
+                        break;
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    continue;
+                }
 
                 yield return dirs.Current;
             }

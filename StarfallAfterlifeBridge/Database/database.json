@@ -67600,6 +67600,43 @@
       "effect": 1670603632
     }
   ],
+  "house_ranks": [
+    {
+      "id": 0,
+      "name_en": "Head of the house",
+      "name_ru": "\u0413\u043b\u0430\u0432\u0430 \u0434\u043e\u043c\u0430",
+      "order": 0,
+      "permissions": -1
+    },
+    {
+      "id": 10,
+      "name_en": "Advisor",
+      "name_ru": "\u0421\u043e\u0432\u0435\u0442\u043d\u0438\u043a",
+      "order": 1,
+      "permissions": 510
+    },
+    {
+      "id": 20,
+      "name_en": "Officer",
+      "name_ru": "\u041e\u0444\u0438\u0446\u0435\u0440",
+      "order": 2,
+      "permissions": 194
+    },
+    {
+      "id": 30,
+      "name_en": "Member",
+      "name_ru": "\u0423\u0447\u0430\u0441\u0442\u043d\u0438\u043a",
+      "order": 3,
+      "permissions": 192
+    },
+    {
+      "id": 40,
+      "name_en": "Recruit",
+      "name_ru": "\u0420\u0435\u043a\u0440\u0443\u0442",
+      "order": 4,
+      "permissions": 0
+    }
+  ],
   "gamemaps": [
     "bg_MothershipAssault",
     "bg_MothershipAssault_2",

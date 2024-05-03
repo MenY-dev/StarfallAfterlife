@@ -1,4 +1,5 @@
 ﻿using StarfallAfterlife.Bridge.Database;
+using StarfallAfterlife.Bridge.Mathematics;
 using StarfallAfterlife.Bridge.Profiles;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,9 @@ namespace StarfallAfterlife.Bridge.Game
                     if (character.ProductionPoints < character.ProductionCap)
                     {
                         var timeDelta = now - character.LastProductionIncomeTime;
-                        character.ProductionPoints += Math.Max(0, (int)(timeDelta.TotalMinutes * character.ProductionIncome));
+
+                        character.ProductionPoints = character.ProductionPoints.AddWithoutOverflow(
+                            Math.Max(0, (int)(timeDelta.TotalMinutes * character.ProductionIncome)));
 
                         DistributeProductionPoints(false);
 
@@ -50,7 +53,7 @@ namespace StarfallAfterlife.Bridge.Game
                 UpdateProductionPointsIncome(false);
 
                 if (p.GameProfile.CurrentCharacter is Character character)
-                    character.ProductionPoints += count;
+                    character.ProductionPoints = character.ProductionPoints.AddWithoutOverflow(count);
 
                 DistributeProductionPoints(false);
 
@@ -86,11 +89,11 @@ namespace StarfallAfterlife.Bridge.Game
                         if (remainingPoints < character.ProductionPoints)
                         {
                             project.ProductionPointsSpent = dtbItem.ProductionPoints;
-                            character.ProductionPoints -= remainingPoints;
+                            character.ProductionPoints = character.ProductionPoints.SubtractWithoutOverflow(remainingPoints);
                         }
                         else
                         {
-                            project.ProductionPointsSpent += character.ProductionPoints;
+                            project.ProductionPointsSpent = project.ProductionPointsSpent.AddWithoutOverflow(character.ProductionPoints);
                             character.ProductionPoints = 0;
                             break;
                         }

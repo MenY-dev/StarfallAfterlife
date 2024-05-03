@@ -1,5 +1,6 @@
 ﻿using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Diagnostics;
+using StarfallAfterlife.Bridge.Mathematics;
 using StarfallAfterlife.Bridge.Networking;
 using StarfallAfterlife.Bridge.Primitives;
 using StarfallAfterlife.Bridge.Profiles;
@@ -295,7 +296,7 @@ namespace StarfallAfterlife.Bridge.Game
                             }
 
 
-                            character.IGC += Math.Max(0, (int)(info.IGC * 0.9f) * totalCount);
+                            character.IGC = character.IGC.AddWithoutOverflow(Math.Max(0, (int)(info.IGC * 0.9f) * totalCount));
                         }
                     }
 
@@ -336,7 +337,7 @@ namespace StarfallAfterlife.Bridge.Game
                     if (item.ItemType is (InventoryItemType.ShipProject or InventoryItemType.ItemProject))
                         character.DeleteInventoryItem(item, count);
 
-                    character.IGC = Math.Max(0, character.IGC - item.IGCToProduce);
+                    character.IGC = Math.Max(0, character.IGC.SubtractWithoutOverflow(item.IGCToProduce));
 
                     var newCraftings = Enumerable
                         .Repeat(entity, count)
@@ -550,7 +551,7 @@ namespace StarfallAfterlife.Bridge.Game
                     var pp = itemInfo.ProductionPoints - craftingItem.ProductionPointsSpent;
                     var cost = (int)(p.GameProfile.ProductionPointsCost60IGC / 60f * pp);
                     craftingItem.ProductionPointsSpent = itemInfo.ProductionPoints;
-                    character.IGC = Math.Max(0, character.IGC - cost);
+                    character.IGC = Math.Max(0, character.IGC.SubtractWithoutOverflow(cost));
                     Profile.SaveGameProfile();
                     SfaClient?.SyncCharacterCurrencies(character);
                     doc["ok"] = 1;
@@ -679,13 +680,13 @@ namespace StarfallAfterlife.Bridge.Game
                                 SfaDatabase.Instance.GetItem(entity) is SfaItem item)
                             {
                                 character.AddInventoryItem(item, count);
-                                igcCost += item.IGC * count;
+                                igcCost = igcCost.AddWithoutOverflow(item.IGC * count);
                             }
                         }
                     }
 
-                    igcCost += ShipConstructionInfo.CalculateCost(oldShip, newShip);
-                    character.IGC = Math.Max(0, character.IGC - igcCost);
+                    igcCost = igcCost.AddWithoutOverflow(ShipConstructionInfo.CalculateCost(oldShip, newShip));
+                    character.IGC = Math.Max(0, character.IGC.SubtractWithoutOverflow(igcCost));
 
                     p.SaveGameProfile();
                     SfaClient?.SyncCharacterCurrencies(character);
@@ -722,7 +723,7 @@ namespace StarfallAfterlife.Bridge.Game
                     }
 
                     if (p.Database?.GetShip(ship.Data?.Hull ?? 0) is ShipBlueprint blueprint)
-                        character.IGC = Math.Max(0, character.IGC + (int)Math.Round(blueprint.IGCToProduce * 0.33333333));
+                        character.IGC = Math.Max(0, character.IGC.AddWithoutOverflow((int)Math.Round(blueprint.IGCToProduce * 0.33333333)));
 
                     p.SaveGameProfile();
                     SfaClient?.SyncCharacterCurrencies(character);
@@ -771,7 +772,7 @@ namespace StarfallAfterlife.Bridge.Game
                     if (p.Database?.GetItem(id) is SfaItem item)
                     {
                         character.AddInventoryItem(item, 1);
-                        character.BGC = Math.Max(0, character.BGC - item.BGC);
+                        character.BGC = Math.Max(0, character.BGC.SubtractWithoutOverflow(item.BGC));
                         p.SaveGameProfile();
                         SfaClient?.SyncCharacterCurrencies(character);
                     }
@@ -903,7 +904,7 @@ namespace StarfallAfterlife.Bridge.Game
                         item.TimeToRepair = 0;
                     }
 
-                    character.IGC = Math.Max(0, character.IGC - totalCost);
+                    character.IGC = Math.Max(0, character.IGC.SubtractWithoutOverflow(totalCost));
                     p.SaveGameProfile();
                     SfaClient?.SyncCharacterCurrencies(character);
                 }

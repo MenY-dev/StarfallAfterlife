@@ -33,7 +33,7 @@ namespace StarfallAfterlife.Bridge.Server.Inventory
                 }
             }
 
-            character.DiscoveryClient?.Invoke(c => c.SynckSessionFleetInfo());
+            character.DiscoveryClient?.Invoke(c => c.SyncSessionFleetInfo());
             return removedItems;
         }
     }
