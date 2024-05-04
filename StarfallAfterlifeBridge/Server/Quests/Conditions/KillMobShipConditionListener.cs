@@ -19,6 +19,8 @@ namespace StarfallAfterlife.Bridge.Server.Quests.Conditions
 
         public List<int> Systems { get; set; }
 
+        public bool CountMobsOnlyInTargetSystem { get; set; }
+
         public KillMobShipConditionListener(QuestListener quest, JsonNode info) : base(quest, info)
         {
 
@@ -33,13 +35,21 @@ namespace StarfallAfterlife.Bridge.Server.Quests.Conditions
 
             MobId = (int?)doc["target_mob_id"] ?? -1;
             Systems = doc["target_systems"]?.DeserializeUnbuffered<List<int>>() ?? new();
+
+            if ((int?)doc["count_mobs_only_in_target_system"] is int countOnlyInSystem)
+                CountMobsOnlyInTargetSystem = countOnlyInSystem > 0;
+            else
+                CountMobsOnlyInTargetSystem = Systems is not null and { Count: > 0 };
         }
 
         void IBattleInstanceListener.OnMobDestroyed(int fleetId, MobKillInfo mobInfo)
         {
             if (mobInfo is null ||
                 fleetId != Quest?.Character.UniqueId ||
-                (Systems is not null && Systems.Count > 0 && Systems.Contains(mobInfo.SystemId) == false))
+                (CountMobsOnlyInTargetSystem == true &&
+                    Systems is not null &&
+                    Systems.Count > 0 &&
+                    Systems.Contains(mobInfo.SystemId) == false))
                 return;
 
             if (mobInfo.MobId == MobId)

@@ -315,6 +315,25 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                 Progress?.ActiveQuests?.Remove(questId);
                 DiscoveryClient?.SendQuestCompleteData(quest);
                 DiscoveryClient?.SyncQuestCanceled(questId);
+
+                if (quest.Info?.Type == QuestType.HouseTask &&
+                    quest.Info.LogicName is string ident)
+                {
+                    DiscoveryClient?.Invoke(c =>
+                    {
+                        c.Server?.RealmInfo?.Use(r =>
+                        {
+                            if (this.GetHouseInfo() is SfHouseInfo houseInfo &&
+                                houseInfo.House is SfHouse house &&
+                                house.Tasks.TryGetValue(ident, out var tasksCount) == true)
+                            {
+                                house.Tasks[ident] = Math.Min(tasksCount + 1, house.TasksPoolSize);
+                                houseInfo.Save();
+                                c.BroadcastHouseUpdate();
+                            }
+                        });
+                    });
+                }
             }
         }
 
@@ -393,6 +412,33 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                                 c.SendInventoryNewItems(addedItems);
                         });
                     }
+
+                    if (reward.HouseCurrency > 0)
+                    {
+                        DiscoveryClient?.Invoke(c =>
+                        {
+                            c.Server?.RealmInfo?.Use(r =>
+                            {
+                                if (this.GetHouseInfo() is SfHouseInfo houseInfo &&
+                                    houseInfo.House is SfHouse house &&
+                                    house.GetMember(this) is HouseMember member)
+                                {
+                                    var availableCurrency = house.MaxCurrency - house.Currency;
+
+                                    if (availableCurrency > 0)
+                                    {
+                                        var totalCurrency = Math.Min(reward.HouseCurrency, availableCurrency);
+                                        house.Currency = house.Currency.AddWithoutOverflow(totalCurrency);
+                                        member.Currency = member.Currency.AddWithoutOverflow(totalCurrency);
+                                        houseInfo.Save();
+                                        c.BroadcastHouseCurrencyChanged();
+                                        c.BroadcastHouseMemberInfoChanged();
+                                    }
+                                }
+                            });
+                        });
+                    }
+
                     var notification = $"+{bgc} BGC";
 
                     if (igc is not null)

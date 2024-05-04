@@ -1,7 +1,9 @@
-﻿using StarfallAfterlife.Bridge.Houses;
+﻿using StarfallAfterlife.Bridge.Collections;
+using StarfallAfterlife.Bridge.Houses;
 using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Server.Characters;
 using StarfallAfterlife.Bridge.Server.Discovery;
+using StarfallAfterlife.Bridge.Server.Quests;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
@@ -102,6 +104,50 @@ namespace StarfallAfterlife.Bridge.Server
             return null;
         }
 
+        public static Task<DiscoveryQuest> CreateHouseQuest(this ServerCharacter character, string identity)
+        {
+            if (character is null ||
+                string.IsNullOrWhiteSpace(identity))
+                return Task.FromResult<DiscoveryQuest>(null);
 
+            return Task<DiscoveryQuest>.Factory.StartNew(() =>
+            {
+                DiscoveryQuest quest = null;
+
+                character.DiscoveryClient?.Server?.UseQuestGenerator(gen =>
+                {
+                    var galaxyMap = gen.Realm.GalaxyMap;
+                    var extraMap = gen.ExtraMap;
+                    var system = character.Fleet?.System?.Info;
+
+                    if (galaxyMap is null ||
+                        extraMap is null ||
+                        galaxyMap.Systems is null or { Count: < 1 })
+                        return;
+
+                    try
+                    {
+                        if (system is null ||
+                            system.Level < character.AccessLevel)
+                        {
+                            system = extraMap.GetCircle(character.AccessLevel)?.GetStartSystem(character.Faction) ??
+                                     galaxyMap.Systems.FirstOrDefault();
+                        }
+
+                        // Search for a random system nearby
+                        system = galaxyMap
+                            .GetSystemsArround(system.Id, 3, true)
+                            .ToList()
+                            .Randomize(new Random().Next())
+                            .FirstOrDefault().Key;
+
+                        quest = gen.GenerateHouseTask(identity, system.Id);
+                    }
+                    catch { }
+                });
+
+                return quest;
+            });
+        }
     }
 }

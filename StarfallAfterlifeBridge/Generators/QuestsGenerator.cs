@@ -1,4 +1,5 @@
-﻿using StarfallAfterlife.Bridge.Database;
+﻿using StarfallAfterlife.Bridge.Collections;
+using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Networking;
 using StarfallAfterlife.Bridge.Primitives;
 using StarfallAfterlife.Bridge.Realms;
@@ -67,6 +68,12 @@ namespace StarfallAfterlife.Bridge.Generators
             Seed = seed;
         }
 
+        public void Init()
+        {
+            Rnd = new(Seed);
+            ExtraMap.Build();
+        }
+
         protected override bool Generate()
         {
             Realm.QuestsDatabase = Build();
@@ -76,12 +83,10 @@ namespace StarfallAfterlife.Bridge.Generators
         public virtual DiscoveryQuestsDatabase Build()
         {
             var qd = new DiscoveryQuestsDatabase();
-            ExtraMap.Build();
-            Rnd = new(Seed);
+            Init();
             GenerateQuestLines(qd);
             GenerateTaskBoardQuests(qd);
             GenerateLevelingQuests(qd);
-            ExtraMap = null;
             return qd;
         }
 
@@ -301,6 +306,67 @@ namespace StarfallAfterlife.Bridge.Generators
                     }
                 }
             }
+        }
+
+        public DiscoveryQuest GenerateHouseTask(string identity, int systemId)
+        {
+            if (identity is null)
+                return null;
+
+            var system = Realm?.GalaxyMap?.GetSystem(systemId);
+            var info = Realm?.Database?.QuestsLogics
+                .Where(l => l.Value?.Type == QuestType.HouseTask &&
+                            l.Value.UniqueLogicIdentifier?.Equals(identity, StringComparison.OrdinalIgnoreCase) == true)
+                .ToList()
+                .Randomize(Rnd.Next())
+                .FirstOrDefault().Value;
+
+            if (system is null || info is null)
+                return null;
+
+            var quest = new DiscoveryQuest()
+            {
+                Id = new QuestIdInfo
+                {
+                    Type = info.Type,
+                    LocalId = Rnd.Next(0, 10000),
+                }.ToId(),
+                LogicId = info.Id,
+                LogicName = info.UniqueLogicIdentifier,
+                Type = info.Type,
+                Reward = new(),
+                ObjectSystem = systemId,
+                ObjectType = GalaxyMapObjectType.None,
+                ObjectId = Rnd.Next(0, 10000),
+                Level = system.Level,
+                ObjectFaction = Faction.None,
+                Conditions = new JsonArray(),
+            };
+
+            var context = new QuestContext
+            {
+                Quest = quest,
+                MobsDatabase = Realm.MobsDatabase,
+                MobsMap = Realm.MobsMap,
+                TargetLevel = quest.Level,
+                TargetSystemId = quest.ObjectSystem,
+                TargetFaction = quest.ObjectFaction,
+            };
+
+            foreach (var item in info.Conditions)
+            {
+                if (GenerateQuestCondition(item, context) is JsonObject condition)
+                    quest.Conditions.Add(condition);
+                else
+                    return null;
+            }
+
+            if (info.Conditions.Count > 0 && quest.Conditions.Count < 1)
+                return null;
+
+            quest.Reward = info.Rewards.FirstOrDefault().Combine(GenerateRewardForTaskBoardQuest(quest));
+
+            return quest;
         }
 
         protected virtual void GenerateTaskBoardQuests(DiscoveryQuestsDatabase qd)

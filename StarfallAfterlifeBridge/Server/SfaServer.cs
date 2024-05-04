@@ -63,11 +63,15 @@ namespace StarfallAfterlife.Bridge.Server
 
         public ShopsGenerator ShopsGenerator{ get; protected set; }
 
+        public QuestsGenerator QuestsGenerator { get; protected set; }
+
         protected TaskCompletionSource CompletionSource { get; set; }
 
         protected ActionBuffer ActionBuffer { get; } = new();
 
         protected object ClientsLockher { get; } = new();
+
+        protected object QuestsGeneratorLocker { get; } = new();
 
         public static Version Version => AssemblyVersion.Value;
 
@@ -441,6 +445,26 @@ namespace StarfallAfterlife.Bridge.Server
             }
 
             return shops;
+        }
+
+        public void UseQuestGenerator(Action<QuestsGenerator> action)
+        {
+            lock (QuestsGeneratorLocker)
+            {
+                try
+                {
+                    var generator = QuestsGenerator;
+
+                    if (generator is null)
+                    {
+                        generator = QuestsGenerator = new(Realm, Realm?.Seed ?? 0);
+                        generator.Init();
+                    }
+
+                    action?.Invoke(generator);
+                }
+                catch { }
+            }
         }
 
         public virtual void Invoke(Action action) => ActionBuffer?.Invoke(action);

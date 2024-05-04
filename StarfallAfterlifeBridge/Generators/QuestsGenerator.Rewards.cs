@@ -193,6 +193,20 @@ namespace StarfallAfterlife.Bridge.Generators
             var xp = quest.Conditions.Sum(q => GetConditionXp(q) * ((int?)q["progress_require"] ?? 1));
             revard.Xp = xp * quest.Level;
 
+            if (quest.Type == QuestType.HouseTask)
+            {
+                int GetConditionHouseCurrency(JsonNode condition) => (QuestConditionType?)(byte?)condition["type"] switch
+                {
+                    QuestConditionType.ScanUnknownPlanet => 200,
+                    QuestConditionType.KillMobShip => 50,
+                    QuestConditionType.KillBoss => 750,
+                    _ => 0,
+                };
+
+                var houseCurrency = quest.Conditions.Sum(q => GetConditionHouseCurrency(q) * ((int?)q["progress_require"] ?? 1));
+                revard.HouseCurrency = houseCurrency * quest.Level;
+            }
+
             return revard;
         }
     }

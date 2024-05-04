@@ -317,12 +317,12 @@ namespace StarfallAfterlife.Bridge.Generators
                     {
                         condition["target_mob_id"] = mob.Id;
                         condition["target_mob_internal_name"] = mob.InternalName;
-
-                        if (info.CountMobsOnlyInTargetSystem == 1)
-                            condition["target_systems"] = new JsonArray { system.Id };
-                        else
-                            condition["target_systems"] = new JsonArray();
-
+                        condition["count_mobs_only_in_target_system"] = info.CountMobsOnlyInTargetSystem;
+                        condition["target_systems"] = Realm.GalaxyMap
+                            .GetSystemsArround(system.Id, 1, true)
+                            .Where(s => Realm.MobsMap.GetSystemMobs(s.Key.Id)?.Any(m => m.MobId == mob.Id) == true)
+                            .Select(s => JsonValue.Create(s.Key.Id))
+                            .ToJsonArray();
 
                         return true;
                     }
@@ -595,9 +595,10 @@ namespace StarfallAfterlife.Bridge.Generators
                         .ToList() ?? new())
                     {
                         if (item is not null &&
-                            addedBosses.Contains(item.MobId) == false &&
+                            addedBosses.Contains(item.FleetId) == false &&
                             Realm.MobsDatabase.GetMob(item.MobId) is DiscoveryMobInfo mobInfo &&
-                            mobInfo.Tags?.Contains("Mob.Role.Boss", StringComparer.InvariantCultureIgnoreCase) == true)
+                            mobInfo.IsBoss() == true &&
+                            item.ObjectId != -1)
                         {
                             condition["target_mob_id"] = item.FleetId;
                             condition["target_mob_internal_name"] = mobInfo.InternalName;
@@ -609,9 +610,43 @@ namespace StarfallAfterlife.Bridge.Generators
                     }
                 }
             }
+            else if (context.Quest.LogicName?.Equals("house_task_kill_boss", StringComparison.OrdinalIgnoreCase) == true)
+            {
+                foreach (var system in systems)
+                {
+                    foreach (var item in Realm.MobsMap
+                        .GetSystemMobs(system.Id)?
+                        .Randomize(context.Quest.ObjectId + context.Quest.LogicId ^ (info.Identity?.GetHashCode() ?? 0))
+                        .ToList() ?? new())
+                    {
+                        if (item is not null &&
+                            addedBosses.Contains(item.FleetId) == false &&
+                            Realm.MobsDatabase.GetMob(item.MobId) is DiscoveryMobInfo mobInfo &&
+                            mobInfo.IsBoss() == true)
+                        {
+                            condition["target_mob_id"] = item.FleetId;
+                            condition["target_mob_internal_name"] = mobInfo.InternalName;
+
+                            if (item.ObjectId > -1)
+                            {
+                                condition["target_object_id"] = item.ObjectId;
+                                condition["target_object_type"] = (int)item.ObjectType;
+                            }
+                            else
+                            {
+                                condition["target_object_id"] = item.FleetId;
+                                condition["target_object_type"] = (byte)DiscoveryObjectType.AiFleet;
+                            }
+
+                            condition["target_systems"] = JsonHelpers.ParseNodeUnbuffered(new List<int> { system.Id });
+                            return true;
+                        }
+                    }
+                }
+            }
             else
             {
-
+                return false;
             }
 
             return false;

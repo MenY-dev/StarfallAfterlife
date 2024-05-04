@@ -6,9 +6,11 @@ using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Serialization;
 using StarfallAfterlife.Bridge.Server.Characters;
 using StarfallAfterlife.Bridge.Server.Discovery;
+using StarfallAfterlife.Bridge.Server.Quests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Security;
 using System.Text;
 using System.Text.Json.Nodes;
@@ -55,6 +57,9 @@ namespace StarfallAfterlife.Bridge.Server
 
                 case DiscoveryClientAction.PurchaseHouseUpgradeAction:
                     HandlePurchaseHouseUpgradeAction(reader, systemId, objectType, objectId); break;
+
+                case DiscoveryClientAction.TakeHouseTaskFromPool:
+                    HandleTakeHouseTaskFromPoolAction(reader, systemId, objectType, objectId); break;
             }
         }
 
@@ -442,6 +447,45 @@ namespace StarfallAfterlife.Bridge.Server
             });
         }
 
+        private void HandleTakeHouseTaskFromPoolAction(SfReader reader, int systemId, DiscoveryObjectType objectType, int objectId)
+        {
+            var identity = reader.ReadShortString(Encoding.UTF8);
+
+            if (identity is null)
+                return;
+
+            Invoke(() =>
+            {
+                Server?.RealmInfo?.Use(r =>
+                {
+                    if (CurrentCharacter is ServerCharacter character &&
+                        character.GetHouseInfo() is SfHouseInfo houseInfo &&
+                        houseInfo.House is SfHouse house &&
+                        character.GetHousePermissions(houseInfo).HasFlag(HouseRankPermission.TakeTasks) == true &&
+                        house.Tasks.GetValueOrDefault(identity) > 0)
+                    {
+                        character.CreateHouseQuest(identity).ContinueWith(t =>
+                        {
+                            if (t.IsCompleted == true &&
+                                t.Result is DiscoveryQuest quest)
+                            {
+                                Invoke(() => Server?.RealmInfo?.Use(r =>
+                                {
+                                    if (character.AcceptDynamicQuest(quest) == true)
+                                    {
+                                        house.Tasks[identity] = Math.Max(0, house.Tasks.GetValueOrDefault(identity) - 1);
+                                        houseInfo.Save();
+                                        BroadcastHouseUpdate();
+                                        SendQuestDataUpdate();
+                                    }
+                                }));
+                            }
+                        });
+                    }
+                });
+            });
+        }
+
         public void UpdateHouseMemberInfo()
         {
             Server?.RealmInfo?.Use(r =>
@@ -473,13 +517,13 @@ namespace StarfallAfterlife.Bridge.Server
                     if (newXp > house.Xp)
                     {
                         house.Xp = newXp;
-                        Invoke(c => c.SendHouseXpChanged(house.Xp));
+                        Invoke(c => c.BroadcastHouseXpChanged());
                     }
 
                     if (newLvl > house.Level)
                     {
                         house.Level = newLvl;
-                        Invoke(c => c.SendHouseUpdate(house));
+                        Invoke(c => c.BroadcastHouseUpdate());
                     }
 
                     houseInfo.Save();
@@ -573,6 +617,23 @@ namespace StarfallAfterlife.Bridge.Server
             {
                 writer.WriteInt64(newXp);
             });
+        }
+
+        public void BroadcastHouseXpChanged()
+        {
+            if (CurrentCharacter is ServerCharacter character &&
+                character.GetHouse() is SfHouse house)
+            {
+                Server?.RealmInfo?.Use(r =>
+                {
+                    foreach (var member in house.Members.Values)
+                    {
+                        if (Server?.GetCharacter(member) is ServerCharacter memberChar)
+                            memberChar.DiscoveryClient?.Invoke(
+                                c => c.SendHouseXpChanged(house.Xp));
+                    }
+                });
+            }
         }
 
         public void SendHouseInvitation(SfHouse house, string inviter)
@@ -784,6 +845,23 @@ namespace StarfallAfterlife.Bridge.Server
             });
         }
 
+        public void BroadcastHouseUpdate()
+        {
+            if (CurrentCharacter is ServerCharacter character &&
+                character.GetHouse() is SfHouse house)
+            {
+                Server?.RealmInfo?.Use(r =>
+                {
+                    foreach (var member in house.Members.Values)
+                    {
+                        if (Server?.GetCharacter(member) is ServerCharacter memberChar)
+                            memberChar.DiscoveryClient?.Invoke(
+                                c => c.SendHouseUpdate(house));
+                    }
+                });
+            }
+        }
+
         public void SendHouseOpenUpgrade(int upgradeId, int upgradeLvl)
         {
             SendGalaxyMessage(DiscoveryServerGalaxyAction.HouseOpenUpgrade, writer =>
@@ -837,6 +915,23 @@ namespace StarfallAfterlife.Bridge.Server
             {
                 writer.WriteInt32(newCurrency);
             });
+        }
+
+        public void BroadcastHouseCurrencyChanged()
+        {
+            if (CurrentCharacter is ServerCharacter character &&
+                character.GetHouse() is SfHouse house)
+            {
+                Server?.RealmInfo?.Use(r =>
+                {
+                    foreach (var member in house.Members.Values)
+                    {
+                        if (Server?.GetCharacter(member) is ServerCharacter memberChar)
+                            memberChar.DiscoveryClient?.Invoke(
+                                c => c.SendHouseCurrencyChanged(house.Currency));
+                    }
+                });
+            }
         }
 
         public void SendHouseDoctrineCooldownStarted(int doctrineId, TimeSpan duration)
