@@ -282,6 +282,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                 return false;
             }
 
+            quest.Id = questId;
             var questProgress = new QuestProgress() { QuestData = quest };
 
             if (QuestListener.Create(quest, this) is QuestListener listener)
