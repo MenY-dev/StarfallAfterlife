@@ -266,7 +266,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
             var activeQuests = Progress.ActiveQuests ??= new();
             var questId = Enumerable
-                .Range(0, activeQuests.Count + 1)
+                .Range(1, activeQuests.Count + 1)
                 .Select(i => new QuestIdInfo
                 {
                     LocalId = i,
@@ -276,9 +276,6 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                 }.ToId())
                 .FirstOrDefault(i => activeQuests.ContainsKey(i) == false);
 
-            if (questId < 1)
-                return false;
-
             if (checkQuestLimits == true && CheckQuestLimitsReached() == true)
             {
                 DiscoveryClient.Invoke(c => c.SendQuestLimitNotification(questId));
@@ -287,7 +284,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
             var questProgress = new QuestProgress() { QuestData = quest };
 
-            if (QuestListener.Create(questId, this) is QuestListener listener)
+            if (QuestListener.Create(quest, this) is QuestListener listener)
             {
                 Progress.ActiveQuests[questId] = questProgress;
                 ActiveQuests.Add(listener);

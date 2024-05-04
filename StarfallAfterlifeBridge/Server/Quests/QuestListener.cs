@@ -34,12 +34,22 @@ namespace StarfallAfterlife.Bridge.Server.Quests
 
         public static QuestListener Create(int questId, ServerCharacter character, QuestProgress progress = null)
         {
-            if (character is null)
+            if (character.Realm?.QuestsDatabase?.GetQuest(questId) is DiscoveryQuest dtbQuest)
+                return Create(dtbQuest, character, progress);
+
+            if (progress?.IsDynamic == true)
+                return Create(progress?.QuestData, character, progress);
+
+            return null;
+        }
+
+        public static QuestListener Create(DiscoveryQuest quest, ServerCharacter character, QuestProgress progress = null)
+        {
+            if (character is null ||
+                quest is null)
                 return null;
 
-            if (character.DiscoveryClient.Server.Realm is SfaRealm realm &&
-                realm.QuestsDatabase?.GetQuest(questId) is DiscoveryQuest quest &&
-                JsonHelpers.ParseNodeUnbuffered(quest.Conditions.ToJsonString()) is JsonArray conditions)
+            if (JsonHelpers.ParseNodeUnbuffered(quest.Conditions.ToJsonString()) is JsonArray conditions)
             {
                 var listener = new QuestListener
                 {
