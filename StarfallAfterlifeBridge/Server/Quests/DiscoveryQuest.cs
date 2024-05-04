@@ -56,5 +56,7 @@ namespace StarfallAfterlife.Bridge.Server.Quests
                 .Where(b => b is not null)
                 .ToList() ?? new();
         }
+
+        public bool IsDynamicQuest() => QuestIdInfo.Create(Id).IsDynamicQuest;
     }
 }

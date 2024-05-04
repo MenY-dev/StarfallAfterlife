@@ -111,6 +111,9 @@ namespace StarfallAfterlife.Bridge.Server.Quests
                     progress.SetProgress(item.Identity, conditionProgress);
             }
 
+            if (Info?.IsDynamicQuest() == true)
+                progress.QuestData = Info;
+
             Character.UpdateQuestProgress(Id, progress);
         }
 

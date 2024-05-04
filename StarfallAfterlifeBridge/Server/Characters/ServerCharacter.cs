@@ -320,12 +320,18 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
         public void UpdateQuestProgress(int questId, QuestProgress questProgress)
         {
+            bool isDynamic = QuestIdInfo.IsDynamicQuestId(questId);
             Progress.CompletedQuests ??= new();
             Progress.ActiveQuests ??= new();
 
             if (Progress.ActiveQuests.ContainsKey(questId) == true &&
-                Progress.CompletedQuests.Contains(questId) == false)
+                (isDynamic == true && Progress.CompletedQuests.Contains(questId) == false))
             {
+                if (isDynamic == true &&
+                    Progress.ActiveQuests.TryGetValue(questId, out var currentProgress) == true &&
+                    currentProgress.QuestData is DiscoveryQuest dynamicQuestData)
+                    questProgress.QuestData = dynamicQuestData;
+
                 Progress.ActiveQuests[questId] = questProgress;
                 DiscoveryClient?.SyncQuestProgress(questId, questProgress);
             }

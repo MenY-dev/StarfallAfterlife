@@ -14,6 +14,7 @@ namespace StarfallAfterlife.Bridge.Profiles
         [JsonPropertyName("quest_data"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public DiscoveryQuest QuestData { get; set; }
 
+        [JsonIgnore]
         public bool IsDynamic => QuestData is DiscoveryQuest quest &&
                                  QuestIdInfo.Create(quest.Id).IsDynamicQuest;
 

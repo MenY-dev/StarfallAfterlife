@@ -93,5 +93,7 @@ namespace StarfallAfterlife.Bridge.Database
 
             return quest;
         }
+
+        public static bool IsDynamicQuestId(int id) => (byte)(id >>> 31) > 0;
     }
 }
