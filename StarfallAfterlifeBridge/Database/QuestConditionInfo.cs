@@ -129,8 +129,8 @@ namespace StarfallAfterlife.Bridge.Database
             ShipClass = new();
 
             foreach (var item in doc["ship_class"]?.AsArray() ?? Enumerable.Empty<JsonNode>())
-                if ((byte?)item is byte shipClass)
-                    Factions.Add((Faction)shipClass);
+                if ((int?)item is int shipClass)
+                    ShipClass.Add(shipClass);
 
             MinTargetLevel = (int?)doc["min_target_level"] ?? 0;
             ItemToDeliver = (int?)doc["item_to_deliver"] ?? 0;
