@@ -887,14 +887,19 @@ namespace StarfallAfterlife.Bridge.Server
         {
             int entityId = reader.ReadInt32();
 
-            if (Server?.Realm is SfaRealm realm &&
-                realm.Database is SfaDatabase realmDatabase &&
-                realm.QuestsDatabase is DiscoveryQuestsDatabase questsDatabase &&
-                questsDatabase.GetQuest(entityId) is DiscoveryQuest quests &&
-                realmDatabase.GetQuestLogic(quests.LogicId) is QuestLogicInfo logic)
+            Invoke(c =>
             {
-                SendQuestDialog(entityId, logic);
-            }
+                if (Server?.Realm is SfaRealm realm &&
+                    (realm.Database ?? SfaDatabase.Instance) is SfaDatabase realmDatabase &&
+                    realm.QuestsDatabase is DiscoveryQuestsDatabase questsDatabase)
+                {
+                    var quest = questsDatabase.GetQuest(entityId) ??
+                                CurrentCharacter?.Progress?.ActiveQuests?.GetValueOrDefault(entityId)?.QuestData;
+
+                    if (quest is not null)
+                        SendQuestDialog(quest);
+                }
+            });
         }
 
 

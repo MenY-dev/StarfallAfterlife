@@ -388,35 +388,32 @@ namespace StarfallAfterlife.Bridge.Server
             SendDiscoveryMessage(obj, DiscoveryServerAction.SecretObjectRevealed);
         }
 
-        public void SendQuestDialog(int entityId, QuestLogicInfo logic)
+        public void SendQuestDialog(DiscoveryQuest quest)
         {
-            var fleet = CurrentCharacter?.Fleet;
-            var questInfo = Server.Realm.QuestsDatabase.GetQuest(entityId);
-
-            if (questInfo is null)
+            if (quest is null)
                 return;
 
             SendGalaxyMessage(
                 DiscoveryServerGalaxyAction.QuestDataUpdate,
                 writer =>
                 {
-                    var bindings = JsonHelpers.ParseNodeUnbuffered(questInfo.CreateBindings());
-                    var reward = questInfo.Reward;
+                    var bindings = JsonHelpers.ParseNodeUnbuffered(quest.CreateBindings());
+                    var reward = quest.Reward;
 
                     var doc = new JsonObject()
                     {
                         ["quest_dialog"] = new JsonObject
                         {
-                            ["id"] = questInfo.Id,
-                            ["entity"] = questInfo.Id,
-                            ["level"] = questInfo.Level,
-                            ["faction"] = (byte)questInfo.ObjectFaction,
+                            ["id"] = quest.Id,
+                            ["entity"] = quest.Id,
+                            ["level"] = quest.Level,
+                            ["faction"] = (byte)quest.ObjectFaction,
                             ["is_quest_dialog"] = 1,
                             ["state"] = (byte)QuestState.InProgress,
-                            ["quest_logic"] = questInfo.LogicId,
+                            ["quest_logic"] = quest.LogicId,
                             ["quest_params"] = new JsonObject
                             {
-                                ["condition_params"] = questInfo.Conditions.Clone() ?? new JsonArray(),
+                                ["condition_params"] = quest.Conditions.Clone() ?? new JsonArray(),
                                 ["reward"] = new JsonObject
                                 {
                                     ["igc"] = reward.IGC,
@@ -436,7 +433,7 @@ namespace StarfallAfterlife.Bridge.Server
                     writer.WriteShortString(doc.ToJsonString(), -1, true, Encoding.UTF8);
                 });
 
-            SfaDebug.Print($"SendQuestDialog (QuestId = {entityId})", "DiscoveryServerClient");
+            SfaDebug.Print($"SendQuestDialog (QuestId = {quest.Id})", "DiscoveryServerClient");
         }
 
         public void SendQuestDataUpdate()
