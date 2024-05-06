@@ -48,6 +48,8 @@ namespace StarfallAfterlife.Bridge.Houses
 
         public List<KeyValuePair<int, int>> Upgrades { get; } = new();
 
+        public List<HouseDoctrine> Doctrines { get; } = new();
+
         public Dictionary<int, DateTime> DoctrineCooldown { get; } = new();
 
         public Dictionary<string, int> Tasks { get; } = new();
@@ -76,6 +78,7 @@ namespace StarfallAfterlife.Bridge.Houses
                     ["upgrade_id"] = u.Key,
                     ["upgrade_level"] = u.Value,
                 }).ToJsonArray(),
+                ["doctrines"] = JsonSerializer.SerializeToNode(Doctrines),
                 ["doctrine_cd"] = DoctrineCooldown.Select(u => new JsonObject
                 {
                     ["id"] = u.Key,
@@ -98,6 +101,7 @@ namespace StarfallAfterlife.Bridge.Houses
             Members.Clear();
             Upgrades.Clear();
             DoctrineCooldown.Clear();
+            Doctrines.Clear();
 
             if (doc is not JsonObject)
                 return false;
@@ -179,6 +183,16 @@ namespace StarfallAfterlife.Bridge.Houses
                         if (item is JsonObject task &&
                             (string)task["ident"] is string ident)
                             Tasks[ident] = (int?)task["count"] ?? 0;
+                    }
+                    catch { }
+                }
+
+                foreach (var item in doc["doctrines"]?.AsArraySelf() ?? new())
+                {
+                    try
+                    {
+                        if (item?.DeserializeUnbuffered<HouseDoctrine>() is HouseDoctrine doctrine)
+                            Doctrines.Add(doctrine);
                     }
                     catch { }
                 }
@@ -299,6 +313,78 @@ namespace StarfallAfterlife.Bridge.Houses
 
             foreach (var task in Tasks.ToArray())
                 Tasks[task.Key] = task.Value + count;
+        }
+
+        public HouseDoctrine GetDoctrine(int doctrineId)
+        {
+            UpdateDoctrines();
+            return Doctrines.FirstOrDefault(d => d?.Info.Id == doctrineId);
+        }
+
+        public bool AddDoctrine(HouseDoctrine doctrine)
+        {
+            UpdateDoctrines();
+
+            if (doctrine is null)
+                return false;
+
+            RemoveDoctrine(doctrine.Info.Id);
+            Doctrines.Add(doctrine);
+            DoctrineCooldown[doctrine.Info.Id] = doctrine.EndTime;
+            return true;
+        }
+
+        public void RemoveDoctrine(int doctrineId)
+        {
+            UpdateDoctrines();
+            Doctrines.RemoveAll(d => d.Info.Id == doctrineId);
+            DoctrineCooldown.Remove(doctrineId);
+        }
+
+        public void UpdateDoctrines()
+        {
+            var toRemove = new List<HouseDoctrine>();
+
+            foreach (var doctrine in Doctrines)
+            {
+                if (doctrine is null)
+                    continue;
+
+                if (doctrine.IsCompleted || doctrine.IsEndOfTime)
+                {
+                    toRemove.Add(doctrine);
+                    AddEffectToMembers(
+                        doctrine.Info.Effect,
+                        doctrine.Info.EffectDuration);
+                }
+            }
+
+            foreach (var item in toRemove)
+            {
+                Doctrines.Remove(item);
+                DoctrineCooldown.Remove(item.Info.Id);
+            }
+        }
+
+        public void AddEffectToMembers(int effectId, double duration)
+        {
+            foreach (var member in Members.Values)
+            {
+                var memberEffects = member.Effects ??= new();
+                var effect = memberEffects.FirstOrDefault(e => e?.Id == effectId);
+                var currentTime = DateTime.UtcNow;
+
+                if (effect is null)
+                {
+                    effect = new() { Id = effectId };
+                    memberEffects.Add(effect);
+                }
+
+                if (effect.EndTime < currentTime)
+                    effect.EndTime = currentTime;
+
+                effect.EndTime += TimeSpan.FromHours(duration);
+            }
         }
     }
 }

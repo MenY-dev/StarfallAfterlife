@@ -1,4 +1,5 @@
 ﻿using StarfallAfterlife.Bridge.Collections;
+using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Houses;
 using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Server.Characters;
@@ -148,6 +149,76 @@ namespace StarfallAfterlife.Bridge.Server
 
                 return quest;
             });
+        }
+
+        public static HouseDoctrine StartDoctrine(this ServerCharacter character, int doctrineId)
+        {
+            if (character is null)
+                return null;
+
+            var dtb = character?.DiscoveryClient.Server.Realm.Database ?? SfaDatabase.Instance;
+
+            if (character.GetHouseInfo() is SfHouseInfo houseInfo &&
+                houseInfo.House is SfHouse house &&
+                character.GetHousePermissions(house).HasFlag(HouseRankPermission.StartDoctrine) == true &&
+                dtb.GetHouseDoctrine(doctrineId) is HouseDoctrineInfo doctrineInfo &&
+                doctrineInfo.GetQuestLogic(house, dtb) is QuestLogicInfo questLogic)
+            {
+                var doctrine = new HouseDoctrine
+                {
+                    Info = doctrineInfo,
+                    EndTime = DateTime.UtcNow.AddHours(doctrineInfo.QuestDuration),
+                    Target = questLogic.Conditions?.FirstOrDefault().ProgressRequire ?? 0,
+                };
+
+                if (house.AddDoctrine(doctrine) == true)
+                    return doctrine;
+            }
+
+            return null;
+        }
+
+        public static bool TakeHouseEffects(this ServerCharacter character) =>
+            TakeHouseEffects(character, character?.GetHouse());
+
+        public static bool TakeHouseEffects(this ServerCharacter character, SfHouseInfo houseInfo) =>
+            TakeHouseEffects(character, houseInfo?.House);
+
+        public static bool TakeHouseEffects(this ServerCharacter character, SfHouse house) =>
+            TakeHouseEffects(character, house?.GetMember(character));
+
+        public static bool TakeHouseEffects(this ServerCharacter character, HouseMember member)
+        {
+            var result = false;
+            var client = character?.DiscoveryClient;
+
+            if (client is null || member is null)
+                return result;
+
+            var dtb = client.Server.Realm.Database ?? SfaDatabase.Instance;
+            var currentTime = DateTime.UtcNow;
+
+            if (member.Effects is List<HouseEffect> effects)
+            {
+                foreach (var item in effects)
+                {
+                    var time = (item.EndTime - currentTime).TotalHours;
+
+                    if (time > 0 && dtb.GetHouseEffect(item.Id) is HouseEffectInfo effectInfo)
+                    {
+                        if ("craft_booster".Equals(effectInfo.Type, StringComparison.OrdinalIgnoreCase) == true)
+                            client.Invoke(_ => character.AddBooster(1464674507, time));
+                        else if ("xp_booster".Equals(effectInfo.Type, StringComparison.OrdinalIgnoreCase) == true)
+                            client.Invoke(_ => character.AddBooster(1160329638, time));
+                    }
+
+                    result = true;
+                }
+
+                effects.Clear();
+            }
+
+            return result;
         }
     }
 }

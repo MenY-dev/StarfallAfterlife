@@ -32,6 +32,8 @@ namespace StarfallAfterlife.Bridge.Server.Quests
 
         public QuestState State { get; set; } = QuestState.InProgress;
 
+        public DateTime EndTime { get; set; } = default;
+
         public static QuestListener Create(int questId, ServerCharacter character, QuestProgress progress = null)
         {
             if (character.Realm?.QuestsDatabase?.GetQuest(questId) is DiscoveryQuest dtbQuest)
@@ -114,7 +116,7 @@ namespace StarfallAfterlife.Bridge.Server.Quests
             if (Info?.IsDynamicQuest() == true)
                 progress.QuestData = Info;
 
-            Character.UpdateQuestProgress(Id, progress);
+            Character.UpdateQuestProgress(this, progress);
         }
 
         public void DeliverQuestItems()

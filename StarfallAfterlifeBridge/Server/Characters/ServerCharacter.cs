@@ -297,6 +297,119 @@ namespace StarfallAfterlife.Bridge.Server.Characters
             return true;
         }
 
+        public void SyncDoctrines()
+        {
+            DiscoveryClient?.Invoke(c => c.Server?.RealmInfo?.Use(r =>
+            {
+                var houseInfo = this.GetHouseInfo();
+                var house = houseInfo?.House;
+
+                house?.UpdateDoctrines();
+
+                if (house?.Doctrines.ToArray() is HouseDoctrine[] doctrines)
+                {
+                    var quests = ActiveQuests.ToArray();
+
+                    foreach (var quest in quests)
+                    {
+                        if (quest is DoctrineQuestListener dl)
+                        {
+                            if (doctrines.Any(d => d.Info.Id == dl.DoctrineId) == false)
+                                AbandoneQuest(quest.Id, QuestState.Done);
+                            else
+                                dl.Update();
+                        }
+                    }
+
+                    quests = ActiveQuests.ToArray();
+
+                    foreach (var item in doctrines)
+                    {
+                        if (quests.Any(l => l is DoctrineQuestListener dl && dl.DoctrineId == item.Info.Id) == false)
+                            AcceptDoctrineQuest(item.Info.Id);
+                    }
+                }
+                else
+                {
+                    var quests = ActiveQuests.ToArray();
+
+                    foreach (var quest in quests)
+                    {
+                        if (quest is DoctrineQuestListener)
+                            AbandoneQuest(quest.Id, QuestState.Done);
+                    }
+                }
+
+                if (this.TakeHouseEffects(house) == true)
+                    houseInfo?.Save();
+
+                c.SendQuestDataUpdate();
+            }));
+        }
+
+        public void AcceptDoctrineQuest(int doctrineId)
+        {
+            DiscoveryClient?.Server?.RealmInfo?.Use(r =>
+            {
+                var activeQuests = ActiveQuests;
+                var listener = activeQuests.ToArray().FirstOrDefault(
+                    l => l is DoctrineQuestListener dl && dl.DoctrineId == doctrineId);
+
+                if (listener is not null)
+                {
+                    listener.Update();
+                    return;
+                }
+
+                listener = DoctrineQuestListener.Create(this, doctrineId);
+
+                if (listener is null || listener.Info is null)
+                    return;
+
+                var questId = Enumerable
+                    .Range(1, activeQuests.Count + 1)
+                    .Select(i => new QuestIdInfo
+                    {
+                        LocalId = i,
+                        Type = QuestType.HouseDoctrine,
+                        Faction = listener.Info.ObjectFaction,
+                        IsDynamicQuest = true,
+                    }.ToId())
+                    .FirstOrDefault(i => activeQuests.Any(l => l.Id == i) == false);
+
+                listener.Info.Id = questId;
+                ActiveQuests.Add(listener);
+                listener.StartListening();
+                listener.RaiseInitialActions();
+            });
+        }
+
+        public void AddDoctrineProgress(int doctrineId, int count)
+        {
+            DiscoveryClient.Invoke(c => c.Server?.RealmInfo?.Use(_ =>
+            {
+                if (this.GetHouseInfo() is SfHouseInfo houseInfo &&
+                    houseInfo.House is SfHouse house &&
+                    house.GetDoctrine(doctrineId) is HouseDoctrine doctrine)
+                {
+                    doctrine.AddToProgress(count);
+                    house.UpdateDoctrines();
+                    houseInfo.Save();
+
+                    foreach (var member in house.Members.Values)
+                    {
+                        if (c.Server?.GetCharacter(member) is ServerCharacter memberChar)
+                            memberChar.SyncDoctrines();
+                    }
+                }
+            }));
+        }
+
+        public void AddBooster(int boosterId, double duration)
+        {
+
+        }
+
         protected bool CheckQuestLimitsReached()
         {
             var countPredicate = (QuestListener q) =>
@@ -305,12 +418,12 @@ namespace StarfallAfterlife.Bridge.Server.Characters
             return ActiveQuests.ToArray().Count(countPredicate) >= 30;
         }
 
-        public void AbandoneQuest(int questId)
+        public void AbandoneQuest(int questId, QuestState state = QuestState.Abandoned)
         {
             if (ActiveQuests.ToArray().FirstOrDefault(q => q?.Id == questId) is QuestListener quest)
             {
                 quest.StopListening();
-                quest.State = QuestState.Abandoned;
+                quest.State = state;
                 ActiveQuests.Remove(quest);
                 Progress?.ActiveQuests?.Remove(questId);
                 DiscoveryClient?.SendQuestCompleteData(quest);
@@ -337,23 +450,30 @@ namespace StarfallAfterlife.Bridge.Server.Characters
             }
         }
 
-        public void UpdateQuestProgress(int questId, QuestProgress questProgress)
+        public void UpdateQuestProgress(QuestListener quest, QuestProgress questProgress)
         {
-            bool isDynamic = QuestIdInfo.IsDynamicQuestId(questId);
-            Progress.CompletedQuests ??= new();
-            Progress.ActiveQuests ??= new();
+            if (quest is null)
+                return;
 
-            if (Progress.ActiveQuests.ContainsKey(questId) == true &&
-                (isDynamic == true && Progress.CompletedQuests.Contains(questId) == false))
+            DiscoveryClient?.Invoke(c =>
             {
-                if (isDynamic == true &&
-                    Progress.ActiveQuests.TryGetValue(questId, out var currentProgress) == true &&
-                    currentProgress.QuestData is DiscoveryQuest dynamicQuestData)
-                    questProgress.QuestData = dynamicQuestData;
+                bool isDynamic = QuestIdInfo.IsDynamicQuestId(quest.Id);
+                Progress.CompletedQuests ??= new();
+                Progress.ActiveQuests ??= new();
 
-                Progress.ActiveQuests[questId] = questProgress;
-                DiscoveryClient?.SyncQuestProgress(questId, questProgress);
-            }
+                if (quest is DoctrineQuestListener == false &&
+                    Progress.ActiveQuests.ContainsKey(quest.Id) == true &&
+                    (isDynamic == true && Progress.CompletedQuests.Contains(quest.Id) == false))
+                {
+                    if (isDynamic == true &&
+                        Progress.ActiveQuests.TryGetValue(quest.Id, out var currentProgress) == true &&
+                        currentProgress.QuestData is DiscoveryQuest dynamicQuestData)
+                        questProgress.QuestData = dynamicQuestData;
+
+                    Progress.ActiveQuests[quest.Id] = questProgress;
+                    c?.SyncQuestProgress(quest.Id, questProgress);
+                }
+            });
         }
 
 
@@ -473,7 +593,8 @@ namespace StarfallAfterlife.Bridge.Server.Characters
             {
                 Progress.ActiveQuests ??= new();
 
-                if (ActiveQuests.FirstOrDefault(q => q?.Id == questId) is QuestListener quest)
+                if (ActiveQuests.FirstOrDefault(q => q?.Id == questId) is QuestListener quest &&
+                    quest is not DoctrineQuestListener)
                 {
                     try
                     {

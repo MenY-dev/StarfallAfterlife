@@ -29,5 +29,8 @@ namespace StarfallAfterlife.Bridge.Houses
 
         [JsonPropertyName("rank_id")]
         public int Rank { get; set; }
+
+        [JsonPropertyName("effects")]
+        public List<HouseEffect> Effects { get; set; }
     }
 }

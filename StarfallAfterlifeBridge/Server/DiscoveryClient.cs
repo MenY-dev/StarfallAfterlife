@@ -64,6 +64,7 @@ namespace StarfallAfterlife.Bridge.Server
                     character.HouseTag = character.GetHouse()?.Tag;
                     character.UpdateFleetInfo();
                     character.UpdateQuestLines();
+                    character.SyncDoctrines();
                 }
             }
 
@@ -320,6 +321,7 @@ namespace StarfallAfterlife.Bridge.Server
             });
 
             character.Party?.SetMemberStarSystem(character.UniqueId, system);
+            character.SyncDoctrines();
 
             if (character.Fleet is UserFleet fleet &&
                 fleet.System is not null &&

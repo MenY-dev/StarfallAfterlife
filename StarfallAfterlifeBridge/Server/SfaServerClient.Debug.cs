@@ -1,4 +1,5 @@
 ﻿using StarfallAfterlife.Bridge.Database;
+using StarfallAfterlife.Bridge.Houses;
 using StarfallAfterlife.Bridge.Mathematics;
 using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Server.Characters;
@@ -130,6 +131,41 @@ namespace StarfallAfterlife.Bridge.Server
                 int.TryParse(msg[8..].Trim(), out int charBgc))
             {
                 CurrentCharacter?.AddCharacterCurrencies(bgc: charBgc);
+            }
+            else if (msg.StartsWith("add hc ") &&
+                msg.Length > 7 &&
+                int.TryParse(msg[7..].Trim(), out int houseCurrency))
+            {
+                DiscoveryClient?.Invoke(c =>
+                {
+                    c.Server?.RealmInfo?.Use(r =>
+                    {
+                        if (c.CurrentCharacter?.GetHouseInfo() is SfHouseInfo houseInfo &&
+                            houseInfo.House is SfHouse house &&
+                            house.GetMember(c.CurrentCharacter) is HouseMember member)
+                        {
+                            house.Currency = house.Currency.AddWithoutOverflow(houseCurrency);
+                            member.Currency = member.Currency.AddWithoutOverflow(houseCurrency);
+                            houseInfo.Save();
+                            c.BroadcastHouseCurrencyChanged();
+                            c.BroadcastHouseMemberInfoChanged();
+                        }
+                    });
+                });
+            }
+            else if (msg.StartsWith("add doctrine ") &&
+                msg.Length > 13 &&
+                int.TryParse(msg[13..].Trim(), out int doctrineProgress))
+            {
+                DiscoveryClient?.Invoke(c => c.Server?.RealmInfo?.Use(r =>
+                {
+                    if (c.CurrentCharacter?.GetHouse() is SfHouse house)
+                    {
+                        c.CurrentCharacter?.AddDoctrineProgress(878337677, doctrineProgress);
+                        c.CurrentCharacter?.AddDoctrineProgress(1474451710, doctrineProgress);
+                        c.SendHouseUpdate(house);
+                    }
+                }));
             }
             else if (msg.StartsWith("add party"))
             {

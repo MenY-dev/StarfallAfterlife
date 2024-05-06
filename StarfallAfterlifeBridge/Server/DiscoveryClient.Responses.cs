@@ -482,7 +482,7 @@ namespace StarfallAfterlife.Bridge.Server
                                 ["faction"] = (byte)listener.Info.ObjectFaction,
                                 ["state"] = (byte)listener.State,
                                 ["quest_logic"] = listener.Info.LogicId,
-                                ["minutes_remain"] = 0,
+                                ["minutes_remain"] = Math.Max(0, (listener.EndTime - DateTime.UtcNow).TotalMinutes),
                                 ["progress"] = new JsonObject
                                 {
                                     ["conditions"] = progress,

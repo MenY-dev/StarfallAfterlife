@@ -60,6 +60,9 @@ namespace StarfallAfterlife.Bridge.Server
 
                 case DiscoveryClientAction.TakeHouseTaskFromPool:
                     HandleTakeHouseTaskFromPoolAction(reader, systemId, objectType, objectId); break;
+
+                case DiscoveryClientAction.StartDoctrineAction:
+                    HandleHouseStartDoctrineAction(reader, systemId, objectType, objectId); break;
             }
         }
 
@@ -92,6 +95,7 @@ namespace StarfallAfterlife.Bridge.Server
 
                         SendHouseCreated(result);
                         SendHouseFullInfo(houseInfo.House);
+                        character.SyncDoctrines();
                     }
                     else
                     {
@@ -117,6 +121,7 @@ namespace StarfallAfterlife.Bridge.Server
                         {
                             character.HouseTag = null;
                             SendHouseCharacterLeft(character.UniqueId, CharacterHouseLeftReason.Leave, character.UniqueId);
+                            character.SyncDoctrines();
                             character.UpdateFleetInfo();
                             Galaxy?.BeginPreUpdateAction(g => character?.Fleet?.BroadcastFleetDataChanged());
 
@@ -156,6 +161,7 @@ namespace StarfallAfterlife.Bridge.Server
                         character.HouseTag = null;
                         dtb.DeleteHouse(house);
                         SendHouseCharacterLeft(character.UniqueId, CharacterHouseLeftReason.Leave, character.UniqueId);
+                        character.SyncDoctrines();
                         character.UpdateFleetInfo();
                         Galaxy?.BeginPreUpdateAction(g => character?.Fleet?.BroadcastFleetDataChanged());
 
@@ -386,6 +392,7 @@ namespace StarfallAfterlife.Bridge.Server
                             BroadcastHouseCharacterOnlineStatus(true);
 
                             character.UpdateFleetInfo();
+                            character.SyncDoctrines();
                             Galaxy?.BeginPreUpdateAction(g => character?.Fleet?.BroadcastFleetDataChanged());
                         }
                         else
@@ -481,6 +488,45 @@ namespace StarfallAfterlife.Bridge.Server
                                 }));
                             }
                         });
+                    }
+                });
+            });
+        }
+
+        private void HandleHouseStartDoctrineAction(SfReader reader, int systemId, DiscoveryObjectType objectType, int objectId)
+        {
+            var id = reader.ReadInt32();
+            
+            Invoke(() =>
+            {
+                Server?.RealmInfo?.Use(r =>
+                {
+                    if (CurrentCharacter is ServerCharacter character &&
+                        character.GetHouseInfo() is SfHouseInfo houseInfo &&
+                        houseInfo.House is SfHouse house &&
+                        character.GetHousePermissions(houseInfo).HasFlag(HouseRankPermission.StartDoctrine) == true)
+                    {
+                        var dtb = character?.DiscoveryClient.Server.Realm.Database ?? SfaDatabase.Instance;
+
+                        if (dtb.GetHouseDoctrine(id) is HouseDoctrineInfo doctrineInfo &&
+                            house.Currency >= doctrineInfo.Price &&
+                            character.StartDoctrine(id) is HouseDoctrine doctrine)
+                        {
+                            house.Currency = house.Currency.SubtractWithoutOverflow(doctrineInfo.Price);
+                            houseInfo.Save();
+
+                            foreach (var member in house.Members.Values)
+                            {
+                                if (Server?.GetCharacter(member) is ServerCharacter memberChar)
+                                {
+                                    memberChar.DiscoveryClient?.Invoke(c =>
+                                    {
+                                        memberChar.SyncDoctrines();
+                                        c.SendHouseUpdate(house);
+                                    });
+                                }
+                            }
+                        }
                     }
                 });
             });

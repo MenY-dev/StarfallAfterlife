@@ -508,6 +508,22 @@ namespace StarfallAfterlife.Bridge.Database
             return null;
         }
 
+        public HouseDoctrineInfo? GetHouseDoctrine(int id)
+        {
+            if (HouseDoctrines.TryGetValue(id, out HouseDoctrineInfo houseDoctrine) == true)
+                return houseDoctrine;
+
+            return null;
+        }
+
+        public HouseEffectInfo? GetHouseEffect(int id)
+        {
+            if (HouseEffects.TryGetValue(id, out HouseEffectInfo houseEffect) == true)
+                return houseEffect;
+
+            return null;
+        }
+
         public static int LevelToAccessLevel(int level) => level switch
         {
             >= 85 => 7,
