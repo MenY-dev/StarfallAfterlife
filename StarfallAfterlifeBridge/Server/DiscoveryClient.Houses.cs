@@ -90,6 +90,7 @@ namespace StarfallAfterlife.Bridge.Server
                             house.Ranks.Add(HouseRank.CreateFromDatabaseInfo(item.Value));
 
                         house.Faction = character.Faction;
+                        house.UpdateTasksPool();
                         house.AddMember(character);
                         houseInfo.Save();
 
@@ -187,8 +188,12 @@ namespace StarfallAfterlife.Bridge.Server
             {
                 Server?.RealmInfo?.Use(r =>
                 {
-                    if (CurrentCharacter?.GetHouseInfo()?.House is SfHouse house)
+                    if (CurrentCharacter?.GetHouseInfo() is SfHouseInfo houseInfo &&
+                        houseInfo.House is SfHouse house)
                     {
+                        if (house.UpdateTasksPool() == true)
+                            houseInfo.Save();
+
                         SendHouseUpdate(house);
                         UpdateHouseMemberInfo();
                         BroadcastHouseCharacterOnlineStatus(true);

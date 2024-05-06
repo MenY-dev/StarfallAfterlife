@@ -4,6 +4,7 @@ using StarfallAfterlife.Bridge.Server.Discovery;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
@@ -38,6 +39,8 @@ namespace StarfallAfterlife.Bridge.Houses
 
         public int TasksPoolSize { get; set; }
 
+        public DateTime TasksPoolUpdateTime { get; set; }
+
         public int MaxCurrency { get; set; }
 
         public HashSet<int> DoctrineAccessLevels { get; } = new();
@@ -68,6 +71,7 @@ namespace StarfallAfterlife.Bridge.Houses
                 ["link"] = Link ?? "",
                 ["motd"] = MessageOfTheDay ?? "",
                 ["task_pool_size"] = TasksPoolSize,
+                ["task_pool_update_time"] = TasksPoolUpdateTime,
                 ["currency"] = Currency,
                 ["max_currency"] = MaxCurrency,
                 ["max_members"] = MaxMembers,
@@ -118,6 +122,7 @@ namespace StarfallAfterlife.Bridge.Houses
                 Link = (string)doc["link"];
                 MessageOfTheDay = (string)doc["motd"];
                 TasksPoolSize = (int?)doc["task_pool_size"] ?? 0;
+                TasksPoolUpdateTime = (DateTime?)doc["task_pool_update_time"] ?? default;
                 Currency = (int?)doc["currency"] ?? 0;
                 MaxCurrency = (int?)doc["max_currency"] ?? 0;
                 MaxMembers = (int?)doc["max_members"] ?? 0;
@@ -313,6 +318,25 @@ namespace StarfallAfterlife.Bridge.Houses
 
             foreach (var task in Tasks.ToArray())
                 Tasks[task.Key] = task.Value + count;
+        }
+
+        public bool UpdateTasksPool()
+        {
+            static int GetWeek(DateTime time) => CultureInfo.InvariantCulture.Calendar
+                .GetWeekOfYear(time, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Sunday);
+
+            var currentTime = DateTime.UtcNow;
+
+            if (GetWeek(currentTime) == GetWeek(TasksPoolUpdateTime) &&
+                currentTime.Year == TasksPoolUpdateTime.Year)
+                return false;
+
+            TasksPoolUpdateTime = currentTime;
+            Tasks["house_task_kill_mob"] = TasksPoolSize;
+            Tasks["house_task_scan_unknown_planet"] = TasksPoolSize;
+            Tasks["house_task_kill_boss"] = TasksPoolSize;
+
+            return true;
         }
 
         public HouseDoctrine GetDoctrine(int doctrineId)
