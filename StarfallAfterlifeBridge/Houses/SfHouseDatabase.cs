@@ -53,10 +53,10 @@ namespace StarfallAfterlife.Bridge.Houses
         {
             houseInfo = null;
 
-            if (string.IsNullOrWhiteSpace(name) == true)
+            if (string.IsNullOrWhiteSpace(name) == true || name.Length > 32)
                 return HouseCreationResult.NameIsTooLong;
 
-            if (string.IsNullOrWhiteSpace(tag) == true)
+            if (string.IsNullOrWhiteSpace(tag) == true || tag.Length > 8)
                 return HouseCreationResult.TagIsTooLong;
 
             foreach (var house in Houses.Select(h => h.Value?.House))
