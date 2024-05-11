@@ -28,25 +28,25 @@ namespace StarfallAfterlife.Bridge.Profiles
         public int HasPremium { get; set; } = 0;
 
         [JsonPropertyName("xp_boost")]
-        public int XpBoost { get; set; } = 0;
+        public double XpBoost => GetEffect(1160329638) > 0 ? 1.5 : 1;
 
         [JsonPropertyName("igc_boost")]
-        public int IgcBoost { get; set; } = 0;
+        public double IgcBoost => GetEffect(503112805) > 0 ? 2 : 1;
 
         [JsonPropertyName("craft_boost")]
-        public int CraftBoost { get; set; } = 0;
+        public double CraftBoost => GetEffect(1464674507) > 0 ? 0.7 : 1;
 
         [JsonPropertyName("premium_minutes_left")]
         public int PremiumMinutesLeft { get; set; } = 0;
 
         [JsonPropertyName("xp_minutes_left")]
-        public int XpMinutesLeft { get; set; } = 0;
+        public double XpMinutesLeft => GetEffect(1160329638);
 
         [JsonPropertyName("igc_minutes_left")]
-        public int IgcMinutesLeft { get; set; } = 0;
+        public double IgcMinutesLeft => GetEffect(503112805);
 
         [JsonPropertyName("craft_minutes_left")]
-        public int CraftMinutesLeft { get; set; } = 0;
+        public double CraftMinutesLeft => GetEffect(1464674507);
 
         [JsonPropertyName("igc")]
         public int IGC { get; set; } = 10000;
@@ -131,6 +131,9 @@ namespace StarfallAfterlife.Bridge.Profiles
 
         [JsonPropertyName("statistic")]
         public Dictionary<string, double> Statistic { get; set; } = new();
+
+        [JsonPropertyName("effects")]
+        public CharacterEffectsCollection Effects { get; set; } = new();
 
         [JsonPropertyName("has_session_results")]
         public bool HasSessionResults { get; set; } = false;

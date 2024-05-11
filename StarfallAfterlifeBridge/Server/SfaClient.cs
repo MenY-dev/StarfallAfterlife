@@ -1098,6 +1098,13 @@ namespace StarfallAfterlife.Bridge.Server
                         }
                     }
 
+                    if (doc["effect"]?.AsObjectSelf() is JObject effect)
+                    {
+                        if ((int?)effect["id"] is int id &&
+                            (double?)effect["duration"] is double duration)
+                            character.AddEffect(id, duration);
+                    }
+
                     GalacticChannel?.SendCharacterCurrencyUpdate();
                     GalacticChannel?.SendCharacterXpUpdate();
                     SyncCharacterCurrencies(character);

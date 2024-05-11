@@ -199,6 +199,10 @@ namespace StarfallAfterlife.Bridge.Profiles
             return null;
         }
 
+        public void AddEffect(int id, double duration) => (Effects ??= new()).Add(id, duration);
+
+        public double GetEffect(int id) => (Effects ??= new()).Get(id);
+
         protected int CreateId<T>(int startID, IEnumerable<T> list, Func<T, int> walker)
         {
             if (startID < 0 || list is null || walker is null)

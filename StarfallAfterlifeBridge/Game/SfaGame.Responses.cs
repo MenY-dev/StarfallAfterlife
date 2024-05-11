@@ -103,6 +103,7 @@ namespace StarfallAfterlife.Bridge.Game
                 doc["c_xp_minutes_left"] = character.XpMinutesLeft;
                 doc["c_igc_minutes_left"] = character.IgcMinutesLeft;
                 doc["c_craft_minutes_left"] = character.CraftMinutesLeft;
+                doc["effects"] = JsonHelpers.ParseNode(character.Effects ??= new());
             }
 
             if (character.HasSessionResults == true &&

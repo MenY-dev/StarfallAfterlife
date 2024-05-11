@@ -10,6 +10,7 @@ using StarfallAfterlife.Bridge.Server.Inventory;
 using StarfallAfterlife.Bridge.Server.Quests;
 using StarfallAfterlife.Bridge.Server.Quests.Conditions;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -745,6 +746,38 @@ namespace StarfallAfterlife.Bridge.Server
                     writer.WriteShortString(name, -1, true, Encoding.UTF8);
                     writer.WriteShortString(charName ?? string.Empty, -1, true, Encoding.UTF8);
                 });
+        }
+
+        public void SendCharacterBoosterUpdate(int boosterId)
+        {
+            if (CurrentCharacter is ServerCharacter character)
+            {
+                SendGalaxyMessage(
+                DiscoveryServerGalaxyAction.CharacterBoosterUpdate,
+                writer =>
+                {
+                    switch (boosterId)
+                    {
+                        case 503112805:
+                            writer.WriteByte(2);
+                            writer.WriteInt32((int?)character.Effects?.Get(boosterId) ?? 0);
+                            writer.WriteSingle((float)character.IgcBoost);
+                            break;
+                        case 1160329638:
+                            writer.WriteByte(3);
+                            writer.WriteInt32((int?)character.Effects?.Get(boosterId) ?? 0);
+                            writer.WriteSingle((float)character.XpBoost);
+                            break;
+                        case 1464674507:
+                            writer.WriteByte(4);
+                            writer.WriteInt32((int?)character.Effects?.Get(boosterId) ?? 0);
+                            writer.WriteSingle((float)character.CraftBoost);
+                            break;
+                    }
+                });
+
+                SfaDebug.Print($"SendCharacterBoosterUpdate (Id = {boosterId})", GetType().Name);
+            }
         }
 
         public virtual void RequestDiscoveryObjectSync(StarSystemObject obj)

@@ -20,6 +20,7 @@ using StarfallAfterlife.Bridge.Server.Discovery.AI;
 using System.Reflection.Emit;
 using static StarfallAfterlife.Bridge.Native.Windows.Win32;
 using StarfallAfterlife.Bridge.Houses;
+using System.Text.Json.Serialization;
 
 namespace StarfallAfterlife.Bridge.Server.Characters
 {
@@ -53,13 +54,17 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
         public int Xp { get; set; }
 
-        public float XpFactor { get; set; }
-
         public int BonusXp { get; set; }
 
         public int IGC { get; set; }
 
         public int BGC { get; set; }
+
+        public double XpBoost => Effects?.Get(1160329638) > 0 ? 1.5 : 1;
+
+        public double IgcBoost => Effects?.Get(503112805) > 0 ? 2 : 1;
+
+        public double CraftBoost => Effects?.Get(1464674507) > 0 ? 0.7 : 1;
 
         public int CurrentDetachment { get; set; } = 0;
 
@@ -87,6 +92,8 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
         public List<ShipsGroup> ShipGroups { get; } = new();
 
+        public CharacterEffectsCollection Effects { get; set; } = new();
+
         public CharacterParty Party { get; set; }
 
         protected Dictionary<int, DateTime> AbilitiesCooldown { get; } = new();
@@ -98,7 +105,6 @@ namespace StarfallAfterlife.Bridge.Server.Characters
             if (doc is null)
                 return;
 
-            XpFactor = (float?)doc["c_xp_boost"] ?? 1;
             BonusXp = (int?)doc["bonus_xp"] ?? 0;
             Xp = (int?)doc["xp"] ?? 0;
             Level = (int?)doc["level"] ?? 0;
@@ -173,7 +179,9 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                 ShipGroups.AddRange(shipGroups.DeserializeUnbuffered<List<ShipsGroup>>() ?? new());
             }
 
+            Effects = doc["effects"]?.AsObjectSelf()?.DeserializeUnbuffered<CharacterEffectsCollection>() ?? new();
             Inventory ??= new(this);
+
             Events?.Broadcast<ICharacterListener>(l => l.OnCurrencyUpdated(this));
         }
 
@@ -218,7 +226,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
             {
                 ["faction"] = (int)Faction,
                 ["charactname"] = UniqueName ?? "",
-                ["xp_factor"] = XpFactor,
+                ["xp_factor"] = 1,
                 ["bonus_xp"] = BonusXp,
                 ["access_level"] = AccessLevel,
                 ["level"] = Level,
@@ -407,7 +415,13 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
         public void AddBooster(int boosterId, double duration)
         {
+            (Effects ??= new()).Add(boosterId, duration);
 
+            DiscoveryClient.Invoke(c =>
+            {
+                c.SendAddEffect(boosterId, duration);
+                c.SendCharacterBoosterUpdate(boosterId);
+            });
         }
 
         protected bool CheckQuestLimitsReached()
@@ -885,13 +899,17 @@ namespace StarfallAfterlife.Bridge.Server.Characters
             Dictionary<int, int> shipsXp = null)
         {
             if (igc is not null)
+            {
+                if (igc > 0) igc = (int)(igc * IgcBoost);
                 IGC = IGC.AddWithoutOverflow((int)igc);
+            }
 
             if (bgc is not null)
                 BGC = BGC.AddWithoutOverflow((int)bgc);
 
             if (xp is not null)
             {
+                if (xp > 0) xp = (int)(xp * XpBoost);
                 Xp = Xp.AddWithoutOverflow((int)xp);
                 AddXpToSeasons((int)xp);
                 DiscoveryClient?.AddXpToHouse((long)xp);
@@ -899,12 +917,13 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
             if (shipsXp is not null)
             {
-                foreach (var item in shipsXp)
+                foreach (var item in shipsXp.ToArray())
                 {
+                    var shipXp = shipsXp[item.Key] = (int)(item.Value * XpBoost);
                     var ship = Ships.FirstOrDefault(s => s?.Id == item.Key);
 
                     if (ship is not null)
-                        ship.Xp = ship.Xp.AddWithoutOverflow(item.Value);
+                        ship.Xp = ship.Xp.AddWithoutOverflow(shipXp);
                 }
             }
 

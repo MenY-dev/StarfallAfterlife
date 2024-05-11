@@ -434,6 +434,25 @@ namespace StarfallAfterlife.Bridge.Server
             Client?.Send(doc, SfaServerAction.AddCharacterCurrencies);
         }
 
+        public void SendAddEffect(int effectId, double duration)
+        {
+            if (CurrentCharacter is ServerCharacter character)
+                SendAddEffect(character.UniqueId, effectId, duration);
+        }
+
+        public void SendAddEffect(int charId, int effectId, double duration)
+        {
+            Client?.Send(new JsonObject()
+            {
+                ["char_id"] = charId,
+                ["effect"] = new JsonObject
+                {
+                    ["id"] = effectId,
+                    ["duration"] = duration,
+                },
+            }, SfaServerAction.AddCharacterCurrencies);
+        }
+
         public virtual void SendDiscoveryMessage(int systemId, DiscoveryObjectType objectType, int objectId, DiscoveryServerAction action, Action<SfWriter> writeAction = null)
         {
             SendToDiscoveryChannel(writer =>

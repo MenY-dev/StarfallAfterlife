@@ -296,7 +296,7 @@ namespace StarfallAfterlife.Bridge.Game
                             }
 
 
-                            character.IGC = character.IGC.AddWithoutOverflow(Math.Max(0, (int)(info.IGC * 0.9f) * totalCount));
+                            character.IGC = character.IGC.AddWithoutOverflow(Math.Max(0, (int)(info.IGC * 0.9f * character.IgcBoost) * totalCount));
                         }
                     }
 
@@ -337,7 +337,7 @@ namespace StarfallAfterlife.Bridge.Game
                     if (item.ItemType is (InventoryItemType.ShipProject or InventoryItemType.ItemProject))
                         character.DeleteInventoryItem(item, count);
 
-                    character.IGC = Math.Max(0, character.IGC.SubtractWithoutOverflow(item.IGCToProduce));
+                    character.IGC = Math.Max(0, character.IGC.SubtractWithoutOverflow((int)(item.IGCToProduce * character.CraftBoost)));
 
                     var newCraftings = Enumerable
                         .Repeat(entity, count)
@@ -723,7 +723,7 @@ namespace StarfallAfterlife.Bridge.Game
                     }
 
                     if (p.Database?.GetShip(ship.Data?.Hull ?? 0) is ShipBlueprint blueprint)
-                        character.IGC = Math.Max(0, character.IGC.AddWithoutOverflow((int)Math.Round(blueprint.IGCToProduce * 0.33333333)));
+                        character.IGC = Math.Max(0, character.IGC.AddWithoutOverflow((int)Math.Round(blueprint.IGCToProduce * 0.33333333 * character.IgcBoost)));
 
                     p.SaveGameProfile();
                     SfaClient?.SyncCharacterCurrencies(character);
