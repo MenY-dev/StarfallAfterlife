@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualBasic;
 using StarfallAfterlife.Bridge.Database;
+using StarfallAfterlife.Bridge.Mathematics;
 using StarfallAfterlife.Bridge.Primitives;
 using StarfallAfterlife.Bridge.Serialization;
 using System;
@@ -123,6 +124,139 @@ namespace StarfallAfterlife.Bridge.Server.Galaxy
                     }
                 }
             }
+        }
+
+        public List<int> FindPath(int from, int to, int[] levels = null)
+        {
+            if (from == to)
+                return new();
+
+            var startStar = GetSystem(from);
+            var endStar = GetSystem(to);
+
+            if (startStar is null || endStar is null)
+                return new();
+
+            var result = new List<int>();
+            var startStarPos = new Vector2(startStar.X, startStar.Y);
+            var endStarPos = new Vector2(endStar.X, endStar.Y);
+            var pathDir = (endStarPos - startStarPos).Normalize();
+
+            var reachable = new LinkedList<KeyValuePair<GalaxyMapStarSystem, float>>();
+            var paths = new Dictionary<GalaxyMapStarSystem, GalaxyMapStarSystem>() { { startStar, null } };
+            var costs = new Dictionary<int, int>() { { startStar.Id, 0 } };
+
+
+            GalaxyMapStarSystem currentStar = null;
+            Push(startStar, 0);
+
+            Func<GalaxyMapStarSystem, bool> CheckStar = levels is not null ?
+                s => s is not null && levels.Contains(s.Level) == true :
+                _ => true;
+
+            GalaxyMapStarSystem Pull()
+            {
+                if (reachable.Count < 1)
+                    return null;
+
+                var next = reachable.First();
+                reachable.RemoveFirst();
+                return next.Key;
+            }
+
+            void Push(GalaxyMapStarSystem star, float coast)
+            {
+                var pair = KeyValuePair.Create(star, coast);
+                var nextNode = reachable.First;
+
+                if (nextNode is null)
+                {
+                    reachable.AddFirst(pair);
+                    return;
+                }
+
+                while (nextNode is not null)
+                {
+                    if (nextNode.Value.Value > coast)
+                    {
+                        reachable.AddBefore(nextNode, pair);
+                        return;
+                    }
+
+                    nextNode = nextNode.Next;
+                }
+
+                reachable.AddLast(pair);
+            }
+
+            IEnumerable<GalaxyMapStarSystem> GetNeighbors(GalaxyMapStarSystem parent)
+            {
+                if (parent?.Portals is not null)
+                {
+                    foreach (var item in parent.Portals)
+                    {
+                        if (item is not null &&
+                            GetSystem(item.Destination) is GalaxyMapStarSystem star &&
+                            CheckStar(star) == true)
+                            yield return star;
+                    }
+                }
+            }
+
+            float GetHeuristic(GalaxyMapStarSystem nextStar)
+            {
+                if (nextStar is null)
+                    return float.MaxValue;
+
+                var nextToStart = new Vector2(startStarPos.X - nextStar.X, startStarPos.Y - nextStar.Y);
+                var nextToEnd = new Vector2(endStarPos.X - nextStar.X, endStarPos.Y - nextStar.Y);
+                var errorFromStart = Math.Abs(pathDir.GetNegative().GetAngleTo(nextToStart));
+                var errorToEnd = Math.Abs(pathDir.GetAngleTo(nextToEnd));
+
+                return errorFromStart + errorToEnd;
+            }
+
+            while (reachable.Count > 0)
+            {
+                currentStar = Pull();
+
+                if (currentStar is null)
+                    return new();
+
+                if (currentStar == endStar)
+                    break;
+
+                foreach (var nextStar in GetNeighbors(currentStar))
+                {
+                    if (nextStar is null)
+                        continue;
+
+                    var newCost = costs.GetValueOrDefault(currentStar.Id) + 1;
+
+                    if (costs.TryGetValue(nextStar.Id, out int nextCost) == false || newCost < nextCost)
+                    {
+                        costs[nextStar.Id] = newCost;
+                        paths[nextStar] = currentStar;
+                        Push(nextStar, GetHeuristic(nextStar));
+                    }
+                }
+            }
+
+            if (currentStar != endStar)
+                return result;
+
+            if (currentStar is not null)
+            {
+                while (currentStar != null)
+                {
+                    result.Add(currentStar.Id);
+                    currentStar = paths[currentStar];
+                }
+
+                result.Reverse();
+            }
+
+            return result;
         }
 
         public override void Init()
