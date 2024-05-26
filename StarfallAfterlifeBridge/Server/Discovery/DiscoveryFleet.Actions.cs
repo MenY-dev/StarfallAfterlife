@@ -39,7 +39,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             };
 
             ScanStartHex = Hex;
-            ScanEndTime = DateTime.Now.AddSeconds(ScanInfo.Time);
+            ScanEndTime = DateTime.UtcNow.AddSeconds(ScanInfo.Time);
             Broadcast<IObjectScanningListener>(l => l.OnScanningStateChanged(this, ScanInfo));
         }
 
@@ -54,7 +54,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             };
 
             ScanStartHex = Hex;
-            ScanEndTime = DateTime.Now.AddSeconds(ScanInfo.Time);
+            ScanEndTime = DateTime.UtcNow.AddSeconds(ScanInfo.Time);
             Broadcast<IObjectScanningListener>(l => l.OnScanningStateChanged(this, ScanInfo));
         }
 
@@ -74,7 +74,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                 {
                     CancelScanning();
                 }
-                else if (DateTime.Now >= ScanEndTime)
+                else if (DateTime.UtcNow >= ScanEndTime)
                 {
                     var info = ScanInfo;
                     info.State = ScanState.Finished;

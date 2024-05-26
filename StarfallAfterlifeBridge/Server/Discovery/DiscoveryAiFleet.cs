@@ -12,6 +12,8 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
     {
         public override DiscoveryObjectType Type => DiscoveryObjectType.AiFleet;
 
+        public bool UseRespawn { get; set; } = true;
+
         public float RespawnTimeout { get; set; } = 180;
 
         public DateTime RespawnTime { get; protected set; }
@@ -20,7 +22,8 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
         {
             base.Update();
 
-            if (State == FleetState.Destroyed &&
+            if (UseRespawn == true &&
+                State == FleetState.Destroyed &&
                 LastUpdateTime >= RespawnTime)
             {
                 Broadcast<IStarSystemObjectListener>(l => l.OnObjectSpawned(this));
@@ -39,7 +42,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
             if (newState == FleetState.Destroyed)
             {
-                RespawnTime = DateTime.Now.AddSeconds(RespawnTimeout);
+                RespawnTime = DateTime.UtcNow.AddSeconds(RespawnTimeout);
             }
         }
     }

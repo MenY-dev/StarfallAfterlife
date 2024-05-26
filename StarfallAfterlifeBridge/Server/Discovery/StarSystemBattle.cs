@@ -24,6 +24,8 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
         public bool IsDungeon { get; set; }
 
+        public bool IsUserAdded { get; set; }
+
         public bool HasNebula { get; set; }
 
         public bool HasAsteroids { get; set; }
@@ -58,13 +60,19 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
         {
             IsStarted = true;
 
+            System?.AddDeferredAction(() =>
+            {
+                if (IsStarted == true && IsFinished == false && IsUserAdded == false)
+                    Finish();
+            }, TimeSpan.FromMinutes(1));
+
+            UpdateAttackerInfo();
+
             foreach (var member in Members)
                 member.Fleet.SetFleetState(FleetState.InBattle);
 
             foreach (var member in Members)
                 Galaxy?.Listeners.Broadcast<IBattleListener>(l => l.OnBattleFleetAdded(this, member));
-
-            UpdateAttackerInfo();
 
             Galaxy?.Listeners.Broadcast<IBattleListener>(l => l.OnBattleStarted(this));
         }
@@ -100,7 +108,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
         public virtual void Finish()
         {
-            IsFinished = false;
+            IsFinished = true;
 
             foreach (var member in Members.ToList())
                 Leave(member, Hex);
@@ -122,6 +130,8 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
             if (Members.Contains(member) == false)
                 Members.Add(member);
+
+            IsUserAdded |= member?.Fleet is UserFleet;
 
             if (IsStarted == true && IsFinished == false)
             {
@@ -148,17 +158,21 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                     fleet.SetLocation(SystemHexMap.HexToSystemPoint(safeHex));
                 }
 
+                member.IsDestroyed |= destroyed;
                 Galaxy?.Listeners.Broadcast<IBattleListener>(l => l.OnBattleFleetLeaving(this, member));
 
                 if (destroyed == true)
                 {
                     fleet.SetFleetState(FleetState.Destroyed);
-                    fleet.System?.Broadcast<IStarSystemObjectListener>(l => l.OnObjectDestroed(member.Fleet));
+                    fleet.System?.Broadcast<IStarSystemObjectListener>(l => l.OnObjectDestroed(System?.Id ?? -1, fleet.Type, fleet.Id));
                 }
                 else
                 {
-                    if (fleet is UserFleet)
-                        fleet.AddEffect(new() { Duration = 10, Logic = GameplayEffectType.Immortal });
+                    fleet.AddEffect(new()
+                    {
+                        Duration = fleet is UserFleet ? 10 : 5,
+                        Logic = GameplayEffectType.Immortal
+                    });
 
                     fleet.SetFleetState(FleetState.InGalaxy);
                     fleet.System?.Broadcast<IStarSystemObjectListener>(l => l.OnObjectSpawned(member.Fleet));

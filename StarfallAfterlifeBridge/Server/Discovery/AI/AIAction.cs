@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace StarfallAfterlife.Bridge.Server.Discovery.AI
 {
-    public class AIAction
+    public class AIAction : IAINode
     {
         public FleetAI AI { get; set; }
 
         protected DiscoveryFleet Fleet => AI?.Fleet;
 
-        public AIActionState State { get; set; }
+        public AINodeState State { get; set; }
 
         public string Name { get; set; }
 
@@ -28,21 +28,21 @@ namespace StarfallAfterlife.Bridge.Server.Discovery.AI
 
         public virtual void Start()
         {
-            State = AIActionState.Started;
-            StartTime = DateTime.Now;
+            State = AINodeState.Started;
+            StartTime = DateTime.UtcNow;
         }
 
         public virtual void Update()
         {
-            CurrentTime = DateTime.Now;
+            CurrentTime = DateTime.UtcNow;
             DeltaTime = CurrentTime - LastUpdateTime;
             TotalTime = CurrentTime - StartTime;
         }
 
         public virtual void Stop()
         {
-            if (State is AIActionState.Started)
-                State = AIActionState.Failed;
+            if (State is AINodeState.Started)
+                State = AINodeState.Failed;
         }
     }
 }

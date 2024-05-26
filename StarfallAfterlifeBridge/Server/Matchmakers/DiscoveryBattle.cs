@@ -128,21 +128,21 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
             }
         }
 
-        public void Leave(DiscoveryBattleCharacterInfo character, SystemHex spawnHex)
+        public void Leave(DiscoveryBattleCharacterInfo character, SystemHex spawnHex, bool destroyed = false)
         {
             lock (_locker)
             {
                 Characters.Remove(character);
-                Galaxy?.BeginPreUpdateAction(g => SystemBattle?.Leave(character.Member, spawnHex));
+                Galaxy?.BeginPreUpdateAction(g => SystemBattle?.Leave(character.Member, spawnHex, destroyed));
             }
         }
 
-        public void Leave(DiscoveryBattleMobInfo mob, SystemHex spawnHex)
+        public void Leave(DiscoveryBattleMobInfo mob, SystemHex spawnHex, bool destroyed = false)
         {
             lock (_locker)
             {
                 Mobs.Remove(mob);
-                Galaxy?.BeginPreUpdateAction(g => SystemBattle?.Leave(mob.Member, spawnHex));
+                Galaxy?.BeginPreUpdateAction(g => SystemBattle?.Leave(mob.Member, spawnHex, destroyed));
             }
         }
 
@@ -167,7 +167,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
             if (member.Fleet is DiscoveryAiFleet fleet)
             {
-                if (Server?.Realm?.MobsDatabase?.GetMob(fleet.MobId) is DiscoveryMobInfo mobInfo)
+                if (Server?.GetMobInfo(fleet.MobId) is DiscoveryMobInfo mobInfo)
                 {
                     var mob = mobInfo?.Clone();
                     int fleetId = fleet.Id;
@@ -192,7 +192,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                         shipId++;
                     }
 
-                    info = new DiscoveryBattleMobInfo(member, mobInfo);
+                    info = new DiscoveryBattleMobInfo(member, mob);
                 }
             }
 
@@ -205,7 +205,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
             if (fleet is null)
                 return null;
 
-            if (Server?.Realm?.MobsDatabase?.GetMob(fleet.MobId) is DiscoveryMobInfo mobInfo)
+            if (Server?.GetMobInfo(fleet.MobId) is DiscoveryMobInfo mobInfo)
             {
                 var mob = mobInfo.Clone();
                 int fleetId = fleet.FleetId;
@@ -621,21 +621,25 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
             lock (_locker)
             {
                 if (JsonNode.Parse(data) is JsonObject doc &&
-                (DiscoveryObjectType?)(byte?)doc["killer_type"] == DiscoveryObjectType.UserFleet &&
-                (int?)doc["killer_id"] is int fleetId &&
-                (int?)doc["mob_id"] is int mobFleetId &&
-                Server.GetCharacter(fleetId) is ServerCharacter character)
+                    (DiscoveryObjectType?)(byte?)doc["killer_type"] == DiscoveryObjectType.UserFleet &&
+                    (int?)doc["killer_id"] is int fleetId &&
+                    (int?)doc["mob_id"] is int mobFleetId &&
+                    Server.GetCharacter(fleetId) is ServerCharacter character)
                 {
                     var battleMob = Mobs?.FirstOrDefault(m => m?.FleetId == mobFleetId);
 
                     if (battleMob is not null)
-                        SystemBattle.Leave(battleMob.Member, Location, true);
+                        Leave(battleMob, Location, true);
 
                     var mobInfo = battleMob?.Mob ?? Bosses?.FirstOrDefault(b => b?.FleetId == mobFleetId)?.Mob;
                     var killInfo = new MobKillInfo();
+                    var mobId = mobInfo?.Id ?? -1;
+
+                    if (mobId > -1 && FleetIdInfo.IsDynamicMob(mobFleetId))
+                        mobId *= -1;
 
                     killInfo.SystemId = SystemId;
-                    killInfo.MobId = mobInfo?.Id ?? -1;
+                    killInfo.MobId = mobId;
                     killInfo.FleetId = mobFleetId;
                     killInfo.ObjectId = (int?)doc["obj_id"] ?? -1;
                     killInfo.ObjectType = (DiscoveryObjectType?)(byte?)doc["type"] ?? DiscoveryObjectType.None;

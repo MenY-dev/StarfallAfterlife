@@ -134,7 +134,11 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             if (state != FleetState.InGalaxy)
             {
                 Stop();
-                AI?.StopCurrentAction();
+                AI?.Disconnect();
+            }
+            else
+            {
+                AI?.Connect(this);
             }
 
             BroadcastFleetDataChanged();
@@ -188,8 +192,8 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
         public virtual void Update()
         {
-            DeltaTime = (float)(DateTime.Now - LastUpdateTime).TotalSeconds;
-            LastUpdateTime = DateTime.Now;
+            DeltaTime = (float)(DateTime.UtcNow - LastUpdateTime).TotalSeconds;
+            LastUpdateTime = DateTime.UtcNow;
 
             if (State == FleetState.InGalaxy)
             {
@@ -347,8 +351,8 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
         public void SetAI(FleetAI ai)
         {
             AI?.Disconnect();
-            ai?.Connect(this);
             AI = ai;
+            ai?.Connect(this);
         }
 
         public virtual Vector2 CreateHexOffset()
@@ -374,15 +378,17 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             return IsInNebula() ? NebulaVision : Vision;
         }
 
-        public virtual bool IsVisible(DiscoveryFleet target)
+        public virtual bool IsVisible(DiscoveryFleet target, bool includeDebuffs = true)
         {
             if (MayBeVisible(target) == false)
                 return false;
 
-            var vision = (GetCurrentVision() + target.AgroVision);
-            var distance = Hex.GetDistanceTo(target.Hex);
+            var vision = GetCurrentVision() + target.AgroVision;
 
-            return distance < vision;
+            if (includeDebuffs == true)
+                vision += target.AgroVision;
+
+            return Hex.GetDistanceTo(target.Hex) < vision;
         }
 
         public virtual bool MayBeVisible(DiscoveryFleet target)
@@ -421,7 +427,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
         protected override void OnSystemChanged(StarSystem system)
         {
-            LastUpdateTime = DateTime.Now;
+            LastUpdateTime = DateTime.UtcNow;
             ApplyEffects();
             base.OnSystemChanged(system);
         }

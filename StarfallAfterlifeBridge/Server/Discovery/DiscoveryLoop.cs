@@ -70,13 +70,13 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             {
                 while (cts.Token.IsCancellationRequested == false)
                 {
-                    var callbackInvokeTime = DateTime.Now;
+                    var callbackInvokeTime = DateTime.UtcNow;
                     callback.Invoke();
 
                     if (FrameRate > 0)
                     {
                         double targetFrameTime = 1 / FrameRate;
-                        double callbackDuration = (DateTime.Now - callbackInvokeTime).TotalSeconds;
+                        double callbackDuration = (DateTime.UtcNow - callbackInvokeTime).TotalSeconds;
 
                         if (targetFrameTime > callbackDuration)
                         {

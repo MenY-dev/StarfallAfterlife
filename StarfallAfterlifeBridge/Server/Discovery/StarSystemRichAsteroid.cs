@@ -63,7 +63,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             }
 
             CurrentOres = currentOres;
-            LastTake = DateTime.Now;
+            LastTake = DateTime.UtcNow;
             IsPatrial = true;
         }
 

@@ -29,8 +29,6 @@ namespace StarfallAfterlife.Bridge.Server
 {
     public partial class SfaServer : MessagingServer<SfaServerClient>, ISfaObject
     {
-        //public string RealmId { get; set; } = "3af8cc9c641f452fbf69b9c99d6f2569";
-
         public SfaRealm Realm => RealmInfo?.Realm;
 
         public SfaRealmVariable Variable => Realm?.Variable;
@@ -51,6 +49,8 @@ namespace StarfallAfterlife.Bridge.Server
 
         public IdCollection<CharacterParty> Parties { get; } = new() { StartId = 1 };
 
+        public DynamicMobDatabase DynamicMobs { get; } = new();
+
         public Uri InstanceManagerAddress { get; set; }
 
         public bool UsePortForwarding { get; set; } = false;
@@ -69,9 +69,11 @@ namespace StarfallAfterlife.Bridge.Server
 
         protected ActionBuffer ActionBuffer { get; } = new();
 
-        protected object ClientsLockher { get; } = new();
+        protected object ClientsLocker { get; } = new();
 
         protected object QuestsGeneratorLocker { get; } = new();
+
+        protected object DynamicMobsLocker { get; } = new();
 
         public static Version Version => AssemblyVersion.Value;
 
@@ -147,7 +149,7 @@ namespace StarfallAfterlife.Bridge.Server
 
         public SfaServerClient GetClient(string auth)
         {
-            lock (ClientsLockher)
+            lock (ClientsLocker)
                 return Clients.FirstOrDefault(c => c.Auth == auth);
         }
 
@@ -156,7 +158,7 @@ namespace StarfallAfterlife.Bridge.Server
             if (profileId == Guid.Empty)
                 return null;
 
-            lock (ClientsLockher)
+            lock (ClientsLocker)
                 return Clients.FirstOrDefault(c => c.ProfileId == profileId);
         }
 
@@ -195,13 +197,13 @@ namespace StarfallAfterlife.Bridge.Server
 
         public void UseClients(Action<List<SfaServerClient>> handler)
         {
-            lock (ClientsLockher)
+            lock (ClientsLocker)
                 handler?.Invoke(Clients);
         }
 
         public virtual int RegisterPlayer(SfaServerClient player)
         {
-            lock (ClientsLockher)
+            lock (ClientsLocker)
             {
                 if (player is null || player.PlayerId > -1 ||
                     Players.ContainsId(player.PlayerId) == true)
@@ -217,7 +219,7 @@ namespace StarfallAfterlife.Bridge.Server
             if (from is null || to is null)
                 return false;
 
-            lock (ClientsLockher)
+            lock (ClientsLocker)
             {
                 var id = Players.IdOf(from);
 
@@ -270,7 +272,7 @@ namespace StarfallAfterlife.Bridge.Server
 
         public virtual int RegisterCharacter(ServerCharacter character)
         {
-            lock (ClientsLockher)
+            lock (ClientsLocker)
             {
                 if (character is null || character.UniqueId > -1 ||
                     Characters.ContainsId(character.UniqueId) == true)
@@ -297,19 +299,19 @@ namespace StarfallAfterlife.Bridge.Server
 
         public ServerCharacter GetCharacter(string name)
         {
-            lock (ClientsLockher)
+            lock (ClientsLocker)
                 return Characters.FirstOrDefault(c => c.UniqueName == name);
         }
 
         public ServerCharacter GetCharacter(int id)
         {
-            lock (ClientsLockher)
+            lock (ClientsLocker)
                 return Characters[id];
         }
 
         public ServerCharacter GetCharacter(Guid profileId, Guid charId)
         {
-            lock (ClientsLockher)
+            lock (ClientsLocker)
                 return Characters.FirstOrDefault(
                     c => c?.Guid == charId && c.ProfileId == profileId);
         }
@@ -319,7 +321,7 @@ namespace StarfallAfterlife.Bridge.Server
             if (member is null)
                 return null;
 
-            lock (ClientsLockher)
+            lock (ClientsLocker)
                 return Characters.FirstOrDefault(
                     c => c?.Guid == member.CharacterId && c.ProfileId == member.PlayerId);
         }
@@ -329,14 +331,14 @@ namespace StarfallAfterlife.Bridge.Server
             if (fleet is null)
                 return null;
 
-            lock (ClientsLockher)
+            lock (ClientsLocker)
                 return Characters.FirstOrDefault(c => c.Fleet == fleet);
         }
 
 
         public List<SfaServerClient> GetClientsInDiscovery()
         {
-            lock (ClientsLockher)
+            lock (ClientsLocker)
             {
                 return Players
                     .Where(c => c.State == SfaClientState.InDiscoveryMod)
@@ -346,7 +348,7 @@ namespace StarfallAfterlife.Bridge.Server
 
         public List<SfaServerClient> GetClientsInRankedMode()
         {
-            lock (ClientsLockher)
+            lock (ClientsLocker)
             {
                 return Players
                     .Where(c => c.State == SfaClientState.InRankedMode)
@@ -465,6 +467,33 @@ namespace StarfallAfterlife.Bridge.Server
                 }
                 catch { }
             }
+        }
+
+        public void UseDynamicMobs(Action<DynamicMobDatabase> action)
+        {
+            lock (DynamicMobsLocker)
+                action?.Invoke(DynamicMobs);
+        }
+
+        public DiscoveryMobInfo GetMobInfo(int id)
+        {
+            DiscoveryMobInfo mob = null;
+
+            if (id < -1)
+            {
+                UseDynamicMobs(dtb => mob = dtb[-id]);
+            }
+            else if (id > -1)
+            {
+                mob = Realm?.MobsDatabase?.GetMob(id);
+            }
+
+            return mob;
+        }
+
+        public DiscoveryMobInfo GetMobInfo(string name)
+        {
+            return Realm?.MobsDatabase?.GetMob(name);
         }
 
         public virtual void Invoke(Action action) => ActionBuffer?.Invoke(action);

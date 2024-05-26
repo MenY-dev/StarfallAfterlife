@@ -20,7 +20,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery.AI
             base.Update();
 
             if (TotalTime > Duration)
-                State = AIActionState.Completed;
+                State = AINodeState.Completed;
         }
     }
 }

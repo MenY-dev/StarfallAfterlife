@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace StarfallAfterlife.Bridge.Server.Discovery.AI
 {
-    public enum AIActionState
+    public enum AIArchetype
     {
-        Nove = 0,
-        Started = 1,
-        Completed = 2,
-        Failed = 3,
+        Scientist = 0,
+        Miner = 1,
+        Trader = 2,
+        Patroller = 3,
+        Aggressor = 4,
     }
 }

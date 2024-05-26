@@ -31,14 +31,14 @@ namespace StarfallAfterlife.Bridge.Server.Discovery.AI
             base.Update();
 
             if (TotalTime > Duration)
-                State = AIActionState.Completed;
+                State = AINodeState.Completed;
         }
 
         public override void Stop()
         {
             base.Stop();
 
-            if (State is AIActionState.Started)
+            if (State is AINodeState.Started)
                 Fleet?.AddEffect(new() { Duration = 0, Logic = GameplayEffectType.Scan });
         }
     }

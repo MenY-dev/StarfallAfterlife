@@ -20,7 +20,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             if (isVisible == true)
                 Broadcast<IStarSystemObjectListener>(l => l.OnObjectSpawned(this));
             else
-                Broadcast<IStarSystemObjectListener>(l => l.OnObjectDestroed(this));
+                Broadcast<IStarSystemObjectListener>(l => l.OnObjectDestroed(System?.Id ?? -1, Type, Id));
         }
     }
 }

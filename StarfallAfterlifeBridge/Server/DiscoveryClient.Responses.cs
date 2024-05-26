@@ -39,13 +39,13 @@ namespace StarfallAfterlife.Bridge.Server
             SfaDebug.Print($"EnterToStarSystem (SystemId = {systemId}, Location = {location})", "DiscoveryServerClient");
         }
 
-        public void SendDisconnectObject(StarSystemObject obj)
+        public void SendDisconnectObject(int systemId, DiscoveryObjectType objectType, int objectId)
         {
             SendDiscoveryMessage(
-                obj,
+                systemId, objectType, objectId,
                 DiscoveryServerAction.DisconnectObject);
 
-            SfaDebug.Print($"DisconnectObject (SystemId = {obj?.System?.Id}, Id = {obj?.Id}, Type = {obj?.Type})", "DiscoveryServerClient");
+            SfaDebug.Print($"DisconnectObject (SystemId = {systemId}, Id = {objectId}, Type = {objectType})", "DiscoveryServerClient");
         }
 
         public virtual void SendFleetWarpedGateway()

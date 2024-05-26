@@ -1,9 +1,11 @@
 ﻿using StarfallAfterlife.Bridge.Database;
+using StarfallAfterlife.Bridge.Generators;
 using StarfallAfterlife.Bridge.Houses;
 using StarfallAfterlife.Bridge.Mathematics;
 using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Server.Characters;
 using StarfallAfterlife.Bridge.Server.Discovery;
+using StarfallAfterlife.Bridge.Server.Discovery.AI;
 using StarfallAfterlife.Bridge.Server.Galaxy;
 using System;
 using System.Collections.Generic;
@@ -235,6 +237,82 @@ namespace StarfallAfterlife.Bridge.Server
                 else if (int.TryParse(questInfo, out int questId) == true)
                 {
                     CurrentCharacter.CompleteQuest(questId);
+                }
+            }
+            else if ("m".Equals(msg?.Trim(), StringComparison.OrdinalIgnoreCase))
+            {
+                DiscoveryClient.Invoke(c =>
+                {
+                    if (CurrentCharacter?.Fleet is UserFleet charFleet &&
+                        charFleet.System is StarSystem starSystem)
+                    {
+                        var mob = new GalaxyPatrolMobGenerator(Server?.Realm)
+                        {
+                            Faction = Faction.Pyramid,
+                            Level = 10,
+                        }.Build();
+
+                        if (mob is null)
+                        {
+                            SendToChat(channel, label, "Mob creation error");
+                            return;
+                        }
+
+                        Server.UseDynamicMobs(dtb => dtb.Add(mob));
+
+                        var fleet = new DiscoveryAiFleet
+                        {
+                            Id = mob.Id,
+                            Faction = mob.Faction,
+                            Name = "nebtrashlvl2",
+                            MobId = -mob.Id,
+                            Level = mob.Level,
+                            FactionGroup = 1,
+                            BaseVision = 0,
+                            AgroVision = -100,
+                            BaseSpeed = 5,
+                            UseRespawn = false,
+                            Hull = mob.Ships?.ElementAtOrDefault(mob.MainShipIndex)?.Data?.Hull ??
+                                   mob.Ships?.FirstOrDefault()?.Data?.Hull ?? 0,
+                        };
+
+                        fleet.SetLocation(SystemHexMap.HexToSystemPoint(
+                            starSystem.GetNearestSafeHex(charFleet, charFleet.Hex, true)));
+
+                        fleet.SetAI(new GalaxyPatrollingAI()
+                        {
+                            Archetype = AIArchetype.Miner,
+                        });
+
+                        Galaxy.BeginPreUpdateAction(_ =>
+                        {
+                            starSystem.AddFleet(fleet);
+                        });
+
+                        SendToChat(channel, label, $"Spawn {fleet.Name}!");
+                    }
+                });
+            }
+
+            else if (msg.StartsWith("mj ") &&
+                msg.Length > 3 &&
+                int.TryParse(msg[3..].Trim(), out int mobJumpSystem))
+            {
+                if (CurrentCharacter?.Fleet is UserFleet charFleet &&
+                    charFleet.System is StarSystem starSystem &&
+                    starSystem.Galaxy?.Map?.GetSystem(mobJumpSystem) is not null)
+                {
+                    var testMobId = new FleetIdInfo { Type = FleetType.DynamicMob, LocalId = 321789 }.ToId();
+
+                    Galaxy.BeginPreUpdateAction(_ =>
+                    {
+                        if (starSystem.Fleets.FirstOrDefault(f => f.Id == testMobId) is DiscoveryFleet mob &&
+                            mob.AI is GalaxyPatrollingAI ai)
+                        {
+                            ai.StateMachine?.StartStateByName("change_system", mobJumpSystem);
+                            DiscoveryClient?.Invoke(c => SendToChat(channel, label, $"Move {mob.Name} to {mobJumpSystem}"));
+                        }
+                    });
                 }
             }
         }

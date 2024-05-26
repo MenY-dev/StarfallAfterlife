@@ -10,7 +10,7 @@ namespace StarfallAfterlife.Bridge.Profiles
 {
     public class SfaProfileInfo
     {
-        public static readonly int CurrentVersion = 1;
+        public static readonly int CurrentVersion = 2;
 
         [JsonPropertyName("version")]
         public int Version { get; set; } = CurrentVersion;

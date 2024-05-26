@@ -10,13 +10,13 @@ namespace StarfallAfterlife.Bridge.Server.Discovery.AI
 {
     public class AIActionQueue : AIAction
     {
-        public List<AIAction> Queue { get; } = new();
+        public List<IAINode> Queue { get; } = new();
 
-        protected List<AIActionState> Results { get; } = new();
+        protected List<AINodeState> Results { get; } = new();
 
-        protected AIAction CurrentAction { get; set; }
+        protected IAINode CurrentAction { get; set; }
 
-        public AIAction LastAction { get; protected set; }
+        public IAINode LastAction { get; protected set; }
 
         public QueueCompletionHandling CompletionHandling { get; set; }
 
@@ -31,7 +31,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery.AI
         {
             base.Update();
 
-            if (State is not AIActionState.Started)
+            if (State is not AINodeState.Started)
                 return;
 
             var action = CurrentAction;
@@ -43,15 +43,15 @@ namespace StarfallAfterlife.Bridge.Server.Discovery.AI
             }
 
             if (action is null ||
-                action.State is not AIActionState.Started)
+                action.State is not AINodeState.Started)
             {
                 action?.Stop();
 
                 if (CompletionHandling is QueueCompletionHandling.All &&
                     action is not null &&
-                    action.State is not AIActionState.Completed)
+                    action.State is not AINodeState.Completed)
                 {
-                    State = AIActionState.Failed;
+                    State = AINodeState.Failed;
                     Queue.Clear();
                     return;
                 }
@@ -72,13 +72,13 @@ namespace StarfallAfterlife.Bridge.Server.Discovery.AI
 
             if (CompletionHandling is QueueCompletionHandling.Any)
             {
-                State = Results.Any(r => r is not AIActionState.Completed) ?
-                        AIActionState.Completed :
-                        AIActionState.Failed;
+                State = Results.Any(r => r is not AINodeState.Completed) ?
+                        AINodeState.Completed :
+                        AINodeState.Failed;
             }
             else
             {
-                State = AIActionState.Completed;
+                State = AINodeState.Completed;
             }
 
             return;
@@ -86,7 +86,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery.AI
 
         public override void Stop()
         {
-            if (State is AIActionState.Started)
+            if (State is AINodeState.Started)
                 CurrentAction?.Stop();
 
             Queue.Clear();
@@ -94,9 +94,9 @@ namespace StarfallAfterlife.Bridge.Server.Discovery.AI
             base.Stop();
         }
 
-        protected virtual AIAction StartNextAction()
+        protected virtual IAINode StartNextAction()
         {
-            AIAction newAction = null;
+            IAINode newAction = null;
 
             while (newAction is null && Queue.Count > 0)
             {

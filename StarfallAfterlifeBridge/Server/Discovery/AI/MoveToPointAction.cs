@@ -28,7 +28,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery.AI
 
             if (Fleet?.Location.GetDistanceTo(Point) is null or < 0.01f)
             {
-                State = AIActionState.Completed;
+                State = AINodeState.Completed;
             }
         }
     }

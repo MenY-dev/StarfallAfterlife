@@ -1023,7 +1023,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
             lock (_characterLocker)
             {
                 var dtb = SfaDatabase.Instance;
-                AbilitiesCooldown[abilityId] = DateTime.Now.AddSeconds(dtb.GetAbility(abilityId)?.Cooldown ?? 0);
+                AbilitiesCooldown[abilityId] = DateTime.UtcNow.AddSeconds(dtb.GetAbility(abilityId)?.Cooldown ?? 0);
                 Ability.Use(this, abilityId, systemId, hex);
                 DiscoveryClient?.SyncAbilities(Fleet);
             }
@@ -1031,7 +1031,7 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
         public KeyValuePair<int, float>[] GetAbilitiesCooldown()
         {
-            var now = DateTime.Now;
+            var now = DateTime.UtcNow;
 
             lock (_characterLocker)
                 return AbilitiesCooldown.Select(a => KeyValuePair.Create(

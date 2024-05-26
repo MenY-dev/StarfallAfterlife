@@ -31,22 +31,27 @@ namespace StarfallAfterlife.Bridge.Server.Discovery.AI
 
             if (IsConnected == false ||
                 fleet is null ||
-                fleet.State != FleetState.InGalaxy)
+                fleet.State != FleetState.InGalaxy ||
+                fleet.GetBattle() is not null)
                 return;
 
-            var time = DateTime.Now;
+            var time = DateTime.UtcNow;
             var faction = fleet.Faction;
             var targetFleet = fleet.AttackTarget as DiscoveryFleet;
 
             if (targetFleet is null)
             {
-                var enemies = fleet.System?.Fleets.Where(f =>
-                    f != fleet &&
-                    f.State == FleetState.InGalaxy &&
-                    f.Faction.IsEnemy(faction, false) &&
-                    fleet.CanAttack(f) &&
-                    fleet.GetBattle() is null &&
-                    fleet.IsVisible(f));
+                bool IsJoiningAvailable(DiscoveryFleet fleet) =>
+                    fleet.GetBattle() is not StarSystemBattle battle ||
+                    (battle.IsDungeon == false && battle.Members.Count(m => m.Fleet is DiscoveryAiFleet) < 1);
+
+                var enemies = fleet.System?.Fleets.Where(enemy =>
+                    enemy != fleet &&
+                    enemy.State == FleetState.InGalaxy &&
+                    enemy.Faction.IsEnemy(faction, false) &&
+                    IsJoiningAvailable(enemy) == true &&
+                    fleet.CanAttack(enemy) &&
+                    fleet.IsVisible(enemy));
 
                 if ((time - AttackEndTime).TotalSeconds > AttackCooldown &&
                     enemies.Any() == true)
@@ -68,7 +73,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery.AI
             targetFleet = fleet.AttackTarget as DiscoveryFleet;
 
             if (targetFleet is null &&
-                CurrentAction is null or not { State: AIActionState.Started })
+                CurrentAction is null or not { State: AINodeState.Started })
             {
                 StartAction(new AIActionQueue
                 {
@@ -85,12 +90,12 @@ namespace StarfallAfterlife.Bridge.Server.Discovery.AI
             base.Update();
         }
 
-        protected override void OnActionFinished(AIAction action)
+        protected override void OnActionFinished(IAINode action)
         {
             base.OnActionFinished(action);
 
             if (action is AttackAction)
-                AttackEndTime = DateTime.Now;
+                AttackEndTime = DateTime.UtcNow;
         }
 
         protected Vector2 CreateRandowWaypoint()

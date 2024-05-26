@@ -15,20 +15,20 @@ namespace StarfallAfterlife.Bridge.Server.Discovery.AI
 
         public StarSystem System => Fleet.System;
 
-        protected AIAction CurrentAction { get; set; }
+        protected IAINode CurrentAction { get; set; }
 
         public virtual void Update()
         {
-            if (CurrentAction is AIAction action)
+            if (CurrentAction is IAINode action)
             {
-                if (action.State is not AIActionState.Started)
+                if (action.State is not AINodeState.Started)
                     StopCurrentAction();
                 else
                     action.Update();
             }
         }
 
-        public virtual void StartAction(AIAction action)
+        public virtual void StartAction(IAINode action)
         {
             StopCurrentAction();
 
@@ -52,7 +52,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery.AI
             }
         }
 
-        protected virtual void OnActionFinished(AIAction action)
+        protected virtual void OnActionFinished(IAINode action)
         {
 
         }

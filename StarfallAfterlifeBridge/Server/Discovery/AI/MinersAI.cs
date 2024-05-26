@@ -17,7 +17,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery.AI
             if (IsConnected == false)
                 return;
 
-            if (CurrentAction is null or not { State: AIActionState.Started })
+            if (CurrentAction is null or not { State: AINodeState.Started })
             {
                 StartAction(new AIActionQueue
                 {

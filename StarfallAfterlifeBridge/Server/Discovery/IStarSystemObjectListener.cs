@@ -9,6 +9,6 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
     public interface IStarSystemObjectListener : IDiscoveryListener
     {
         void OnObjectSpawned(StarSystemObject obj);
-        void OnObjectDestroed(StarSystemObject obj);
+        void OnObjectDestroed(int systemId, DiscoveryObjectType objectType, int objectId);
     }
 }

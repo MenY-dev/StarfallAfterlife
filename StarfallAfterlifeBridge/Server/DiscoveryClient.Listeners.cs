@@ -60,9 +60,9 @@ namespace StarfallAfterlife.Bridge.Server
             }
         });
 
-        void IStarSystemObjectListener.OnObjectDestroed(StarSystemObject obj) => Invoke(() =>
+        void IStarSystemObjectListener.OnObjectDestroed(int systemId, DiscoveryObjectType objectType, int objectId) => Invoke(() =>
         {
-            SendDisconnectObject(obj);
+            SendDisconnectObject(systemId, objectType, objectId);
         });
 
         void IFleetListener.OnFleetMoved(DiscoveryFleet fleet) => Invoke(() =>

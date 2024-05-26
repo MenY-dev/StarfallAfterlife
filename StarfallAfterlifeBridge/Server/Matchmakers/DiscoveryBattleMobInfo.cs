@@ -46,7 +46,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                     BehaviorTreeName = mob.BehaviorTreeName,
                     MobInternalName = mob.InternalName,
                     MobFaction = mob.Faction,
-                    Tags = mob.Tags.ToList(),
+                    Tags = mob.Tags?.ToList() ?? new(),
                 },
                 Cargo = new(),
             };

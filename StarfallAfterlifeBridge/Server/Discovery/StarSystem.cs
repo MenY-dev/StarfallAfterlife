@@ -198,13 +198,20 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
         protected virtual void UpdateFleets()
         {
-            foreach (var fleet in Fleets)
-                fleet?.Update();
+            for (int i = Fleets.Count - 1; i >= 0; i--)
+            {
+                DiscoveryFleet fleet = Fleets.ElementAtOrDefault(i);
+
+                if (fleet is null || fleet.System != this)
+                    continue;
+
+                fleet.Update();
+            }
         }
 
         private void UpdateRichAsteroids()
         {
-            var time = DateTime.Now;
+            var time = DateTime.UtcNow;
 
             foreach (var asteroid in RichAsteroids)
             {
@@ -294,11 +301,11 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
             Fleets.Remove(fleet);
             fleet.ParentObject = null;
-            Broadcast<IStarSystemObjectListener>(l => l.OnObjectDestroed(fleet));
+            Broadcast<IStarSystemObjectListener>(l => l.OnObjectDestroed(Id, fleet.Type, fleet.Id));
         }
 
         public void AddDeferredAction(Action action, TimeSpan waitingTime) =>
-            AddDeferredAction(action, DateTime.Now + waitingTime);
+            AddDeferredAction(action, DateTime.UtcNow + waitingTime);
 
         public void AddDeferredAction(Action action, DateTime invokeTime)
         {
@@ -310,7 +317,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
         public void UpdateDefferedActions()
         {
-            var now = DateTime.Now;
+            var now = DateTime.UtcNow;
             var toRemove = new List<Action>();
 
             foreach (var action in DefferedActions)
@@ -326,7 +333,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                 DefferedActions.Remove(action);
         }
 
-        public virtual SystemHex GetNearestSafeHex(DiscoveryFleet fleet, SystemHex targetHex, bool ignoreTargetHex = true)
+        public virtual SystemHex GetNearestSafeHex(DiscoveryFleet fleet, SystemHex targetHex, bool ignoreTargetHex = true, bool includeObjects = true)
         {
             if (fleet is null)
                 return targetHex;
@@ -339,8 +346,10 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                 hexes = Enumerable.Repeat(targetHex, 1).Concat(hexes);
 
             closedHexes.AddRange(ActiveBattles.Select(s => s.Hex));
-            closedHexes.AddRange(GetAllObjects(false).Select(s => s.Hex));
             closedHexes.AddRange(Fleets.Where(f => f.Faction.IsEnemy(myFaction)).Select(s => s.Hex));
+
+            if (includeObjects == true)
+                closedHexes.AddRange(GetAllObjects(false).Select(s => s.Hex));
 
             foreach (var hex in hexes)
             {

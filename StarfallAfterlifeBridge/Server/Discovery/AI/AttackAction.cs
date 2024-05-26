@@ -42,7 +42,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery.AI
                 (Target is DiscoveryFleet targetFleet &&
                 (Fleet.CanAttack(targetFleet) == false || Fleet.MayBeVisible(targetFleet) == false)))
             {
-                State = AIActionState.Failed;
+                State = AINodeState.Failed;
                 Fleet.Stop();
             }
         }

@@ -70,9 +70,25 @@ namespace StarfallAfterlife.Bridge.Database
             return Mobs?.Values?.FirstOrDefault(m => m.InternalName == name);
         }
 
+        public DiscoveryMobInfo GetServiceFleet(Faction faction) =>
+            GetMob(GetFactionServiceFleetName(faction));
+
         public IEnumerable<DiscoveryMobInfo> GetCircleMobs(int accellLevel)
         {
             return Circles?.GetValueOrDefault(accellLevel) ?? new();
         }
+
+        public static string GetFactionServiceFleetName(Faction faction) => faction switch
+        {
+            Faction.Deprived => "dpr_disc_fleet",
+            Faction.Eclipse => "ecl_disc_fleet",
+            Faction.Vanguard => "vng_disc_fleet",
+            Faction.Screechers => "screechers_fleets",
+            Faction.Nebulords => "nebulords_fleet",
+            Faction.Pyramid => "pyramid_fleets",
+            Faction.MineworkerUnion => "miners_fleets",
+            Faction.FreeTraders => "traders_fleet",
+            _ => null,
+        };
     }
 }

@@ -15,6 +15,8 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
         public Vector2 HexOffset { get; set; }
 
+        public bool IsDestroyed { get; set; }
+
         public BattleMember(DiscoveryFleet fleet, BattleRole role, Vector2 hexOffset)
         {
             Fleet = fleet;
