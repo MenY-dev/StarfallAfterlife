@@ -385,8 +385,8 @@
         "fleet_min": -1,
         "fleet_max": -1,
         "drop_state": true,
-        "role": 0,
-        "bt": "/Game/gameplay/ai/BtSniper.BtSniper",
+        "role": 1,
+        "bt": "/Game/gameplay/ai/ships/BT_Sniper.BT_Sniper",
         "tags": [],
         "drop_tree": {
           "type": 1,
@@ -791,8 +791,8 @@
         "fleet_min": -1,
         "fleet_max": -1,
         "drop_state": true,
-        "role": 0,
-        "bt": "/Game/gameplay/ai/BtFighter.BtFighter",
+        "role": 3,
+        "bt": "/Game/gameplay/ai/ships/BT_ShipForceFindEnemy.BT_ShipForceFindEnemy",
         "tags": [],
         "drop_tree": {
           "type": 1,
@@ -1047,8 +1047,8 @@
         "fleet_min": -1,
         "fleet_max": -1,
         "drop_state": true,
-        "role": 0,
-        "bt": "/Game/gameplay/ai/BtFighter.BtFighter",
+        "role": 3,
+        "bt": "/Game/gameplay/ai/ships/BT_ShipForceFindEnemy.BT_ShipForceFindEnemy",
         "tags": [],
         "drop_tree": {
           "type": 1,
@@ -1303,8 +1303,8 @@
         "fleet_min": -1,
         "fleet_max": -1,
         "drop_state": true,
-        "role": 0,
-        "bt": "/Game/gameplay/ai/BtFighter.BtFighter",
+        "role": 3,
+        "bt": "/Game/gameplay/ai/ships/BT_ShipForceFindEnemy.BT_ShipForceFindEnemy",
         "tags": [],
         "drop_tree": {
           "type": 1,

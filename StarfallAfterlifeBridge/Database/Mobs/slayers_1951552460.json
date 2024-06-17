@@ -193,7 +193,7 @@
         "fleet_min": -1,
         "fleet_max": -1,
         "drop_state": true,
-        "role": 0,
+        "role": 3,
         "bt": "",
         "tags": [],
         "drop_tree": {
@@ -603,7 +603,7 @@
         "fleet_min": -1,
         "fleet_max": -1,
         "drop_state": true,
-        "role": 0,
+        "role": 3,
         "bt": "",
         "tags": [],
         "drop_tree": {
@@ -1013,7 +1013,7 @@
         "fleet_min": -1,
         "fleet_max": -1,
         "drop_state": true,
-        "role": 0,
+        "role": 3,
         "bt": "",
         "tags": [],
         "drop_tree": {
@@ -1423,7 +1423,7 @@
         "fleet_min": -1,
         "fleet_max": -1,
         "drop_state": true,
-        "role": 0,
+        "role": 3,
         "bt": "",
         "tags": [],
         "drop_tree": {

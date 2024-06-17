@@ -505,7 +505,7 @@
         "fleet_max": -1,
         "drop_state": true,
         "role": 0,
-        "bt": "",
+        "bt": "/Game/gameplay/ai/BTDefendPirateBoss.BTDefendPirateBoss",
         "tags": [],
         "drop_tree": {
           "type": 1,
@@ -723,7 +723,7 @@
         "fleet_max": -1,
         "drop_state": true,
         "role": 0,
-        "bt": "",
+        "bt": "/Game/gameplay/ai/BTDefendPirateBoss.BTDefendPirateBoss",
         "tags": [],
         "drop_tree": {
           "type": 1,
@@ -941,7 +941,7 @@
         "fleet_max": -1,
         "drop_state": true,
         "role": 0,
-        "bt": "",
+        "bt": "/Game/gameplay/ai/BTDefendPirateBoss.BTDefendPirateBoss",
         "tags": [],
         "drop_tree": {
           "type": 1,
@@ -1159,7 +1159,7 @@
         "fleet_max": -1,
         "drop_state": true,
         "role": 0,
-        "bt": "",
+        "bt": "/Game/gameplay/ai/BTDefendPirateBoss.BTDefendPirateBoss",
         "tags": [],
         "drop_tree": {
           "type": 1,
@@ -1377,7 +1377,7 @@
         "fleet_max": -1,
         "drop_state": true,
         "role": 0,
-        "bt": "",
+        "bt": "/Game/gameplay/ai/BTDefendPirateBoss.BTDefendPirateBoss",
         "tags": [],
         "drop_tree": {
           "type": 1,
@@ -1595,7 +1595,7 @@
         "fleet_max": -1,
         "drop_state": true,
         "role": 0,
-        "bt": "",
+        "bt": "/Game/gameplay/ai/BTDefendPirateBoss.BTDefendPirateBoss",
         "tags": [],
         "drop_tree": {
           "type": 1,
@@ -1813,7 +1813,7 @@
         "fleet_max": -1,
         "drop_state": true,
         "role": 0,
-        "bt": "",
+        "bt": "/Game/gameplay/ai/BTDefendPirateBoss.BTDefendPirateBoss",
         "tags": [],
         "drop_tree": {
           "type": 1,
@@ -2031,7 +2031,7 @@
         "fleet_max": -1,
         "drop_state": true,
         "role": 0,
-        "bt": "",
+        "bt": "/Game/gameplay/ai/BTDefendPirateBoss.BTDefendPirateBoss",
         "tags": [],
         "drop_tree": {
           "type": 1,
@@ -2249,7 +2249,7 @@
         "fleet_max": -1,
         "drop_state": true,
         "role": 0,
-        "bt": "",
+        "bt": "/Game/gameplay/ai/BTDefendPirateBoss.BTDefendPirateBoss",
         "tags": [],
         "drop_tree": {
           "type": 1,

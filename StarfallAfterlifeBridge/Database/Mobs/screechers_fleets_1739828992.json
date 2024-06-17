@@ -3820,6 +3820,16 @@
           "childs": [
             {
               "type": 2,
+              "chance": 0.035,
+              "weight": 1,
+              "item_id": 1281308446,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            },
+            {
+              "type": 2,
               "chance": 0.14,
               "weight": 1,
               "item_id": 812786784,
@@ -5529,7 +5539,18 @@
           "item_type": 0,
           "item_min": 1,
           "item_max": 1,
-          "childs": []
+          "childs": [
+            {
+              "type": 2,
+              "chance": 0.035,
+              "weight": 1,
+              "item_id": 1281308446,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            }
+          ]
         }
       }
     },
@@ -6591,7 +6612,18 @@
           "item_type": 0,
           "item_min": 1,
           "item_max": 1,
-          "childs": []
+          "childs": [
+            {
+              "type": 2,
+              "chance": 0.05,
+              "weight": 1,
+              "item_id": 1281308446,
+              "item_type": 2,
+              "item_min": 1,
+              "item_max": 2,
+              "childs": null
+            }
+          ]
         }
       }
     },

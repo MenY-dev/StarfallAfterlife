@@ -150,8 +150,8 @@
         "fleet_min": -1,
         "fleet_max": -1,
         "drop_state": true,
-        "role": 0,
-        "bt": "/Game/gameplay/ai/BtSniper.BtSniper",
+        "role": 1,
+        "bt": "/Game/gameplay/ai/ships/BT_Sniper.BT_Sniper",
         "tags": [],
         "drop_tree": {
           "type": 1,
@@ -342,7 +342,7 @@
         "fleet_min": -1,
         "fleet_max": -1,
         "drop_state": true,
-        "role": 0,
+        "role": 2,
         "bt": "/Game/gameplay/ai/BtScout.BtScout",
         "tags": [],
         "drop_tree": {
@@ -494,7 +494,7 @@
         "fleet_min": -1,
         "fleet_max": -1,
         "drop_state": true,
-        "role": 0,
+        "role": 2,
         "bt": "/Game/gameplay/ai/BtScout.BtScout",
         "tags": [],
         "drop_tree": {
@@ -646,7 +646,7 @@
         "fleet_min": -1,
         "fleet_max": -1,
         "drop_state": true,
-        "role": 0,
+        "role": 2,
         "bt": "/Game/gameplay/ai/BtScout.BtScout",
         "tags": [],
         "drop_tree": {
