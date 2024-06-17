@@ -1,7 +1,10 @@
-﻿using StarfallAfterlife.Bridge.Database;
+﻿using StarfallAfterlife.Bridge.Collections;
+using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Mathematics;
+using StarfallAfterlife.Bridge.Primitives;
 using StarfallAfterlife.Bridge.Server.Characters;
 using StarfallAfterlife.Bridge.Server.Discovery;
+using StarfallAfterlife.Bridge.Server.Galaxy;
 using StarfallAfterlife.Bridge.Server.Matchmakers;
 using StarfallAfterlife.Bridge.Server.Quests;
 using StarfallAfterlife.Bridge.Tasks;
@@ -48,6 +51,23 @@ namespace StarfallAfterlife.Bridge.Server
                         item?.Update();
 
                     SendQuestDataUpdate();
+
+                    var rnd = new Random128();
+
+                    if (rnd.NextDouble() < 0.33 &&
+                        Galaxy?.Map is GalaxyMap map)
+                    {
+                        var systemsArround = map
+                            .GetSystemsArround(system, 1, false)
+                            .Skip(1)
+                            .ToList();
+
+                        if (systemsArround.Count > 0)
+                        {
+                            Server?.SpawnMainFactionPatrol(
+                                systemsArround[rnd.Next(0, systemsArround.Count)].Key.Id);
+                        }
+                    }
                 }
 
                 RequestDiscoveryObjectSync(fleet);

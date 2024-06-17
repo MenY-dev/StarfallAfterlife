@@ -49,8 +49,6 @@ namespace StarfallAfterlife.Bridge.Server
 
         public IdCollection<CharacterParty> Parties { get; } = new() { StartId = 1 };
 
-        public DynamicMobDatabase DynamicMobs { get; } = new();
-
         public Uri InstanceManagerAddress { get; set; }
 
         public bool UsePortForwarding { get; set; } = false;
@@ -72,8 +70,6 @@ namespace StarfallAfterlife.Bridge.Server
         protected object ClientsLocker { get; } = new();
 
         protected object QuestsGeneratorLocker { get; } = new();
-
-        protected object DynamicMobsLocker { get; } = new();
 
         public static Version Version => AssemblyVersion.Value;
 
@@ -467,33 +463,6 @@ namespace StarfallAfterlife.Bridge.Server
                 }
                 catch { }
             }
-        }
-
-        public void UseDynamicMobs(Action<DynamicMobDatabase> action)
-        {
-            lock (DynamicMobsLocker)
-                action?.Invoke(DynamicMobs);
-        }
-
-        public DiscoveryMobInfo GetMobInfo(int id)
-        {
-            DiscoveryMobInfo mob = null;
-
-            if (id < -1)
-            {
-                UseDynamicMobs(dtb => mob = dtb[-id]);
-            }
-            else if (id > -1)
-            {
-                mob = Realm?.MobsDatabase?.GetMob(id);
-            }
-
-            return mob;
-        }
-
-        public DiscoveryMobInfo GetMobInfo(string name)
-        {
-            return Realm?.MobsDatabase?.GetMob(name);
         }
 
         public virtual void Invoke(Action action) => ActionBuffer?.Invoke(action);

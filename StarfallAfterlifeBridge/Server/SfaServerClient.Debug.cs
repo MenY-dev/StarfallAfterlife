@@ -246,43 +246,53 @@ namespace StarfallAfterlife.Bridge.Server
                     if (CurrentCharacter?.Fleet is UserFleet charFleet &&
                         charFleet.System is StarSystem starSystem)
                     {
-                        var mob = new GalaxyPatrolMobGenerator(Server?.Realm)
+                        var faction = Faction.Deprived;
+                        var info = new GalaxyPatrolMobGenerator(Server?.Realm)
                         {
-                            Faction = Faction.Pyramid,
+                            Faction = faction,
+                            Archetype = AIArchetype.Miner,
                             Level = 10,
                         }.Build();
 
-                        if (mob is null)
+                        if (info is null)
                         {
                             SendToChat(channel, label, "Mob creation error");
                             return;
                         }
 
-                        Server.UseDynamicMobs(dtb => dtb.Add(mob));
+                        var mob = new DynamicMob()
+                        {
+                            Info = info,
+                            Type = faction switch
+                            {
+                                Faction.Deprived => DynamicMobType.DeprivedPatrol,
+                                Faction.Eclipse => DynamicMobType.EclipsePatrol,
+                                Faction.Vanguard => DynamicMobType.VanguardPatrol,
+                                _ => DynamicMobType.None,
+                            }
+                        };
+
+                        if  (Server.AddDynamicMob(mob) == false)
+                        {
+                            SendToChat(channel, label, "Mob already exist");
+                            return;
+                        }
 
                         var fleet = new DiscoveryAiFleet
                         {
-                            Id = mob.Id,
-                            Faction = mob.Faction,
-                            Name = "nebtrashlvl2",
-                            MobId = -mob.Id,
-                            Level = mob.Level,
                             FactionGroup = 1,
                             BaseVision = 0,
                             AgroVision = -100,
-                            BaseSpeed = 5,
                             UseRespawn = false,
-                            Hull = mob.Ships?.ElementAtOrDefault(mob.MainShipIndex)?.Data?.Hull ??
-                                   mob.Ships?.FirstOrDefault()?.Data?.Hull ?? 0,
                         };
 
-                        fleet.SetLocation(SystemHexMap.HexToSystemPoint(
-                            starSystem.GetNearestSafeHex(charFleet, charFleet.Hex, true)));
-
-                        fleet.SetAI(new GalaxyPatrollingAI()
+                        fleet.Init(mob, new GalaxyPatrollingAI()
                         {
                             Archetype = AIArchetype.Miner,
                         });
+
+                        fleet.SetLocation(SystemHexMap.HexToSystemPoint(
+                            starSystem.GetNearestSafeHex(charFleet, charFleet.Hex, true)));
 
                         Galaxy.BeginPreUpdateAction(_ =>
                         {

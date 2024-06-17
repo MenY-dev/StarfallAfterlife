@@ -12,33 +12,42 @@ namespace StarfallAfterlife.Bridge.Server
 {
     public class DynamicMobDatabase
     {
-        public DiscoveryMobInfo this[int id] { get => Get(id); }
+        public DynamicMob this[int id] { get => Get(id); }
 
-        public SortedList<int, DiscoveryMobInfo> Mobs { get; } = new();
+        public SortedList<int, DynamicMob> Mobs { get; } = new();
 
         private int _maxId = FleetIdInfo.DynamicMobsStartIndex;
         private Queue<int> _freeIds = new();
+        private Dictionary<DynamicMobType, int> _mobStats = new(); 
 
-        public DiscoveryMobInfo Get(int id)
+        public DynamicMob Get(int id)
         {
             return Mobs.GetValueOrDefault(id);
         }
 
-        public void Add(DiscoveryMobInfo mob)
+        public int GetStats(DynamicMobType type) => _mobStats.GetValueOrDefault(type);
+
+        public bool Add(DynamicMob mob)
         {
-            if (mob is null)
-                return;
+            if (mob is null ||
+                mob.Info is null)
+                return false;
+
+            if (Mobs?.ContainsKey(mob.Info.Id) == true)
+                return true;
 
             Add(CreateNewId(), mob);
+            return true;
         }
 
-        protected void Add(int id, DiscoveryMobInfo mob)
+        protected void Add(int id, DynamicMob mob)
         {
             if (mob is null)
                 return;
 
-            mob.Id = id;
+            (mob.Info ??= new()).Id = id;
             _maxId = Math.Max(id, _maxId);
+            _mobStats[mob.Type] = _mobStats.GetValueOrDefault(mob.Type) + 1;
             Mobs[id] = mob;
         }
 
@@ -52,9 +61,13 @@ namespace StarfallAfterlife.Bridge.Server
 
         public bool Remove(int id)
         {
-            if (Mobs.Remove(id) == true)
+            if (Mobs.Remove(id, out var mob) == true)
             {
                 _freeIds.Enqueue(id);
+
+                if (mob is not null)
+                    _mobStats[mob.Type] = Math.Max(0, _mobStats.GetValueOrDefault(mob.Type) - 1);
+
                 return true;
             }
 

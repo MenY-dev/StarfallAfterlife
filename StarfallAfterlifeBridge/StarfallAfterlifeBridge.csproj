@@ -145,7 +145,13 @@
     <None Update="Database\Mobs\dpatrol_683020775.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Database\Mobs\dpr_disc_fleet_1509349585.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Database\Mobs\dragoons_240764413.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\ecl_disc_fleet_873475987.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Database\Mobs\entrepreneurs_390046621.json">
@@ -548,6 +554,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Database\Mobs\vendors_178785322.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Database\Mobs\vng_disc_fleet_319196146.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Database\Mobs\vpatrol_506049257.json">

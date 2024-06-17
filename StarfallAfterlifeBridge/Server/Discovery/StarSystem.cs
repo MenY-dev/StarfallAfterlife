@@ -144,27 +144,17 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                         mobsDatabase.GetMob(mob.MobId) is DiscoveryMobInfo mobInfo)
                     {
                         if (mob.ObjectType != GalaxyMapObjectType.None ||
-                            mob.ObjectId > -1)
+                            mob.ObjectId > -1 ||
+                            mobInfo.IsSpecOps() == true ||
+                            mobInfo.IsServiceFleet() == true)
                             continue;
 
-                        var fleet = new DiscoveryAiFleet
-                        {
-                            Id = mob.FleetId,
-                            Faction = mobInfo.Faction,
-                            FactionGroup = mob.FactionGroup,
-                            Name = mobInfo.InternalName,
-                            Level = mobInfo.Level,
-                            BaseSpeed = 4,
-                            MobId = mobInfo.Id,
-                            Hull = mobInfo.GetMainShipHull(),
-                            Hex = mob.SpawnHex,
-                        };
+                        var fleet = new DiscoveryAiFleet();
 
-                        fleet.SetLocation(SystemHexMap.HexToSystemPoint(mob.SpawnHex), true);
-                        fleet.SetAI(fleet.Faction switch
+                        fleet.Init(mob, mobInfo, mobInfo.Faction switch
                         {
                             Faction.Deprived or
-                            Faction.Eclipse or 
+                            Faction.Eclipse or
                             Faction.Vanguard or
                             Faction.Screechers or
                             Faction.Nebulords or
@@ -281,7 +271,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             if (Fleets.Contains(fleet) == false)
             {
                 if (location is not null)
-                    fleet.SetLocation(location.Value);
+                    fleet.SetLocation(location.Value, true);
 
                 Fleets.Add(fleet);
             }
@@ -290,6 +280,8 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
             if (GetFleetBattle(fleet) is null)
                 fleet.SetFleetState(FleetState.InGalaxy);
+            else
+                fleet.SetFleetState(FleetState.InBattle);
 
             Broadcast<IStarSystemObjectListener>(l => l.OnObjectSpawned(fleet));
         }

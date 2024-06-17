@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StarfallAfterlife.Bridge.Server;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -37,6 +38,21 @@ namespace StarfallAfterlife.Bridge.Database
 
             return false;
         }
+
+        public static IEnumerable<Faction> GetMainFactions()
+        {
+            yield return Faction.Deprived;
+            yield return Faction.Eclipse;
+            yield return Faction.Vanguard;
+        }
+
+        public static DynamicMobType ToPatrolType(this Faction self) => self switch
+        {
+            Faction.Deprived => DynamicMobType.DeprivedPatrol,
+            Faction.Eclipse => DynamicMobType.EclipsePatrol,
+            Faction.Vanguard => DynamicMobType.VanguardPatrol,
+            _ => DynamicMobType.None,
+        };
 
         public static string GetName(this Faction self) => self switch
         {

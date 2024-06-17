@@ -67,7 +67,7 @@ namespace StarfallAfterlife.Bridge.Server
                 FleetIdInfo.IsDynamicMob(mob.Id) == true &&
                 mob.UseRespawn == false)
             {
-                UseDynamicMobs(dtb => dtb.Remove(mob.Id));
+                RemoveDynamicMob(mob.Id);
                 Galaxy.BeginPreUpdateAction(_ => mob.System?.RemoveFleet(mob));
             }
         });
