@@ -6,6 +6,7 @@ using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Launcher;
 using StarfallAfterlife.Bridge.Serialization;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -16,6 +17,9 @@ namespace StarfallAfterlife.Launcher.MobsEditor
         public Dictionary<string, DiscoveryMobInfo> Mobs { get; protected set; }
 
         public SelectionModel<KeyValuePair<string, DiscoveryMobInfo>> Selection { get; } = new();
+
+        public string MobsDirectory => App.Launcher?.GameDirectory is string gameDir ?
+            Path.Combine(gameDir, "Msk", "starfall_game", "Mgrs", "sfmgr", "mobs") : null;
 
         public MobsEditorWindow()
         {
@@ -38,9 +42,7 @@ namespace StarfallAfterlife.Launcher.MobsEditor
             var list = this.Find<ListBox>("MobsList");
 
             if (list is not null &&
-                App.Launcher is SfaLauncher launcher &&
-                launcher.GameDirectory is string gameDir &&
-                Path.Combine(gameDir, "Msk", "starfall_game", "Mgrs", "sfmgr", "mobs") is string mobsDir &&
+                MobsDirectory is string mobsDir &&
                 Directory.Exists(mobsDir) == true)
             {
                 var files = new List<string>();
@@ -52,21 +54,37 @@ namespace StarfallAfterlife.Launcher.MobsEditor
 
                     foreach (var file in files)
                     {
-                        try
-                        {
-                            var mob = JsonHelpers.DeserializeUnbuffered<DiscoveryMobInfo>(File.ReadAllText(file));
+                        var mob = LoadMob(file);
 
-                            if (mob is not null)
-                                Mobs.Add(file, mob);
-                        }
-                        catch { }
+                        if (mob is not null)
+                            Mobs.Add(file, mob);
                     }
                 }
                 catch { }
 
-                list.ItemsSource = null;
+                var scroll = list.Scroll.Offset;
                 list.ItemsSource = Mobs;
+                list.CoerceValue(ListBox.ItemsSourceProperty);
+                list.UpdateLayout();
+                list.Scroll.Offset = scroll;
             }
+        }
+
+        public DiscoveryMobInfo LoadMob(string path)
+        {
+            try
+            {
+                return JsonHelpers.DeserializeUnbuffered<DiscoveryMobInfo>(File.ReadAllText(path));
+            }
+            catch { }
+
+            return null;
+        }
+
+        public void OpenFolder()
+        {
+            if (MobsDirectory is string mobsDir)
+                Process.Start("explorer.exe", $"\"{mobsDir}\"");
         }
 
         protected override void OnLoaded(RoutedEventArgs e)

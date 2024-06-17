@@ -3,6 +3,7 @@ using Avalonia.Data;
 using Avalonia.Data.Converters;
 using HarfBuzzSharp;
 using StarfallAfterlife.Bridge.Database;
+using StarfallAfterlife.Bridge.Generators;
 using StarfallAfterlife.Bridge.Networking;
 using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Server.Discovery;
@@ -305,5 +306,18 @@ namespace StarfallAfterlife.Launcher.MobsEditor
         }
 
         protected DiscoveryMobShipData GetMainShipData() => Info?.Ships?.ElementAtOrDefault(MainShipIndex);
+
+
+        public void GenerateDrop()
+        {
+            foreach (var item in Ships)
+                item.GenerateDrop();
+        }
+
+        public void ClearDrop()
+        {
+            foreach (var item in Ships)
+                item.ClearDrop();
+        }
     }
 }

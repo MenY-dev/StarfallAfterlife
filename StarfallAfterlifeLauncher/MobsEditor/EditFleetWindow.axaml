@@ -85,6 +85,15 @@
 							</ItemsControl>
 						</Grid>
 					</DockPanel>
+					<Button Content="Generate Drop" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center">
+						<Button.Flyout>
+							<MenuFlyout>
+								<MenuItem Header="Generate" Command="{Binding GenerateDrop}"/>
+								<MenuItem Header="Clear"  Command="{Binding ClearDrop}"/>
+								<MenuItem Header="Cancel"/>
+							</MenuFlyout>
+						</Button.Flyout>
+					</Button>
 				</StackPanel>
 			</Panel>
 			<Panel Grid.Column="2" MinWidth="600">
