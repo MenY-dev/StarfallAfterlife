@@ -22,7 +22,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
         public SfaDatabase Database => Realm.Database;
 
-        public Dictionary<int, StarSystem> ActiveSystems { get; } = new();
+        public SortedList<int, StarSystem> ActiveSystems { get; } = new();
 
         public MulticastEvent Listeners { get; } = new();
 
@@ -33,8 +33,6 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
         protected object UpdateLockher { get; } = new();
 
         protected object UpdateActionsLockher { get; } = new();
-
-        public Dictionary<int, TaskBoardEntry> Quests { get; } = new();
 
         protected List<Action<DiscoveryGalaxy>> PreUpdateActions { get; } = new();
 
@@ -47,8 +45,8 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
         public StarSystem GetActiveSystem(int systemId, bool activateSystem = false)
         {
-            if (ActiveSystems.ContainsKey(systemId) == true)
-                return ActiveSystems[systemId];
+            if (ActiveSystems.TryGetValue(systemId, out var system) == true)
+                return system;
 
             if (activateSystem == true)
                 return ActivateStarSystem(systemId);
@@ -82,40 +80,21 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
         {
             lock (UpdateLockher)
             {
-                if (ActiveSystems.ContainsKey(systemId) == true)
-                    return ActiveSystems[systemId];
+                StarSystem system = null;
 
-                var system = new StarSystem(this, systemId);
+                if (ActiveSystems.TryGetValue(systemId, out system) == true)
+                    return system;
+
+                system = new StarSystem(this, systemId);
                 system.Init();
 
                 if (system.Info is null)
                     return null;
 
-                ActiveSystems[systemId] = system;
+                if (ActiveSystems.TryAdd(systemId, system))
+                    return system;
 
-                //var testFleet = new DiscoveryAiFleet
-                //{
-                //    Name = "Abaas",
-                //    Id = 1000000 + systemId * 100 + 0,
-                //    Faction = (Faction)system.Info.Faction,
-                //    FactionGroup = system.Info.FactionGroup,
-                //    Level = 85,
-                //    Speed = 4,
-                //    MobId = 519298432
-                //};
-
-                //testFleet.SetAI(new PatrollingAI(new Vector2[]
-                //{
-                //    new Vector2(5, 4),
-                //    new Vector2(16, -8),
-                //    new Vector2(-14, -8),
-                //    new Vector2(3, 2),
-                //    new Vector2(-7, 1),
-                //}));
-
-                //system.AddFleet(testFleet);
-
-                return system;
+                return null;
             }
         }
 
@@ -172,11 +151,11 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             {
                 HandleUpdateActions(PreUpdateActions);
 
-                foreach (var system in ActiveSystems.Values)
+                for (int i = 0; i < ActiveSystems.Count; i++)
                 {
                     try
                     {
-                        system?.Update();
+                        ActiveSystems.GetValueAtIndex(i)?.Update();
                     }
                     catch (Exception e)
                     {
