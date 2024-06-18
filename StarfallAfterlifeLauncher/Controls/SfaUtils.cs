@@ -73,6 +73,9 @@ namespace StarfallAfterlife.Launcher.Controls
         public static readonly IValueConverter LocalizationKeyToNameConverter =
             new FuncValueConverter<object, string>(v =>
             {
+                if (v is null)
+                    return null;
+
                 try
                 {
                     var culture = CultureInfo.GetCultureInfo(v?.ToString());
