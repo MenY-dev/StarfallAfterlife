@@ -129,7 +129,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 1,
+        "xp": 1500,
         "fleet_min": 1,
         "fleet_max": 1,
         "drop_state": true,
@@ -430,7 +430,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 1,
+        "xp": 3000,
         "fleet_min": 1,
         "fleet_max": 1,
         "drop_state": true,
@@ -714,7 +714,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 1,
+        "xp": 3000,
         "fleet_min": 1,
         "fleet_max": 1,
         "drop_state": true,
@@ -999,7 +999,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 1,
+        "xp": 3000,
         "fleet_min": 1,
         "fleet_max": 1,
         "drop_state": true,
@@ -1287,7 +1287,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 1,
+        "xp": 3000,
         "fleet_min": 1,
         "fleet_max": 1,
         "drop_state": true,
@@ -1457,7 +1457,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 1,
+        "xp": 1500,
         "fleet_min": 1,
         "fleet_max": 1,
         "drop_state": true,
@@ -1668,7 +1668,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 1,
+        "xp": 1500,
         "fleet_min": 1,
         "fleet_max": 1,
         "drop_state": true,
@@ -1952,7 +1952,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 1,
+        "xp": 4500,
         "fleet_min": 1,
         "fleet_max": 1,
         "drop_state": true,
@@ -2250,7 +2250,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 1,
+        "xp": 4500,
         "fleet_min": 1,
         "fleet_max": 1,
         "drop_state": true,
@@ -2470,7 +2470,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 1,
+        "xp": 4500,
         "fleet_min": 1,
         "fleet_max": 1,
         "drop_state": true,
@@ -2742,7 +2742,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 1,
+        "xp": 4500,
         "fleet_min": 1,
         "fleet_max": 1,
         "drop_state": true,
@@ -2959,7 +2959,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 2,
+        "xp": 3000,
         "fleet_min": 2,
         "fleet_max": 2,
         "drop_state": true,
@@ -3138,7 +3138,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 2,
+        "xp": 6000,
         "fleet_min": 2,
         "fleet_max": 2,
         "drop_state": true,
@@ -3322,7 +3322,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 2,
+        "xp": 6000,
         "fleet_min": 2,
         "fleet_max": 2,
         "drop_state": true,
@@ -3605,7 +3605,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 2,
+        "xp": 6000,
         "fleet_min": 2,
         "fleet_max": 2,
         "drop_state": true,
@@ -3861,7 +3861,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 2,
+        "xp": 6000,
         "fleet_min": 2,
         "fleet_max": 2,
         "drop_state": true,
@@ -4021,7 +4021,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 2,
+        "xp": 3000,
         "fleet_min": 2,
         "fleet_max": 2,
         "drop_state": true,
@@ -4287,7 +4287,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 2,
+        "xp": 3000,
         "fleet_min": 2,
         "fleet_max": 2,
         "drop_state": true,
@@ -4528,7 +4528,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 2,
+        "xp": 9000,
         "fleet_min": 2,
         "fleet_max": 2,
         "drop_state": true,
@@ -4759,7 +4759,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 2,
+        "xp": 9000,
         "fleet_min": 2,
         "fleet_max": 2,
         "drop_state": true,
@@ -4981,7 +4981,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 2,
+        "xp": 9000,
         "fleet_min": 2,
         "fleet_max": 2,
         "drop_state": true,
@@ -5226,7 +5226,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 2,
+        "xp": 9000,
         "fleet_min": 2,
         "fleet_max": 2,
         "drop_state": true,
@@ -5447,7 +5447,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 3,
+        "xp": 4500,
         "fleet_min": 3,
         "fleet_max": 3,
         "drop_state": true,
@@ -5630,7 +5630,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 3,
+        "xp": 9000,
         "fleet_min": 3,
         "fleet_max": 3,
         "drop_state": true,
@@ -5797,7 +5797,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 3,
+        "xp": 9000,
         "fleet_min": 3,
         "fleet_max": 3,
         "drop_state": true,
@@ -5975,7 +5975,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 3,
+        "xp": 9000,
         "fleet_min": 3,
         "fleet_max": 3,
         "drop_state": true,
@@ -6181,7 +6181,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 3,
+        "xp": 9000,
         "fleet_min": 3,
         "fleet_max": 3,
         "drop_state": true,
@@ -6327,7 +6327,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 3,
+        "xp": 4500,
         "fleet_min": 3,
         "fleet_max": 3,
         "drop_state": true,
@@ -6485,7 +6485,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 3,
+        "xp": 4500,
         "fleet_min": 3,
         "fleet_max": 3,
         "drop_state": true,
@@ -6706,7 +6706,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 3,
+        "xp": 13500,
         "fleet_min": 3,
         "fleet_max": 3,
         "drop_state": true,
@@ -6946,7 +6946,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 3,
+        "xp": 13500,
         "fleet_min": 3,
         "fleet_max": 3,
         "drop_state": true,
@@ -7130,7 +7130,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 3,
+        "xp": 13500,
         "fleet_min": 3,
         "fleet_max": 3,
         "drop_state": true,
@@ -7402,7 +7402,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 3,
+        "xp": 13500,
         "fleet_min": 3,
         "fleet_max": 3,
         "drop_state": true,
@@ -7582,7 +7582,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 4,
+        "xp": 6000,
         "fleet_min": 4,
         "fleet_max": 4,
         "drop_state": true,
@@ -7832,7 +7832,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 4,
+        "xp": 12000,
         "fleet_min": 4,
         "fleet_max": 4,
         "drop_state": true,
@@ -8087,7 +8087,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 4,
+        "xp": 12000,
         "fleet_min": 4,
         "fleet_max": 4,
         "drop_state": true,
@@ -8333,7 +8333,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 4,
+        "xp": 12000,
         "fleet_min": 4,
         "fleet_max": 4,
         "drop_state": true,
@@ -8508,7 +8508,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 4,
+        "xp": 12000,
         "fleet_min": 4,
         "fleet_max": 4,
         "drop_state": true,
@@ -8640,7 +8640,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 4,
+        "xp": 6000,
         "fleet_min": 4,
         "fleet_max": 4,
         "drop_state": true,
@@ -8840,7 +8840,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 4,
+        "xp": 6000,
         "fleet_min": 4,
         "fleet_max": 4,
         "drop_state": true,
@@ -9050,7 +9050,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 4,
+        "xp": 18000,
         "fleet_min": 4,
         "fleet_max": 4,
         "drop_state": true,
@@ -9239,7 +9239,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 4,
+        "xp": 18000,
         "fleet_min": 4,
         "fleet_max": 4,
         "drop_state": true,
@@ -9447,7 +9447,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 4,
+        "xp": 18000,
         "fleet_min": 4,
         "fleet_max": 4,
         "drop_state": true,
@@ -9739,7 +9739,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 4,
+        "xp": 18000,
         "fleet_min": 4,
         "fleet_max": 4,
         "drop_state": true,
@@ -9926,7 +9926,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 5,
+        "xp": 7500,
         "fleet_min": 5,
         "fleet_max": 5,
         "drop_state": true,
@@ -10088,7 +10088,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 5,
+        "xp": 15000,
         "fleet_min": 5,
         "fleet_max": 5,
         "drop_state": true,
@@ -10309,7 +10309,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 5,
+        "xp": 15000,
         "fleet_min": 5,
         "fleet_max": 5,
         "drop_state": true,
@@ -10526,7 +10526,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 5,
+        "xp": 15000,
         "fleet_min": 5,
         "fleet_max": 5,
         "drop_state": true,
@@ -10745,7 +10745,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 5,
+        "xp": 15000,
         "fleet_min": 5,
         "fleet_max": 5,
         "drop_state": true,
@@ -10924,7 +10924,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 5,
+        "xp": 7500,
         "fleet_min": 5,
         "fleet_max": 5,
         "drop_state": true,
@@ -11103,7 +11103,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 5,
+        "xp": 7500,
         "fleet_min": 5,
         "fleet_max": 5,
         "drop_state": true,
@@ -11299,7 +11299,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 5,
+        "xp": 22500,
         "fleet_min": 5,
         "fleet_max": 5,
         "drop_state": true,
@@ -11485,7 +11485,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 5,
+        "xp": 22500,
         "fleet_min": 5,
         "fleet_max": 5,
         "drop_state": true,
@@ -11718,7 +11718,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 5,
+        "xp": 22500,
         "fleet_min": 5,
         "fleet_max": 5,
         "drop_state": true,
@@ -11887,7 +11887,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 5,
+        "xp": 22500,
         "fleet_min": 5,
         "fleet_max": 5,
         "drop_state": true,
@@ -12060,7 +12060,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 6,
+        "xp": 9000,
         "fleet_min": 6,
         "fleet_max": 6,
         "drop_state": true,
@@ -12253,7 +12253,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 6,
+        "xp": 18000,
         "fleet_min": 6,
         "fleet_max": 6,
         "drop_state": true,
@@ -12485,7 +12485,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 6,
+        "xp": 18000,
         "fleet_min": 6,
         "fleet_max": 6,
         "drop_state": true,
@@ -12836,7 +12836,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 6,
+        "xp": 18000,
         "fleet_min": 6,
         "fleet_max": 6,
         "drop_state": true,
@@ -13035,7 +13035,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 6,
+        "xp": 18000,
         "fleet_min": 6,
         "fleet_max": 6,
         "drop_state": true,
@@ -13157,7 +13157,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 6,
+        "xp": 9000,
         "fleet_min": 6,
         "fleet_max": 6,
         "drop_state": true,
@@ -13323,7 +13323,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 6,
+        "xp": 9000,
         "fleet_min": 6,
         "fleet_max": 6,
         "drop_state": true,
@@ -13526,7 +13526,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 6,
+        "xp": 27000,
         "fleet_min": 6,
         "fleet_max": 6,
         "drop_state": true,
@@ -13789,7 +13789,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 6,
+        "xp": 27000,
         "fleet_min": 6,
         "fleet_max": 6,
         "drop_state": true,
@@ -14032,7 +14032,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 6,
+        "xp": 27000,
         "fleet_min": 6,
         "fleet_max": 6,
         "drop_state": true,
@@ -14220,7 +14220,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 6,
+        "xp": 27000,
         "fleet_min": 6,
         "fleet_max": 6,
         "drop_state": true,
@@ -14414,7 +14414,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 7,
+        "xp": 10500,
         "fleet_min": 7,
         "fleet_max": 7,
         "drop_state": true,
@@ -14602,7 +14602,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 7,
+        "xp": 10500,
         "fleet_min": 7,
         "fleet_max": 7,
         "drop_state": true,
@@ -14906,7 +14906,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 7,
+        "xp": 21000,
         "fleet_min": 7,
         "fleet_max": 7,
         "drop_state": true,
@@ -15190,7 +15190,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 7,
+        "xp": 21000,
         "fleet_min": 7,
         "fleet_max": 7,
         "drop_state": true,
@@ -15390,7 +15390,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 7,
+        "xp": 21000,
         "fleet_min": 7,
         "fleet_max": 7,
         "drop_state": true,
@@ -15601,7 +15601,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 7,
+        "xp": 21000,
         "fleet_min": 7,
         "fleet_max": 7,
         "drop_state": true,
@@ -15778,7 +15778,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 7,
+        "xp": 21000,
         "fleet_min": 7,
         "fleet_max": 7,
         "drop_state": true,
@@ -16034,7 +16034,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 7,
+        "xp": 21000,
         "fleet_min": 7,
         "fleet_max": 7,
         "drop_state": true,
@@ -16230,7 +16230,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 7,
+        "xp": 10500,
         "fleet_min": 7,
         "fleet_max": 7,
         "drop_state": false,
@@ -16390,7 +16390,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 7,
+        "xp": 10500,
         "fleet_min": 7,
         "fleet_max": 7,
         "drop_state": true,
@@ -16605,7 +16605,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 7,
+        "xp": 10500,
         "fleet_min": 7,
         "fleet_max": 7,
         "drop_state": true,
@@ -16859,7 +16859,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 7,
+        "xp": 31500,
         "fleet_min": 7,
         "fleet_max": 7,
         "drop_state": true,
@@ -17165,7 +17165,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 7,
+        "xp": 31500,
         "fleet_min": 7,
         "fleet_max": 7,
         "drop_state": true,
@@ -17444,7 +17444,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 7,
+        "xp": 31500,
         "fleet_min": 7,
         "fleet_max": 7,
         "drop_state": true,
@@ -17703,7 +17703,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 7,
+        "xp": 31500,
         "fleet_min": 7,
         "fleet_max": 7,
         "drop_state": true,
@@ -17937,7 +17937,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 7,
+        "xp": 31500,
         "fleet_min": 7,
         "fleet_max": 7,
         "drop_state": true,
@@ -18218,7 +18218,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 7,
+        "xp": 31500,
         "fleet_min": 7,
         "fleet_max": 7,
         "drop_state": true,

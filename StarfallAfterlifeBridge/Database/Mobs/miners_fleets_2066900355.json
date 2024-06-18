@@ -131,7 +131,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 2000,
+        "xp": 1500,
         "fleet_min": -1,
         "fleet_max": -1,
         "drop_state": true,
@@ -465,7 +465,7 @@
         "cargo_list": []
       },
       "ServiceData": {
-        "xp": 5000,
+        "xp": 1500,
         "fleet_min": -1,
         "fleet_max": -1,
         "drop_state": true,
