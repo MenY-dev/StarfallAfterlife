@@ -82,7 +82,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             if (Members.FirstOrDefault(m => m.Role == BattleRole.Explore)?.Fleet is UserFleet exploreFleet)
             {
                 AttackerId = exploreFleet.Id;
-                AttackerTargetType = exploreFleet.Type;
+                AttackerTargetType = DiscoveryObjectType.UserFleet;
             }
             else if (Members.FirstOrDefault(m => m.Role == BattleRole.Attack)?.Fleet is DiscoveryAiFleet aiFleet)
             {
@@ -91,8 +91,22 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             }
             else if (Members.FirstOrDefault(m => m.Role == BattleRole.Attack)?.Fleet is UserFleet userFleet)
             {
+                var defenseObj = IsDungeon ? DungeonInfo?.Target : Members.FirstOrDefault(m => m.Role != BattleRole.Attack)?.Fleet;
+
+                if (defenseObj is null)
+                    defenseObj = userFleet;
+
                 AttackerId = userFleet.Id;
-                AttackerTargetType = IsDungeon ? DungeonInfo?.Target?.Type ?? DiscoveryObjectType.None : DiscoveryObjectType.AiFleet;
+                AttackerTargetType = defenseObj.Type switch
+                {
+                    DiscoveryObjectType.UserFleet or
+                    DiscoveryObjectType.AiFleet or
+                    DiscoveryObjectType.PiratesOutpost or
+                    DiscoveryObjectType.PiratesStation
+                        => defenseObj.Faction == userFleet.Faction ?
+                            DiscoveryObjectType.UserFleet : DiscoveryObjectType.None,
+                    _ => defenseObj.Type,
+                };
             }
             else if (Members.FirstOrDefault(m => m.Role != BattleRole.Attack)?.Fleet is StarSystemObject target)
             {
