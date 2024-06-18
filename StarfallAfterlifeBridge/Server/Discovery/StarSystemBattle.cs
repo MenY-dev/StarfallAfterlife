@@ -58,7 +58,6 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
         public virtual void Start()
         {
-            IsStarted = true;
 
             System?.AddDeferredAction(() =>
             {
@@ -74,6 +73,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             foreach (var member in Members)
                 Galaxy?.Listeners.Broadcast<IBattleListener>(l => l.OnBattleFleetAdded(this, member));
 
+            IsStarted = true;
             Galaxy?.Listeners.Broadcast<IBattleListener>(l => l.OnBattleStarted(this));
         }
 

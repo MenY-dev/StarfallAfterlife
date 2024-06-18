@@ -17,7 +17,15 @@ namespace StarfallAfterlife.Bridge.Server
             {
                 Invoke(() =>
                 {
-                    var matchmakerBattle = Matchmaker?.DiscoveryGameMode?.CreateNewBattle(battle);
+                    var matchmakerBattle = Matchmaker?.DiscoveryGameMode?.GetBattle(battle);
+
+                    if (matchmakerBattle is not null)
+                    {
+                        SfaDebug.Print($"The battle has already started!", GetType().Name);
+                        return;
+                    }
+
+                    matchmakerBattle = Matchmaker?.DiscoveryGameMode?.CreateNewBattle(battle);
 
                     if (matchmakerBattle is not null)
                     {
@@ -30,36 +38,42 @@ namespace StarfallAfterlife.Bridge.Server
             else SfaDebug.Print($"Battle not started! (Reason: Waiting players)", GetType().Name);
         }
 
-        void IBattleListener.OnBattleFleetAdded(StarSystemBattle battle, BattleMember newMember) => Invoke(() =>
+        void IBattleListener.OnBattleFleetAdded(StarSystemBattle battle, BattleMember newMember)
         {
-            var matchmakerBattle = Matchmaker?.DiscoveryGameMode?.GetBattle(battle);
+            var isBattleReady = battle.IsStarted == true && battle.IsFinished == false;
 
-            if (battle.IsStarted == true && battle.IsFinished == false &&
-                matchmakerBattle is null && newMember.Fleet is UserFleet fleet)
+            Invoke(() =>
             {
-                matchmakerBattle = Matchmaker?.DiscoveryGameMode?.CreateNewBattle(battle);
+                var matchmakerBattle = Matchmaker?.DiscoveryGameMode?.GetBattle(battle);
 
-                if (matchmakerBattle is not null)
+                if (isBattleReady == true && matchmakerBattle is null && newMember.Fleet is UserFleet)
                 {
-                    SfaDebug.Print($"Battle started! (Hex = {battle.Hex})", GetType().Name);
+                    matchmakerBattle = Matchmaker?.DiscoveryGameMode?.CreateNewBattle(battle);
 
-                    GetCharacter(fleet)?.DiscoveryClient?.SendFleetAttacked(
-                       battle.AttackerId,
-                       battle.AttackerTargetType,
-                       battle.Hex);
-
-                    matchmakerBattle.Start();
+                    if (matchmakerBattle is not null)
+                    {
+                        SfaDebug.Print($"Battle started! (Hex = {battle.Hex})", GetType().Name);
+                        matchmakerBattle.Start();
+                    }
                 }
-            }
 
-            if (matchmakerBattle is null)
-            {
-                SfaDebug.Print($"Member not added to battle! (Reason: Waiting Battle)", GetType().Name);
-                return;
-            }
+                if (newMember.Fleet is UserFleet user)
+                {
+                    GetCharacter(user)?.DiscoveryClient?.SendFleetAttacked(
+                        battle.AttackerId,
+                        battle.AttackerTargetType,
+                        battle.Hex);
+                }
 
-            matchmakerBattle.AddToBattle(newMember);
-        });
+                if (matchmakerBattle is null)
+                {
+                    SfaDebug.Print($"Member not added to battle! (Reason: Waiting Battle)", GetType().Name);
+                    return;
+                }
+
+                matchmakerBattle.AddToBattle(newMember);
+            });
+        }
 
         void IBattleListener.OnBattleFleetLeaving(StarSystemBattle battle, BattleMember member) => Invoke(() =>
         {
