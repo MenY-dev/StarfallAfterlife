@@ -19772,6 +19772,45 @@
       "galaxy_value": 26,
       "additionalparams": "{\"ProductionPoints\":15,\"ProjectToOpenXp\":60,\"RequiredProjectToOpenXp\":100,\"IGCToProduce\":120,\"ProductionPointsOnDisassemble\":3,\"ProjectIsDefaultOpen\":0,\"ProjectToOpen\":1138095429,\"materials\":[{\"Count\":1,\"Entity\":1978287836},{\"Count\":1,\"Entity\":662710167}],\"DropItemsOnDisassemble\":[{\"Entity\":1978287836,\"MinCount\":1,\"MaxCount\":1},{\"Entity\":662710167,\"MinCount\":1,\"MaxCount\":1}],\"Abilities\":[],\"ItemWidth\":1,\"ItemHeight\":1,\"Faction\":254,\"tags\":[\"Item.Quality.Normal\",\"Item.RareShopItem\",\"DamageType.Energy.Photon\",\"Equipment.Weapon.Missiles.Energy.Photon\"]}",
       "bgcprice": 0
+    },
+    {
+      "id": 287041267,
+      "name": "BP_DefectiveLongRangeCannonSiberia_C",
+      "techtype": 32,
+      "igcprice": 453,
+      "cargo": 40,
+      "techlevel": 2,
+      "min_galaxy_level": 5,
+      "max_galaxy_level": 7,
+      "galaxy_value": 168,
+      "additionalparams": "{\"ProductionPoints\":128,\"ProjectToOpenXp\":40,\"RequiredProjectToOpenXp\":100,\"IGCToProduce\":2240,\"ProductionPointsOnDisassemble\":32,\"ProjectIsDefaultOpen\":0,\"ProjectToOpen\":1849675589,\"materials\":[],\"DropItemsOnDisassemble\":[{\"Entity\":635232752,\"MinCount\":6,\"MaxCount\":11},{\"Entity\":814891119,\"MinCount\":3,\"MaxCount\":5}],\"Abilities\":[],\"ItemWidth\":1,\"ItemHeight\":4,\"Faction\":254,\"tags\":[\"Item.Quality.Broken\",\"DamageType.Energy.Photon\",\"Equipment.Weapon.Ballistic.Energy.Photon\"]}",
+      "bgcprice": 0
+    },
+    {
+      "id": 1792776903,
+      "name": "BP_ImprovedLongRangeCannonSiberia_C",
+      "techtype": 32,
+      "igcprice": 1636,
+      "cargo": 40,
+      "techlevel": 2,
+      "min_galaxy_level": 5,
+      "max_galaxy_level": 7,
+      "galaxy_value": 202,
+      "additionalparams": "{\"ProductionPoints\":128,\"ProjectToOpenXp\":100,\"RequiredProjectToOpenXp\":-1,\"IGCToProduce\":2240,\"ProductionPointsOnDisassemble\":32,\"ProjectIsDefaultOpen\":0,\"ProjectToOpen\":1849675589,\"materials\":[],\"DropItemsOnDisassemble\":[{\"Entity\":635232752,\"MinCount\":20,\"MaxCount\":25},{\"Entity\":814891119,\"MinCount\":10,\"MaxCount\":12}],\"Abilities\":[],\"ItemWidth\":1,\"ItemHeight\":4,\"Faction\":254,\"tags\":[\"Item.Quality.Improved\",\"DamageType.Energy.Photon\",\"Equipment.Weapon.Ballistic.Energy.Photon\"]}",
+      "bgcprice": 0
+    },
+    {
+      "id": 1849675589,
+      "name": "BP_LongRangeCannonSiberia_C",
+      "techtype": 32,
+      "igcprice": 2240,
+      "cargo": 40,
+      "techlevel": 2,
+      "min_galaxy_level": 5,
+      "max_galaxy_level": 7,
+      "galaxy_value": 168,
+      "additionalparams": "{\"ProductionPoints\":128,\"ProjectToOpenXp\":60,\"RequiredProjectToOpenXp\":100,\"IGCToProduce\":2240,\"ProductionPointsOnDisassemble\":32,\"ProjectIsDefaultOpen\":0,\"ProjectToOpen\":1849675589,\"materials\":[{\"Count\":34,\"Entity\":635232752},{\"Count\":17,\"Entity\":814891119}],\"DropItemsOnDisassemble\":[{\"Entity\":635232752,\"MinCount\":13,\"MaxCount\":18},{\"Entity\":814891119,\"MinCount\":6,\"MaxCount\":9}],\"Abilities\":[],\"ItemWidth\":1,\"ItemHeight\":4,\"Faction\":254,\"tags\":[\"Item.Quality.Normal\",\"QuestReward.Common\",\"DamageType.Energy.Photon\",\"Equipment.Weapon.Ballistic.Energy.Photon\"]}",
+      "bgcprice": 0
     }
   ],
   "discovery_items": [
