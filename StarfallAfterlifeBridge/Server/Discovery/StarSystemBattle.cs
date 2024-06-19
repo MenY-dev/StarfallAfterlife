@@ -145,6 +145,14 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             if (Members.Contains(member) == false)
                 Members.Add(member);
 
+            if (member.Fleet is DiscoveryFleet fleet)
+            {
+                var rnd = new Random128();
+                var dir = Vector2.Up.Rotate(rnd.NextSingle() * SfMath.Tau);
+                var offset = dir * (SystemHexMap.SystemHexSizeX * 0.4f * rnd.NextSingle());
+                fleet.SetLocation(SystemHexMap.HexToSystemPoint(Hex) + offset);
+            }
+
             IsUserAdded |= member?.Fleet is UserFleet;
 
             if (IsStarted == true && IsFinished == false)
