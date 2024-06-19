@@ -213,6 +213,16 @@ namespace StarfallAfterlife.Launcher.ViewModels
                 launcher.CurrentProfile is SfaProfile profile &&
                 IPAddress.TryParse(ServerAddress, out var address) == true)
             {
+                void TryStartGame()
+                {
+                    Dispatcher.UIThread.Invoke(() => { try { gameLoadingPopup?.Close(); } catch { }; });
+
+                    if (address is null)
+                        return;
+
+                    appVM.StartGame(profile, new IPEndPoint(address, ServerPort).ToString(), () => server.Password);
+                }
+
                 Task.Factory.StartNew(() =>
                 {
                     if (appVM.ProcessSessionsCancellationBeforePlay(server.Realm?.Id).Result == false)
@@ -272,15 +282,11 @@ namespace StarfallAfterlife.Launcher.ViewModels
 
                                 monitor.WaitOne(4000);
                                 address = newAddress;
-                            }).ContinueWith(t =>
-                            {
-                                Dispatcher.UIThread.Invoke(() => gameLoadingPopup?.Close());
-
-                                if (address is null)
-                                    return;
-
-                                appVM.StartGame(profile, new IPEndPoint(address, ServerPort).ToString(), () => server.Password);
-                            });
+                            }).ContinueWith(t => TryStartGame());
+                        }
+                        else
+                        {
+                            TryStartGame();
                         }
                     }
                     catch { }
