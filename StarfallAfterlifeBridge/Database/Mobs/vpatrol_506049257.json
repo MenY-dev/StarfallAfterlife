@@ -174,7 +174,7 @@
         "fleet_max": -1,
         "drop_state": true,
         "role": 3,
-        "bt": "/Game/gameplay/ai/BtBoxPatrol.BtBoxPatrol",
+        "bt": "",
         "tags": [],
         "drop_tree": {
           "type": 1,
@@ -445,7 +445,7 @@
         "fleet_max": -1,
         "drop_state": false,
         "role": 3,
-        "bt": "/Game/gameplay/ai/BtBoxPatrol.BtBoxPatrol",
+        "bt": "",
         "tags": [],
         "drop_tree": {
           "type": 1,
@@ -737,7 +737,7 @@
         "fleet_max": -1,
         "drop_state": false,
         "role": 3,
-        "bt": "/Game/gameplay/ai/BtBoxPatrol.BtBoxPatrol",
+        "bt": "",
         "tags": [],
         "drop_tree": {
           "type": 1,
@@ -966,7 +966,7 @@
         "fleet_max": -1,
         "drop_state": true,
         "role": 3,
-        "bt": "/Game/gameplay/ai/BtBoxPatrol.BtBoxPatrol",
+        "bt": "",
         "tags": [],
         "drop_tree": {
           "type": 1,
@@ -1174,7 +1174,7 @@
         "fleet_max": -1,
         "drop_state": true,
         "role": 3,
-        "bt": "/Game/gameplay/ai/BtBoxPatrol.BtBoxPatrol",
+        "bt": "",
         "tags": [],
         "drop_tree": {
           "type": 1,
