@@ -24,6 +24,8 @@ using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Networking;
 using StarfallAfterlife.Bridge.Diagnostics;
 using StarfallAfterlife.Bridge.Houses;
+using System.Net.Sockets;
+using System.Timers;
 
 namespace StarfallAfterlife.Bridge.Server
 {
@@ -67,6 +69,8 @@ namespace StarfallAfterlife.Bridge.Server
 
         protected ActionBuffer ActionBuffer { get; } = new();
 
+        public Timer PingTimer { get; } = new(TimeSpan.FromSeconds(5));
+
         protected object ClientsLocker { get; } = new();
 
         protected object QuestsGeneratorLocker { get; } = new();
@@ -78,7 +82,7 @@ namespace StarfallAfterlife.Bridge.Server
 
         public SfaServer()
         {
-
+            
         }
 
         public SfaServer(SfaRealmInfo realm)
@@ -108,6 +112,19 @@ namespace StarfallAfterlife.Bridge.Server
                 return true;
 
             return false;
+        }
+
+        protected override void HandleNewClient(SfaServerClient client)
+        {
+            base.HandleNewClient(client);
+
+            if (client?.TcpClient?.Client is Socket socket)
+            {
+                socket.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.TcpKeepAliveTime, 10);
+                socket.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.TcpKeepAliveInterval, 3);
+                socket.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.TcpKeepAliveRetryCount, 3);
+                socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
+            }
         }
 
         protected override void HandleClientDisconnect(SfaServerClient client)
@@ -140,6 +157,25 @@ namespace StarfallAfterlife.Bridge.Server
                 }
 
                 ProcessNewUserStatus(client, UserInGameStatus.None);
+            });
+        }
+
+        protected virtual void PingTimerTick(object sender, ElapsedEventArgs e)
+        {
+            UseClients(clients =>
+            {
+                try
+                {
+                    foreach (var c in clients)
+                    {
+                        try
+                        {
+                            c.Send("ping", SfaServerAction.Ping);
+                        }
+                        catch { }
+                    }
+                }
+                catch { }
             });
         }
 
@@ -481,6 +517,9 @@ namespace StarfallAfterlife.Bridge.Server
                 Matchmaker.InstanceManagerAddress = InstanceManagerAddress;
                 Matchmaker.Start();
                 base.Start();
+                PingTimer.Elapsed -= PingTimerTick;
+                PingTimer.Elapsed += PingTimerTick;
+                PingTimer.Enabled = true;
                 CompletionSource = new TaskCompletionSource();
 
                 if (UsePortForwarding == true &&
@@ -504,6 +543,7 @@ namespace StarfallAfterlife.Bridge.Server
             Galaxy?.Listeners.Remove(this);
             Matchmaker?.Stop();
             Clients?.Clear();
+            PingTimer.Enabled = false;
             base.Stop();
 
             CompletionSource?.TrySetResult();
