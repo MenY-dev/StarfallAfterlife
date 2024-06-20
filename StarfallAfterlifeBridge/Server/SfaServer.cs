@@ -388,7 +388,7 @@ namespace StarfallAfterlife.Bridge.Server
             }
         }
 
-        public void ProcessNewUserStatus(SfaServerClient client, UserInGameStatus status)
+        public void ProcessNewUserStatus(SfaServerClient client, UserInGameStatus status, bool isCharChannel = false)
         {
             if (client is null ||
                 client.IsPlayer == false)
@@ -411,20 +411,25 @@ namespace StarfallAfterlife.Bridge.Server
 
             UseClients(_ =>
             {
-                foreach (var item in Players)
+                if (isCharChannel == true)
                 {
-                    if (item != client &&
-                        item.IsConnected == true)
+                    if (client.CurrentCharacter is ServerCharacter character)
                     {
-                        item.Invoke(c =>
+                        foreach (var item in Players)
                         {
-                            c.SendAcceptNewFriend($"@{client.UniqueName}", status);
-                            c.SendUserStatus($"@{client.UniqueName}", status);
-                        });
+                            if (item != client &&
+                                item.IsConnected == true)
+                            {
+                                item.Invoke(c =>
+                                {
+                                    c.SendAcceptNewFriend(character.UniqueName, status, isCharChannel);
+                                    c.SendUserStatus(character.UniqueName, status, isCharChannel);
+                                });
+                            }
+                        }
                     }
                 }
-
-                if (client.CurrentCharacter is ServerCharacter character)
+                else
                 {
                     foreach (var item in Players)
                     {
@@ -433,8 +438,8 @@ namespace StarfallAfterlife.Bridge.Server
                         {
                             item.Invoke(c =>
                             {
-                                c.SendAcceptNewFriend(character.UniqueName, status);
-                                c.SendUserStatus(character.UniqueName, status);
+                                c.SendAcceptNewFriend($"@{client.UniqueName}", status, isCharChannel);
+                                c.SendUserStatus($"@{client.UniqueName}", status, isCharChannel);
                             });
                         }
                     }

@@ -34,6 +34,9 @@ namespace StarfallAfterlife.Bridge.Server
                 case DiscoveryClientAction.LeaveHouseAction:
                     HandleLeaveHouseAction(reader, systemId, objectType, objectId); break;
 
+                case DiscoveryClientAction.KickMemberAction:
+                    HandleHouseKickMemberAction(reader, systemId, objectType, objectId); break;
+
                 case DiscoveryClientAction.DestroyHouseAction:
                     HandleDestroyHouseAction(reader, systemId, objectType, objectId); break;
 
@@ -63,6 +66,9 @@ namespace StarfallAfterlife.Bridge.Server
 
                 case DiscoveryClientAction.StartDoctrineAction:
                     HandleHouseStartDoctrineAction(reader, systemId, objectType, objectId); break;
+
+                case DiscoveryClientAction.SetMemberRankAction:
+                    HandleHouseSetMemberRankAction(reader, systemId, objectType, objectId); break;
             }
         }
 
@@ -91,12 +97,15 @@ namespace StarfallAfterlife.Bridge.Server
 
                         house.Faction = character.Faction;
                         house.UpdateTasksPool();
-                        house.AddMember(character);
+                        var member = house.AddMember(character);
+                        member.Rank = (Server?.Realm?.Database ?? SfaDatabase.Instance).GetMaxRank()?.Id ?? 0;
                         houseInfo.Save();
 
                         SendHouseCreated(result);
                         SendHouseFullInfo(houseInfo.House);
+                        character.HouseTag = house.Tag;
                         character.SyncDoctrines();
+                        character.UpdateFleetInfo();
                     }
                     else
                     {
@@ -148,6 +157,56 @@ namespace StarfallAfterlife.Bridge.Server
             });
         }
 
+
+        private void HandleHouseKickMemberAction(SfReader reader, int systemId, DiscoveryObjectType objectType, int objectId)
+        {
+            int memberId = reader.ReadInt32();
+
+            Invoke(() =>
+            {
+                Server?.RealmInfo?.Use(r =>
+                {
+                    if (CurrentCharacter is ServerCharacter character &&
+                        r.Realm?.HouseDatabase is SfHouseDatabase dtb &&
+                        character.GetHouseInfo() is SfHouseInfo houseInfo &&
+                        houseInfo.GetMember(character) is HouseMember causer &&
+                        houseInfo.House is SfHouse house)
+                    {
+                        var targetChar = memberId < -1 ?
+                            Server.GetCharacter(house.Members.Values.FirstOrDefault(m => m.Id == memberId)) :
+                            Server?.GetCharacter(memberId);
+
+                        if (house.RemoveMember(targetChar) is HouseMember removedMember)
+                        {
+                            targetChar.HouseTag = null;
+                            targetChar?.DiscoveryClient?.SendHouseCharacterLeft(targetChar.UniqueId, CharacterHouseLeftReason.Kicked, causer.Id);
+                            targetChar.SyncDoctrines();
+                            targetChar.UpdateFleetInfo();
+                            Galaxy?.BeginPreUpdateAction(g => targetChar.Fleet?.BroadcastFleetDataChanged());
+
+
+                            foreach (var member in house.Members.Values)
+                            {
+                                if (Server?.GetCharacter(member) is ServerCharacter memberChar &&
+                                    memberChar != targetChar)
+                                    memberChar.DiscoveryClient?.Invoke(
+                                        c => c.SendHouseCharacterLeft(removedMember.Id, CharacterHouseLeftReason.Kicked, removedMember.Id));
+                            }
+                        }
+
+                        if (house.Members.Count > 0)
+                        {
+                            houseInfo.Save();
+                        }
+                        else
+                        {
+                            dtb.DeleteHouse(houseInfo);
+                        }
+                    }
+                });
+            });
+        }
+
         private void HandleDestroyHouseAction(SfReader reader, int systemId, DiscoveryObjectType objectType, int objectId)
         {
             Invoke(() =>
@@ -172,7 +231,7 @@ namespace StarfallAfterlife.Bridge.Server
                             {
                                 memberChar.DiscoveryClient?.Invoke(c =>
                                 {
-                                    c.SendHouseCharacterLeft(member.Id, CharacterHouseLeftReason.Leave, member.Id);
+                                    c.SendHouseCharacterLeft(member.Id, CharacterHouseLeftReason.HouseDestroyed, member.Id);
                                     c.SendHouseDestroyed();
                                 });
                             }
@@ -335,14 +394,20 @@ namespace StarfallAfterlife.Bridge.Server
 
                         SendHouseInviteResult(HouseUserInviteResult.Success);
                     }
+                    else
+                    {
+                        SendHouseInviteResult(HouseUserInviteResult.NoRecruitRights);
+                    }
                 });
             });
         }
 
         private void HandleHouseInviteResponseAction(SfReader reader, int systemId, DiscoveryObjectType objectType, int objectId)
         {
-            var houseId = reader.ReadInt32();
             var result = reader.ReadBoolean();
+
+            if (result == false)
+                return;
 
             Invoke(() =>
             {
@@ -350,39 +415,40 @@ namespace StarfallAfterlife.Bridge.Server
 
                 if (character is null)
                 {
-                    SendHouseInviteResponseResult(houseId, HouseInviteAcceptResult.Unknown);
+                    SendHouseInviteResponseResult(objectId, HouseInviteAcceptResult.Unknown);
                     return;
                 }
 
                 if (character.GetHouse() is not null)
                 {
-                    SendHouseInviteResponseResult(houseId, HouseInviteAcceptResult.AlreadyInHouse);
+                    SendHouseInviteResponseResult(objectId, HouseInviteAcceptResult.AlreadyInHouse);
                     return;
                 }
 
                 Server?.RealmInfo?.Use(r =>
                 {
                     if (r.Realm?.HouseDatabase is SfHouseDatabase dtb &&
-                        dtb.Houses.GetValueOrDefault(houseId) is SfHouseInfo houseInfo &&
+                        dtb.Houses.GetValueOrDefault(objectId) is SfHouseInfo houseInfo &&
                         houseInfo.House is SfHouse house)
                     {
                         if (house.GetMember(character) is not null)
                         {
-                            SendHouseInviteResponseResult(houseId, HouseInviteAcceptResult.AlreadyInHouse);
+                            SendHouseInviteResponseResult(objectId, HouseInviteAcceptResult.AlreadyInHouse);
                             return;
                         }
 
                         if (house.Members.Count >= house.MaxMembers)
                         {
-                            SendHouseInviteResponseResult(houseId, HouseInviteAcceptResult.MembersLimitReached);
+                            SendHouseInviteResponseResult(objectId, HouseInviteAcceptResult.MembersLimitReached);
                             return;
                         }
 
                         if (house.AddMember(character) is HouseMember newMember)
                         {
+                            newMember.Rank = (Server?.Realm?.Database ?? SfaDatabase.Instance).GetMinRank()?.Id ?? 0;
+                            houseInfo.Save();
                             character.HouseTag = house.Tag;
                             SendHouseNewMember(character.UniqueId, newMember.Name, newMember.Rank);
-                            SendHouseFullInfo(house);
 
                             foreach (var member in house.Members.Values)
                             {
@@ -395,19 +461,21 @@ namespace StarfallAfterlife.Bridge.Server
                             BroadcastHouseMemberInfoChanged();
                             BroadcastHouseMemberRankChanged();
                             BroadcastHouseCharacterOnlineStatus(true);
+                            BroadcastHouseFullInfo();
 
                             character.UpdateFleetInfo();
                             character.SyncDoctrines();
                             Galaxy?.BeginPreUpdateAction(g => character?.Fleet?.BroadcastFleetDataChanged());
+                            SendHouseInviteResponseResult(objectId, HouseInviteAcceptResult.Success);
                         }
                         else
                         {
-                            SendHouseInviteResponseResult(houseId, HouseInviteAcceptResult.InviteExpired);
+                            SendHouseInviteResponseResult(objectId, HouseInviteAcceptResult.InviteExpired);
                         }
                     }
                     else
                     {
-                        SendHouseInviteResponseResult(houseId, HouseInviteAcceptResult.HouseDestroyed);
+                        SendHouseInviteResponseResult(objectId, HouseInviteAcceptResult.HouseDestroyed);
                     }
                 });
             });
@@ -537,6 +605,75 @@ namespace StarfallAfterlife.Bridge.Server
             });
         }
 
+        private void HandleHouseSetMemberRankAction(SfReader reader, int systemId, DiscoveryObjectType objectType, int objectId)
+        {
+            var memberId = reader.ReadInt32();
+            var rankId = reader.ReadInt32();
+
+            Invoke(() =>
+            {
+                Server?.RealmInfo?.Use(r =>
+                {
+                    if (CurrentCharacter is ServerCharacter character &&
+                        character.GetHouseInfo() is SfHouseInfo houseInfo &&
+                        houseInfo.House is SfHouse house &&
+                        house.GetMember(character) is HouseMember currentCharMember &&
+                        character.GetHousePermissions(houseInfo).HasFlag(HouseRankPermission.ChangeRank) == true)
+                    {
+                        var dtb = (Server?.Realm?.Database ?? SfaDatabase.Instance);
+                        var targetMemberChar = Server?.GetCharacter(memberId);
+                        var member = memberId < -1 ?
+                            house.Members.Values.FirstOrDefault(m => m.Id == memberId) :
+                            targetMemberChar?.GetHouseMember(house);
+
+
+                        if (member is null ||
+                            member.Id == currentCharMember.Id)
+                        {
+                            SendHouseFailChangeMemberRank(memberId, rankId);
+                            return;
+                        }
+
+                        if (targetMemberChar is null)
+                            targetMemberChar = Server.GetCharacter(member);
+
+                        var maxRank = dtb.GetMaxRank();
+                        var isMaxRank = rankId == maxRank?.Id;
+                        var currentCharRank = dtb.GetRank(currentCharMember.Rank);
+
+                        if (currentCharRank?.Id != maxRank?.Id)
+                        {
+                            var currentCharRankOrder = currentCharRank?.Order ?? int.MaxValue;
+                            var newRankOrder = dtb.GetRank(rankId)?.Order ?? int.MaxValue;
+                            var targetMemberRankOrder = dtb.GetRank(member.Rank)?.Order ?? int.MaxValue;
+
+                            if (newRankOrder <= currentCharRankOrder ||
+                                targetMemberRankOrder <= currentCharRankOrder)
+                            {
+                                SendHouseFailChangeMemberRank(memberId, rankId);
+                                return;
+                            }
+                        }
+
+                        member.Rank = rankId;
+
+                        if (isMaxRank)
+                        {
+                            var ranks = dtb.HouseRanks.Values.OrderBy(v => v.Order).ToArray();
+
+                            if (ranks.Length > 1)
+                                currentCharMember.Rank = ranks[1].Id;
+                        }
+
+                        houseInfo.Save();
+
+                        BroadcastHouseFullInfo();
+                        BroadcastHouseUpdate();
+                    }
+                });
+            });
+        }
+
         public void UpdateHouseMemberInfo()
         {
             Server?.RealmInfo?.Use(r =>
@@ -588,6 +725,22 @@ namespace StarfallAfterlife.Bridge.Server
             {
                 writer.WriteByte((byte)result);
             });
+        }
+
+        public void BroadcastHouseFullInfo()
+        {
+            if (CurrentCharacter is ServerCharacter character &&
+                character.GetHouse() is SfHouse house)
+            {
+                Server?.RealmInfo?.Use(r =>
+                {
+                    foreach (var member in house.Members.Values)
+                    {
+                        if (Server?.GetCharacter(member) is ServerCharacter memberChar)
+                            memberChar.DiscoveryClient?.Invoke(c => c.SendHouseFullInfo(house));
+                    }
+                });
+            }
         }
 
         public void SendHouseFullInfo(SfHouse house)
@@ -802,9 +955,9 @@ namespace StarfallAfterlife.Bridge.Server
         {
             if (CurrentCharacter is ServerCharacter character &&
                 character.GetHouse() is SfHouse house &&
-                house.GetMember(character) is HouseMember member)
+                house.GetMember(character) is HouseMember currentMember)
             {
-                SendHouseMemberRankChanged(character.UniqueId, member.Rank);
+                SendHouseMemberRankChanged(character.UniqueId, currentMember.Rank);
 
                 Server?.RealmInfo?.Use(r =>
                 {
@@ -812,7 +965,7 @@ namespace StarfallAfterlife.Bridge.Server
                     {
                         if (Server?.GetCharacter(member) is ServerCharacter memberChar && memberChar != character)
                             memberChar.DiscoveryClient?.Invoke(
-                                c => c.SendHouseMemberRankChanged(member.Id, member.Rank));
+                                c => c.SendHouseMemberRankChanged(currentMember.Id, currentMember.Rank));
                     }
                 });
             }
@@ -844,7 +997,7 @@ namespace StarfallAfterlife.Bridge.Server
                     {
                         if (Server?.GetCharacter(member) is ServerCharacter memberChar && memberChar != character)
                             memberChar.DiscoveryClient?.Invoke(
-                                c => c.SendHouseCharacterOnlineStatus(member.Id, isOnline));
+                                c => c.SendHouseCharacterOnlineStatus(currentMember.Id, isOnline));
                     }
                 }
             });
@@ -862,13 +1015,15 @@ namespace StarfallAfterlife.Bridge.Server
                 if (character is not null &&
                     house.GetMember(character) is HouseMember currentMember &&
                     currentMember.Id == member.Id)
+                {
                     SendHouseCharacterOnlineStatus(character.UniqueId, isOnline);
 
-                foreach (var member in house.Members.Values)
-                {
-                    if (Server?.GetCharacter(member) is ServerCharacter memberChar && memberChar != character)
-                        memberChar.DiscoveryClient?.Invoke(
-                            c => c.SendHouseCharacterOnlineStatus(member.Id, isOnline));
+                    foreach (var member in house.Members.Values)
+                    {
+                        if (Server?.GetCharacter(member) is ServerCharacter memberChar && memberChar != character)
+                            memberChar.DiscoveryClient?.Invoke(
+                                c => c.SendHouseCharacterOnlineStatus(currentMember.Id, isOnline));
+                    }
                 }
             });
         }
@@ -944,17 +1099,17 @@ namespace StarfallAfterlife.Bridge.Server
         {
             if (CurrentCharacter is ServerCharacter character &&
                 character.GetHouse() is SfHouse house &&
-                house.GetMember(character) is HouseMember member)
+                house.GetMember(character) is HouseMember charMember)
             {
                 Server?.RealmInfo?.Use(r =>
                 {
-                    SendHouseMemberInfoChanged(character.UniqueId, member.Level, member.Currency);
+                    SendHouseMemberInfoChanged(character.UniqueId, charMember.Level, charMember.Currency);
 
                     foreach (var member in house.Members.Values)
                     {
                         if (Server?.GetCharacter(member) is ServerCharacter memberChar && memberChar != character)
                             memberChar.DiscoveryClient?.Invoke(
-                                c => c.SendHouseMemberInfoChanged(member.Id, member.Level, member.Currency));
+                                c => c.SendHouseMemberInfoChanged(charMember.Id, charMember.Level, charMember.Currency));
                     }
                 });
             }

@@ -27,8 +27,7 @@ namespace StarfallAfterlife.Bridge.Server
                 case FriendChannelAction.RemoveFromFriends:
                     break;
                 case FriendChannelAction.Status:
-                    if (isCharChannel == false)
-                        HandleUserStatus(isCharChannel, reader);
+                    HandleUserStatus(isCharChannel, reader);
                     break;
                 default:
                     break;
@@ -52,8 +51,10 @@ namespace StarfallAfterlife.Bridge.Server
 
             Invoke(c =>
             {
-                Server?.ProcessNewUserStatus(this, status);
-                Server?.Matchmaker?.OnUserStatusChanged(this, status);
+                Server?.ProcessNewUserStatus(this, status, isCharChannel);
+
+                if (isCharChannel == false)
+                    Server?.Matchmaker?.OnUserStatusChanged(this, status);
             });
         }
 
@@ -69,12 +70,12 @@ namespace StarfallAfterlife.Bridge.Server
                         var status = item.IsConnected == true ? item.UserStatus : UserInGameStatus.None;
 
                         SendAcceptNewFriend($"@{item.UniqueName}", status);
-                        SendUserStatus($"@{item.UniqueName}", status);
+                        SendUserStatus($"@{item.UniqueName}", status, false);
 
                         if (item.CurrentCharacter is ServerCharacter character)
                         {
                             SendAcceptNewFriend(character.UniqueName, status);
-                            SendUserStatus(character.UniqueName, status);
+                            SendUserStatus(character.UniqueName, status, true);
                         }
                     }
                 }

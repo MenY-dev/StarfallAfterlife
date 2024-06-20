@@ -218,7 +218,7 @@ namespace StarfallAfterlife.Bridge.Houses
 
             for (int i = 0; i < Members.Count + 1; i++)
             {
-                if (Members.Values.All(m => m?.Id != id) == false)
+                if (Members.Values.All(m => m?.Id != id) == true)
                     break;
 
                 id--;

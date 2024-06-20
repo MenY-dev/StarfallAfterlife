@@ -500,6 +500,16 @@ namespace StarfallAfterlife.Bridge.Database
             return null;
         }
 
+        public HouseRankInfo? GetMinRank()
+        {
+            return HouseRanks.Values.OrderBy(i => -i.Order).FirstOrDefault();
+        }
+
+        public HouseRankInfo? GetMaxRank()
+        {
+            return HouseRanks.Values.OrderBy(i => i.Order).FirstOrDefault();
+        }
+
         public HouseUpgradeInfo? GetHouseUpgrade(int id)
         {
             if (HouseUpgrades.TryGetValue(id, out HouseUpgradeInfo upgrade) == true)

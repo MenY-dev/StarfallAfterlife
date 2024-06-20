@@ -32,6 +32,22 @@ namespace StarfallAfterlife.Bridge.Server
                 m.CharacterId == charId);
         }
 
+        public static HouseMember GetHouseMember(this ServerCharacter self, SfHouseInfo houseInfo) =>
+            GetHouseMember(self, houseInfo?.House);
+
+        public static HouseMember GetHouseMember(this ServerCharacter self, SfHouse house)
+        {
+            if (self is null || house is null)
+                return null;
+
+            var playerId = self.ProfileId;
+            var charId = self.Guid;
+
+            return house.Members.Values.FirstOrDefault(m =>
+                m.PlayerId == playerId &&
+                m.CharacterId == charId);
+        }
+
         public static HouseMember AddMember(this SfHouse self, ServerCharacter character)
         {
             if (self is null || character is null || character.GetHouse() is not null)

@@ -149,6 +149,7 @@ namespace StarfallAfterlife.Bridge.Server
                             house.Currency = house.Currency.AddWithoutOverflow(houseCurrency);
                             member.Currency = member.Currency.AddWithoutOverflow(houseCurrency);
                             houseInfo.Save();
+                            c.BroadcastHouseUpdate();
                             c.BroadcastHouseCurrencyChanged();
                             c.BroadcastHouseMemberInfoChanged();
                         }

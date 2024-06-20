@@ -55,6 +55,7 @@ namespace StarfallAfterlife.Bridge.Server
                 if (Characters.FirstOrDefault(c => c.UniqueId == id) is ServerCharacter character)
                 {
                     CurrentCharacter?.SetOnlineStatus(false);
+                    Server.ProcessNewUserStatus(Client, UserInGameStatus.None, true);
                     CurrentCharacter = character;
                     var progress = new CharacterProgress();
                     progress.LoadFromJson(authData["progress"]);
@@ -179,7 +180,7 @@ namespace StarfallAfterlife.Bridge.Server
                 {
                     client.CurrentSystemId = -1;
                     client.CurrentSystemName = null;
-                    Server.ProcessNewUserStatus(Client, UserInGameStatus.CharInDiscovery);
+                    Server.ProcessNewUserStatus(Client, UserInGameStatus.CharMainMenu, true);
                 }
 
                 character.Party?.SetMemberStarSystem(character.UniqueId, -1);
@@ -217,6 +218,7 @@ namespace StarfallAfterlife.Bridge.Server
                 }
 
                 character.LoadFromCharacterData(charData);
+                character.HouseTag = character.GetHouse()?.Tag;
 
                 if (doc["active_session"]?["ships"] is JsonArray ships)
                     character.LoadActiveShips(ships);
@@ -225,6 +227,7 @@ namespace StarfallAfterlife.Bridge.Server
 
                 character.CreateNewFleet();
                 character.Fleet?.AddListener(this);
+                character.SetOnlineStatus(true);
             }
 
             if (State == SfaCharacterState.EnterToGalaxy)
