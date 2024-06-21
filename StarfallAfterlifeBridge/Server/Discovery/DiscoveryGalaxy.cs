@@ -92,7 +92,10 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                     return null;
 
                 if (ActiveSystems.TryAdd(systemId, system))
+                {
+                    Listeners?.Broadcast<IGalaxyListener>(l => l.OnStarSystemActivated(system));
                     return system;
+                }
 
                 return null;
             }

@@ -19,7 +19,182 @@ namespace StarfallAfterlife.Bridge.Server
         public DynamicMobDatabase DynamicMobs { get; } = new();
 
         protected object DynamicMobsLocker { get; } = new();
-        
+
+        public void SpawnBlockadeInSystem(StarSystem system)
+        {
+            Galaxy?.BeginPreUpdateAction(_ =>
+            {
+                try
+                {
+                    var systemInfo = system.Info;
+
+                    if (systemInfo is null)
+                        return;
+
+                    var faction = systemInfo.Faction;
+                    var factionGroup = systemInfo.FactionGroup;
+
+                    if ((faction.IsPirates() || faction == Faction.None) == false)
+                        return;
+
+                    if (faction.IsPirates() == false)
+                    {
+                        var piratesFleet = system.Fleets.FirstOrDefault(f => f.Faction.IsPirates() == true);
+
+                        if (piratesFleet is null)
+                            return;
+
+                        faction = piratesFleet.Faction;
+                        factionGroup = piratesFleet.FactionGroup;
+                    }
+
+                    var allObjects = system
+                        .GetAllObjects()
+                        .Select(o => (Object: o, Hex: o.Hex, Radius: system.GetObjectRadius(o)))
+                        .Append((null, SystemHex.Zero, system.GetStarRadius()))
+                        .ToList();
+
+                    var rnd = new Random128(Realm?.Seed ?? 0 + system.Id * 1000);
+                    var targets = Enumerable.Empty<StarSystemObject>()
+                        .Concat(system.Planets)
+                        .Concat(system.MinerMotherships)
+                        .Concat(system.ScienceStations)
+                        .Concat(system.RepairStations)
+                        .Concat(system.FuelStation)
+                        .Concat(system.TradeStations)
+                        .Where(i => (rnd.Next() & 100) < 10)
+                        .Select(o => (Object: o, Hex: o.Hex, Radius: system.GetObjectRadius(o)))
+                        .Where(i => i.Radius < 1.8f)
+                        .Where(i =>
+                        {
+                            var selfHex = i.Object.Hex;
+                            var selfRadius = i.Radius;
+
+                            return allObjects.All(o =>
+                                o.Object == i.Object ||
+                                o.Hex.GetDistanceTo(selfHex) >= (o.Radius + selfRadius));
+                        })
+                        .ToList();
+
+                    Invoke(() =>
+                    {
+                        foreach (var item in targets)
+                            SpawnBlockadeForObject(item.Object, faction, factionGroup);
+                    });
+                }
+                catch { }
+            });
+        }
+
+        public void SpawnBlockadeForObject(StarSystemObject targetObject, Faction blockadeFaction, int blockadeFactionGroup = -1)
+        {
+            if (targetObject is null)
+                return;
+
+            var map = Galaxy?.Map;
+            var system = targetObject.System;
+
+            if (map is null)
+                return;
+
+            Task.Factory.StartNew(() =>
+            {
+                try
+                {
+                    var hexesCompletionSource = new TaskCompletionSource<SystemHex[]>();
+
+                    Galaxy.BeginPreUpdateAction(g =>
+                    {
+                        try
+                        {
+                            var allObjects = system.GetAllObjects(false).Select(o => o.Hex);
+                            var hexes = targetObject.Hex
+                                .GetRing(1)
+                                .Where(h => h.GetSize() <= 16)
+                                .Where(h => allObjects.All(o => o != h))
+                                .ToArray();
+
+                            hexesCompletionSource.TrySetResult(hexes);
+                        }
+                        catch
+                        {
+                            hexesCompletionSource.TrySetCanceled();
+                        }
+                    });
+
+                    hexesCompletionSource.Task.Wait(TimeSpan.FromSeconds(2));
+
+                    if (hexesCompletionSource.Task.IsCompletedSuccessfully == false)
+                        return;
+
+                    var hexes = hexesCompletionSource.Task.Result;
+                    var rnd = new Random128((Realm?.Seed ?? 0) + targetObject.Id * 1000);
+                    var mobType = blockadeFaction.ToBlockadeType();
+
+                    if (hexes.Length < 1 || mobType is DynamicMobType.None)
+                        return;
+
+                    var mobs = new List<(SystemHex Hex, DynamicMob Mob)>();
+                    var accessLvl = system.Info?.Level ?? 1;
+                    var level = rnd.Next(
+                                SfaDatabase.GetCircleMinLevel(accessLvl),
+                                SfaDatabase.GetCircleMaxLevel(accessLvl) + 1);
+
+                    foreach (var item in hexes)
+                    {
+                        var archetype = rnd.NextDouble() switch
+                        {
+                            < 0.5 => AIArchetype.Patroller,
+                            _ => AIArchetype.Aggressor,
+                        };
+
+                        var mobInfo = new GalaxyPatrolMobGenerator(Realm)
+                        {
+                            Faction = blockadeFaction,
+                            Archetype = archetype,
+                            Level = level,
+                        }.Build();
+
+                        if (mobInfo is null)
+                            continue;
+
+                        mobInfo.InternalName = "vpatrol";
+
+                        var mob = new DynamicMob()
+                        {
+                            Info = mobInfo,
+                            Type = mobType,
+                        };
+
+                        if (AddDynamicMob(mob) == true)
+                            mobs.Add((item, mob));
+                    }
+
+                    Galaxy.BeginPreUpdateAction(_ =>
+                    {
+                        foreach (var item in mobs)
+                        {
+                            var fleet = new DiscoveryAiFleet
+                            {
+                                FactionGroup = blockadeFactionGroup,
+                                AgroVision = -100,
+                                UseRespawn = true,
+                                RespawnTimeout = 300f,
+                            };
+
+                            fleet.Init(item.Mob, new BlockadeAI()
+                            {
+                                TargetHex = item.Hex,
+                            });
+                            fleet.SetLocation(SystemHexMap.HexToSystemPoint(item.Hex), true);
+                            system.AddFleet(fleet);
+                        }
+                    });
+                }
+                catch { }
+            });
+        }
+
         public void SpawnMainFactionPatrol(int systemId)
         {
             Galaxy.BeginPreUpdateAction(g =>

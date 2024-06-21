@@ -13,7 +13,7 @@ namespace StarfallAfterlife.Bridge.Server
         VanguardPatrol = 2,
         ScreechersBlockade = 41,
         NebulordsBlockade = 42,
-        PyramidBlockadel = 43,
+        PyramidBlockade = 43,
         None = -1,
     }
 }

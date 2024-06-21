@@ -1,15 +1,19 @@
-﻿using StarfallAfterlife.Bridge.Diagnostics;
+﻿using StarfallAfterlife.Bridge.Database;
+using StarfallAfterlife.Bridge.Diagnostics;
+using StarfallAfterlife.Bridge.Mathematics;
+using StarfallAfterlife.Bridge.Primitives;
 using StarfallAfterlife.Bridge.Server.Discovery;
 using StarfallAfterlife.Bridge.Server.Galaxy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace StarfallAfterlife.Bridge.Server
 {
-    public partial class SfaServer : IBattleListener
+    public partial class SfaServer : IBattleListener, IGalaxyListener
     {
         void IBattleListener.OnBattleStarted(StarSystemBattle battle)
         {
@@ -90,5 +94,10 @@ namespace StarfallAfterlife.Bridge.Server
         {
             Matchmaker?.DiscoveryGameMode?.GetBattle(battle)?.Stop();
         });
+
+        void IGalaxyListener.OnStarSystemActivated(StarSystem system)
+        {
+            SpawnBlockadeInSystem(system);
+        }
     }
 }

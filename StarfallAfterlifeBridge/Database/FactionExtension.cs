@@ -54,6 +54,14 @@ namespace StarfallAfterlife.Bridge.Database
             _ => DynamicMobType.None,
         };
 
+        public static DynamicMobType ToBlockadeType(this Faction self) => self switch
+        {
+            Faction.Screechers => DynamicMobType.ScreechersBlockade,
+            Faction.Nebulords => DynamicMobType.NebulordsBlockade,
+            Faction.Pyramid => DynamicMobType.PyramidBlockade,
+            _ => DynamicMobType.None,
+        };
+
         public static string GetName(this Faction self) => self switch
         {
             Faction.Pyramid => "P.Y.R.A.M.I.D.",
