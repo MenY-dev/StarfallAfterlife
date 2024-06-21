@@ -233,10 +233,10 @@ namespace StarfallAfterlife.Bridge.Server
                         var accessLvl = system.Info?.Level ?? 1;
                         var archetype = rnd.NextDouble() switch
                         {
-                            < 0.25 => AIArchetype.Miner,
-                            < 0.5 => AIArchetype.Trader,
-                            < 0.75 => AIArchetype.Scientist,
-                            < 0.90 => AIArchetype.Patroller,
+                            < 0.15 => AIArchetype.Miner,
+                            < 0.30 => AIArchetype.Trader,
+                            < 0.50 => AIArchetype.Scientist,
+                            < 0.75 => AIArchetype.Patroller,
                             _ => AIArchetype.Aggressor,
                         };
 
