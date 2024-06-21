@@ -264,7 +264,7 @@ namespace StarfallAfterlife.Bridge.Server
                         var fleet = new DiscoveryAiFleet
                         {
                             FactionGroup = 1,
-                            AgroVision = -3,
+                            AgroVision = -2,
                             UseRespawn = false,
                         };
 

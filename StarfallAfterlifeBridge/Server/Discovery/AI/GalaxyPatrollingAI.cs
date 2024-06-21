@@ -26,7 +26,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery.AI
 
         public TimeSpan AttackCooldown { get; set; } = TimeSpan.FromSeconds(3);
 
-        public float AttackChance { get; set; } = 0.5f;
+        public float AttackChance { get; set; } = 0.333f;
 
         public int TargetLostDistance { get; set; } = 5;
 
