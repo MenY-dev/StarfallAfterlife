@@ -212,12 +212,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
             lock (Lockher)
             {
                 var battle = Battles.FirstOrDefault(b => b.InstanceInfo == e.Instance) as DiscoveryBattle;
-                var character = battle?.GetCharByShipId(e.ShipId);
-
-                character?.DiscoveryClient?.Invoke(() =>
-                {
-                    character.UpdateShipStatus(e.ShipId, e.ShipData, e.ShipStats);
-                });
+                battle.ShipStatusUpdated(e.ShipId, e.ShipData, e.ShipStats);
             }
         }
 

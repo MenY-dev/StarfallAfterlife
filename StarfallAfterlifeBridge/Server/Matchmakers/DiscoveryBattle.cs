@@ -143,6 +143,9 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
             {
                 Mobs.Remove(mob);
                 Galaxy?.BeginPreUpdateAction(g => SystemBattle?.Leave(mob.Member, spawnHex, destroyed));
+
+                if (destroyed == true)
+                    Server?.RemoveMobCache(mob.FleetId);
             }
         }
 
@@ -167,7 +170,8 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
             if (member.Fleet is DiscoveryAiFleet fleet)
             {
-                if (Server?.GetMobInfo(fleet.MobId) is DiscoveryMobInfo mobInfo)
+                if (Server is SfaServer server &&
+                    (server.GetMobCache(fleet.Id) ?? server.GetMobInfo(fleet.MobId)) is DiscoveryMobInfo mobInfo)
                 {
                     var mob = mobInfo?.Clone();
                     int fleetId = fleet.Id;
@@ -826,6 +830,84 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                                 }, TimeSpan.FromSeconds(5));
                             }
                             break;
+                    }
+                }
+            }
+        }
+
+        public virtual void ShipStatusUpdated(int shipId, string shipData, string shipStats)
+        {
+            lock (_locker)
+            {
+                if (GetCharByShipId(shipId) is ServerCharacter character)
+                {
+                    character?.DiscoveryClient?.Invoke(() => character.UpdateShipStatus(shipId, shipData, shipStats));
+                    return;
+                }
+
+                foreach (var battleMob in Mobs)
+                {
+                    var mob = battleMob?.Mob;
+                    var mobShips = mob?.Ships;
+
+                    if (mobShips is null)
+                        continue;
+
+                    for (int i = 0; i < mobShips.Count; i++)
+                    {
+                        var ship = mobShips[i];
+                        var currentShipData = ship?.Data;
+
+                        if (currentShipData?.Id != shipId)
+                            continue;
+
+                        try
+                        {
+                            if (JsonHelpers.ParseNodeUnbuffered(shipData) is JsonObject data)
+                            {
+
+                                currentShipData.ArmorDelta = (float?)data["armor"] ?? 0;
+                                currentShipData.StructureDelta = (float?)data["structure"] ?? 0;
+
+                                if ((int?)data["destroyed"] is int isShipdDestroyed &&
+                                    isShipdDestroyed != 0)
+                                {
+                                    mobShips.Remove(ship);
+                                }
+                                else
+                                {
+                                    if (data["hplist"]?.DeserializeUnbuffered<List<ShipHardpoint>>() is List<ShipHardpoint> hplist)
+                                    {
+                                        currentShipData.HardpointList ??= new();
+                                        currentShipData.HardpointList.Clear();
+                                        currentShipData.HardpointList.AddRange(hplist);
+                                    }
+
+                                    (currentShipData.Cargo ??= new()).Clear();
+
+                                    if (data["cargo_list"]?.AsArraySelf() is JsonArray cargo &&
+                                        (Server?.Realm?.Database ?? SfaDatabase.Instance) is SfaDatabase database)
+                                    {
+                                        foreach (var item in cargo)
+                                        {
+                                            if (item is JsonObject &&
+                                                (int?)item["entity"] is int entity &&
+                                                (int?)item["count"] is int count &&
+                                                database.GetItem(entity) is SfaItem itemImfo)
+                                            {
+                                                currentShipData.Cargo.Add(itemImfo, count, (string)item["unique_data"]);
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if (mobShips.Count > 0)
+                                    Server?.AddMobCache(mob.Clone());
+                            }
+                        }
+                        catch { }
+
+                        return;
                     }
                 }
             }

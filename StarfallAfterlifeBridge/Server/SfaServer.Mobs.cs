@@ -18,7 +18,13 @@ namespace StarfallAfterlife.Bridge.Server
     {
         public DynamicMobDatabase DynamicMobs { get; } = new();
 
+        public Dictionary<int, (DiscoveryMobInfo Fleet, DateTime UpdateTime)> FleetsCache { get; } = new();
+
+        public TimeSpan FleetCacheLifetime { get; set; } = TimeSpan.FromMinutes(5);
+
         protected object DynamicMobsLocker { get; } = new();
+
+        protected object FleetsCacheLocker { get; } = new();
 
         public void SpawnBlockadeInSystem(StarSystem system)
         {
@@ -332,6 +338,51 @@ namespace StarfallAfterlife.Bridge.Server
         public DiscoveryMobInfo GetMobInfo(string name)
         {
             return Realm?.MobsDatabase?.GetMob(name);
+        }
+
+        public DiscoveryMobInfo GetMobCache(int fleetId)
+        {
+            if (fleetId <= -1) fleetId = -fleetId;
+
+            lock (FleetsCacheLocker)
+            {
+                var now = DateTime.UtcNow;
+
+                if (FleetsCache.TryGetValue(fleetId, out var cache) == true)
+                {
+                    if ((now - cache.UpdateTime) > FleetCacheLifetime)
+                    {
+                        RemoveMobCache(fleetId);
+                        return null;
+                    }
+
+                    return cache.Fleet;
+                }
+
+                return null;
+            }
+        }
+
+        public void AddMobCache(DiscoveryMobInfo mobInfo)
+        {
+            if (mobInfo is null)
+                return;
+
+            lock (FleetsCacheLocker)
+            {
+                var fleetId = mobInfo.Id < -1 ? -mobInfo.Id : mobInfo.Id;
+                FleetsCache[fleetId] = (mobInfo, DateTime.UtcNow);
+            }
+        }
+
+        public bool RemoveMobCache(int fleetId)
+        {
+            if (fleetId <= -1) fleetId = -fleetId;
+
+            lock (FleetsCacheLocker)
+            {
+                return FleetsCache.Remove(fleetId);
+            }
         }
     }
 }
