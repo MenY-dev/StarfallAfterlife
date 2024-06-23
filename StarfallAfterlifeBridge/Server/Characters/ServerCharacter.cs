@@ -1082,5 +1082,31 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                 DiscoveryClient?.Invoke(c => c.BroadcastHouseCharacterOnlineStatus(isOnline));
             }
         }
+
+        public JsonNode GetRealmParam(string paramName)
+        {
+            if (paramName is null)
+                return null;
+
+            return Progress?.RealmParams[paramName];
+        }
+
+        public void SetRealmParam(string name, object value) =>
+            SetRealmParam(KeyValuePair.Create(name, value));
+
+        public void SetRealmParam(params KeyValuePair<string, object>[] newParams)
+        {
+            lock (_characterLocker)
+            {
+                if (newParams is null or { Length: < 1 })
+                    return;
+
+                var data = newParams.Select(i =>
+                        KeyValuePair.Create(i.Key, JsonHelpers.ParseNodeUnbuffered(i.Value))).ToArray();
+
+                (Progress ??= new()).RealmParams?.Override(data);
+                DiscoveryClient?.Invoke(c => c.SyncNewRealmParams(data));
+            }
+        }
     }
 }

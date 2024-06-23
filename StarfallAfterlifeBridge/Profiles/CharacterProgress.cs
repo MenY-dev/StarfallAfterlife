@@ -41,6 +41,8 @@ namespace StarfallAfterlife.Bridge.Profiles
         public Dictionary<int, int> SeasonsProgress { get; set; } = new();
         public HashSet<int> SeasonsRewards { get; set; } = new();
 
+        public JsonObject RealmParams { get; set; } = new();
+
         public string Path { get; set; }
 
 
@@ -127,6 +129,7 @@ namespace StarfallAfterlife.Bridge.Profiles
             TakenRewards = doc["taken_rewards"]?.DeserializeUnbuffered<HashSet<int>>() ?? new();
             SeasonsProgress = doc["seasons_progress"]?.DeserializeUnbuffered<Dictionary<int, int>>() ?? new();
             SeasonsRewards = doc["seasons_rewards"]?.DeserializeUnbuffered<HashSet<int>>() ?? new();
+            RealmParams = doc["realm_params"]?.AsObjectSelf() ?? new();
         }
 
         public override JsonNode ToJson()
@@ -166,6 +169,7 @@ namespace StarfallAfterlife.Bridge.Profiles
             }
 
             doc["systems"] = systems;
+            doc["realm_params"] = RealmParams?.Clone() ?? new JsonObject();
             return doc;
         }
 

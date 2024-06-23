@@ -99,6 +99,19 @@ namespace StarfallAfterlife.Bridge.Server
             }, SfaServerAction.SyncProgress);
         }
 
+        public void SyncNewRealmParams(params KeyValuePair<string, JsonNode>[] newParams)
+        {
+            if (newParams is null or { Length: < 1 })
+                return;
+
+            Client?.Send(new JsonObject()
+            {
+                ["new_realm_params"] = new JsonObject(newParams
+                    .Where(i => i.Key is not null)
+                    .Select(i => KeyValuePair.Create(i.Key, i.Value?.Clone()))),
+            }, SfaServerAction.SyncProgress);
+        }
+
         public void SyncExploration(IEnumerable<int> systems, IEnumerable<IGalaxyMapObject> newObjects = null)
         {
             var newSystemsResponse = new JsonArray();

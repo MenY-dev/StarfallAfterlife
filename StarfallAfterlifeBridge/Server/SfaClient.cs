@@ -766,6 +766,11 @@ namespace StarfallAfterlife.Bridge.Server
                         progress.AddSeasonProgress(id, xp);
                 }
 
+                if (doc["new_realm_params"] is JObject newRealmParams)
+                {
+                    progress.RealmParams?.Override(newRealmParams);
+                }
+
                 profile.SaveCharacterProgress();
             }
         }
