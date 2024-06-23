@@ -517,10 +517,10 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
                 if (quest.Info?.Reward is QuestReward reward)
                 {
-                    var xpFactor = (quest.Info?.Level ?? 0) < AccessLevel ? 0.1 : 1;
+                    var xpFactor = quest.Info.Type == QuestType.Task && quest.Info.Level < AccessLevel ? 0.1 : 1;
                     var igc = reward.IGC > 0 ? reward.IGC : default(int?);
                     var xp = reward.Xp > 0 ? (int)(reward.Xp * xpFactor) : default(int?);
-                    var bgc = SfaDatabase.AccessLevelToQuestBGReward(quest.Info?.Level ?? 1);
+                    var bgc = SfaDatabase.AccessLevelToQuestBGReward(quest.Info.Level);
 
                     AddCharacterCurrencies(igc: igc, bgc: bgc, xp: xp);
 
