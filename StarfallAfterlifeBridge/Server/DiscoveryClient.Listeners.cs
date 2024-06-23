@@ -45,6 +45,7 @@ namespace StarfallAfterlife.Bridge.Server
                     }
 
                     character.UpdateQuestLines();
+                    character.UpdateDailyQuests();
                     character.Party?.SetMemberStarSystem(character.UniqueId, system);
 
                     foreach (var item in CurrentCharacter?.ActiveQuests ?? new())

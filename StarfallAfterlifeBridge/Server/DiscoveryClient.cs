@@ -65,6 +65,7 @@ namespace StarfallAfterlife.Bridge.Server
                     character.HouseTag = character.GetHouse()?.Tag;
                     character.UpdateFleetInfo();
                     character.UpdateQuestLines();
+                    character.UpdateDailyQuests();
                     character.SyncDoctrines();
                 }
             }

@@ -1,5 +1,6 @@
 ﻿using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Mathematics;
+using StarfallAfterlife.Bridge.Primitives;
 using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Realms;
 using StarfallAfterlife.Bridge.Server.Inventory;
@@ -15,6 +16,83 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 {
     public partial class ServerCharacter
     {
+        public void UpdateDailyQuests()
+        {
+            lock (this)
+            {
+                try
+                {
+                    var lastAcceptParam = "last_daily_quest_accept";
+                    var lastAccept = (DateTime?)GetRealmParam(lastAcceptParam) ?? DateTime.MinValue;
+                    var now = DateTime.UtcNow;
+
+                    if (lastAccept.DayOfYear == now.DayOfYear ||
+                        ActiveQuests.Any(q => q?.Info?.Type == QuestType.Daily) == true)
+                        return;
+
+                    if ((Realm?.Database ?? SfaDatabase.Instance) is SfaDatabase dtb)
+                    {
+                        var allLogics = dtb.QuestsLogics
+                            .Where(l => l.Value.Type == QuestType.Daily)
+                            .ToList();
+
+                        if (allLogics.Count < 1)
+                            return;
+
+                        var rnd = new Random128();
+                        var accesLvl = AccessLevel;
+                        var logic = allLogics[rnd.Next(0, allLogics.Count)].Value;
+
+                        DiscoveryClient?.Server?.UseQuestGenerator(gen =>
+                        {
+                            try
+                            {
+                                var quest = gen.GenerateDailyTask(logic);
+
+                                if (quest is null)
+                                    return;
+
+                                var revardType = rnd.Next() % 3;
+                                var revardItems = new List<QuestRevardItemInfo>();
+
+                                if (revardType != 1)
+                                {
+                                    var availableItems = (
+                                        from bp in dtb.Blueprints.Values
+                                        where bp.MinLvl <= accesLvl && bp.IsAvailableForTrading == true
+                                        where bp.IsDefective == false && bp.Faction is Faction.None or Faction.Other
+                                        select bp).ToList();
+
+                                    if (availableItems.Count > 0)
+                                    {
+                                        var item = availableItems[rnd.Next(0, availableItems.Count)];
+                                        revardItems.Add(new() { Count = rnd.Next(1,3), Id = item.Id });
+                                    }
+                                }
+
+                                quest.Reward = quest.Reward.Combine(new()
+                                {
+                                    IGC = revardType > 0 ? accesLvl * 14000 : 0,
+                                    Xp = revardType < 2 ? accesLvl * 15000 : 0,
+                                    Items = revardItems,
+                                });
+
+                                SetRealmParam(lastAcceptParam, now);
+
+                                DiscoveryClient?.Invoke(c => c.Server?.RealmInfo?.Use(r =>
+                                {
+                                    if (AcceptDynamicQuest(quest, false) == true)
+                                        c.SendQuestDataUpdate();
+                                }));
+                            }
+                            catch { }
+                        });
+                    }
+                }
+                catch { }
+            }
+        }
+
         public void UpdateQuestLines()
         {
             if (Realm is SfaRealm realm &&

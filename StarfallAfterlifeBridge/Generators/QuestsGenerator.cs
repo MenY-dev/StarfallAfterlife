@@ -308,6 +308,56 @@ namespace StarfallAfterlife.Bridge.Generators
             }
         }
 
+        public DiscoveryQuest GenerateDailyTask(QuestLogicInfo info)
+        {
+            if (info is null || info.Type is not QuestType.Daily)
+                return null;
+
+            var quest = new DiscoveryQuest()
+            {
+                Id = new QuestIdInfo
+                {
+                    Type = info.Type,
+                    LocalId = Rnd.Next(0, 10000),
+                }.ToId(),
+                LogicId = info.Id,
+                LogicName = info.UniqueLogicIdentifier,
+                Type = info.Type,
+                Reward = new(),
+                ObjectSystem = -1,
+                ObjectType = GalaxyMapObjectType.None,
+                ObjectId = -1,
+                Level = 0,
+                ObjectFaction = Faction.None,
+                Conditions = new JsonArray(),
+            };
+
+            var context = new QuestContext
+            {
+                Quest = quest,
+                MobsDatabase = Realm.MobsDatabase,
+                MobsMap = Realm.MobsMap,
+                TargetLevel = quest.Level,
+                TargetSystemId = quest.ObjectSystem,
+                TargetFaction = quest.ObjectFaction,
+            };
+            
+            foreach (var item in info.Conditions)
+            {
+                if (GenerateQuestCondition(item, context) is JsonObject condition)
+                    quest.Conditions.Add(condition);
+                else
+                    return null;
+            }
+
+            if (info.Conditions.Count > 0 && quest.Conditions.Count < 1)
+                return null;
+
+            quest.Reward = info.Rewards.FirstOrDefault().Combine(GenerateRewardForTaskBoardQuest(quest));
+
+            return quest;
+        }
+
         public DiscoveryQuest GenerateHouseTask(string identity, int systemId)
         {
             if (identity is null)
