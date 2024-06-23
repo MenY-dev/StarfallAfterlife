@@ -32,16 +32,18 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
                     if ((Realm?.Database ?? SfaDatabase.Instance) is SfaDatabase dtb)
                     {
-                        var allLogics = dtb.QuestsLogics
-                            .Where(l => l.Value.Type == QuestType.Daily)
+                        var accesLvl = AccessLevel;
+                        var logicId = "daily_quest_logic" + accesLvl;
+                        var allLogics = dtb.QuestsLogics.Values
+                            .Where(l => l.Type == QuestType.Daily)
+                            .Where(l => logicId.Equals(l.UniqueLogicIdentifier, StringComparison.OrdinalIgnoreCase))
                             .ToList();
 
                         if (allLogics.Count < 1)
                             return;
 
                         var rnd = new Random128();
-                        var accesLvl = AccessLevel;
-                        var logic = allLogics[rnd.Next(0, allLogics.Count)].Value;
+                        var logic = allLogics[rnd.Next(0, allLogics.Count)];
 
                         DiscoveryClient?.Server?.UseQuestGenerator(gen =>
                         {
