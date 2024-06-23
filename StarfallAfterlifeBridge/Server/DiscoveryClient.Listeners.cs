@@ -132,6 +132,10 @@ namespace StarfallAfterlife.Bridge.Server
                 character.Fleet == fleet)
             {
                 UpdateExploration(system.Id, newHex, vision);
+                character.HexTraveled++;
+
+                if ((character.HexTraveled % 10) == 0)
+                    character.AddNewStats(new() { { "Stat.FleetActions.HexTraveled", 10 } });
             }
         });
 

@@ -96,6 +96,8 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
         public CharacterParty Party { get; set; }
 
+        public int HexTraveled { get; set; }
+
         protected Dictionary<int, DateTime> AbilitiesCooldown { get; } = new();
 
         private readonly object _characterLocker = new();

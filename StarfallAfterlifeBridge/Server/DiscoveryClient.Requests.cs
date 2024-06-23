@@ -550,8 +550,13 @@ namespace StarfallAfterlife.Bridge.Server
 
                         fleet.AddEffect(new() { Duration = 6, Logic = GameplayEffectType.Immortal });
                         currentSystem.RemoveFleet(fleet);
-                        Invoke(() => SendFleetWarpedGateway(currentSystem.Id, fleet.Type, fleet.Id));
+                        Invoke(() =>
+                        {
+                            SendFleetWarpedGateway(currentSystem.Id, fleet.Type, fleet.Id);
+                            character.AddNewStats(new() { { "Stat.FleetActions.WarpOnVortex", 1 } });
+                        });
                         newSystem.AddFleet(fleet, newLocation);
+
                     }
                 }
             });
@@ -611,6 +616,7 @@ namespace StarfallAfterlife.Bridge.Server
 
                     CurrentCharacter?.AddCharacterCurrencies(igc: -cost);
                     SendFleetWarpedMothership(currentSystem.Id, fleet.Type, fleet.Id);
+                    character.AddNewStats(new() { { "Stat.FleetActions.WarpOnGateway", 1 } });
                 });
 
                 g.BeginPostUpdateAction(g => newSystem.AddFleet(fleet, gate.Location));
@@ -658,6 +664,7 @@ namespace StarfallAfterlife.Bridge.Server
 
                         SyncSessionFleetInfo();
                         SendFleetCargo();
+                        character.AddNewStats(new() { { "Stat.FleetActions.SendCargoToMotherhsip", 1 } });
                     }
                 }
             });
