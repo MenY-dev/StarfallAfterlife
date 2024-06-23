@@ -21,6 +21,8 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         public bool InBattle { get; set; }
 
+        public int KilledShips { get; set; }
+
         public DiscoveryBattleMobInfo(BattleMember member, DiscoveryMobInfo mob)
         {
             if (mob is null || member is null)

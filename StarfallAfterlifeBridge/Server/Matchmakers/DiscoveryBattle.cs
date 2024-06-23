@@ -629,7 +629,13 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                     var battleMob = Mobs?.FirstOrDefault(m => m?.FleetId == mobFleetId);
 
                     if (battleMob is not null)
-                        Leave(battleMob, Location, true);
+                    {
+                        battleMob.KilledShips++;
+
+                        if (battleMob.Mob?.Ships is not IList<DiscoveryMobShipData> ships ||
+                            ships.Count <= battleMob.KilledShips)
+                            Leave(battleMob, Location, true);
+                    }
 
                     var mobInfo = battleMob?.Mob ?? Bosses?.FirstOrDefault(b => b?.FleetId == mobFleetId)?.Mob;
                     var killInfo = new MobKillInfo();
