@@ -8,6 +8,7 @@ using Avalonia.Platform;
 using Avalonia.Utilities;
 using StarfallAfterlife.Bridge.Database;
 using StarfallAfterlife.Bridge.Launcher;
+using StarfallAfterlife.Launcher.Services;
 using StarfallAfterlife.Launcher.ViewModels;
 using StarfallAfterlife.Launcher.Views;
 using System;
@@ -51,6 +52,13 @@ public partial class App : Application
         };
 
         Launcher.Load();
+
+        try
+        {
+            if (Launcher.TestGameDirectory() == false)
+                Launcher.GameDirectory = GameFinder.Instance.FindGameDirectory();
+        }
+        catch { }
 
         if ((string)Launcher.SettingsStorage["localization"] is string currentLoc)
             CurrentLocalization = currentLoc;
