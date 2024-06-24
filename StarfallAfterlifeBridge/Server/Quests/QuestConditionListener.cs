@@ -49,6 +49,8 @@ namespace StarfallAfterlife.Bridge.Server.Quests
             }
         }
 
+        public float Factor { get; set; } = 1;
+
         public bool ListeningStarted { get; protected set; } = false;
 
         public virtual bool IsCompleted => Progress >= ProgressRequire;
@@ -64,6 +66,23 @@ namespace StarfallAfterlife.Bridge.Server.Quests
             
             if (info is JsonObject)
                 LoadConditionInfo(info);
+
+            var dtb = Quest?.Realm?.Database ?? SfaDatabase.Instance;
+
+            if (Quest?.Info?.LogicId is int logicId &&
+                Identity is string identity &&
+                dtb.GetQuestLogic(logicId) is QuestLogicInfo logic &&
+                logic.Conditions is List<QuestConditionInfo> conditions)
+            {
+                foreach (var item in conditions)
+                {
+                    if (item.Identity?.Equals(identity, StringComparison.Ordinal) == true)
+                    {
+                        Factor = Math.Max(1, item.QuestValueFactor);
+                        break;
+                    }
+                }
+            }
         }
 
         public static QuestConditionListener Create(QuestListener quest, JsonNode info)
