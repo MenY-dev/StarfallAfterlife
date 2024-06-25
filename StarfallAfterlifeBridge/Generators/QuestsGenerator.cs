@@ -313,6 +313,14 @@ namespace StarfallAfterlife.Bridge.Generators
             if (info is null || info.Type is not QuestType.Daily)
                 return null;
 
+            var level = 1;
+
+            if (info.UniqueLogicIdentifier is string logicId &&
+                logicId.Length > 0 &&
+                logicId[^1..] is string levelString &&
+                int.TryParse(levelString, out int parsedLevel) == true)
+                level = Math.Max(1, parsedLevel);
+
             var quest = new DiscoveryQuest()
             {
                 Id = new QuestIdInfo
@@ -327,7 +335,7 @@ namespace StarfallAfterlife.Bridge.Generators
                 ObjectSystem = -1,
                 ObjectType = GalaxyMapObjectType.None,
                 ObjectId = -1,
-                Level = 0,
+                Level = level,
                 ObjectFaction = Faction.None,
                 Conditions = new JsonArray(),
             };
@@ -353,7 +361,7 @@ namespace StarfallAfterlife.Bridge.Generators
             if (info.Conditions.Count > 0 && quest.Conditions.Count < 1)
                 return null;
 
-            quest.Reward = info.Rewards.FirstOrDefault().Combine(GenerateRewardForTaskBoardQuest(quest));
+            quest.Reward = info.Rewards?.FirstOrDefault() ?? new();
 
             return quest;
         }

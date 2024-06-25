@@ -10,8 +10,6 @@ namespace StarfallAfterlife.Bridge.Server.Quests.Conditions
 {
     internal class StatTrackingConditionListener : QuestConditionListener, ICharacterListener
     {
-        public float Factor { get; protected set; } = 1;
-
         public string StatTag { get; protected set; } = null;
 
         public StatTrackingConditionListener(QuestListener quest, JsonNode info) : base(quest, info)
@@ -37,7 +35,7 @@ namespace StarfallAfterlife.Bridge.Server.Quests.Conditions
             if (string.IsNullOrWhiteSpace(tag) || tag.Equals(StatTag, StringComparison.InvariantCultureIgnoreCase) == false)
                 return;
 
-            Progress = Math.Min(ProgressRequire, Math.Max(Progress, (int)(Progress + value * Factor)));
+            Progress = Math.Min(ProgressRequire, Math.Max(Progress, (int)(Progress + value)));
         }
     }
 }

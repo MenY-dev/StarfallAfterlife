@@ -459,9 +459,7 @@ namespace StarfallAfterlife.Bridge.Server
                                 progress.Add(new JsonObject
                                 {
                                     ["identity"] = condition.Identity,
-                                    ["progress_done"] = condition.Factor > 1 ?
-                                                        condition.Progress / condition.Factor :
-                                                        condition.Progress,
+                                    ["progress_done"] = condition.Progress,
                                 });
                             }
 
