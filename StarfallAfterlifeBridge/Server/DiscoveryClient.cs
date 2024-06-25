@@ -88,14 +88,20 @@ namespace StarfallAfterlife.Bridge.Server
                 if (character.Fleet is UserFleet fleet &&
                     fleet.State is not FleetState.None)
                 {
+                    foreach (var item in character.CustomInstances.ToArray().Where(i => i.Type == 3))
+                        character.RemoveCustomInstance(item.Id);
+
                     Galaxy?.BeginPreUpdateAction(g =>
                     {
+                        fleet.IsIsolated = false;
                         fleet.SetFleetState(FleetState.InGalaxy);
                         Invoke(() => EnterToStarSystem(character.Fleet?.System?.Id ?? GetCharactDefaultSystem()?.Id ?? 0));
                     });
                 }
                 else
                 {
+                    character.CustomInstances.Clear();
+
                     Client.SendRequest(SfaServerAction.StartSession, new JsonObject
                     {
                         ["character_id"] = CurrentCharacter.UniqueId

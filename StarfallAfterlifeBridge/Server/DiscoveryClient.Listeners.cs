@@ -124,20 +124,59 @@ namespace StarfallAfterlife.Bridge.Server
             SendObjectStockOld(obj as StarSystemObject, storage.Name);
         });
 
-        void IUserFleetListener.OnSystemExplorationChanged(UserFleet fleet, SystemHex newHex, int vision) => Invoke(() =>
+        void IUserFleetListener.OnSystemExplorationChanged(UserFleet fleet, SystemHex newHex, int vision)
         {
             if (fleet is not null &&
-                fleet.System is StarSystem system &&
-                CurrentCharacter is ServerCharacter character &&
-                character.Fleet == fleet)
+                fleet.IsIsolated == true &&
+                fleet.State == FleetState.InGalaxy)
             {
-                UpdateExploration(system.Id, newHex, vision);
-                character.HexTraveled++;
+                Invoke(() =>
+                {
+                    if (fleet.System is StarSystem system &&
+                        CurrentCharacter is ServerCharacter character &&
+                        character.Fleet == fleet &&
+                        character.GetSystemCustomInstances(system.Id).FirstOrDefault(i => i.Hex == newHex) is CustomInstance instance)
+                    {
+                        if (instance.Type == 3)
+                        {
+                            Galaxy?.BeginPreUpdateAction(g =>
+                            {
+                                fleet.SetFleetState(FleetState.InBattle);
 
-                if ((character.HexTraveled % 10) == 0)
-                    character.AddNewStats(new() { { "Stat.FleetActions.HexTraveled", 10 } });
+                                Invoke(c =>
+                                {
+                                    c.SendSetInBattle(instance.Hex, 1);
+                                    c.RequestDiscoveryObjectSync(fleet);
+                                    c.SyncFleetData(fleet);
+
+                                    Server?.Matchmaker?.DiscoveryGameMode?.StartCaravanTutorBattle(character);
+
+                                    c.SendFleetAttacked(
+                                        instance.Id,
+                                        DiscoveryObjectType.CustomInstance,
+                                        newHex);
+                                });
+                            });
+                        }    
+                    }
+                });
             }
-        });
+
+            Invoke(() =>
+            {
+                if (fleet is not null &&
+                    fleet.System is StarSystem system &&
+                    CurrentCharacter is ServerCharacter character &&
+                    character.Fleet == fleet)
+                {
+                    UpdateExploration(system.Id, newHex, vision);
+                    character.HexTraveled++;
+
+                    if ((character.HexTraveled % 10) == 0)
+                        character.AddNewStats(new() { { "Stat.FleetActions.HexTraveled", 10 } });
+                }
+            });
+        }
 
         void IObjectScanningListener.OnScanningStateChanged(DiscoveryFleet fleet, ScanInfo info) => Invoke(() =>
         {

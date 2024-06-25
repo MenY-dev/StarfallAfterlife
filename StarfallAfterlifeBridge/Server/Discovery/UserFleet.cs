@@ -12,6 +12,8 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
     {
         public override DiscoveryObjectType Type => DiscoveryObjectType.UserFleet;
 
+        public bool IsIsolated { get; set; }
+
         private SystemHex _lastHex = SystemHex.Zero; 
 
         public SystemHexMap ExploreMap { get; } = new();
@@ -29,6 +31,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             if (State == FleetState.InGalaxy &&
                 Immortal == false &&
                 Stealth == false &&
+                IsIsolated == false &&
                 DockObjectType == DiscoveryObjectType.None &&
                 System.GetBattle(Hex) is StarSystemBattle battle &&
                 battle.IsPossibleToJoin == true &&

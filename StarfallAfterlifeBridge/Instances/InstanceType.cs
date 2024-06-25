@@ -14,6 +14,7 @@ namespace StarfallAfterlife.Bridge.Instances
         MothershipAssault = 3,
         StationAttack = 4,
         SurvivalMode = 5,
-        RankedMode = 6
+        RankedMode = 6,
+        CaravanTutorial = 7
     }
 }

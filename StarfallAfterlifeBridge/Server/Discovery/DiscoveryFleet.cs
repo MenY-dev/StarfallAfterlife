@@ -397,7 +397,8 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                 target == this ||
                 target.System != System ||
                 target.Stealth == true ||
-                target.DockObjectType != DiscoveryObjectType.None)
+                target.DockObjectType != DiscoveryObjectType.None ||
+                target is UserFleet { IsIsolated: true })
                 return false;
 
             if (target.IsInNebula() == true &&
@@ -414,7 +415,8 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
                 target.System is null ||
                 target.System != System ||
                 target.Stealth == true ||
-                target.Immortal == true)
+                target.Immortal == true ||
+                target is UserFleet { IsIsolated: true })
                 return false;
 
             return true;

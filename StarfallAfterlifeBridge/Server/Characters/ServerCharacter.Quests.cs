@@ -3,6 +3,7 @@ using StarfallAfterlife.Bridge.Mathematics;
 using StarfallAfterlife.Bridge.Primitives;
 using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Realms;
+using StarfallAfterlife.Bridge.Server.Discovery;
 using StarfallAfterlife.Bridge.Server.Inventory;
 using StarfallAfterlife.Bridge.Server.Quests;
 using System;
@@ -16,6 +17,8 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 {
     public partial class ServerCharacter
     {
+        public List<CustomInstance> CustomInstances { get; } = new();
+
         public void UpdateDailyQuests()
         {
             lock (this)
@@ -164,6 +167,117 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                     foreach (var item in items)
                         DiscoveryClient.Invoke(() => dst.Receive(item, item.Count));
                 }
+            }
+        }
+
+        public void SetTutorialStage(int systemId, TutorialStage stage)
+        {
+            if (stage == TutorialStage.NeedMoveToVortex)
+            {
+                DiscoveryClient?.Galaxy?.BeginPreUpdateAction(g =>
+                {
+                    if (Fleet is UserFleet fleet &&
+                        g.GetActiveSystem(systemId, false) is StarSystem system &&
+                        fleet.System == system)
+                    {
+                        fleet.IsIsolated = true;
+
+                        var toRemove = system.Fleets.Where(f => f != fleet).ToArray();
+
+                        DiscoveryClient?.Invoke(c =>
+                        {
+                            foreach (var item in toRemove)
+                            {
+                                c.SendDisconnectObject(systemId, item.Type, item.Id);
+                            }
+                        });
+                    }
+                });
+            }
+            else if (stage == TutorialStage.SpawnPersonalCaravan)
+            {
+                DiscoveryClient?.Galaxy?.BeginPreUpdateAction(g =>
+                {
+                    if (Fleet is UserFleet fleet &&
+                        g.GetActiveSystem(systemId, false) is StarSystem system &&
+                        fleet.System == system)
+                    {
+                        var hex = Fleet.Hex
+                            .GetSpiral(16)
+                            .Skip(14)
+                            .Where(h => h.GetSize() < 17)
+                            .Where(h => system.GetObjectAt(h) is null)
+                            .FirstOrDefault(Fleet.Hex);
+
+                        DiscoveryClient.Invoke(c => AddCustomInstance(systemId, hex, 3));
+                    }
+                });
+            }
+        }
+
+        public CustomInstance AddCustomInstance(int system, SystemHex hex, byte type = 0)
+        {
+            lock (_characterLocker)
+            {
+                var toTemove = CustomInstances
+                    .Where(i => i.System == system && i.Type == type)
+                    .ToList();
+
+                foreach (var item in toTemove)
+                    RemoveCustomInstance(item.Id);
+
+                var id = Enumerable
+                    .Range(1, CustomInstances.Count + 1)
+                    .FirstOrDefault(newId => CustomInstances.Any(i => i.Id == newId) == false);
+
+                var instance = new CustomInstance(system, id, type, hex);
+                CustomInstances.Add(instance);
+
+                DiscoveryClient.Invoke(c =>
+                {
+                    c.RequestDiscoveryObjectSync(system, DiscoveryObjectType.CustomInstance, instance.Id);
+                    c.SyncCustomInstance(instance);
+                });
+
+                return instance;
+            }
+        }
+
+        public void RemoveCustomInstance(int id)
+        {
+            lock (_characterLocker)
+            {
+                var removed = new List<CustomInstance>();
+
+                CustomInstances.RemoveAll(i =>
+                {
+                    if (i.Id == id)
+                    {
+                        removed.Add(i);
+                        return true;
+                    }
+
+                    return false;
+                });
+
+                foreach (var i in removed)
+                    DiscoveryClient.Invoke(c => c.SendDisconnectObject(i.System, DiscoveryObjectType.CustomInstance, i.Id));
+            }
+        }
+
+        public CustomInstance[] GetSystemCustomInstances(int system)
+        {
+            lock (_characterLocker)
+            {
+                return CustomInstances.Where(i => i.System == system).ToArray();
+            }
+        }
+
+        public CustomInstance GetCustomInstance(int id)
+        {
+            lock (_characterLocker)
+            {
+                return CustomInstances.FirstOrDefault(i => i.Id == id);
             }
         }
     }

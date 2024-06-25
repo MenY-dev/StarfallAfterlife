@@ -274,6 +274,7 @@ namespace StarfallAfterlife.Bridge.Instances
                 case InstanceType.StationAttack: return new StationAttackInstance() { Info = info };
                 case InstanceType.SurvivalMode: return new SurvivalModeInstance() { Info = info };
                 case InstanceType.RankedMode: return new RankedInstance() { Info = info };
+                case InstanceType.CaravanTutorial: return new CaravanTutorInstanse() { Info = info };
                 default: return null;
             }
         }

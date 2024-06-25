@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using StarfallAfterlife.Bridge.Server.Quests;
 using System.Text.Json.Nodes;
 using StarfallAfterlife.Bridge.Serialization;
+using StarfallAfterlife.Bridge.Server.Characters;
 
 namespace StarfallAfterlife.Bridge.Server
 {
@@ -386,6 +387,23 @@ namespace StarfallAfterlife.Bridge.Server
             }
         }
 
+        public void SyncCustomInstance(CustomInstance instance)
+        {
+            SendDiscoveryMessage(
+                instance.System,
+                DiscoveryObjectType.CustomInstance,
+                instance.Id,
+                DiscoveryServerAction.Sync,
+                writer =>
+            {
+                writer.WriteByte((byte)Faction.None); // Faction
+                writer.WriteInt32(0); // Faction group
+                writer.WriteUInt16(0); // Quest count
+                writer.WriteHex(instance.Hex); // Position
+                writer.WriteByte(instance.Type); // Type
+            });
+        }
+
         public virtual void SyncRichAsteroid(int systemId, int asteroidId)
         {
             if (Galaxy
@@ -422,6 +440,18 @@ namespace StarfallAfterlife.Bridge.Server
 
         public virtual void SyncFleetData(DiscoveryFleet fleet)
         {
+            if (fleet is null)
+                return;
+
+            if (CurrentCharacter is ServerCharacter character &&
+                character.Fleet is UserFleet charFleet &&
+                charFleet != fleet)
+            {
+                if (charFleet.IsIsolated == true ||
+                    (fleet as UserFleet)?.IsIsolated == true)
+                    return;
+            }
+
             SendSyncMessage(
                 fleet,
                 writer =>

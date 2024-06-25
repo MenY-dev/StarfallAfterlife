@@ -135,6 +135,12 @@ namespace StarfallAfterlife.Bridge.Profiles
         [JsonPropertyName("effects")]
         public CharacterEffectsCollection Effects { get; set; } = new();
 
+        [JsonPropertyName("events")]
+        public HashSet<string> Events { get; set; } = new()
+        {
+            "ShipyardBanDropSessionTutorial"
+        };
+
         [JsonPropertyName("has_session_results")]
         public bool HasSessionResults { get; set; } = false;
 

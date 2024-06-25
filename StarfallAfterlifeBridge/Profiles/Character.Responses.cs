@@ -592,23 +592,12 @@ namespace StarfallAfterlife.Bridge.Profiles
 
         public JsonNode CreateCheckedEventsResponse()
         {
-            return new JsonArray()
-            {
-                new JsonObject { ["event_id"] = "DiscoveryIntroTutorial" },
-                new JsonObject { ["event_id"] = "DiscoveryMothershipTutorial" },
-                new JsonObject { ["event_id"] = "DiscoveryCaravanTutorial" },
-                new JsonObject { ["event_id"] = "DiscoveryPostCaravanTutorial" },
-                new JsonObject { ["event_id"] = "DiscoveryQuestsTutorial" },
-                new JsonObject { ["event_id"] = "DiscoveryAutopilotTutorial" },
-                new JsonObject { ["event_id"] = "ShipyardBanDropSessionTutorial" },
-                new JsonObject { ["event_id"] = "ShipyardIntroTutorial" },
-                new JsonObject { ["event_id"] = "ShipyardShipEditTutorial" },
-                new JsonObject { ["event_id"] = "ShipyardCraftingTutorial" },
-                new JsonObject { ["event_id"] = "ShipyardShipBuildTutorial" },
-                new JsonObject { ["event_id"] = "FirstChoiceTutorial" },
-                new JsonObject { ["event_id"] = "DiscoveryRecall" },
-                new JsonObject { ["event_id"] = "MiningContextHint" },
-            };
+
+
+            return Events?.ToArray()
+                .Append("ShipyardBanDropSessionTutorial")
+                .Select(e => new JsonObject { ["event_id"] = e ?? "" })
+                .ToJsonArray() ?? new JsonArray();
         }
     }
 }

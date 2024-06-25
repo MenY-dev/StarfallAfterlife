@@ -170,6 +170,9 @@ namespace StarfallAfterlife.Bridge.Server
                 case DiscoveryClientAction.ReportStarName:
                     HandleReportStarName(reader, systemId, objectType, objectId); break;
 
+                case DiscoveryClientAction.SetTutorialStage:
+                    HandleSetTutorialStage(reader, systemId, objectType, objectId); break;
+
                 default:
                     InputFromDiscoveryHousesChannel(reader, action, systemId, objectType, objectId);
                     break;
@@ -291,6 +294,18 @@ namespace StarfallAfterlife.Bridge.Server
         {
             int systemId = reader.ReadInt32();
             SfaDebug.Print($"HandleSwitchViewToStarSystem (SystemId = {systemId})");
+
+            if (CurrentCharacter?.GetSystemCustomInstances(systemId) is CustomInstance[] customInstances)
+            {
+                foreach (var instance in customInstances)
+                {
+                    Invoke(c =>
+                    {
+                        c.RequestDiscoveryObjectSync(systemId, DiscoveryObjectType.CustomInstance, instance.Id);
+                        c.SyncCustomInstance(instance);
+                    });
+                }
+            }
 
             Galaxy.BeginPreUpdateAction(g =>
             {
@@ -996,7 +1011,13 @@ namespace StarfallAfterlife.Bridge.Server
                     fleet.Id == objectId &&
                     system.Id == systemId)
                 {
-                    if (system.GetObjectsAt<SecretObject>(hex, false).FirstOrDefault() is SecretObject secret &&
+                    var objectsInHex = system.GetObjectsAt(hex, false);
+
+                    if (character.GetSystemCustomInstances(systemId).FirstOrDefault(i => i.Hex == hex) is CustomInstance instance)
+                    {
+
+                    }
+                    else if (objectsInHex.FirstOrDefault(o => o is SecretObject) is SecretObject secret &&
                         character.Progress?.SecretLocs?.Contains(secret.Id) is null or false)
                     {
                         fleet.ExploreSecretObject(secret);
@@ -1015,6 +1036,26 @@ namespace StarfallAfterlife.Bridge.Server
         {
             var targetObjectId = reader.ReadInt32();
             var targetObjectType = (DiscoveryObjectType)reader.ReadByte();
+
+            if (targetObjectType == DiscoveryObjectType.CustomInstance &&
+                CurrentCharacter is ServerCharacter character &&
+                CurrentCharacter.GetCustomInstance(targetObjectId) is CustomInstance instance)
+            {
+                Galaxy.BeginPreUpdateAction(g =>
+                {
+                    var fleet = CurrentCharacter?.Fleet;
+
+                    if (fleet is null ||
+                        fleet.System is null ||
+                        fleet.System.Id != systemId ||
+                        fleet.Id != objectId)
+                        return;
+
+                    fleet.MoveTo(instance.Hex);
+                });
+
+                return;
+            }
 
             Galaxy.BeginPreUpdateAction(g =>
             {
@@ -1177,6 +1218,14 @@ namespace StarfallAfterlife.Bridge.Server
         private void HandleReportStarName(SfReader reader, int systemId, DiscoveryObjectType objectType, int objectId)
         {
             Server?.ReportSystemName(systemId, Client);
+        }
+
+        private void HandleSetTutorialStage(SfReader reader, int systemId, DiscoveryObjectType objectType, int objectId)
+        {
+            var stage = (TutorialStage)reader.ReadByte();
+
+            if (CurrentCharacter is ServerCharacter character)
+                Invoke(_ => character.SetTutorialStage(systemId, stage));
         }
     }
 }

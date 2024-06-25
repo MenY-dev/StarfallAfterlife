@@ -325,10 +325,10 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 PendingMembers.Clear();
 
                 foreach (var character in Characters.ToArray())
-                    Leave(character, SystemBattle.Hex);
+                    Leave(character, SystemBattle?.Hex ?? default);
 
                 foreach (var mob in Mobs.ToArray())
-                    Leave(mob, SystemBattle.Hex);
+                    Leave(mob, SystemBattle?.Hex ?? default);
 
                 Bosses?.Clear();
 
@@ -338,7 +338,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 }, TimeSpan.FromSeconds(10));
 
                 Matchmaker.RemoveBattle(this);
-                Galaxy?.BeginPreUpdateAction(g => SystemBattle.Finish());
+                Galaxy?.BeginPreUpdateAction(g => SystemBattle?.Finish());
             }
         }
 

@@ -1110,5 +1110,24 @@ namespace StarfallAfterlife.Bridge.Game
 
             return result;
         }
+
+        public JsonNode HandleSetCharEvent(SfaHttpQuery query)
+        {
+
+            JsonNode result = null;
+
+            Profile.Use(p =>
+            {
+                if ((string)query["event_id"] is string eventId &&
+                    p.GameProfile.CurrentCharacter is Character character)
+                {
+                    (character.Events ??= new()).Add(eventId);
+                    result = new JsonObject { ["ok"] = 1 };
+                    p.SaveGameProfile();
+                }
+            });
+
+            return result;
+        }
     }
 }

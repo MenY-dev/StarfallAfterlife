@@ -573,6 +573,18 @@ namespace StarfallAfterlife.Bridge.Server
                 });
         }
 
+        public void SendSetInBattle(SystemHex hex, int inBattle)
+        {
+            SendDiscoveryMessage(
+                CurrentCharacter?.Fleet,
+                DiscoveryServerAction.SetInBattle,
+                writer =>
+                {
+                    writer.WriteInt32(inBattle);
+                    writer.WriteHex(hex);
+                });
+        }
+
         public void SendConnectToInstance(string address, int port, string auth)
         {
             if (address is null || auth is null || port < 0 || port > ushort.MaxValue)

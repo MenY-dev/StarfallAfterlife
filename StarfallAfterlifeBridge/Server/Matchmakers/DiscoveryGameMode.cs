@@ -1,4 +1,5 @@
 ﻿using StarfallAfterlife.Bridge.Instances;
+using StarfallAfterlife.Bridge.Server.Characters;
 using StarfallAfterlife.Bridge.Server.Discovery;
 using System;
 using System.Collections.Generic;
@@ -53,5 +54,18 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
             Matchmaker?.Battles.FirstOrDefault(b =>
                 b is DiscoveryBattle battle &&
                 battle.SystemBattle == systemBattle) as DiscoveryBattle;
+
+        public void StartCaravanTutorBattle(ServerCharacter character)
+        {
+            var match = new CaravanTutorBattle()
+            {
+                GameMode = this,
+            };
+
+            match.Init();
+            Matchmaker.AddBattle(match);
+            match.AddToBattle(new BattleMember(character.Fleet, BattleRole.Attack, default));
+            match.Start();
+        }
     }
 }
