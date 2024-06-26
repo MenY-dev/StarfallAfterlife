@@ -473,18 +473,23 @@ namespace StarfallAfterlife.Bridge.Server.Characters
 
             DiscoveryClient?.Invoke(c =>
             {
+                if (quest is DoctrineQuestListener == true)
+                    return;
+
                 bool isDynamic = QuestIdInfo.IsDynamicQuestId(quest.Id);
                 Progress.CompletedQuests ??= new();
                 Progress.ActiveQuests ??= new();
 
-                if (quest is DoctrineQuestListener == false &&
-                    Progress.ActiveQuests.ContainsKey(quest.Id) == true &&
-                    (isDynamic == true && Progress.CompletedQuests.Contains(quest.Id) == false))
+
+                if (Progress.ActiveQuests.ContainsKey(quest.Id) == true &&
+                    Progress.CompletedQuests.Contains(quest.Id) == false)
                 {
                     if (isDynamic == true &&
                         Progress.ActiveQuests.TryGetValue(quest.Id, out var currentProgress) == true &&
                         currentProgress.QuestData is DiscoveryQuest dynamicQuestData)
+                    {
                         questProgress.QuestData = dynamicQuestData;
+                    }
 
                     Progress.ActiveQuests[quest.Id] = questProgress;
                     c?.SyncQuestProgress(quest.Id, questProgress);
