@@ -37,6 +37,9 @@ namespace StarfallAfterlife.Bridge.Server
                 case SfaServerAction.TakeCharactRewardFromQueue:
                     ProcessTakeCharactRewardFromQueue(JsonHelpers.ParseNodeUnbuffered(text));
                     break;
+                case SfaServerAction.SyncCharacterData:
+                    ProcessSyncCharacterData(JsonHelpers.ParseNodeUnbuffered(text));
+                    break;
                 default:
                     break;
             }
@@ -1157,6 +1160,22 @@ namespace StarfallAfterlife.Bridge.Server
                 (int?)doc["reward_id"] is int rewardId)
                     Characters?.FirstOrDefault(c => c?.UniqueId == charId)?
                         .AddReward(rewardId);
+            });
+        }
+
+        private void ProcessSyncCharacterData(JsonNode doc)
+        {
+            Invoke(() =>
+            {
+                if (doc is not null &&
+                    (int?)doc["char_id"] is int charId &&
+                    Characters?.FirstOrDefault(c => c?.UniqueId == charId) is ServerCharacter character)
+                {
+                    if (doc["detachments"]?.AsArraySelf() is JsonArray detachments)
+                    {
+                        character.SyncAbilities(detachments);
+                    }
+                }
             });
         }
 

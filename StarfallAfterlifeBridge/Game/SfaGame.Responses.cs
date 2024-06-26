@@ -228,51 +228,7 @@ namespace StarfallAfterlife.Bridge.Game
 
             if (flags.HasFlag(UserDataFlag.Detachments))
             {
-                JsonArray detachments = new JsonArray();
-
-                if (Profile?.CurrentSession is DiscoverySession session)
-                {
-                    var activeDetachments = character.Detachments.FirstOrDefault(d => d.Key == character.CurrentDetachment);
-                    var slots = new JsonObject();
-
-                    foreach (var ship in session?.Ships ?? new())
-                        if (ship is not null)
-                            slots[ship.Slot.ToString()] = ship.Id < 1 ? 0 : ship.Id + character.IndexSpace;
-
-                    detachments.Add(new JsonObject()
-                    {
-                        ["id"] = activeDetachments.Key,
-                        ["xp"] = activeDetachments.Value.Xp,
-                        ["slots"] = slots,
-                        ["abilities"] = JsonHelpers.ParseNodeUnbuffered(character.CreateDetachmentAbilitiesResponse(activeDetachments.Value)?.ToJsonString()),
-                    });
-                }
-                else
-                {
-                    foreach (var detachment in character.Detachments)
-                    {
-                        detachments.Add(new JsonObject()
-                        {
-                            ["id"] = detachment.Key,
-                            ["xp"] = detachment.Value.Xp,
-                            ["slots"] = character.CreateDetachmentSlotsResponse(detachment.Value),
-                            ["abilities"] = character.CreateDetachmentAbilitiesResponse(detachment.Value),
-                        });
-                    }
-                }
-
-                //foreach (var detachment in character.Detachments)
-                //{
-                //    detachments.Add(new JsonObject()
-                //    {
-                //        ["id"] = detachment.Key,
-                //        ["xp"] = detachment.Value.Xp,
-                //        ["slots"] = JsonHelpers.ParseNodeUnbuffered(character.CreateDetachmentSlotsResponse(detachment.Value)?.ToJsonString()),
-                //        ["abilities"] = JsonHelpers.ParseNodeUnbuffered(character.CreateDetachmentAbilitiesResponse(detachment.Value)?.ToJsonString()),
-                //    });
-                //}
-
-                doc["detachments"] = detachments;
+                doc["detachments"] = CreateDetachmentsResponse(character);
             }
 
             if (flags.HasFlag(UserDataFlag.ProjectsResearch))
@@ -358,6 +314,47 @@ namespace StarfallAfterlife.Bridge.Game
             }
 
             return doc;
+        }
+
+        public JsonNode CreateDetachmentsResponse(Character character)
+        {
+            JsonArray detachments = new JsonArray();
+
+            if (character is null)
+                return detachments;
+
+            if (Profile?.CurrentSession is DiscoverySession session)
+            {
+                var activeDetachments = character.Detachments.FirstOrDefault(d => d.Key == character.CurrentDetachment);
+                var slots = new JsonObject();
+
+                foreach (var ship in session?.Ships ?? new())
+                    if (ship is not null)
+                        slots[ship.Slot.ToString()] = ship.Id < 1 ? 0 : ship.Id + character.IndexSpace;
+
+                detachments.Add(new JsonObject()
+                {
+                    ["id"] = activeDetachments.Key,
+                    ["xp"] = activeDetachments.Value.Xp,
+                    ["slots"] = slots,
+                    ["abilities"] = JsonHelpers.ParseNodeUnbuffered(character.CreateDetachmentAbilitiesResponse(activeDetachments.Value)?.ToJsonString()),
+                });
+            }
+            else
+            {
+                foreach (var detachment in character.Detachments)
+                {
+                    detachments.Add(new JsonObject()
+                    {
+                        ["id"] = detachment.Key,
+                        ["xp"] = detachment.Value.Xp,
+                        ["slots"] = character.CreateDetachmentSlotsResponse(detachment.Value),
+                        ["abilities"] = character.CreateDetachmentAbilitiesResponse(detachment.Value),
+                    });
+                }
+            }
+
+            return detachments;
         }
 
         public JsonNode CreateShipResponse(FleetShipInfo ship)

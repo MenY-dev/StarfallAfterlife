@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace StarfallAfterlife.Bridge.Database
@@ -38,6 +39,12 @@ namespace StarfallAfterlife.Bridge.Database
         public List<LevelQuestInfo> LevelQuests { get; } = new();
 
         public Dictionary<int, AbilityInfo> Abilities { get; } = new();
+
+        public List<KeyValuePair<int, int>[]> AbilityProgression { get; } = new();
+
+        public Dictionary<int, int> AbilityLevels { get; } = new();
+
+        public Dictionary<int, int[]> CharLevelAbilities { get; } = new();
 
         public Dictionary<int, HouseRankInfo> HouseRanks { get; } = new();
 
@@ -213,6 +220,11 @@ namespace StarfallAfterlife.Bridge.Database
                             Xp = (int?)levelDoc["xp_for_level"] ?? 0,
                             NewAbilityCells = (int?)levelDoc["ability_cells"] ?? 0,
                             NewAccessLevel = (int?)levelDoc["access_level"] ?? 0,
+                            NewAbilities = levelDoc["abilities"]?.AsArraySelf()?
+                                .Select(n => (int?)n?.AsObjectSelf()?["ability_id"])
+                                .Where(i => i is not null)
+                                .Select(i => i.Value)
+                                .ToArray()
                         };
 
                         totalAbilityCells += level.NewAbilityCells;
@@ -263,7 +275,7 @@ namespace StarfallAfterlife.Bridge.Database
                         }
                     }
 
-                    foreach (var logic in line["logics"]?.AsArray() ?? new())
+                    foreach (var logic in line["logics"]?.AsArraySelf() ?? new())
                     {
                         if (logic is not JsonObject)
                             continue;
@@ -284,7 +296,7 @@ namespace StarfallAfterlife.Bridge.Database
                 }
             }
 
-            if (doc["charact_level_quests"]?.AsArray() is JsonArray levelQuests)
+            if (doc["charact_level_quests"]?.AsArraySelf() is JsonArray levelQuests)
             {
                 foreach (var quest in levelQuests)
                 {
@@ -296,7 +308,7 @@ namespace StarfallAfterlife.Bridge.Database
                 }
             }
 
-            if (doc["mob_tags"]?.AsArray() is JsonArray mobTags)
+            if (doc["mob_tags"]?.AsArraySelf() is JsonArray mobTags)
             {
                 foreach (var tagNode in mobTags)
                 {
@@ -305,61 +317,111 @@ namespace StarfallAfterlife.Bridge.Database
                 }
             }
 
-            if (doc["character_abilities"]?["abilities"]?.AsArray() is JsonArray abilities)
+            if (doc["character_abilities"].AsObjectSelf() is JsonObject abilitiesInfo)
             {
-                foreach (var ability in abilities)
+                if (abilitiesInfo["abilities"]?.AsArraySelf() is JsonArray abilities)
                 {
-                    if ((int?)ability["id"] is int id)
+                    foreach (var ability in abilities)
                     {
-                        var info = new AbilityInfo
+                        if ((int?)ability["id"] is int id)
                         {
-                            Id = id,
-                            Logic = (AbilityLogic?)(byte?)ability["logic"] ?? AbilityLogic.Unknown,
-                            TargetType = (AbilityTargetType?)(byte?)ability["target_type"] ?? AbilityTargetType.Passive,
-                        };
-
-                        if (ability["additionalparams"] is JsonObject additionalParams)
-                        {
-                            if (additionalParams["params"] is JsonObject logicParams)
+                            var info = new AbilityInfo
                             {
-                                info.Cooldown = (float?)logicParams["cooldown"] ?? 0;
-                                info.AgroVision = (float?)logicParams["agrovision"] ?? 0;
-                                info.NebulaVision = (float?)logicParams["nebula_vision"] ?? 0;
-                                info.SensorRadius = (float?)logicParams["radius"] ?? 0;
-                            }
-                            
-                            if (additionalParams["effects"]?.AsArray() is JsonArray effects)
-                            {
-                                var abilityEffects = new List<FleetEffectInfo>();
+                                Id = id,
+                                Logic = (AbilityLogic?)(byte?)ability["logic"] ?? AbilityLogic.Unknown,
+                                TargetType = (AbilityTargetType?)(byte?)ability["target_type"] ?? AbilityTargetType.Passive,
+                            };
 
-                                foreach(var effect in effects)
+                            if (ability["additionalparams"] is JsonObject additionalParams)
+                            {
+                                if (additionalParams["params"] is JsonObject logicParams)
                                 {
-                                    var fleetEffect = new FleetEffectInfo
-                                    {
-                                        Logic = (GameplayEffectType?)(int?)effect["logic"] ?? GameplayEffectType.Unknown,
-                                        Duration = (float?)effect["duration"] ?? 0,
-                                    };
-
-                                    if (effect["params"] is JsonObject effectParams)
-                                    {
-                                        fleetEffect.EngineBoost = (float?)effectParams["boost"] ?? 0;
-                                        fleetEffect.Vision = (int?)(double?)effectParams["vision"] ?? 0;
-                                        fleetEffect.NebulaVision = (int?)(double?)effectParams["nebula_vision"] ?? 0;
-                                    }
-
-                                    abilityEffects.Add(fleetEffect);
+                                    info.Cooldown = (float?)logicParams["cooldown"] ?? 0;
+                                    info.AgroVision = (float?)logicParams["agrovision"] ?? 0;
+                                    info.NebulaVision = (float?)logicParams["nebula_vision"] ?? 0;
+                                    info.SensorRadius = (float?)logicParams["radius"] ?? 0;
                                 }
 
-                                info.Effects = abilityEffects;
+                                if (additionalParams["effects"]?.AsArraySelf() is JsonArray effects)
+                                {
+                                    var abilityEffects = new List<FleetEffectInfo>();
+
+                                    foreach (var effect in effects)
+                                    {
+                                        var fleetEffect = new FleetEffectInfo
+                                        {
+                                            Logic = (GameplayEffectType?)(int?)effect["logic"] ?? GameplayEffectType.Unknown,
+                                            Duration = (float?)effect["duration"] ?? 0,
+                                        };
+
+                                        if (effect["params"] is JsonObject effectParams)
+                                        {
+                                            fleetEffect.EngineBoost = (float?)effectParams["boost"] ?? 0;
+                                            fleetEffect.Vision = (int?)(double?)effectParams["vision"] ?? 0;
+                                            fleetEffect.NebulaVision = (int?)(double?)effectParams["nebula_vision"] ?? 0;
+                                        }
+
+                                        abilityEffects.Add(fleetEffect);
+                                    }
+
+                                    info.Effects = abilityEffects;
+                                }
+                            }
+
+                            dtb.Abilities[id] = info;
+                        }
+                    }
+                }
+
+                if (abilitiesInfo["ability_progression"]?.AsArraySelf() is JsonArray progression)
+                {
+                    foreach (var item in progression)
+                    {
+                        if (item?.AsObjectSelf() is IEnumerable<KeyValuePair<string, JsonNode>> levels)
+                        {
+                            var abilityLevels = new Dictionary<int, int>();
+
+                            foreach (var lvl in levels)
+                            {
+                                if (Regex.Matches(lvl.Key, @"(\d+)$")?.LastOrDefault()?.Value is string lvlText &&
+                                    int.TryParse(lvlText, out int lvlIndex) == true &&
+                                    (int?)lvl.Value is int abilityId)
+                                {
+                                    abilityLevels[lvlIndex] = abilityId;
+                                    dtb.AbilityLevels[abilityId] = lvlIndex;
+                                }
+                            }
+
+                            if (abilityLevels.Count > 0)
+                                dtb.AbilityProgression.Add(abilityLevels.OrderBy(i => i.Key).ToArray());
+                        }
+                    }
+                }
+
+                if (dtb.Levels.Count > 0)
+                {
+                    var levelAbilities = new HashSet<int>();
+
+                    foreach (var item in dtb.Levels.Values.OrderBy(i => i.Level))
+                    {
+                        if (item.NewAbilities is not null and { Length: > 0})
+                        {
+                            foreach (var newAbility in item.NewAbilities)
+                            {
+                                if (dtb.GetAbilityProgression(newAbility) is KeyValuePair<int, int>[] ap)
+                                    foreach (var ability in ap)
+                                        levelAbilities.Remove(ability.Value);
+
+                                levelAbilities.Add(newAbility);
                             }
                         }
 
-                        dtb.Abilities[id] = info;
+                        dtb.CharLevelAbilities.Add(item.Level, levelAbilities.ToArray());
                     }
                 }
             }
 
-            if (doc["house_levels"]?.AsArray() is JsonArray houseLevels)
+            if (doc["house_levels"]?.AsArraySelf() is JsonArray houseLevels)
             {
                 foreach (var node in houseLevels)
                 {
@@ -372,7 +434,7 @@ namespace StarfallAfterlife.Bridge.Database
                 }
             }
 
-            if (doc["house_upgrades"]?.AsArray() is JsonArray houseUpgrades)
+            if (doc["house_upgrades"]?.AsArraySelf() is JsonArray houseUpgrades)
             {
                 foreach (var node in houseUpgrades)
                 {
@@ -385,7 +447,7 @@ namespace StarfallAfterlife.Bridge.Database
                 }
             }
 
-            if (doc["house_effects"]?.AsArray() is JsonArray houseEffects)
+            if (doc["house_effects"]?.AsArraySelf() is JsonArray houseEffects)
             {
                 foreach (var node in houseEffects)
                 {
@@ -398,7 +460,7 @@ namespace StarfallAfterlife.Bridge.Database
                 }
             }
 
-            if (doc["house_doctrines"]?.AsArray() is JsonArray houseDoctrines)
+            if (doc["house_doctrines"]?.AsArraySelf() is JsonArray houseDoctrines)
             {
                 foreach (var node in houseDoctrines)
                 {
@@ -411,7 +473,7 @@ namespace StarfallAfterlife.Bridge.Database
                 }
             }
 
-            if (doc["house_ranks"]?.AsArray() is JsonArray houseRanks)
+            if (doc["house_ranks"]?.AsArraySelf() is JsonArray houseRanks)
             {
                 foreach (var node in houseRanks)
                 {
@@ -449,8 +511,29 @@ namespace StarfallAfterlife.Bridge.Database
 
         public AbilityInfo? GetAbility(int abilityId)
         {
-            if (Abilities?.TryGetValue(abilityId, out AbilityInfo ability) == true)
+            if (Abilities.TryGetValue(abilityId, out AbilityInfo ability) == true)
                 return ability;
+
+            return default;
+        }
+
+        public KeyValuePair<int, int>[] GetAbilityProgression(int abilityId)
+        {
+            return AbilityProgression.FirstOrDefault(i => i.Any(lvl => lvl.Value == abilityId));
+        }
+
+        public int? GetAbilityLevel(int abilityId)
+        {
+            if (AbilityLevels.TryGetValue(abilityId, out int lvl) == true)
+                return lvl;
+
+            return default;
+        }
+
+        public int[] GetCharLevelAbilities(int lvl)
+        {
+            if (CharLevelAbilities.TryGetValue(lvl, out int[] abilities) == true)
+                return abilities;
 
             return default;
         }

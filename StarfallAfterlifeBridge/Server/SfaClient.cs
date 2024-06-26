@@ -1086,7 +1086,55 @@ namespace StarfallAfterlife.Bridge.Server
                         character.BGC = character.BGC.AddWithoutOverflow(bgc);
 
                     if ((int?)doc["xp"] is int xp)
+                    {
+                        var currentLevel = character.Level;
                         character.AddXp(xp);
+
+                        if (character.Level != currentLevel)
+                        {
+                            var dtb = SfaDatabase.Instance;
+                            var levelAbilities = dtb.GetCharLevelAbilities(character.Level);
+                            var isChanged = false;
+
+                            if (character.Detachments is CharacterDetachments detachments)
+                            {
+                                foreach (var dt in detachments)
+                                {
+                                    if (dt.Value?.Abilities is null)
+                                        continue;
+
+                                    foreach (var item in dt.Value.Abilities.ToArray())
+                                    {
+                                        if (item.Value < 1)
+                                            continue;
+
+                                        if (levelAbilities.Contains(item.Value) == false &&
+                                            dtb.GetAbilityProgression(item.Value) is KeyValuePair<int, int>[] prog) 
+                                        {
+                                            foreach (var newAbility in prog)
+                                            {
+                                                if (levelAbilities.Contains(newAbility.Value) == true)
+                                                {
+                                                    dt.Value.Abilities[item.Key] = newAbility.Value;
+                                                    isChanged = true;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (isChanged == true)
+                            {
+                                Send(new JObject
+                                {
+                                    ["char_id"] = character.UniqueId,
+                                    ["detachments"] = Game.CreateDetachmentsResponse(character),
+                                }, SfaServerAction.SyncCharacterData);
+                            }
+                        }
+                    }
 
                     if (doc["ships_xp"]?.DeserializeUnbuffered<Dictionary<int, int>>() is Dictionary<int, int> ships)
                     {

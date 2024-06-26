@@ -18,6 +18,8 @@ namespace StarfallAfterlife.Bridge.Database
 
         public int NewAbilityCells { get; set; }
 
+        public int[] NewAbilities { get; set; }
+
         public int NewAccessLevel { get; set; }
     }
 }

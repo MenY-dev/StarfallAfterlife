@@ -164,17 +164,9 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                         Ships.Add(ship);
                     }
                 }
-
-                if (detachment["abilities"]?.AsArraySelf() is JsonArray abilities)
-                {
-                    foreach (var ability in abilities)
-                    {
-                        if ((int?)ability?.AsObjectSelf()?.FirstOrDefault().Value is int abilityId &&
-                            abilityId > 0)
-                            Abilities.Add(abilityId);
-                    }
-                }
             }
+
+            SyncAbilities(doc["detachments"]);
 
             if (doc["ship_groups"]?.AsArraySelf() is JsonArray shipGroups)
             {
@@ -185,6 +177,33 @@ namespace StarfallAfterlife.Bridge.Server.Characters
             Inventory ??= new(this);
 
             Events?.Broadcast<ICharacterListener>(l => l.OnCurrencyUpdated(this));
+        }
+
+        internal void SyncAbilities(JsonNode detachments)
+        {
+            lock (_characterLocker)
+            {
+                var detachment = detachments?.AsArraySelf()?.FirstOrDefault(d => (int?)d["id"] == CurrentDetachment);
+
+                if (detachment is null)
+                    return;
+
+                if (detachment["slots"]?.AsObjectSelf() is JsonObject slotsNode &&
+                    DiscoveryClient?.Server?.Realm?.Database is SfaDatabase database &&
+                    detachment["abilities"]?.AsArraySelf() is JsonArray abilities)
+                {
+                    Abilities.Clear();
+
+                    foreach (var ability in abilities)
+                    {
+                        if ((int?)ability?.AsObjectSelf()?.FirstOrDefault().Value is int abilityId &&
+                            abilityId > 0)
+                            Abilities.Add(abilityId);
+                    }
+                }
+
+                UpdateFleetInfo();
+            }
         }
 
         public void LoadActiveShips(JsonNode doc)
