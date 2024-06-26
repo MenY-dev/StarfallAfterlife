@@ -54,10 +54,10 @@ namespace StarfallAfterlife.Bridge.Generators
             foreach (var circle in ExtraMap.Circles.Values)
             {
                 var systems = GetSystems(circle, rnd.Next());
-                GenerateObjects(map, systems, SecretObjectType.Stash, Math.Max(20, systems.Count / 4), rnd);
+                GenerateObjects(map, systems, SecretObjectType.Stash, Math.Max(20, systems.Count / 6), rnd);
 
                 systems = GetSystems(circle, rnd.Next());
-                GenerateObjects(map, systems, SecretObjectType.ShipsGraveyard, Math.Max(20, systems.Count / 12), rnd);
+                GenerateObjects(map, systems, SecretObjectType.ShipsGraveyard, Math.Max(20, systems.Count / 8), rnd);
             }
 
             return map;
