@@ -299,7 +299,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
             }
         }
 
-        public void OnUserStatusChanged(SfaServerClient user, UserInGameStatus status)
+        public void OnUserStatusChanged(bool isCharChannel, SfaServerClient user, UserInGameStatus status)
         {
             lock (Lockher)
             {
@@ -309,10 +309,13 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 foreach (var battle in GetBattles(user))
                     battle?.UserStatusChanged(user, status);
 
-                foreach (var character in user.DiscoveryClient?.Characters?.ToArray() ?? Array.Empty<ServerCharacter>())
+                if (isCharChannel)
                 {
-                    foreach (var battle in GetBattles(character))
-                        battle?.CharStatusChanged(character, status);
+                    foreach (var character in user.DiscoveryClient?.Characters?.ToArray() ?? Array.Empty<ServerCharacter>())
+                    {
+                        foreach (var battle in GetBattles(character))
+                            battle?.CharStatusChanged(character, status);
+                    }
                 }
             }
         }

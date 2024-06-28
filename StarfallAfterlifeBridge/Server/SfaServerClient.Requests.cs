@@ -54,7 +54,7 @@ namespace StarfallAfterlife.Bridge.Server
                 Server?.ProcessNewUserStatus(this, status, isCharChannel);
 
                 if (isCharChannel == false)
-                    Server?.Matchmaker?.OnUserStatusChanged(this, status);
+                    Server?.Matchmaker?.OnUserStatusChanged(isCharChannel, this, status);
             });
         }
 

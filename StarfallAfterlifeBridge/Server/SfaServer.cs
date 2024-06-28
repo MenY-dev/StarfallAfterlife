@@ -411,7 +411,7 @@ namespace StarfallAfterlife.Bridge.Server
 
             UseClients(_ =>
             {
-                if (isCharChannel == true)
+                if (isCharChannel == true || status == UserInGameStatus.None)
                 {
                     if (client.CurrentCharacter is ServerCharacter character)
                     {
@@ -422,26 +422,24 @@ namespace StarfallAfterlife.Bridge.Server
                             {
                                 item.Invoke(c =>
                                 {
-                                    c.SendAcceptNewFriend(character.UniqueName, status, isCharChannel);
-                                    c.SendUserStatus(character.UniqueName, status, isCharChannel);
+                                    c.SendAcceptNewFriend(character.UniqueName, status, true);
+                                    c.SendUserStatus(character.UniqueName, status, true);
                                 });
                             }
                         }
                     }
                 }
-                else
+
+                foreach (var item in Players)
                 {
-                    foreach (var item in Players)
+                    if (item != client &&
+                        item.IsConnected == true)
                     {
-                        if (item != client &&
-                            item.IsConnected == true)
+                        item.Invoke(c =>
                         {
-                            item.Invoke(c =>
-                            {
-                                c.SendAcceptNewFriend($"@{client.UniqueName}", status, isCharChannel);
-                                c.SendUserStatus($"@{client.UniqueName}", status, isCharChannel);
-                            });
-                        }
+                            c.SendAcceptNewFriend($"@{client.UniqueName}", status, false);
+                            c.SendUserStatus($"@{client.UniqueName}", status, false);
+                        });
                     }
                 }
             });
