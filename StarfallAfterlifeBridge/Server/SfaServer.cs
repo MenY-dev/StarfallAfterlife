@@ -423,7 +423,8 @@ namespace StarfallAfterlife.Bridge.Server
                 client.IsPlayer == false)
                 return;
 
-            client.UserStatus = status;
+            if (isCharChannel == false || status is not UserInGameStatus.None)
+                client.UserStatus = status;
 
             if (client.State != SfaClientState.InRankedMode &&
                 status is UserInGameStatus.RankedMainMenu or
