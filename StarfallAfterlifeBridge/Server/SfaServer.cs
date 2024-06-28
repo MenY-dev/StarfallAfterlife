@@ -148,7 +148,7 @@ namespace StarfallAfterlife.Bridge.Server
                     }
                 }
 
-                var time = DateTime.Now;
+                var time = DateTime.UtcNow;
                 var toRemove = clients.Where(c => (time - c.LastInput).TotalHours > 4).ToList();
 
                 foreach (var item in toRemove)
@@ -166,6 +166,8 @@ namespace StarfallAfterlife.Bridge.Server
             {
                 try
                 {
+                    var now = DateTime.UtcNow;
+
                     foreach (var c in clients)
                     {
                         try
@@ -173,6 +175,27 @@ namespace StarfallAfterlife.Bridge.Server
                             c.Send("ping", SfaServerAction.Ping);
                         }
                         catch { }
+
+                        if (c.IsPlayer == true &&
+                            (c.IsConnected == false || c.UserStatus == UserInGameStatus.None) &&
+                            (now - c.LastInput).TotalMinutes > 1 &&
+                            c.DiscoveryClient?.Characters?.ToArray() is ServerCharacter[]  characters)
+                        {
+                            foreach (var item in characters)
+                            {
+                                if (item is ServerCharacter character)
+                                {
+                                    character.Party?.RemoveMember(character.UniqueId);
+                                    Characters.RemoveId(character.UniqueId);
+
+                                    if (character.Fleet is UserFleet fleet)
+                                    {
+                                        character.Fleet = null;
+                                        Galaxy?.BeginPreUpdateAction(_ => fleet.LeaveFromGalaxy());
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
                 catch { }
@@ -216,6 +239,12 @@ namespace StarfallAfterlife.Bridge.Server
                             {
                                 character.Party?.RemoveMember(character.UniqueId);
                                 Characters.RemoveId(character.UniqueId);
+
+                                if (character.Fleet is UserFleet fleet)
+                                {
+                                    character.Fleet = null;
+                                    Galaxy?.BeginPreUpdateAction(_ => fleet.LeaveFromGalaxy());
+                                }
                             }
                         }
                     }

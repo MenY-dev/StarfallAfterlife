@@ -212,7 +212,7 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
                                 //GC.Collect(GC.MaxGeneration, GCCollectionMode.Optimized);
                             }
 
-                            LastInput = DateTime.Now;
+                            LastInput = DateTime.UtcNow;
                         }
                     }
                 }
