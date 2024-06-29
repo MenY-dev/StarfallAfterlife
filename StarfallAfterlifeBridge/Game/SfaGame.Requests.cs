@@ -598,7 +598,7 @@ namespace StarfallAfterlife.Bridge.Game
 
         public JsonNode HandleSaveShip(SfaHttpQuery query)
         {
-            var doc = new JsonObject{ ["ok"] = 1 };
+            var doc = new JsonObject { ["ok"] = 1 };
             JsonNode request = JsonHelpers.ParseNodeUnbuffered((string)query["data"]);
 
             Profile.Use(p =>
@@ -649,6 +649,18 @@ namespace StarfallAfterlife.Bridge.Game
 
                     var oldItems = oldShip.GetAllHardpointsEquipment();
                     var newItems = newShip.GetAllHardpointsEquipment();
+
+                    foreach (var item in newItems)
+                    {
+                        var requiredCount = item.Value - oldItems.FirstOrDefault(i => i.Key == item.Key).Value;
+
+                        if (requiredCount > 0 &&
+                            character.GetInventoryItem(item.Key).Count < requiredCount)
+                        {
+                            doc["error"] = new JsonObject() { ["msg"] = SValue.Create(1) };
+                            return;
+                        }
+                    }
 
                     foreach (var item in oldItems)
                         character.AddInventoryItem(item.Key, item.Value);
