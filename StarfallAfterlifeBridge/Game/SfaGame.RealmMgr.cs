@@ -211,8 +211,13 @@ namespace StarfallAfterlife.Bridge.Game
             
             if (response is JsonNode sr)
             {
-                sr = new JsonObject { ["doc"] = sr };
-                RealmMgrServer.Send(context, JsonHelpers.ToJsonStringUnbuffered(sr, false));
+                var error = sr?.AsObjectSelf()?["error"];
+                var doc = new JsonObject { ["doc"] = sr };
+
+                if (error is not null)
+                    doc["error"] = error;
+
+                RealmMgrServer.Send(context, JsonHelpers.ToJsonStringUnbuffered(doc, false));
                 sr.AsObject().Clear();
             }
         }
