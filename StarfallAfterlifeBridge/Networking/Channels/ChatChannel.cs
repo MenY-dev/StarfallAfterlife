@@ -47,7 +47,6 @@ namespace StarfallAfterlife.Bridge.Networking.Channels
         public virtual void SendMessage(string user, string text, bool isPrivate = false)
         {
             string tag = Encoding.ASCII.GetString(new byte[] { (byte)(isPrivate ? 85 : 65) });
-            SfaDebug.Print(tag);
             Send($"{tag}{user}:{text}", encoding: Encoding.Unicode);
         }
     }
