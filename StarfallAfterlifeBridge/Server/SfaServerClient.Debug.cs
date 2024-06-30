@@ -12,7 +12,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace StarfallAfterlife.Bridge.Server
 {
@@ -20,32 +19,40 @@ namespace StarfallAfterlife.Bridge.Server
     {
         protected bool DebugExploreAllSystemsUsed { get; set; } = false;
 
-        public void HandleDebugConsoleInput(string channel, string msg)
+        public ChatConsole Console { get; set; }
+
+        public void InitConsole()
         {
-            string label = ">";
-            SendToChat(channel, "<", msg);
+            var newConsole = new ChatConsole(this);
 
-            if (msg.StartsWith("arround ") &&
-                msg.Length > 7 &&
-                int.TryParse(msg[7..].Trim(), out int jumps))
+            newConsole.AddHandler("", context =>
             {
-                if (jumps > 10)
-                {
-                    jumps = 10;
-                    SendToChat(channel, label, "Max radius: 10");
-                }
+                context.Print($"Unknown command: {context.Input}");
+            });
 
-                foreach (var system in Map.GetSystemsArround(CurrentCharacter?.Fleet?.System?.Id ?? -1, jumps))
+            newConsole.AddHandler("arround", context =>
+            {
+                if (context.Parce<int>() is int jumps)
                 {
-                    SendToChat(channel, label, $"{system.Key?.Id}: {system.Value}");
+                    if (jumps > 10)
+                    {
+                        jumps = 10;
+                        context.Print("Max radius: 10");
+                    }
+
+                    foreach (var system in Map.GetSystemsArround(CurrentCharacter?.Fleet?.System?.Id ?? -1, jumps))
+                    {
+                        context.Print($"{system.Key?.Id}: {system.Value}");
+                    }
                 }
-            }
-            else if (msg.StartsWith("explore ") &&
-                msg.Length > 7)
+                else context.PrintParametersError();
+            });
+            
+            newConsole.AddHandler("explore", context =>
             {
                 int exploreRadius = 0;
 
-                if ("all".Equals(msg[7..].Trim(), StringComparison.InvariantCultureIgnoreCase) == true)
+                if ("all".Equals(context.Input?.Trim(), StringComparison.OrdinalIgnoreCase) == true)
                 {
                     if (DebugExploreAllSystemsUsed == false)
                     {
@@ -55,17 +62,24 @@ namespace StarfallAfterlife.Bridge.Server
                     else
                     {
                         exploreRadius = 0;
-                        SendToChat(channel, label, "All systems have already been explored!");
+                        context.Print("All systems have already been explored!");
                     }
                 }
-                else if (int.TryParse(msg[7..].Trim(), out exploreRadius) == true &&
-                    exploreRadius > 0)
+                else if (context.Parce<int>() is int radius &&
+                    radius > 0)
                 {
+                    exploreRadius = radius;
+
                     if (exploreRadius > 10)
                     {
                         exploreRadius = 10;
-                        SendToChat(channel, label, "Max radius: 10");
+                        context.Print("Max radius: 10");
                     }
+                }
+                else
+                {
+                    context.PrintParametersError();
+                    return;
                 }
 
                 if (exploreRadius > 0 &&
@@ -95,95 +109,105 @@ namespace StarfallAfterlife.Bridge.Server
 
                     character.DiscoveryClient?.SyncExploration(newSystems, newObjects);
 
-                    SendToChat(channel, label, $"Exploration result:");
-                    SendToChat(channel, label, $"Systems:{newSystems.Count}");
-                    SendToChat(channel, label, $"Objects:{newObjects.Count}");
-                    SendToChat(channel, label, "For the exploration to be displayed, re-enter to the galaxy.");
+                    context.Print($"Exploration result:");
+                    context.Print($"Systems:{newSystems.Count}");
+                    context.Print($"Objects:{newObjects.Count}");
+                    context.Print("For the exploration to be displayed, re-enter to the galaxy.");
                 }
-            }
-            else if (msg.StartsWith("add sxp ") &&
-                msg.Length > 8 &&
-                int.TryParse(msg[8..].Trim(), out int shipsXp))
-            {
-                if (CurrentCharacter is ServerCharacter character &&
-                    character.Ships is List<ShipConstructionInfo> ships)
-                {
-                    var shipsForXp = new Dictionary<int, int>();
+            });
 
-                    foreach (var ship in ships)
-                        shipsForXp[ship.Id] = shipsXp;
+            newConsole.AddHandler("add sxp", context =>
+            {
+                if (context.Parce<int>() is int shipsXp)
+                {
+                    if (CurrentCharacter is ServerCharacter character &&
+                        character.Ships is List<ShipConstructionInfo> ships)
+                    {
+                        var shipsForXp = new Dictionary<int, int>();
 
-                    character.AddCharacterCurrencies(shipsXp: shipsForXp);
-                }
-            }
-            else if (msg.StartsWith("add xp ") &&
-                msg.Length > 7 &&
-                int.TryParse(msg[7..].Trim(), out int charXp))
-            {
-                CurrentCharacter?.AddCharacterCurrencies(xp: charXp);
-            }
-            else if (msg.StartsWith("add igc ") &&
-                msg.Length > 8 &&
-                int.TryParse(msg[8..].Trim(), out int charIgc))
-            {
-                CurrentCharacter?.AddCharacterCurrencies(igc: charIgc);
-            }
-            else if (msg.StartsWith("add bgc ") &&
-                msg.Length > 8 &&
-                int.TryParse(msg[8..].Trim(), out int charBgc))
-            {
-                CurrentCharacter?.AddCharacterCurrencies(bgc: charBgc);
-            }
-            else if (msg.StartsWith("add hc ") &&
-                msg.Length > 7 &&
-                int.TryParse(msg[7..].Trim(), out int houseCurrency))
-            {
-                DiscoveryClient?.Invoke(c =>
-                {
-                    c.Server?.RealmInfo?.Use(r =>
-                    {
-                        if (c.CurrentCharacter?.GetHouseInfo() is SfHouseInfo houseInfo &&
-                            houseInfo.House is SfHouse house &&
-                            house.GetMember(c.CurrentCharacter) is HouseMember member)
-                        {
-                            house.Currency = house.Currency.AddWithoutOverflow(houseCurrency);
-                            member.Currency = member.Currency.AddWithoutOverflow(houseCurrency);
-                            houseInfo.Save();
-                            c.BroadcastHouseUpdate();
-                            c.BroadcastHouseCurrencyChanged();
-                            c.BroadcastHouseMemberInfoChanged();
-                        }
-                    });
-                });
-            }
-            else if (msg.StartsWith("add doctrine ") &&
-                msg.Length > 13 &&
-                int.TryParse(msg[13..].Trim(), out int doctrineProgress))
-            {
-                DiscoveryClient?.Invoke(c => c.Server?.RealmInfo?.Use(r =>
-                {
-                    if (c.CurrentCharacter?.GetHouse() is SfHouse house)
-                    {
-                        c.CurrentCharacter?.AddDoctrineProgress(878337677, doctrineProgress);
-                        c.CurrentCharacter?.AddDoctrineProgress(1474451710, doctrineProgress);
-                        c.SendHouseUpdate(house);
+                        foreach (var ship in ships)
+                            shipsForXp[ship.Id] = shipsXp;
+
+                        character.AddCharacterCurrencies(shipsXp: shipsForXp);
                     }
-                }));
-            }
-            else if (msg.StartsWith("add party"))
-            {
-                if (CurrentCharacter is ServerCharacter character)
-                {
-                    var party = CharacterParty.Create(Server, character.UniqueId);
-                    SendToChat(channel, label, $"New party: {party?.Id.ToString() ?? "error"}");
                 }
-            }
-            else if (msg.StartsWith("add item ") &&
-                msg.Length > 9)
+                else context.PrintParametersError();
+            });
+
+            newConsole.AddHandler("add xp", context =>
             {
-                var info = msg[9..].Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
-                var itemIdText = info.ElementAtOrDefault(0)?.Trim();
-                var countText = info.ElementAtOrDefault(1)?.Trim();
+                if (context.Parce<int>() is int charXp)
+                {
+                    CurrentCharacter?.AddCharacterCurrencies(xp: charXp);
+                }
+                else context.PrintParametersError();
+            });
+
+            newConsole.AddHandler("add igc", context =>
+            {
+                if (context.Parce<int>() is int charIgc)
+                {
+                    CurrentCharacter?.AddCharacterCurrencies(igc: charIgc);
+                }
+                else context.PrintParametersError();
+            });
+
+            newConsole.AddHandler("add bgc", context =>
+            {
+                if (context.Parce<int>() is int charBgc)
+                {
+                    CurrentCharacter?.AddCharacterCurrencies(bgc: charBgc);
+                }
+                else context.PrintParametersError();
+            });
+
+            newConsole.AddHandler("add hc", context =>
+            {
+                if (context.Parce<int>() is int houseCurrency)
+                {
+                    DiscoveryClient?.Invoke(c =>
+                    {
+                        c.Server?.RealmInfo?.Use(r =>
+                        {
+                            if (c.CurrentCharacter?.GetHouseInfo() is SfHouseInfo houseInfo &&
+                                houseInfo.House is SfHouse house &&
+                                house.GetMember(c.CurrentCharacter) is HouseMember member)
+                            {
+                                house.Currency = house.Currency.AddWithoutOverflow(houseCurrency);
+                                member.Currency = member.Currency.AddWithoutOverflow(houseCurrency);
+                                houseInfo.Save();
+                                c.BroadcastHouseUpdate();
+                                c.BroadcastHouseCurrencyChanged();
+                                c.BroadcastHouseMemberInfoChanged();
+                            }
+                        });
+                    });
+                }
+                else context.PrintParametersError();
+            });
+
+            newConsole.AddHandler("add doctrine", context =>
+            {
+                if (context.Parce<int>() is int doctrineProgress)
+                {
+                    DiscoveryClient?.Invoke(c => c.Server?.RealmInfo?.Use(r =>
+                    {
+                        if (c.CurrentCharacter?.GetHouse() is SfHouse house)
+                        {
+                            c.CurrentCharacter?.AddDoctrineProgress(878337677, doctrineProgress);
+                            c.CurrentCharacter?.AddDoctrineProgress(1474451710, doctrineProgress);
+                            c.SendHouseUpdate(house);
+                        }
+                    }));
+                }
+                else context.PrintParametersError();
+            });
+
+            newConsole.AddHandler("add item", context =>
+            {
+                var info = context.Input?.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                var itemIdText = info?.ElementAtOrDefault(0)?.Trim();
+                var countText = info?.ElementAtOrDefault(1)?.Trim();
 
                 if (string.IsNullOrWhiteSpace(itemIdText) == false &&
                     int.TryParse(itemIdText, out int itemId) == true &&
@@ -202,130 +226,68 @@ namespace StarfallAfterlife.Bridge.Server
                         character.DiscoveryClient?.Invoke(c =>
                         {
                             character.Inventory?.AddItem(InventoryItem.Create(item, count));
-                            SendToChat(channel, label, $"{item.Name}({count}) added to inventory.");
+                            context.Print($"{item.Name}({count}) added to inventory.");
                         });
                     }
                 }
-            }
-            else if (msg.StartsWith("toast ") &&
-                    msg.Length > 6 && msg[6..] is string toastMsg)
+                else context.PrintParametersError();
+            });
+
+            newConsole.AddHandler("toast", context =>
             {
-                SendToChat(channel, label, $"Show Toast: {toastMsg}");
-                DiscoveryClient.Invoke(c => c.SendOnScreenNotification(new()
+                if (context.Input is string toastMsg)
                 {
-                    Id = "test_toast",
-                    Text = toastMsg,
-                    LifeTime = 10,
-                    Type = SfaNotificationType.Info,
-                }));
-            }
-            else if (msg.StartsWith("jmp ") &&
-                msg.Length > 4 &&
-                int.TryParse(msg[4..].Trim(), out int system))
-            {
-                CurrentCharacter?.DiscoveryClient?.SendFleetWarpedMothership();
-                CurrentCharacter?.DiscoveryClient?.EnterToStarSystem(system);
-                SendToChat(channel, label, "To complete the jump, exit to the main menu, then return to the galaxy.");
-            }
-            else if (msg.StartsWith("done quest ") &&
-                msg.Length > 11 &&
-                msg[11..].Trim() is string questInfo)
-            {
-                if (questInfo == "all")
-                {
-                    CurrentCharacter.CompleteAllQuests();
-                }
-                else if (int.TryParse(questInfo, out int questId) == true)
-                {
-                    CurrentCharacter.CompleteQuest(questId);
-                }
-            }
-            else if ("m".Equals(msg?.Trim(), StringComparison.OrdinalIgnoreCase))
-            {
-                DiscoveryClient.Invoke(c =>
-                {
-                    if (CurrentCharacter?.Fleet is UserFleet charFleet &&
-                        charFleet.System is StarSystem starSystem)
+                    context.Print($"Show Toast: {toastMsg}");
+                    DiscoveryClient.Invoke(c => c.SendOnScreenNotification(new()
                     {
-                        var faction = Faction.Deprived;
-                        var info = new GalaxyPatrolMobGenerator(Server?.Realm)
-                        {
-                            Faction = faction,
-                            Archetype = AIArchetype.Miner,
-                            Level = 10,
-                        }.Build();
+                        Id = "test_toast",
+                        Text = toastMsg,
+                        LifeTime = 10,
+                        Type = SfaNotificationType.Info,
+                    }));
+                }
+                else context.PrintParametersError();
+            });
 
-                        if (info is null)
-                        {
-                            SendToChat(channel, label, "Mob creation error");
-                            return;
-                        }
+            newConsole.AddHandler("jmp", context =>
+            {
+                if (context.Parce<int>() is int system &&
+                    CurrentCharacter is ServerCharacter character &&
+                    character.Fleet is UserFleet fleet)
+                {
+                    character.DiscoveryClient?.SendFleetWarpedMothership();
+                    character.DiscoveryClient?.EnterToStarSystem(system);
+                    context.Print("To complete the jump, exit to the main menu, then return to the galaxy.");
+                }
+                else context.PrintParametersError();
+            });
 
-                        var mob = new DynamicMob()
-                        {
-                            Info = info,
-                            Type = faction switch
-                            {
-                                Faction.Deprived => DynamicMobType.DeprivedPatrol,
-                                Faction.Eclipse => DynamicMobType.EclipsePatrol,
-                                Faction.Vanguard => DynamicMobType.VanguardPatrol,
-                                _ => DynamicMobType.None,
-                            }
-                        };
-
-                        if  (Server.AddDynamicMob(mob) == false)
-                        {
-                            SendToChat(channel, label, "Mob already exist");
-                            return;
-                        }
-
-                        var fleet = new DiscoveryAiFleet
-                        {
-                            FactionGroup = 1,
-                            BaseVision = 0,
-                            AgroVision = -100,
-                            UseRespawn = false,
-                        };
-
-                        fleet.Init(mob, new GalaxyPatrollingAI()
-                        {
-                            Archetype = AIArchetype.Miner,
-                        });
-
-                        fleet.SetLocation(SystemHexMap.HexToSystemPoint(
-                            starSystem.GetNearestSafeHex(charFleet, charFleet.Hex, true)));
-
-                        Galaxy.BeginPreUpdateAction(_ =>
-                        {
-                            starSystem.AddFleet(fleet);
-                        });
-
-                        SendToChat(channel, label, $"Spawn {fleet.Name}!");
+            newConsole.AddHandler("done quest", context =>
+            {
+                if (context.Input is string questInfo)
+                {
+                    if (questInfo == "all")
+                    {
+                        CurrentCharacter.CompleteAllQuests();
                     }
-                });
-            }
-
-            else if (msg.StartsWith("mj ") &&
-                msg.Length > 3 &&
-                int.TryParse(msg[3..].Trim(), out int mobJumpSystem))
-            {
-                if (CurrentCharacter?.Fleet is UserFleet charFleet &&
-                    charFleet.System is StarSystem starSystem &&
-                    starSystem.Galaxy?.Map?.GetSystem(mobJumpSystem) is not null)
-                {
-                    var testMobId = new FleetIdInfo { Type = FleetType.DynamicMob, LocalId = 321789 }.ToId();
-
-                    Galaxy.BeginPreUpdateAction(_ =>
+                    else if (int.TryParse(questInfo, out int questId) == true)
                     {
-                        if (starSystem.Fleets.FirstOrDefault(f => f.Id == testMobId) is DiscoveryFleet mob &&
-                            mob.AI is GalaxyPatrollingAI ai)
-                        {
-                            ai.StateMachine?.StartStateByName("change_system", mobJumpSystem);
-                            DiscoveryClient?.Invoke(c => SendToChat(channel, label, $"Move {mob.Name} to {mobJumpSystem}"));
-                        }
-                    });
+                        CurrentCharacter.CompleteQuest(questId);
+                    }
                 }
-            }
+                else context.PrintParametersError();
+            });
+
+            Console = newConsole; 
+        }
+
+        public void HandleDebugConsoleInput(string channel, string msg)
+        {
+            if (Console is null)
+                InitConsole();
+
+            SendToChat(channel, "<", msg);
+            Console?.Exec(msg, channel);
         }
     }
 }
