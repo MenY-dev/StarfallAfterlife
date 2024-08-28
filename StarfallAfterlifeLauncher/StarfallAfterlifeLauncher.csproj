@@ -4,13 +4,24 @@
     <OutputType>WinExe</OutputType>
 	<RuntimeIdentifier>win-x64</RuntimeIdentifier>
 	<SelfContained>False</SelfContained>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
+	<PublishAot>true</PublishAot>
+	<PublishTrimmed>true</PublishTrimmed>
+	<TrimMode>partial</TrimMode>
+	<JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
     <Nullable>disable</Nullable>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
 	<RootNamespace>StarfallAfterlife.Launcher</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Assets\Icons\icon_128.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+  	<TrimmableAssembly Include="System.Private.CoreLib" />
+  	<TrimmableAssembly Include="System.Runtime" />
+  	<TrimmableAssembly Include="System.Collections" />
+  </ItemGroup>
+	
   <ItemGroup>
     <None Remove="Assets\avalonia-logo.ico" />
     <None Remove="Assets\Icons\icon_128.ico" />
@@ -32,18 +43,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.0.10" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.10" />
-    <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.0.10" />
-    <PackageReference Include="Avalonia.Desktop" Version="11.0.10" />
-    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.10" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.10" />
+    <PackageReference Include="Avalonia" Version="11.1.3" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.1.3" />
+    <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.1.3" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.1.3" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.1.3" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.1.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\StarfallAfterlifeBridge\StarfallAfterlifeBridge.csproj" />
   </ItemGroup>
-
+	
   <ItemGroup>
     <Compile Update="App.axaml.cs">
       <DependentUpon>App.axaml</DependentUpon>
