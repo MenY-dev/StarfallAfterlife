@@ -42,7 +42,7 @@ namespace StarfallAfterlife.Bridge.Server
                 Invoke(() =>
                 {
                     var battle = Server.Matchmaker.QuickMatchGameMode.CreateStationAttackMatch(difficulty, CurrentCharacter);
-                    battle.Start();
+                    battle?.Start();
                 });
             }
             else if ("srv1".Equals(gameMode, comparison) == true)
@@ -50,7 +50,7 @@ namespace StarfallAfterlife.Bridge.Server
                 Invoke(() =>
                 {
                     var battle = Server.Matchmaker.QuickMatchGameMode.CreateSurvivalMatch(difficulty, CurrentCharacter);
-                    battle.Start();
+                    battle?.Start();
                 });
             }
 
