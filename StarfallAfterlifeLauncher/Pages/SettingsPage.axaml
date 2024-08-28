@@ -8,7 +8,7 @@
 	<DockPanel LastChildFill="True">
 		<Panel DockPanel.Dock="Top">
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="15 10" Spacing="5">
-				<Label Content="f" FontFamily="{StaticResource IconsFont}" Classes="h3" VerticalContentAlignment="Center"/>
+				<Label Content="f" FontWeight="Normal" FontFamily="{StaticResource IconsFont}" Classes="h3" VerticalContentAlignment="Center"/>
 				<Label Content="{DynamicResource s_page_settings_header}" Classes="h3" VerticalContentAlignment="Center" Margin="0 2" />
 			</StackPanel>
 			<c:Separator Height="2" Opacity="0.8" VerticalAlignment="Bottom"/>

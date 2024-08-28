@@ -15,7 +15,11 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Assets\Icons\icon_128.ico</ApplicationIcon>
   </PropertyGroup>
-
+	
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+  	<PublishAot>false</PublishAot>
+  </PropertyGroup>
+	
   <ItemGroup>
   	<TrimmableAssembly Include="System.Private.CoreLib" />
   	<TrimmableAssembly Include="System.Runtime" />

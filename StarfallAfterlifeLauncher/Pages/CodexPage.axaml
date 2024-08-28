@@ -18,7 +18,7 @@
 		<DockPanel LastChildFill="True">
 			<Panel DockPanel.Dock="Top">
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="15 10" Spacing="5">
-					<Label Content="h" FontFamily="{StaticResource IconsFont}" Classes="h3" VerticalContentAlignment="Center"/>
+					<Label Content="h"  FontWeight="Normal" FontFamily="{StaticResource IconsFont}" Classes="h3" VerticalContentAlignment="Center"/>
 					<Label Content="{DynamicResource s_page_codex_header}" Classes="h3" VerticalContentAlignment="Top" Margin="0 2" />
 				</StackPanel>
 				<StackPanel Orientation="Horizontal"

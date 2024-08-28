@@ -10,7 +10,7 @@
 	<DockPanel LastChildFill="True">
 		<Panel DockPanel.Dock="Top">
 			<StackPanel Orientation="Horizontal" Margin="15 10" Spacing="5">
-				<Label Content="a" FontFamily="{StaticResource IconsFont}" Classes="h3" VerticalContentAlignment="Center"/>
+				<Label Content="a" FontWeight="Normal" FontFamily="{StaticResource IconsFont}" Classes="h3" VerticalContentAlignment="Center"/>
 				<Label Content="{DynamicResource s_page_cs_header}" Classes="h3" VerticalContentAlignment="Center" Margin="0 2" />
 			</StackPanel>
 			<StackPanel IsEnabled="{Binding !ServerStarted}" HorizontalAlignment="Right" Orientation="Horizontal" Spacing="10" Margin="0 0 10 0">
