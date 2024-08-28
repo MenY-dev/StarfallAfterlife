@@ -22,7 +22,7 @@
       <Name>SFAProject</Name>
       <Project>{bd31d221-2264-4467-84a1-dd6ad3fb8a74}</Project>
       <Private>True</Private>
-      <Publish>"True"</Publish>
+      <Publish>True</Publish>
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
     </ProjectReference>

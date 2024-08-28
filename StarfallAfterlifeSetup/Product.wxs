@@ -54,7 +54,7 @@
 		</DirectoryRef>
 
 		<Feature Id="SFAFeature" Title="$(var.AppDir)" Level="1" ConfigurableDirectory="INSTALLFOLDER">
-			<Files Include="..\StarfallAfterlifeLauncher\bin\$(Configuration)\net7.0-windows\win-x64\**" />
+			<Files Include="..\StarfallAfterlifeLauncher\bin\$(Configuration)\net8.0-windows\win-x64\**" />
 			<ComponentRef Id="ApplicationShortcut" />
 		</Feature>
 		
