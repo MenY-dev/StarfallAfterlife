@@ -3,9 +3,8 @@
 	<Version>0.10.1</Version>
     <OutputType>WinExe</OutputType>
 	<RuntimeIdentifier>win-x64</RuntimeIdentifier>
-	<SelfContained>False</SelfContained>
     <TargetFramework>net8.0-windows</TargetFramework>
-	<PublishAot>true</PublishAot>
+	<SelfContained>true</SelfContained>
 	<PublishTrimmed>true</PublishTrimmed>
 	<TrimMode>partial</TrimMode>
 	<JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
@@ -14,10 +13,6 @@
 	<RootNamespace>StarfallAfterlife.Launcher</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Assets\Icons\icon_128.ico</ApplicationIcon>
-  </PropertyGroup>
-	
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-  	<PublishAot>false</PublishAot>
   </PropertyGroup>
 	
   <ItemGroup>
