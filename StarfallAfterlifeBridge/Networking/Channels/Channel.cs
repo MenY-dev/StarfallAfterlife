@@ -57,13 +57,11 @@ namespace StarfallAfterlife.Bridge.Networking.Channels
 
         public virtual void Input(ChannelClient client, string text)
         {
-            SfaDebug.Print($"TextInput (Id = {Id}, Name = {Name}, Text = {text})", GetType().Name);
             OnTextInput(new(client, text));
         }
 
         public virtual void Input(ChannelClient client, byte[] data)
         {
-            SfaDebug.Print($"BinaryInput (Id = {Id}, Name = {Name}, Data = {BitConverter.ToString(data).Replace("-", "")}))", GetType().Name);
             OnBinaryInput(new(client, data));
         }
 

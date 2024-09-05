@@ -129,7 +129,6 @@ namespace StarfallAfterlife.Bridge.Game
                 RealmMgrServer.Send(context, JsonHelpers.ToJsonStringUnbuffered(sr, false));
                 sr.AsObject().Clear();
             }
-            //Print($"Response ({response?.ToJsonString()})", "sfmgr");
         }
 
 

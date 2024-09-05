@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StarfallAfterlife.Bridge.Diagnostics;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -87,7 +88,10 @@ namespace StarfallAfterlife.Bridge.Tasks
                             lock (_invokeLocker)
                                 action?.Invoke();
                         }
-                        catch { }
+                        catch (Exception e)
+                        {
+                            SfaDebug.Print(e, GetType().Name);
+                        }
 
                         if (Queue.Count == 0)
                         {

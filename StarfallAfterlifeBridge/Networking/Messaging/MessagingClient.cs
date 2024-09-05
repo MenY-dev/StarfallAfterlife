@@ -45,6 +45,8 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
 
         private bool _readingAvailable = false;
 
+        private string _debugTargetAddsess = null;
+
         public MessagingClient() { }
 
         public void Connect(Uri address)
@@ -57,6 +59,7 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
 
             lock (_locker)
             {
+                _debugTargetAddsess = address?.ToString();
                 _readingAvailable = true;
                 ConnectionCompletion = new();
                 TcpClient = new TcpClient();
@@ -91,6 +94,13 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
                 ConnectionCompletion?.TrySetResult(IsConnected);
             }
 
+            try
+            {
+                if (tcpClient.Client?.RemoteEndPoint is { } rep)
+                    _debugTargetAddsess = rep.ToString();
+            }
+            catch { }
+
             HandleInputStream();
         }
 
@@ -124,11 +134,11 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
             }
             catch
             {
-                SfaDebug.Print($"Connection faled!", GetType().Name);
+                try { SfaDebug.Print($"Connection faled! ({GetDebugTargetAddsess()})", GetType().Name); } catch { }
                 return;
             }
 
-            SfaDebug.Print($"Connected to serveer!", GetType().Name);
+            try { SfaDebug.Print($"Connected ({GetDebugTargetAddsess()})", GetType().Name); } catch { }
 
             lock (_locker)
             {
@@ -216,6 +226,7 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
                         }
                     }
                 }
+                catch (IOException){ }
                 catch (Exception e)
                 {
                     SfaDebug.Log(e.ToString());
@@ -225,7 +236,7 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
                     _readingAvailable = false;
                     Close();
                     OnDisconnected();
-                    SfaDebug.Log("Disconnected!");
+                    try { SfaDebug.Print($"Disconnected ({GetDebugTargetAddsess()})", GetType().Name); } catch { }
                 }
 
             }).ContinueWith(t =>
@@ -491,6 +502,18 @@ namespace StarfallAfterlife.Bridge.Networking.Messaging
         public void Dispose()
         {
             Dispose(disposing: true);
+        }
+
+        private string GetDebugTargetAddsess()
+        {
+            try
+            {
+                return TcpClient?.Client?.RemoteEndPoint?.ToString() ?? _debugTargetAddsess?.ToString();
+            }
+            catch
+            {
+                return _debugTargetAddsess?.ToString();
+            }
         }
     }
 }

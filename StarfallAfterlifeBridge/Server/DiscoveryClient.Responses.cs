@@ -514,7 +514,7 @@ namespace StarfallAfterlife.Bridge.Server
 
                         writer.WriteShortString(doc.ToJsonString(), -1, true, Encoding.UTF8);
 
-                        SfaDebug.Print($"QuestDataUpdate ({quests.ToJsonString()}", "DiscoveryServerClient");
+                        SfaDebug.Print($"QuestDataUpdate (CharId = {CurrentCharacter?.UniqueId}, CharName = {CurrentCharacter?.UniqueName})", GetType().Name);
                     });
             }
         }
@@ -529,7 +529,7 @@ namespace StarfallAfterlife.Bridge.Server
                     writer.WriteInt32((byte)quest.State);
                 });
 
-            SfaDebug.Print($"QuestStateUpdate (UserFleet = {CurrentCharacter?.Fleet?.Id}, Quest = {quest.Id}, State = {quest.State})", "DiscoveryServerClient");
+            SfaDebug.Print($"QuestStateUpdate (QuestId = {quest.Id}, QuestState = {quest.State}, CharId = {CurrentCharacter?.Id}, CharName = {CurrentCharacter?.UniqueName}, CharState = {State})", "DiscoveryServerClient");
         }
 
         public void SendUpdateInventory()

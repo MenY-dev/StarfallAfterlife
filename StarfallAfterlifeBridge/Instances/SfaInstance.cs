@@ -44,6 +44,8 @@ namespace StarfallAfterlife.Bridge.Instances
 
         public int Port { get; set; }
 
+        public bool PortFinded { get; protected set; } = false;
+
         public SfaProcess Process { get; protected set; }
 
         public SfaProcessSandbox Sandbox { get; protected set; }
@@ -141,10 +143,22 @@ namespace StarfallAfterlife.Bridge.Instances
 
         public virtual bool Start()
         {
-            Sandbox.InstanceConfig = CreateInstanceJsonString();
-            State = InstanceState.Created;
-            Process.Start();
-            return true;
+            try
+            {
+                Sandbox.InstanceConfig = CreateInstanceJsonString();
+                State = InstanceState.Created;
+                Process.Start();
+                SfaDebug.Print($"Instance started! (Map = {Map}, Type = {Info?.Type}, DungeonType = {Info?.DungeonType}, DungeonFaction = {Info?.DungeonFaction}, InstanceAuth = {Auth})", GetType().Name);
+                SfaDebug.Print($"Instance players: (InstanceAuth = {Auth}, Players = {Info?.Players.ToArray().Select(p => p.Name)})", GetType().Name);
+                SfaDebug.Print($"Instance chars: (InstanceAuth = {Auth}, Chars = {Info?.Characters.ToArray().Select(c => c.Name)})", GetType().Name);
+                return true;
+            }
+            catch (Exception e)
+            {
+                SfaDebug.Log(e.ToString());
+                Stop();
+                return false;
+            }
         }
 
 
@@ -158,6 +172,8 @@ namespace StarfallAfterlife.Bridge.Instances
                 Process?.Close();
             }
             catch { }
+
+            SfaDebug.Print($"Instance finished! (Map = {Map}, InstanceAuth = {Auth})", GetType().Name);
         }
 
         public virtual JsonNode CreateInstanceConfig()
@@ -198,19 +214,45 @@ namespace StarfallAfterlife.Bridge.Instances
 
         public virtual void SetInstanceReady()
         {
-            Port = Process?.GetServerListeningPort() ?? -1;
+            try
+            {
+                if (PortFinded == false &&
+                    Process?.GetServerListeningPort() is int port &&
+                    port > 0)
+                {
+                    Port = port;
+                    PortFinded = true;
+                }
+            }
+            catch (Exception e)
+            {
+                SfaDebug.Print($"Error getting listening port! (Map = {Map}, InstanceAuth = {Auth}, Error = {e})", GetType().Name);
+            }
 
             if (Info?.UsePortForwarding == true)
-                NatPuncher
-                    .Create(ProtocolType.Udp, Port, Port, 7200)
-                    .Wait(1000);
+            {
+                SfaDebug.Print($"Punch instance port! (Port = {Port}, Map = {Map}, InstanceAuth = {Auth})", GetType().Name);
+
+                try
+                {
+                    NatPuncher
+                        .Create(ProtocolType.Udp, Port, Port, 7200)
+                        .Wait(1000);
+                }
+                catch (Exception e)
+                {
+                    SfaDebug.Print($"Instance port punching error! (Port = {Port}, Map = {Map}, InstanceAuth = {Auth}, Error = {e})", GetType().Name);
+                }
+            }
 
             State = InstanceState.Started;
+            SfaDebug.Print($"Instance ready! (Port = {Port}, Map = {Map}, InstanceAuth = {Auth})", GetType().Name);
         }
 
         public void OnAuthForInstanceReady(int charId, string auth)
         {
             Context?.SendInstanceAuthReady(this, charId, auth);
+            SfaDebug.Print($"Auth ready! (CharId = {charId}, CharAuth = {auth}, InstanceAuth = {Auth})", GetType().Name);
         }
 
         public virtual void ConnectChannels(InstanceChannelClient client)
@@ -223,7 +265,7 @@ namespace StarfallAfterlife.Bridge.Instances
             lock (_shutdownCancellationLockher)
             {
                 CancelShutdown();
-                SfaDebug.Print($"StartShutdownTimer {seconds}s", GetType().Name);
+                SfaDebug.Print($"Start shutdown timer {seconds}s (InstanceAuth = {Auth})", GetType().Name);
 
                 _shutdownCancellation = new();
 
@@ -268,6 +310,28 @@ namespace StarfallAfterlife.Bridge.Instances
 
         private void OnProcessOutputUpdated(object sender, SfaProcessOutputEventArgs e)
         {
+            if (PortFinded == false)
+            {
+                try
+                {
+                    if (ListeningOnPortRegex().Matches(e.Line) is { } matches && matches.Count > 0)
+                    {
+                        foreach (Match match in matches)
+                        {
+                            if (match.Groups["port"].Value is string portString &&
+                                int.TryParse(portString, out var port) == true)
+                            {
+                                Port = port;
+                                PortFinded = true;
+                                SfaDebug.Print($"Get port from stdout! (Port = {port}, InstanceAuth = {Auth})", GetType().Name);
+                                break;
+                            }
+                        }
+                    }
+                }
+                catch { }
+            }
+            
             try
             {
                 if (MatchStateChangedRegex().Matches(e.Line) is { } matches && matches.Count > 0)
@@ -280,6 +344,9 @@ namespace StarfallAfterlife.Bridge.Instances
         [GeneratedRegex(@"[M]atch State Changed from (?<from>.+) to (?<to>.+)")]
         private static partial Regex MatchStateChangedRegex();
 
+        [GeneratedRegex(@"[l]istening on port (?<port>\d+)")]
+        private static partial Regex ListeningOnPortRegex();
+
         private void OnNewMatchState(string oldState, string newState)
         {
             if (newState == "WaitingToStart")
@@ -287,6 +354,8 @@ namespace StarfallAfterlife.Bridge.Instances
 
             if (newState == "InProgress")
                 CancelShutdown();
+
+            SfaDebug.Print($"New match state (OldState = {oldState}, NewState = {newState}, InstanceAuth = {Auth})", GetType().Name);
         }
 
         public static SfaInstance Create(InstanceInfo info)

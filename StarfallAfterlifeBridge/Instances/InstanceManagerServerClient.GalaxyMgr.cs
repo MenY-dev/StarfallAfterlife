@@ -24,108 +24,113 @@ namespace StarfallAfterlife.Bridge.Instances
 
             SfaDebug.Print($"Request ({query})", "galaxymgr");
 
-            switch (query.Function)
+            try
             {
-                case "auth":
-                case "authcompletion":
-                    response = new JsonObject
-                    { };
-                    break;
+                switch (query.Function)
+                {
+                    case "auth":
+                    case "authcompletion":
+                        response = new JsonObject
+                        { };
+                        break;
 
-                case "discovery_charactgetdata":
-                    response = new JsonObject
-                    {
-                        ["result_data"] = SValue.Create(HandleGetCharacterData(
-                            (int?)query["charactid"] ?? -1,
-                            (string)query["gamemode"],
-                            (int?)query["include_destroyed_ships"] == 1))
-                    };
-                    break;
-
-                case "getmobfleet":
-                    response = new JsonObject
-                    {
-                        ["mobdata"] = HandleGetMobFleet((string)query["auth"], (int?)query["mobid"] ?? -1)
-                    };
-                    break;
-
-                case "getmobfleetcustom":
-                    response = new JsonObject
-                    {
-                        ["mobdata"] = HandleGetMobFleetCustom(
-                            (int?)query["level_min"] ?? 0,
-                            (int?)query["level_max"] ?? 0,
-                            (Faction?)(byte?)query["faction"] ?? Faction.None,
-                            ((string)query["tags"])?.Split(',', StringSplitOptions.RemoveEmptyEntries) ?? Array.Empty<string>(),
-                            (string)query["auth"]),
-                    };
-                    break;
-
-                case "getspecialfleet":
-                    response = new JsonObject
-                    {
-                        ["fleetdata"] = HandleGetSpecialFleet((string)query["internalname"], (string)query["auth"])
-                    };
-                    break;
-
-                case "getdroplist":
-                    response = new JsonObject
-                    {
-                        ["listdata"] = new JsonObject
+                    case "discovery_charactgetdata":
+                        response = new JsonObject
                         {
-                            ["items"] = HandleGetDropList((string)query["listname"], (string)query["auth"])
-                        }
-                    };
-                    break;
+                            ["result_data"] = SValue.Create(HandleGetCharacterData(
+                                (int?)query["charactid"] ?? -1,
+                                (string)query["gamemode"],
+                                (int?)query["include_destroyed_ships"] == 1))
+                        };
+                        break;
 
-                case "update_ship_status":
-                    UpdateShipStatus(
-                        (int?)query["shipid"] ?? -1,
-                        (string)query["shipdata"],
-                        (string)query["ship_stats"],
-                        (string)query["auth"]);
-                    break;
+                    case "getmobfleet":
+                        response = new JsonObject
+                        {
+                            ["mobdata"] = HandleGetMobFleet((string)query["auth"], (int?)query["mobid"] ?? -1)
+                        };
+                        break;
 
-                case "update_charact_stats":
-                    UpdateCharacterStats(
-                        (int?)query["charid"] ?? -1,
-                        JsonHelpers.ParseNodeUnbuffered((string)query["stats"]),
-                        (string)query["auth"]);
-                    break;
+                    case "getmobfleetcustom":
+                        response = new JsonObject
+                        {
+                            ["mobdata"] = HandleGetMobFleetCustom(
+                                (int?)query["level_min"] ?? 0,
+                                (int?)query["level_max"] ?? 0,
+                                (Faction?)(byte?)query["faction"] ?? Faction.None,
+                                ((string)query["tags"])?.Split(',', StringSplitOptions.RemoveEmptyEntries) ?? Array.Empty<string>(),
+                                (string)query["auth"]),
+                        };
+                        break;
 
-                case "battle_results":
-                    HandleBattleResults(
-                        (string)query["game_mode"],
-                        (string)query["results"],
-                        (string)query["auth"]);
-                    break;
-                case "save_ships_group":
-                    HandleSaveShipsGroup(
-                        (int?)query["charact"] ?? -1,
-                        (int?)query["group_num"] ?? -1,
-                        JsonHelpers.ParseNodeUnbuffered((string)query["selection_data"]),
-                        (string)query["auth"]);
-                    break;
+                    case "getspecialfleet":
+                        response = new JsonObject
+                        {
+                            ["fleetdata"] = HandleGetSpecialFleet((string)query["internalname"], (string)query["auth"])
+                        };
+                        break;
 
-                case "add_charact_reward_for_event":
-                    response = new JsonObject
-                    {
-                        ["data_result"] = SValue.Create(HandleAddCharactRewardForEvent((string)query["auth"])),
-                    };
-                    break;
+                    case "getdroplist":
+                        response = new JsonObject
+                        {
+                            ["listdata"] = new JsonObject
+                            {
+                                ["items"] = HandleGetDropList((string)query["listname"], (string)query["auth"])
+                            }
+                        };
+                        break;
 
-                case "fleet.getdata":
-                    response = new JsonObject
-                    {
-                        ["ships"] = HandleFleetGetData((int?)query["fleetid"] ?? 0, (string)query["auth"]),
-                    };
-                    break;
+                    case "update_ship_status":
+                        UpdateShipStatus(
+                            (int?)query["shipid"] ?? -1,
+                            (string)query["shipdata"],
+                            (string)query["ship_stats"],
+                            (string)query["auth"]);
+                        break;
 
-                default:
-                    break;
+                    case "update_charact_stats":
+                        UpdateCharacterStats(
+                            (int?)query["charid"] ?? -1,
+                            JsonHelpers.ParseNodeUnbuffered((string)query["stats"]),
+                            (string)query["auth"]);
+                        break;
+
+                    case "battle_results":
+                        HandleBattleResults(
+                            (string)query["game_mode"],
+                            (string)query["results"],
+                            (string)query["auth"]);
+                        break;
+                    case "save_ships_group":
+                        HandleSaveShipsGroup(
+                            (int?)query["charact"] ?? -1,
+                            (int?)query["group_num"] ?? -1,
+                            JsonHelpers.ParseNodeUnbuffered((string)query["selection_data"]),
+                            (string)query["auth"]);
+                        break;
+
+                    case "add_charact_reward_for_event":
+                        response = new JsonObject
+                        {
+                            ["data_result"] = SValue.Create(HandleAddCharactRewardForEvent((string)query["auth"])),
+                        };
+                        break;
+
+                    case "fleet.getdata":
+                        response = new JsonObject
+                        {
+                            ["ships"] = HandleFleetGetData((int?)query["fleetid"] ?? 0, (string)query["auth"]),
+                        };
+                        break;
+
+                    default:
+                        break;
+                }
             }
-
-            SfaDebug.Print($"Response ({response?.ToJsonString()})", "galaxymgr");
+            catch (Exception e)
+            {
+                SfaDebug.Log(e.ToString());
+            }
 
             response = new JsonObject { ["doc"] = response };
             MgrServer.Send(context, response.ToJsonString(false));

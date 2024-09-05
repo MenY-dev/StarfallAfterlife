@@ -25,7 +25,7 @@ namespace StarfallAfterlife.Bridge.Server
 
                     if (matchmakerBattle is not null)
                     {
-                        SfaDebug.Print($"The battle has already started!", GetType().Name);
+                        SfaDebug.Print($"The battle has already started! (BattleAuth = {matchmakerBattle.InstanceInfo.Auth}, Systen = {battle?.System?.Id}, Hex = {battle.Hex})", GetType().Name);
                         return;
                     }
 
@@ -34,12 +34,12 @@ namespace StarfallAfterlife.Bridge.Server
                     if (matchmakerBattle is not null)
                     {
                         matchmakerBattle.Start();
-                        SfaDebug.Print($"Battle started! (Hex = {battle.Hex})", GetType().Name);
+                        SfaDebug.Print($"Battle started! (Systen = {battle?.System?.Id}, Hex = {battle.Hex})", GetType().Name);
                     }
-                    else SfaDebug.Print($"Battle not started! (Reason: Matchmaker Error)", GetType().Name);
+                    else SfaDebug.Print($"Battle not started! (Reason = Matchmaker Error, Systen = {battle?.System?.Id}, Hex = {battle.Hex})", GetType().Name);
                 });
             }
-            else SfaDebug.Print($"Battle not started! (Reason: Waiting players)", GetType().Name);
+            else SfaDebug.Print($"Battle not started! (Reason = Waiting players, Systen = {battle?.System?.Id}, Hex = {battle.Hex})", GetType().Name);
         }
 
         void IBattleListener.OnBattleFleetAdded(StarSystemBattle battle, BattleMember newMember)
@@ -56,7 +56,7 @@ namespace StarfallAfterlife.Bridge.Server
 
                     if (matchmakerBattle is not null)
                     {
-                        SfaDebug.Print($"Battle started! (Hex = {battle.Hex})", GetType().Name);
+                        SfaDebug.Print($"Battle started! (Systen = {battle?.System?.Id}, Hex = {battle.Hex}, InitMemberID = {newMember.Fleet?.Id}, InitMemberName = {newMember.Fleet?.Name})", GetType().Name);
                         matchmakerBattle.Start();
                     }
                 }
@@ -71,11 +71,11 @@ namespace StarfallAfterlife.Bridge.Server
 
                 if (matchmakerBattle is null)
                 {
-                    SfaDebug.Print($"Member not added to battle! (Reason: Waiting Battle)", GetType().Name);
+                    SfaDebug.Print($"Member not added to battle! (Reason = Waiting Battle, MemberID = {newMember.Fleet?.Id}, MemberName = {newMember.Fleet?.Name}, Systen = {battle?.System?.Id}, Hex = {battle.Hex})", GetType().Name);
                     return;
                 }
 
-                SfaDebug.Print($"Member added to battle!", GetType().Name);
+                SfaDebug.Print($"Member added to battle! (MemberID = {newMember.Fleet?.Id}, MemberName = {newMember.Fleet?.Name}, Systen = {battle?.System?.Id}, Hex = {battle.Hex})", GetType().Name);
                 matchmakerBattle.AddToBattle(newMember);
             });
         }

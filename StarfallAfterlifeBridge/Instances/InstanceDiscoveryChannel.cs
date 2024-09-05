@@ -99,7 +99,7 @@ namespace StarfallAfterlife.Bridge.Instances
                 Instance?.Stop();
             }
 
-            SfaDebug.Print($"New Signal (Instance = {instanceId} Cmd = {cmd})", "InstanceDiscoveryChannel");
+            SfaDebug.Print($"New Signal (Cmd = {cmd}, InstanceAuth = {Instance?.Auth})", "InstanceDiscoveryChannel");
         }
 
         private void HandleAuthForInstance(SfReader reader)
@@ -110,7 +110,7 @@ namespace StarfallAfterlife.Bridge.Instances
 
             Instance?.OnAuthForInstanceReady(charId, auth);
 
-            SfaDebug.Print($"Auth For Instance (Instance = {instanceId}, Char = {charId}, Auth = {auth})", "InstanceDiscoveryChannel");
+            SfaDebug.Print($"Auth For Instance (Char = {charId}, Auth = {auth}, InstanceAuth = {Instance?.Auth})", "InstanceDiscoveryChannel");
         }
 
         private void HandleEnemyShipDestroyedNotification(SfReader reader, DiscoveryObjectType objectType, int objectId)
@@ -149,9 +149,9 @@ namespace StarfallAfterlife.Bridge.Instances
             Owner.SendInstanceAction(Instance?.Auth, "enemy_ship_destroyed", data);
 
             SfaDebug.Print($"EnemyShipDestroyed (KillerId = {objectId}, KillerType = {objectType}, " +
-                $"MobId = {shipMobId}, MobFaction = {shipFaction}, MobFactionGroup = {shipFactionGroup})", GetType().Name);
+                $"MobId = {shipMobId}, MobFaction = {shipFaction}, MobFactionGroup = {shipFactionGroup}, InstanceAuth = {Instance?.Auth})", GetType().Name);
 
-            SfaDebug.Print($"EnemyShipDestroyed ({data})", GetType().Name);
+            SfaDebug.Print($"EnemyShipDestroyed (InstanceAuth = {Instance?.Auth}, Data = {data})", GetType().Name);
         }
 
         private void HandleUpdatePirateAssaultStatus(SfReader reader, DiscoveryObjectType objectType, int objectId)
@@ -170,7 +170,7 @@ namespace StarfallAfterlife.Bridge.Instances
             }.ToJsonStringUnbuffered(false));
 
             SfaDebug.Print($"PirateAssaultStatus (Id = {objectId}, Players = {playersInBattle}, " +
-                $"Destroyed = {isDestroyed}, Finished = {isFinished})", GetType().Name);
+                $"Destroyed = {isDestroyed}, Finished = {isFinished}, InstanceAuth = {Instance?.Auth})", GetType().Name);
 
 
         }
@@ -230,10 +230,10 @@ namespace StarfallAfterlife.Bridge.Instances
             Instance?.Context?.SendAddCharacterShipsXp(objectId, shipsXps);
 
             SfaDebug.Print($"AddCharacterShipsXp (ObjectId = {objectId}, " +
-                $"XpSourceLevel = {xpSourceLevel}, SpentBonusXp = {spentBonusXp})", GetType().Name);
+                $"XpSourceLevel = {xpSourceLevel}, SpentBonusXp = {spentBonusXp}, InstanceAuth = {Instance?.Auth})", GetType().Name);
 
             foreach (var item in shipsXps)
-                SfaDebug.Print($"AddCharacterShipsXp (Ship = {item.Key}, Xp = {item.Value})", GetType().Name);
+                SfaDebug.Print($"AddCharacterShipsXp (Ship = {item.Key}, Xp = {item.Value}, InstanceAuth = {Instance?.Auth})", GetType().Name);
         }
 
         private void HandleInstanceObjectInteractEvent(SfReader reader, DiscoveryObjectType objectType, int objectId)
@@ -250,7 +250,7 @@ namespace StarfallAfterlife.Bridge.Instances
             }.ToJsonStringUnbuffered(false));
 
             SfaDebug.Print($"InstanceObjectInteractEvent " +
-                $"(ObjectType = {objectType}, ObjectId = {objectId}, Event = {eventType})", GetType().Name);
+                $"(ObjectType = {objectType}, ObjectId = {objectId}, Event = {eventType}, InstanceAuth = {Instance?.Auth})", GetType().Name);
         }
 
         private void HandleSecretObjectLooted(SfReader reader, DiscoveryObjectType objectType, int objectId)
@@ -262,7 +262,7 @@ namespace StarfallAfterlife.Bridge.Instances
             }.ToJsonStringUnbuffered(false));
 
             SfaDebug.Print($"SecretObjectLooted " +
-                $"(ObjectType = {objectType}, ObjectId = {objectId})");
+                $"(ObjectType = {objectType}, ObjectId = {objectId}, InstanceAuth = {Instance?.Auth})");
         }
 
         private void HandleReportOreTaken(SfReader reader, DiscoveryObjectType objectType, int objectId)
@@ -287,7 +287,7 @@ namespace StarfallAfterlife.Bridge.Instances
                 JsonHelpers.ParseNodeUnbuffered(ores).ToJsonStringUnbuffered(false));
 
             SfaDebug.Print($"HandleReportOreTaken " +
-                $"(ObjectType = {objectType}, ObjectId = {objectId})");
+                $"(ObjectType = {objectType}, ObjectId = {objectId}, InstanceAuth = {Instance?.Auth})");
         }
 
         public void SendMessage(DiscoveryServerAction action, Action<SfWriter> writeAction = null)

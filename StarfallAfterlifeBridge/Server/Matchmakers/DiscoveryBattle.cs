@@ -1,5 +1,6 @@
 ﻿using StarfallAfterlife.Bridge.Collections;
 using StarfallAfterlife.Bridge.Database;
+using StarfallAfterlife.Bridge.Diagnostics;
 using StarfallAfterlife.Bridge.Instances;
 using StarfallAfterlife.Bridge.Mathematics;
 using StarfallAfterlife.Bridge.Networking;
@@ -51,48 +52,52 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
         {
             lock (_locker)
             {
-                if (member?.Fleet is null ||
-                    PendingMembers.FirstOrDefault(m => m.Fleet == member.Fleet) is not null)
-                    return;
+                try
+                {
+                    if (member?.Fleet is null ||
+                        PendingMembers.FirstOrDefault(m => m.Fleet == member.Fleet) is not null)
+                        return;
 
-                if (State == MatchmakerBattleState.PendingMatch)
-                {
-                    PendingMembers.Add(member);
-                    return;
-                }
-                else if (State == MatchmakerBattleState.Started)
-                {
-                    AddToActiveBattle(member);
-                    return;
-                }
-                else if (State == MatchmakerBattleState.Finished)
-                {
-                    Galaxy?.BeginPreUpdateAction(g => SystemBattle?.Leave(member, SystemBattle.Hex));
-                    return;
-                }
-
-                if (member.Fleet is UserFleet)
-                {
-                    var info = CreateCharacterInfo(member);
-
-                    if (info is not null)
+                    if (State == MatchmakerBattleState.PendingMatch)
                     {
-                        Characters.Add(info);
+                        PendingMembers.Add(member);
+                        return;
+                    }
+                    else if (State == MatchmakerBattleState.Started)
+                    {
+                        AddToActiveBattle(member);
+                        return;
+                    }
+                    else if (State == MatchmakerBattleState.Finished)
+                    {
+                        Galaxy?.BeginPreUpdateAction(g => SystemBattle?.Leave(member, SystemBattle.Hex));
+                        return;
+                    }
 
-                        if (State == MatchmakerBattleState.PendingPlayers)
+                    if (member.Fleet is UserFleet)
+                    {
+                        var info = CreateCharacterInfo(member);
+
+                        if (info is not null)
                         {
-                            _cts?.Cancel();
-                            StartInstance();
+                            Characters.Add(info);
+
+                            if (State == MatchmakerBattleState.PendingPlayers)
+                            {
+                                _cts?.Cancel();
+                                StartInstance();
+                            }
                         }
                     }
-                }
-                else if (member.Fleet is DiscoveryAiFleet)
-                {
-                    var info = CreateMobInfo(member);
+                    else if (member.Fleet is DiscoveryAiFleet)
+                    {
+                        var info = CreateMobInfo(member);
 
-                    if (info is not null)
-                        Mobs.Add(info);
+                        if (info is not null)
+                            Mobs.Add(info);
+                    }
                 }
+                catch (Exception e) { SfaDebug.Log(e.ToString()); }
             }
         }
 
@@ -261,20 +266,24 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
             lock (_locker)
             {
-                InstanceInfo.Type = InstanceType.DiscoveryBattle;
-
-                if (SystemBattle is null)
-                    return;
-
-                SystemId = SystemBattle.System?.Id ?? -1;
-                Location = SystemBattle.Hex;
-
-                foreach (var member in SystemBattle.Members)
+                try
                 {
-                    AddToBattle(member);
-                }
+                    InstanceInfo.Type = InstanceType.DiscoveryBattle;
 
-                CreateLocationDrop();
+                    if (SystemBattle is null)
+                        return;
+
+                    SystemId = SystemBattle.System?.Id ?? -1;
+                    Location = SystemBattle.Hex;
+
+                    foreach (var member in SystemBattle.Members)
+                    {
+                        AddToBattle(member);
+                    }
+
+                    CreateLocationDrop();
+                }
+                catch (Exception e) { SfaDebug.Log(e.ToString()); }
             }
         }
 
@@ -306,13 +315,17 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
         {
             lock (_locker)
             {
-                State = MatchmakerBattleState.PendingMatch;
-                InstanceInfo.Characters.AddRange(Characters
-                    .Where(c => c.ServerCharacter?.IsOnline == true)
-                    .Where(c => c.ServerCharacter.DiscoveryClient?.State == SfaCharacterState.InGalaxy)
-                    .Select(c => c.InstanceCharacter));
-                InstanceInfo.ExtraData = CreateExtraData().ToJson().ToJsonString();
-                GameMode.InstanceManager.StartInstance(InstanceInfo);
+                try
+                {
+                    State = MatchmakerBattleState.PendingMatch;
+                    InstanceInfo.Characters.AddRange(Characters
+                        .Where(c => c.ServerCharacter?.IsOnline == true)
+                        .Where(c => c.ServerCharacter.DiscoveryClient?.State == SfaCharacterState.InGalaxy)
+                        .Select(c => c.InstanceCharacter));
+                    InstanceInfo.ExtraData = CreateExtraData().ToJson().ToJsonString();
+                    GameMode.InstanceManager.StartInstance(InstanceInfo);
+                }
+                catch (Exception e) { SfaDebug.Log(e.ToString()); }
             }
         }
 

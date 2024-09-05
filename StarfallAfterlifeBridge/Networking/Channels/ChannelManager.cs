@@ -19,7 +19,7 @@ namespace StarfallAfterlife.Bridge.Networking.Channels
 
         protected override void HandleClient(TcpClient tcpClient)
         {
-            SfaDebug.Print($"HandleClient (Client = {tcpClient.Client.RemoteEndPoint}");
+            SfaDebug.Print($"HandleClient (Client = {tcpClient.Client.RemoteEndPoint})");
 
             TClient channelClient = CreateNewClient(tcpClient);
             NetworkStream stream = tcpClient.GetStream();
@@ -59,8 +59,6 @@ namespace StarfallAfterlife.Bridge.Networking.Channels
 
         protected void OnDataReceived(TClient client, SFCP.Header header)
         {
-            SfaDebug.Print($"OnDataReceived (Cmd = {header.Cmd}, Size = {header.Size})", GetType().Name);
-
             switch (header.Cmd)
             {
                 case 1:
