@@ -101,6 +101,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                     return;
 
                 character.Char.DiscoveryClient?.Invoke(c => c.SendStartBattle(
+                    character.Char,
                     "quick_match",
                     Matchmaker?.CreateBattleIpAddress(),
                     InstanceInfo?.Port ?? -1,

@@ -11,10 +11,11 @@ using StarfallAfterlife.Bridge.Diagnostics;
 using System.Threading;
 using System.Text.Json.Nodes;
 using System.Net.Sockets;
+using System.Text.RegularExpressions;
 
 namespace StarfallAfterlife.Bridge.Instances
 {
-    public class SfaInstance
+    public partial class SfaInstance
     {
         public InstanceState State
         {
@@ -134,6 +135,7 @@ namespace StarfallAfterlife.Bridge.Instances
                 }
             };
 
+            Process.OutputUpdated += OnProcessOutputUpdated;
             Process.Exited += OnProcessExited;
         }
 
@@ -262,6 +264,29 @@ namespace StarfallAfterlife.Bridge.Instances
         private void OnProcessExited(object sender, EventArgs e)
         {
             State = InstanceState.Finished;
+        }
+
+        private void OnProcessOutputUpdated(object sender, SfaProcessOutputEventArgs e)
+        {
+            try
+            {
+                if (MatchStateChangedRegex().Matches(e.Line) is { } matches && matches.Count > 0)
+                    foreach (Match match in matches)
+                        OnNewMatchState(match.Groups["from"].Value, match.Groups["to"].Value);
+            }
+            catch { }
+        }
+
+        [GeneratedRegex(@"[M]atch State Changed from (?<from>.+) to (?<to>.+)")]
+        private static partial Regex MatchStateChangedRegex();
+
+        private void OnNewMatchState(string oldState, string newState)
+        {
+            if (newState == "WaitingToStart")
+                StartShutdownTimer(120);
+
+            if (newState == "InProgress")
+                CancelShutdown();
         }
 
         public static SfaInstance Create(InstanceInfo info)

@@ -59,6 +59,9 @@ namespace StarfallAfterlife.Bridge.Instances
                 case "join_new_char":
                     HandleJoinNewChar(doc); break;
 
+                case "char_drop_session":
+                    HandleCharDropSession(doc); break;
+
                 case "send_char_data":
                     HandleCharDataResponse(doc); break;
 
@@ -127,6 +130,20 @@ namespace StarfallAfterlife.Bridge.Instances
                     JsonHelpers.DeserializeUnbuffered<InstanceCharacter>(data) is InstanceCharacter character)
                 {
                     instance.DiscoveryChannel?.SendNewPlayerJoiningToInstance(character);
+                }
+            }
+        }
+
+        private void HandleCharDropSession(JsonNode doc)
+        {
+            lock (Lockher)
+            {
+                if (doc is not null &&
+                    GetInstanceWithSyncKey((string)doc["sync_key"]) is DiscoveryBattleInstance instance &&
+                    (int?)doc["char_id"] is int charId &&
+                    instance.Info?.Characters?.ToArray().FirstOrDefault(c => c.Id == charId) is InstanceCharacter character)
+                {
+                    instance.DiscoveryChannel?.SendCharDropSession(character);
                 }
             }
         }

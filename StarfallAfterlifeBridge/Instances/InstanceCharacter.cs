@@ -23,6 +23,9 @@ namespace StarfallAfterlife.Bridge.Instances
         [JsonPropertyName("team")]
         public int Team { get; set; } = 100;
 
+        [JsonPropertyName("in_galaxy")]
+        public int InGalaxy { get; set; } = 1;
+
         [JsonPropertyName("role")]
         public DiscoveryPlayerInstanceStatus Role { get; set; }
 

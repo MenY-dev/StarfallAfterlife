@@ -1,5 +1,6 @@
 ﻿using StarfallAfterlife.Bridge.Instances;
 using StarfallAfterlife.Bridge.Primitives;
+using StarfallAfterlife.Bridge.Profiles;
 using StarfallAfterlife.Bridge.Serialization;
 using StarfallAfterlife.Bridge.Server.Characters;
 using System;
@@ -215,6 +216,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
                     foreach (var item in Chars)
                         item.Char.DiscoveryClient?.Invoke(c => c.SendStartBattle(
+                            item.Char,
                             "battlegrounds",
                             Matchmaker?.CreateBattleIpAddress(),
                             InstanceInfo?.Port ?? -1,

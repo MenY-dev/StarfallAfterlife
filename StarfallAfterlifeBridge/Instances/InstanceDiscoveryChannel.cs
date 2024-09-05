@@ -12,7 +12,6 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace StarfallAfterlife.Bridge.Instances
 {
@@ -188,6 +187,19 @@ namespace StarfallAfterlife.Bridge.Instances
                 writer => writer.WriteShortString(text, -1, true, Encoding.UTF8));
         }
 
+        public void SendCharDropSession(InstanceCharacter character)
+        {
+            if (character is null || character.Name is null)
+                return;
+
+            SendMessage(
+                DiscoveryServerAction.CharactDropSession,
+                writer =>
+                {
+                    writer.WriteInt32(character.Id);
+                    writer.WriteShortString(character.Name, -1, true, Encoding.UTF8);
+                });
+        }
 
         private void HandleAddCharacterShipsXp(SfReader reader, DiscoveryObjectType objectType, int objectId)
         {

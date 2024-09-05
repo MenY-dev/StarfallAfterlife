@@ -75,6 +75,7 @@ namespace StarfallAfterlife.Bridge.Server
                     return;
                 }
 
+                SfaDebug.Print($"Member added to battle!", GetType().Name);
                 matchmakerBattle.AddToBattle(newMember);
             });
         }

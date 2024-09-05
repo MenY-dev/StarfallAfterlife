@@ -147,6 +147,21 @@ namespace StarfallAfterlife.Bridge.Instances
             }
         }
 
+        public void SendCharDropSession(InstanceInfo instance, int charId)
+        {
+            lock (Lockher)
+            {
+                if (GetSyncKey(instance) is string syncKey)
+                {
+                    Send("char_drop_session", new JsonObject
+                    {
+                        ["sync_key"] = syncKey,
+                        ["char_id"] = charId,
+                    });
+                }
+            }
+        }
+
         public virtual void SendCharacterData(InstanceCharacter character, JsonNode data) =>
             SendCharacterData(character?.Id ?? -1, data);
 

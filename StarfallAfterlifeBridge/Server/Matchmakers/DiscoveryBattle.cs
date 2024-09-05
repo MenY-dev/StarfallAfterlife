@@ -493,6 +493,8 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                         AddToActiveBattle(member);
 
                     PendingMembers.Clear();
+
+                    BroadcastDroppedSessions();
                 }
                 else if (state == InstanceState.Finished)
                 {
@@ -592,27 +594,42 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
             if (Characters?
                 .FirstOrDefault(c => c?.InstanceCharacter?.Id == characterId)
                 is DiscoveryBattleCharacterInfo info)
-                JoinToInstance(info, auth);
+            {
+                if (info.ServerCharacter.IsOnline == true)
+                    JoinToInstance(info, auth);
+                else
+                    GameMode?.InstanceManager?.SendCharDropSession(InstanceInfo, characterId);
+            }
         }
 
         public void JoinToInstance(DiscoveryBattleCharacterInfo character, string newAuth = null)
         {
             lock (_locker)
             {
-                if (character is null)
+                var instanceCharacter = character?.InstanceCharacter;
+                var serverCharacter = character?.ServerCharacter;
+
+                if (instanceCharacter is null || serverCharacter is null)
                     return;
 
-                if (newAuth is not null &&
-                    character.InstanceCharacter is InstanceCharacter instanceCharacter)
+                if (newAuth is not null)
                     instanceCharacter.Auth = newAuth;
 
-                character.Client?.Invoke(c => c.SendStartBattle(
-                    "discovery",
-                    Matchmaker?.CreateBattleIpAddress(),
-                    InstanceInfo?.Port ?? -1,
-                    character.InstanceCharacter?.Auth,
-                    character.ServerCharacter?.Fleet?.System.Id ?? 0,
-                    character.ServerCharacter?.Fleet?.Id ?? -1));
+                if (serverCharacter.IsOnline == true)
+                {
+                    character.Client?.Invoke(c => c.SendStartBattle(
+                        serverCharacter,
+                        "discovery",
+                        Matchmaker?.CreateBattleIpAddress(),
+                        InstanceInfo?.Port ?? -1,
+                        instanceCharacter?.Auth,
+                        serverCharacter.Fleet?.System.Id ?? 0,
+                        serverCharacter.UniqueId));
+                }
+                else
+                {
+                    GameMode?.InstanceManager?.SendCharDropSession(InstanceInfo, instanceCharacter.Id);
+                }
             }
         }
 
@@ -834,6 +851,20 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                             break;
                     }
                 }
+            }
+        }
+
+        public void BroadcastDroppedSessions()
+        {
+            lock (_locker)
+            {
+                var droppedChars = Characters
+                    .Where(c => c.ServerCharacter?.IsOnline != true)
+                    .Select(c => c.InstanceCharacter?.Id ?? -1)
+                    .ToArray();
+
+                foreach (var charId in droppedChars)
+                    GameMode?.InstanceManager?.SendCharDropSession(InstanceInfo, charId);
             }
         }
     }

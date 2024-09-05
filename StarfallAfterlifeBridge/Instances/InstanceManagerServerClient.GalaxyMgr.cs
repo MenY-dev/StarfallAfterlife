@@ -125,7 +125,7 @@ namespace StarfallAfterlife.Bridge.Instances
                     break;
             }
 
-            SfaDebug.Print($"Response ({response?.ToJsonString()})", "sfmgr");
+            SfaDebug.Print($"Response ({response?.ToJsonString()})", "galaxymgr");
 
             response = new JsonObject { ["doc"] = response };
             MgrServer.Send(context, response.ToJsonString(false));

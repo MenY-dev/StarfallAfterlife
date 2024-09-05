@@ -95,7 +95,7 @@ namespace StarfallAfterlife.Bridge.Server
                     {
                         fleet.IsIsolated = false;
                         fleet.SetFleetState(FleetState.InGalaxy);
-                        Invoke(() => EnterToStarSystem(character.Fleet?.System?.Id ?? GetCharactDefaultSystem()?.Id ?? 0));
+                        Invoke(() => EnterToStarSystem(fleet.System?.Id ?? GetCharactDefaultSystem()?.Id ?? 0));
                     });
                 }
                 else
@@ -202,10 +202,13 @@ namespace StarfallAfterlife.Bridge.Server
         }
 
         public void SendStartBattle(
-            string gameMode,
+            ServerCharacter character, string gameMode,
             string address, int port, string auth,
             int systemId = 0, int charId = 0)
         {
+            if (character is null || character.IsOnline == false)
+                return;
+
             Client?.SendStartBattle(gameMode, address, port, auth, systemId, charId);
         }
 
