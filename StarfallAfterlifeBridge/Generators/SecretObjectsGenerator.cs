@@ -89,6 +89,7 @@ namespace StarfallAfterlife.Bridge.Generators
         {
             var count = SystemHexMap.HexesCount;
             var startIndex = rnd.Next(0, count);
+            var starHexes = SystemHex.Zero.GetSpiralEnumerator(GetStarRadius(system));
 
             for (int i = 0; i < count; i++)
             {
@@ -96,11 +97,14 @@ namespace StarfallAfterlife.Bridge.Generators
                 var hex = SystemHexMap.ArrayIndexToHex(index);
                 var area = hex.GetSpiral(1);
 
-                if (area.Any(h => system.GetObjectAt(h.X, h.Y) is not null) == false)
+                if (area.Any(h => system.GetObjectAt(h.X, h.Y) is not null || starHexes.Contains(h)) == false)
                     return hex;
             }
 
             return SystemHex.Zero;
         }
+
+        public static int GetStarRadius(GalaxyMapStarSystem system) =>
+            system is not null ? system.Size / 160 : 1;
     }
 }

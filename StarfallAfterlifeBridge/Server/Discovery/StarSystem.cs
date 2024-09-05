@@ -253,7 +253,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
         };
 
         public float GetStarRadius() => Info is GalaxyMapStarSystem info ?
-            info.Size / 150f : SystemHexMap.SystemHexSizeX;
+            info.Size / 160f : SystemHexMap.SystemHexSizeX;
 
         public bool IsStarHex(SystemHex hex) =>
             SystemHexMap.HexToSystemPoint(hex).GetSize() < GetStarRadius();
