@@ -10,10 +10,12 @@ namespace StarfallAfterlife.Bridge.Collections
     public sealed class IdCollection<T> : ICollection<T>
     {
         private SortedList<int, T> _innerList = new();
-
-        private Stack<int> _freeIds= new();
+        private Queue<int> _freeIds = new();
+        private int _maxId;
 
         public int StartId { get; init; } = 0;
+
+        public int IdsBufferThreshold { get; init; } = 1000;
 
         public int Count => _innerList.Count;
 
@@ -48,12 +50,12 @@ namespace StarfallAfterlife.Bridge.Collections
             if (currentIndex > -1)
                 return _innerList.GetKeyAtIndex(currentIndex);
 
-            int id = StartId;
+            int id;
 
-            if (_freeIds.Count > 0)
-                id = _freeIds.Pop();
-            else if (_innerList.Count > 0)
-                id = _innerList.LastOrDefault().Key + 1;
+            if (_freeIds.Count >= IdsBufferThreshold)
+                id = _freeIds.Dequeue();
+            else
+                id = ++_maxId;
 
             _innerList.Add(id, item);
             return id;
@@ -69,7 +71,7 @@ namespace StarfallAfterlife.Bridge.Collections
                 return false;
 
             if (index < (_innerList.Count - 1))
-                _freeIds.Push(_innerList.GetKeyAtIndex(index));
+                _freeIds.Enqueue(_innerList.GetKeyAtIndex(index));
 
             _innerList.RemoveAt(index);
             return true;
@@ -79,6 +81,7 @@ namespace StarfallAfterlife.Bridge.Collections
         {
             _innerList.Clear();
             _freeIds.Clear();
+            _maxId = StartId - 1;
         }
 
         public bool Contains(T item) => _innerList.ContainsValue(item);
