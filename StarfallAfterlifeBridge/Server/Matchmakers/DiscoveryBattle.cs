@@ -307,7 +307,10 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
             lock (_locker)
             {
                 State = MatchmakerBattleState.PendingMatch;
-                InstanceInfo.Characters.AddRange(Characters.Select(c => c.InstanceCharacter));
+                InstanceInfo.Characters.AddRange(Characters
+                    .Where(c => c.ServerCharacter?.IsOnline == true)
+                    .Where(c => c.ServerCharacter.DiscoveryClient?.State == SfaCharacterState.InGalaxy)
+                    .Select(c => c.InstanceCharacter));
                 InstanceInfo.ExtraData = CreateExtraData().ToJson().ToJsonString();
                 GameMode.InstanceManager.StartInstance(InstanceInfo);
             }
