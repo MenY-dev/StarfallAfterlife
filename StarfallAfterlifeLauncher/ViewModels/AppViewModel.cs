@@ -170,7 +170,7 @@ namespace StarfallAfterlife.Launcher.ViewModels
             }
         }
 
-        public ICollection<object> Localizations => App.Localizations.Keys;
+        public ICollection<object> Localizations => App.Current.Localizations.Keys;
 
         public string CurrentLocalization
         {

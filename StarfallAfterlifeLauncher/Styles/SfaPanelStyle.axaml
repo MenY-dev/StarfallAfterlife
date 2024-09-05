@@ -107,7 +107,7 @@
 				<Setter Property="Fill" Value="{Binding $parent[UserControl].AccentColor}"/>
 				<Setter Property="Opacity" Value="0.3"/>
 				<Setter Property="OpacityMask">
-					<RadialGradientBrush  Center="50% 100%" GradientOrigin="50% 100%" Radius="1">
+					<RadialGradientBrush  Center="50% 100%" GradientOrigin="50% 100%" RadiusX="100%" RadiusY="100%">
 						<GradientStop Offset="0" Color="#FFFFFFFF"/>
 						<GradientStop Offset="1" Color="#00FFFFFF"/>
 					</RadialGradientBrush>

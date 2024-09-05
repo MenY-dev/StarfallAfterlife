@@ -4,6 +4,13 @@
              RequestedThemeVariant="Dark">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
+	<Application.Localizations>
+		<ResourceDictionary>
+			<ResourceInclude x:Key="ru" Source="/Assets/Strings/ru.axaml"/>
+			<ResourceInclude x:Key="en" Source="/Assets/Strings/en.axaml"/>
+		</ResourceDictionary>
+	</Application.Localizations>
+	
     <Application.Styles>
         <FluentTheme/>
 		<StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>

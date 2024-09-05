@@ -50,7 +50,7 @@
 		<Style Selector="^ > Panel > Rectangle.background">
 			<Setter Property="Opacity" Value="0.8"/>
 			<Setter Property="Fill">
-				<RadialGradientBrush GradientOrigin="50% 0%" Center="50% 10%" Radius="1">
+				<RadialGradientBrush GradientOrigin="50% 0%" Center="50% 10%" RadiusX="100%" RadiusY="100%">
 					<GradientStop Offset="0" Color="{StaticResource PageMainColor}"/>
 					<GradientStop Offset="1" Color="{StaticResource PageSecondaryColor}"/>
 				</RadialGradientBrush>
@@ -75,7 +75,7 @@
 			<Setter Property="Opacity" Value="0.5"/>
 			<Setter Property="IsHitTestVisible" Value="False"/>
 			<Setter Property="OpacityMask">
-				<RadialGradientBrush Center="50% 100%" GradientOrigin="50% 100%"  Radius="0.5" >
+				<RadialGradientBrush Center="50% 100%" GradientOrigin="50% 100%"  RadiusX="50%" RadiusY="50%" >
 					<GradientStop Offset="0" Color="#FFFFFFFF"/>
 					<GradientStop Offset="1" Color="#00FFFFFF"/>
 				</RadialGradientBrush>

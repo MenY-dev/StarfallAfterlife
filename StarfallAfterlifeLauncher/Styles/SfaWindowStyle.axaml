@@ -24,7 +24,7 @@
 				  BasedOn="{StaticResource {x:Type Window}}">
 
 		<Setter Property="Background">
-			<RadialGradientBrush GradientOrigin="50% 0%" Center="50% 10%" Radius="1">
+			<RadialGradientBrush GradientOrigin="50% 0%" Center="50% 10%" RadiusX="100%" RadiusY="100%">
 				<GradientStop Offset="0" Color="{StaticResource PageMainColor}"/>
 				<GradientStop Offset="1" Color="{StaticResource PageSecondaryColor}"/>
 			</RadialGradientBrush>

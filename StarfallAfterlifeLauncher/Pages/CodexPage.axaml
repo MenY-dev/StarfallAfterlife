@@ -110,7 +110,7 @@
 						<Panel Grid.Row="0">
 							<Rectangle Fill="{DynamicResource HoloColor}" Opacity="0.4">
 								<Rectangle.OpacityMask>
-									<RadialGradientBrush Center="50% -100%" GradientOrigin="50% -100%"  Radius="0.5" >
+									<RadialGradientBrush Center="50% -100%" GradientOrigin="50% -100%"  RadiusX="50%" RadiusY="50%" >
 										<GradientStop Offset="0" Color="#FFFFFFFF"/>
 										<GradientStop Offset="1" Color="#00FFFFFF"/>
 									</RadialGradientBrush>
