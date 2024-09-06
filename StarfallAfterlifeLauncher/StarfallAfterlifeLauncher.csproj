@@ -16,12 +16,6 @@
   </PropertyGroup>
 	
   <ItemGroup>
-  	<TrimmableAssembly Include="System.Private.CoreLib" />
-  	<TrimmableAssembly Include="System.Runtime" />
-  	<TrimmableAssembly Include="System.Collections" />
-  </ItemGroup>
-	
-  <ItemGroup>
     <None Remove="Assets\avalonia-logo.ico" />
     <None Remove="Assets\Icons\icon_128.ico" />
     <None Remove="Assets\Icons\logo_512.png" />

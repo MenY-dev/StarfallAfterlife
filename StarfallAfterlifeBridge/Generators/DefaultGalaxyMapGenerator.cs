@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace StarfallAfterlife.Bridge.Generators
@@ -29,7 +30,7 @@ namespace StarfallAfterlife.Bridge.Generators
 
             File.WriteAllText(
                 Path.Combine("V:", $"{mapName}.json"),
-                JsonHelpers.SerializeUnbuffered(map, new (){ WriteIndented = true }));
+                JsonHelpers.SerializeUnbuffered(map, new (){ WriteIndented = true, TypeInfoResolver = JsonSerializerOptions.Default.TypeInfoResolver }));
 
             return map;
         }

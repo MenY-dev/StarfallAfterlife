@@ -39,7 +39,7 @@ namespace StarfallAfterlife.Bridge.Launcher
             {
                 return (_innnerDoc ??= new JsonObject()).WriteToFileUnbuffered(
                     Path,
-                    new() { WriteIndented = true });
+                    new() { WriteIndented = true, TypeInfoResolver = JsonSerializerOptions.Default.TypeInfoResolver });
             }
         }
 

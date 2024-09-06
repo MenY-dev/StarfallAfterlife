@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
@@ -49,7 +50,11 @@ namespace StarfallAfterlife.Bridge.Launcher
                     .AsObjectSelf() ?? new JsonObject();
 
                 doc.Override(JsonHelpers.ParseNodeUnbuffered(ServerSettings ?? new())?.AsObjectSelf());
-                doc.WriteToFileUnbuffered(ServerSettingsFile, new() { WriteIndented = true });
+                doc.WriteToFileUnbuffered(ServerSettingsFile, new()
+                {
+                    WriteIndented = true,
+                    TypeInfoResolver = JsonSerializerOptions.Default.TypeInfoResolver
+                });
             }
             catch { }
         }

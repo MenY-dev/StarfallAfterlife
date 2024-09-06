@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace StarfallAfterlife.Bridge.Houses
@@ -19,7 +20,7 @@ namespace StarfallAfterlife.Bridge.Houses
             try
             {
                 House?.ToJson()?.WriteToFileUnbuffered(
-                    Location, new() { WriteIndented = true });
+                    Location, new() { WriteIndented = true, TypeInfoResolver = JsonSerializerOptions.Default.TypeInfoResolver });
             }
             catch { }
         }

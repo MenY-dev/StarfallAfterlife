@@ -155,6 +155,7 @@ namespace StarfallAfterlife.Bridge.Codex
             {
                 Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic),
                 WriteIndented = true,
+                TypeInfoResolver = JsonSerializerOptions.Default.TypeInfoResolver,
             };
 
             doc["version"] = Version;

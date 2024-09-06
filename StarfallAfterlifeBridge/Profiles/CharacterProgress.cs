@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
@@ -198,7 +199,11 @@ namespace StarfallAfterlife.Bridge.Profiles
                     .AsObjectSelf() ?? new JsonObject();
 
                 doc.Override(ToJson()?.AsObjectSelf());
-                doc.WriteToFileUnbuffered(Path, new() { WriteIndented = true });
+                doc.WriteToFileUnbuffered(Path, new()
+                {
+                    WriteIndented = true,
+                    TypeInfoResolver = JsonSerializerOptions.Default.TypeInfoResolver
+                });
 
                 return true;
             }

@@ -216,7 +216,11 @@ namespace StarfallAfterlife.Bridge.Realms
                     ["last_auth"] = LastAuth,
                 });
 
-                doc.WriteToFileUnbuffered(realmPath, new() { WriteIndented = true });
+                doc.WriteToFileUnbuffered(realmPath, new()
+                {
+                    WriteIndented = true,
+                    TypeInfoResolver = JsonSerializerOptions.Default.TypeInfoResolver
+                });
             }
             catch { }
         }
@@ -275,7 +279,11 @@ namespace StarfallAfterlife.Bridge.Realms
                     .AsObjectSelf() ?? new JsonObject();
 
                 doc.Override((newData ?? new JsonObject()) as JsonObject);
-                doc.WriteToFileUnbuffered(variablePath, new() { WriteIndented = true });
+                doc.WriteToFileUnbuffered(variablePath, new()
+                {
+                    WriteIndented = true,
+                    TypeInfoResolver = JsonSerializerOptions.Default.TypeInfoResolver
+                });
             }
             catch { }
         }

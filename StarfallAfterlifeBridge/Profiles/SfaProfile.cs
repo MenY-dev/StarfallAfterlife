@@ -232,7 +232,11 @@ namespace StarfallAfterlife.Bridge.Profiles
                     .AsObjectSelf() ?? new JsonObject();
 
                 doc.Override(JsonHelpers.ParseNodeUnbuffered(GameProfile)?.AsObjectSelf());
-                doc.WriteToFileUnbuffered(GameProfileLocation, new() { WriteIndented = true });
+                doc.WriteToFileUnbuffered(GameProfileLocation, new()
+                {
+                    WriteIndented = true,
+                    TypeInfoResolver = JsonSerializerOptions.Default.TypeInfoResolver
+                });
             }
             catch { }
 
@@ -259,7 +263,11 @@ namespace StarfallAfterlife.Bridge.Profiles
                     .AsObjectSelf() ?? new JsonObject();
 
                 doc.Override(JsonHelpers.ParseNodeUnbuffered(Info)?.AsObjectSelf());
-                doc.WriteToFileUnbuffered(path, new() { WriteIndented = true });
+                doc.WriteToFileUnbuffered(path, new()
+                {
+                    WriteIndented = true,
+                    TypeInfoResolver = JsonSerializerOptions.Default.TypeInfoResolver
+                });
             }
             catch { }
         }

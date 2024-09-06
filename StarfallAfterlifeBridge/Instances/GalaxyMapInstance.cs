@@ -12,6 +12,7 @@ using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
@@ -105,7 +106,11 @@ namespace StarfallAfterlife.Bridge.Instances
                 ["characters_list"] = new JsonArray(),
             };
 
-            return doc.ToJsonString(new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+            return doc.ToJsonString(new System.Text.Json.JsonSerializerOptions
+            {
+                WriteIndented = true,
+                TypeInfoResolver = JsonSerializerOptions.Default.TypeInfoResolver
+            });
         }
     }
 }

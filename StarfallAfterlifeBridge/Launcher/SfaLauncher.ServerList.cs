@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
@@ -80,7 +81,11 @@ namespace StarfallAfterlife.Bridge.Launcher
             try
             {
                 if (ServerListFile is string path &&
-                    JsonHelpers.SerializeUnbuffered(ServerList ??= new(), new() { WriteIndented = true }) is string text)
+                    JsonHelpers.SerializeUnbuffered(ServerList ??= new(), new()
+                    {
+                        WriteIndented = true,
+                        TypeInfoResolver = JsonSerializerOptions.Default.TypeInfoResolver
+                    }) is string text)
                 {
                     if (Path.GetDirectoryName(path) is string dir &&
                             Directory.Exists(dir) == false)

@@ -153,7 +153,11 @@ namespace StarfallAfterlife.Bridge.Serialization
         {
             try
             {
-                return self?.ToJsonString(new JsonSerializerOptions { WriteIndented = writeIndented });
+                return self?.ToJsonString(new JsonSerializerOptions
+                {
+                    WriteIndented = writeIndented,
+                    TypeInfoResolver = JsonSerializerOptions.Default.TypeInfoResolver,
+                });
             }
             catch { return default; }
         }

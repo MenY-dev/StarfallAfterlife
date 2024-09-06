@@ -13,6 +13,7 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Security;
 using System.Text;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
@@ -569,7 +570,7 @@ namespace StarfallAfterlife.Bridge.Server
         private void HandleHouseStartDoctrineAction(SfReader reader, int systemId, DiscoveryObjectType objectType, int objectId)
         {
             var id = reader.ReadInt32();
-            
+
             Invoke(() =>
             {
                 Server?.RealmInfo?.Use(r =>
@@ -804,7 +805,11 @@ namespace StarfallAfterlife.Bridge.Server
                             ["minutes"] = Math.Max(0, (r.Value - now).Ticks),
                         }).ToJsonArray();
 
-                    var text = info.ToJsonString(new() { WriteIndented = false });
+                    var text = info.ToJsonString(new()
+                    {
+                        WriteIndented = false,
+                        TypeInfoResolver = JsonSerializerOptions.Default.TypeInfoResolver
+                    });
 
                     SendGalaxyMessage(DiscoveryServerGalaxyAction.FullHouseInfo, writer =>
                     {
