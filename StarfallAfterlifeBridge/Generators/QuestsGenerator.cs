@@ -788,6 +788,7 @@ namespace StarfallAfterlife.Bridge.Generators
                 "core_miner_station",
                 "explore_relic_ship",
                 "space_farm",
+                "kill_group_ships",
                 "deprived",
                 "eclipse",
                 "vanguard",
