@@ -56,6 +56,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
         public void LeaveFromGalaxy()
         {
+            GetBattle()?.Leave(this, default, false);
             System?.RemoveFleet(this);
             Listeners?.Clear();
         }

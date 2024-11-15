@@ -56,8 +56,17 @@ namespace StarfallAfterlife.Bridge.Server
 
                     if (matchmakerBattle is not null)
                     {
-                        SfaDebug.Print($"Battle started! (Systen = {battle?.System?.Id}, Hex = {battle.Hex}, InitMemberID = {newMember.Fleet?.Id}, InitMemberName = {newMember.Fleet?.Name})", GetType().Name);
-                        matchmakerBattle.Start();
+                        if (matchmakerBattle.State == Matchmakers.MatchmakerBattleState.Created)
+                        {
+                            SfaDebug.Print($"Battle started! (Systen = {battle?.System?.Id}, Hex = {battle.Hex}, InitMemberID = {newMember.Fleet?.Id}, InitMemberName = {newMember.Fleet?.Name})", GetType().Name);
+                            matchmakerBattle.Start();
+                        }
+                        else if (matchmakerBattle.State is Matchmakers.MatchmakerBattleState.Finished)
+                        {
+                            SfaDebug.Print($"Member not added to battle! (Reason = Battle finished, MemberID = {newMember.Fleet?.Id}, MemberName = {newMember.Fleet?.Name}, Systen = {battle?.System?.Id}, Hex = {battle.Hex})", GetType().Name);
+                            Galaxy?.BeginPreUpdateAction(_ => battle.Finish());
+                            return;
+                        }
                     }
                 }
 

@@ -1134,5 +1134,22 @@ namespace StarfallAfterlife.Bridge.Server.Characters
                 DiscoveryClient?.Invoke(c => c.SyncNewRealmParams(data));
             }
         }
+
+        public bool IsSameCharacter(ServerCharacter other)
+        {
+            if (other is null)
+                return false;
+
+            if (other == this)
+                return true;
+
+            if (Guid != Guid.Empty && Guid == other.Guid)
+                return true;
+
+            if (Id != -1 && Id == other.Id)
+                return true;
+
+            return false;
+        }
     }
 }

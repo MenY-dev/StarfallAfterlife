@@ -19,8 +19,6 @@ using System.Security;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace StarfallAfterlife.Bridge.Server
 {
@@ -136,7 +134,7 @@ namespace StarfallAfterlife.Bridge.Server
                     writer.WriteShortString(name, -1, true, Encoding.UTF8); // Stock
                 });
 
-            SfaDebug.Print($"ObjectStockUpdated (Stock = {name}, Count = {stock.Count}", GetType().Name);
+            SfaDebug.Print($"ObjectStockUpdated (ObjectId = {obj.Id}, ObjectType = {obj.Type}, Stock = {name}, Count = {stock.Count})", GetType().Name);
         }
 
         public virtual void SendFleetCargo()
@@ -529,7 +527,7 @@ namespace StarfallAfterlife.Bridge.Server
                     writer.WriteInt32((byte)quest.State);
                 });
 
-            SfaDebug.Print($"QuestStateUpdate (QuestId = {quest.Id}, QuestState = {quest.State}, CharId = {CurrentCharacter?.Id}, CharName = {CurrentCharacter?.UniqueName}, CharState = {State})", "DiscoveryServerClient");
+            SfaDebug.Print($"QuestStateUpdate (QuestId = {quest.Id}, QuestState = {quest.State}, CharId = {CurrentCharacter?.UniqueId}, CharName = {CurrentCharacter?.UniqueName}, CharState = {State})", "DiscoveryServerClient");
         }
 
         public void SendUpdateInventory()

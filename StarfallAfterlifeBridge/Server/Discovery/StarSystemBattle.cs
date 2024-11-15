@@ -46,7 +46,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
 
         public bool IsPossibleToJoin =>
             IsFinished == false &&
-            (IsDungeon == false || DungeonInfo?.Completed is false || Members.Count > 0);
+            (IsDungeon == false || DungeonInfo?.Completed == false || IsUserAdded == true || Members.Count > 0);
 
         public override void Init()
         {

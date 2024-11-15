@@ -149,8 +149,8 @@ namespace StarfallAfterlife.Bridge.Instances
                 State = InstanceState.Created;
                 Process.Start();
                 SfaDebug.Print($"Instance started! (Map = {Map}, Type = {Info?.Type}, DungeonType = {Info?.DungeonType}, DungeonFaction = {Info?.DungeonFaction}, InstanceAuth = {Auth})", GetType().Name);
-                SfaDebug.Print($"Instance players: (InstanceAuth = {Auth}, Players = {Info?.Players.ToArray().Select(p => p.Name)})", GetType().Name);
-                SfaDebug.Print($"Instance chars: (InstanceAuth = {Auth}, Chars = {Info?.Characters.ToArray().Select(c => c.Name)})", GetType().Name);
+                SfaDebug.Print($"Instance players: (InstanceAuth = {Auth}, Players = {string.Join(", ", Info?.Players.ToArray().Select(p => p.Name) ?? [])})", GetType().Name);
+                SfaDebug.Print($"Instance chars: (InstanceAuth = {Auth}, Chars = {string.Join(", ", Info?.Characters.ToArray().Select(c => c.Name) ?? [])})", GetType().Name);
                 return true;
             }
             catch (Exception e)

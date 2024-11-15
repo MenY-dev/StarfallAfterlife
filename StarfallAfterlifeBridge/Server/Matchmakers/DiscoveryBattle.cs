@@ -60,6 +60,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
                     if (State == MatchmakerBattleState.PendingMatch)
                     {
+                        SfaDebug.Print($"Add to pending members (MemberId = {member.Fleet?.Id}, MemberType = {member.Fleet?.Type}, System = {SystemBattle?.System?.Id}, Hex = {SystemBattle?.Hex})", GetType().Name);
                         PendingMembers.Add(member);
                         return;
                     }
@@ -70,6 +71,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                     }
                     else if (State == MatchmakerBattleState.Finished)
                     {
+                        SfaDebug.Print($"Failed to add member. The battle is finished. (MemberId = {member.Fleet?.Id}, MemberType = {member.Fleet?.Type}, System = {SystemBattle?.System?.Id}, Hex = {SystemBattle?.Hex})", GetType().Name);
                         Galaxy?.BeginPreUpdateAction(g => SystemBattle?.Leave(member, SystemBattle.Hex));
                         return;
                     }
@@ -130,6 +132,18 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                     if (info is not null)
                         Mobs.Add(info);
                 }
+
+                SfaDebug.Print(
+                    $"Add to active battle (MemberId = {member.Fleet?.Id}, MemberType = {member.Fleet?.Type}, " +
+                    $"System = {SystemBattle?.System?.Id}, Hex = {SystemBattle?.Hex}, Auth = {InstanceInfo?.Auth})", GetType().Name);
+            }
+        }
+
+        public void Leave(ServerCharacter character, SystemHex spawnHex, bool destroyed = false)
+        {
+            lock (_locker)
+            {
+                Leave(GetCharacter(character), spawnHex, destroyed);
             }
         }
 
@@ -137,6 +151,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
         {
             lock (_locker)
             {
+                character.InBattle = false;
                 Characters.Remove(character);
                 Galaxy?.BeginPreUpdateAction(g => SystemBattle?.Leave(character.Member, spawnHex, destroyed));
             }
@@ -298,6 +313,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 else
                 {
                     State = MatchmakerBattleState.PendingPlayers;
+                    SfaDebug.Print($"PendingPlayers (System = {SystemBattle?.System?.Id}, Hex = {SystemBattle?.Hex})", GetType().Name);
                     _cts = new();
 
                     Matchmaker.Invoke(() =>
@@ -305,6 +321,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                         if (_cts?.IsCancellationRequested == true)
                             return;
 
+                        SfaDebug.Print($"No players were added. Stopping! (System = {SystemBattle?.System?.Id}, Hex = {SystemBattle?.Hex})", GetType().Name);
                         Stop();
                     }, TimeSpan.FromMinutes(1));
                 }
@@ -324,6 +341,11 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                         .Select(c => c.InstanceCharacter));
                     InstanceInfo.ExtraData = CreateExtraData().ToJson().ToJsonString();
                     GameMode.InstanceManager.StartInstance(InstanceInfo);
+
+                    SfaDebug.Print($"RequestInstance (System = {SystemBattle?.System?.Id}, Hex = {SystemBattle?.Hex})", GetType().Name);
+
+                    foreach (var item in InstanceInfo.Characters.ToArray())
+                        SfaDebug.Print($"InstanceCharacter: (Id = {item.Id}, Name = {item.Name}, System = {SystemBattle?.System?.Id}, Hex = {SystemBattle?.Hex})", GetType().Name);
                 }
                 catch (Exception e) { SfaDebug.Log(e.ToString()); }
             }
@@ -479,17 +501,19 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         public DiscoveryBattleCharacterInfo GetCharacter(ServerCharacter character)
         {
-            if (character is null)
-                return null;
+            lock (_locker)
+            { 
+                if (character is null)
+                    return null;
 
-            return Characters.FirstOrDefault(c => c.ServerCharacter == character) ??
-                   Characters.FirstOrDefault(c => c.ServerCharacter?.UniqueId == character.UniqueId &&
-                                                  c.ServerCharacter?.Id == character.Id);
+                return Characters.FirstOrDefault(c => character.IsSameCharacter(c.ServerCharacter));
+            }
         }
 
         public DiscoveryBattleCharacterInfo GetCharacter(int id)
         {
-            return Characters.FirstOrDefault(c => c.ServerCharacter?.UniqueId == id);
+            lock (_locker)
+                return Characters.FirstOrDefault(c => c.ServerCharacter?.UniqueId == id);
         }
 
         public override void InstanceStateChanged(InstanceState state)
@@ -856,12 +880,21 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                         case UserInGameStatus.CharInBattle:
                             info.InBattle = true;
                             break;
+                        case UserInGameStatus.CharSearchingForGame:
+                            break;
                         default:
                             if (info.InBattle == false)
                             {
                                 Matchmaker?.Invoke(() =>
                                 {
-                                    Leave(info, new(0, 1));
+                                    if (info.InBattle == false)
+                                    {
+                                        SfaDebug.Print(
+                                            $"Player status changed. Exiting battle! (CharName = {character.UniqueName}, CharId = {character.UniqueId}, " +
+                                            $"BattleSystem = {SystemBattle?.System?.Id}, BattleHex = {SystemBattle?.Hex}, Auth = {InstanceInfo.Auth})", GetType().Name);
+
+                                        Leave(info, new(0, 1));
+                                    }
                                 }, TimeSpan.FromSeconds(5));
                             }
                             break;

@@ -194,8 +194,13 @@ namespace StarfallAfterlife.Bridge.Server
 
                 if (character.Fleet is UserFleet fleet)
                 {
-                    fleet.Listeners?.Clear();
+                    fleet.Listeners.Remove(this);
                     character.Fleet = null;
+
+                    foreach (var battle in Server?.Matchmaker?.GetBattles(character) ?? [])
+                        if (battle is DiscoveryBattle discoveryBattle)
+                            discoveryBattle.Leave(character, default, false);
+
                     Galaxy?.BeginPreUpdateAction(g => fleet.LeaveFromGalaxy());
                 }
             }
