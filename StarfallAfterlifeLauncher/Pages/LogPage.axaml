@@ -3,6 +3,7 @@
 			   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			   xmlns:c="using:StarfallAfterlife.Launcher.Controls"
+			   x:Name="root"
 			   mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			   x:Class="StarfallAfterlife.Launcher.Pages.LogPage">
 	
@@ -13,9 +14,9 @@
 				<Label Content="{DynamicResource s_page_log_header}" Classes="h3" VerticalContentAlignment="Center" Margin="0 2" />
 			</StackPanel>
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="15 10" Spacing="5">
-				<c:SfaCheckBox Content="{DynamicResource s_page_log_autoscroll_btn}" Margin="0 0 5 0" IsChecked="{Binding UseAutoscroll}"/>
-				<c:SfaButton Content="{DynamicResource s_page_log_in_window_btn}" Command="{Binding OpenConsole}"/>
-				<c:SfaButton Content="{DynamicResource s_app_save_btn}" Command="{Binding SaveLog}"/>
+				<c:SfaCheckBox Content="{DynamicResource s_page_log_autoscroll_btn}" Margin="0 0 5 0" IsChecked="{Binding #root.UseAutoscroll}"/>
+				<c:SfaButton Content="{DynamicResource s_page_log_in_window_btn}" Command="{Binding #root.OpenConsole}"/>
+				<c:SfaButton Content="{DynamicResource s_app_save_btn}" Command="{Binding #root.SaveLog}"/>
 			</StackPanel>
 			<c:Separator Height="2" Opacity="0.8" VerticalAlignment="Bottom"/>
 		</Panel>
@@ -34,7 +35,7 @@
 						  Name="Output"
 						  Margin="5 0"
 						  AutoScrollToSelectedItem="False"
-						  ItemsSource="{Binding DebugMsgStorage}">
+						  ItemsSource="{Binding #root.DebugMsgStorage}">
 				<c:SfaListBox.ItemTemplate>
 					<DataTemplate>
 						<c:LogMsg DataContext="{Binding}"/>

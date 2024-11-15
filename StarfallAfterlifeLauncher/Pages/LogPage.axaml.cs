@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
+using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Media;
 using Avalonia.Media.TextFormatting;
@@ -11,6 +12,7 @@ using Avalonia.VisualTree;
 using StarfallAfterlife.Bridge.Diagnostics;
 using StarfallAfterlife.Bridge.Tasks;
 using StarfallAfterlife.Launcher.Controls;
+using StarfallAfterlife.Launcher.Services;
 using StarfallAfterlife.Launcher.ViewModels;
 using System;
 using System.Collections.Concurrent;
@@ -23,6 +25,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Tmds.DBus.Protocol;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace StarfallAfterlife.Launcher.Pages
 {
@@ -34,12 +37,21 @@ namespace StarfallAfterlife.Launcher.Pages
         public static readonly StyledProperty<bool> UseAutoscrollProperty =
             AvaloniaProperty.Register<LogPage, bool>(nameof(UseAutoscroll), true);
 
+        public static readonly StyledProperty<string> LogDirectoryProperty =
+            AvaloniaProperty.Register<LogPage, string>(nameof(LogDirectory));
+
         public SfaDebugMsgStorage DebugMsgStorage => GetValue(DebugMsgStorageProperty);
 
         public bool UseAutoscroll
         {
             get => GetValue(UseAutoscrollProperty);
             set => SetValue(UseAutoscrollProperty, value);
+        }
+
+        public string LogDirectory
+        {
+            get => GetValue(LogDirectoryProperty);
+            set => SetValue(LogDirectoryProperty, value);
         }
 
         protected override Type StyleKeyOverride => typeof(SidebarPage);
@@ -52,12 +64,11 @@ namespace StarfallAfterlife.Launcher.Pages
         private bool _fullScrollStarted;
         private int _fullScrollTakeCount;
         private Process _currentConsole;
+        private FileLogger _fileLogger;
 
 
         public LogPage()
         {
-            DataContext = this;
-
             InitializeComponent();
 
             SfaDebug.Update += OnSfaDebugUpdate;
@@ -130,6 +141,28 @@ namespace StarfallAfterlife.Launcher.Pages
                     IsShow == true)
                     Dispatcher.UIThread.Post(() => ScrollDown());
             }
+            else if (change.Property == LogDirectoryProperty)
+            {
+                UpdateFileLoggerDirectory();
+            }
+        }
+
+        protected override void OnLoaded(RoutedEventArgs e)
+        {
+            base.OnLoaded(e);
+            UpdateFileLoggerDirectory();
+        }
+
+        private void UpdateFileLoggerDirectory()
+        {
+            var newDir = LogDirectory;
+
+            if ((_fileLogger is null && newDir is not null) ||
+                (_fileLogger is not null && _fileLogger.LogDirectory != newDir))
+            {
+                _fileLogger?.Dispose();
+                _fileLogger = newDir is not null ? new FileLogger(newDir) : null;
+            }
         }
 
         private void OnSfaDebugUpdate(string msg, string channel, DateTime time)
@@ -168,8 +201,8 @@ namespace StarfallAfterlife.Launcher.Pages
 
                 foreach (var item in result)
                 {
-                    WriteToConsole(item.ToString(300));
-                    WriteToConsole(Environment.NewLine);
+                    WriteToConsole(item.ToString(300, true));
+                    _fileLogger?.Log(item.ToString(true));
                 }
 
                 lock (_locker)
@@ -241,6 +274,12 @@ namespace StarfallAfterlife.Launcher.Pages
                 if (_currentConsole?.HasExited == false &&
                     _currentConsole?.StandardInput is StreamWriter writer)
                     writer.Write(text);
+            }
+            catch { }
+
+            try
+            {
+                _fileLogger?.Log(text);
             }
             catch { }
         }

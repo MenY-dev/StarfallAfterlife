@@ -193,6 +193,12 @@ namespace StarfallAfterlife.Launcher.ViewModels
             }
         }
 
+        public string LogDirectory
+        {
+            get => _logDirectory;
+            set => SetAndRaise(ref _logDirectory, value);
+        }
+
         private RealmInfoViewModel _selectedLocalRealm;
         private RealmInfoViewModel _selectedServerRealm;
         private bool _isGameStarted;
@@ -200,6 +206,7 @@ namespace StarfallAfterlife.Launcher.ViewModels
         private bool _isUpdateAvailable = false;
         private bool _isAutoUpdateCheckCompleted = false;
         private Updater.Relese _latestRelese;
+        private string _logDirectory;
 
 
         public string CurrentProfileName { get => currentProfileName; protected set => SetAndRaise(ref currentProfileName, value); }
@@ -248,6 +255,7 @@ namespace StarfallAfterlife.Launcher.ViewModels
             CreateServerPageViewModel = new CreateServerPageViewModel(this);
             CodexPageViewModel = new CodexViewModel(this);
             ProfilesEditorViewModel = new ProfilesEditorViewModel(this);
+            LogDirectory = launcher?.WorkingDirectory is not null ? Path.Combine(launcher.WorkingDirectory, "Log") : null;
             UpdateRealms();
         }
 

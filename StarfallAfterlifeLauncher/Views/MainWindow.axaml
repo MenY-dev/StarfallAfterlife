@@ -7,6 +7,7 @@
         xmlns:vm="using:StarfallAfterlife.Launcher.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="StarfallAfterlife.Launcher.Views.MainWindow"
+		x:DataType="vm:AppViewModel"
         Title="Starfall Afterlife"
 		Icon="/Assets/Icons/icon_128.ico"
 		Width="1056" Height="640"
@@ -87,7 +88,7 @@
 					<p:FindServerPage Name="FindServerPage" DataContext="{Binding FindServerPageViewModel}"/>
 					<p:CreateServerPage Name="CreateServerPage" DataContext="{Binding CreateServerPageViewModel}"/>
 					<p:CodexPage Name="CodexPage" DataContext="{Binding CodexPageViewModel}"/>
-					<p:LogPage Name="LogPage"/>
+					<p:LogPage Name="LogPage" LogDirectory="{Binding LogDirectory}"/>
 					<p:SettingsPage Name="SettingsPage"/>
 				</c:SidebarPageContainer>
 

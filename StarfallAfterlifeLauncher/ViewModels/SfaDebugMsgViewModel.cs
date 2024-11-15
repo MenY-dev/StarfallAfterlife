@@ -78,9 +78,11 @@ namespace StarfallAfterlife.Launcher.ViewModels
             Expanded = !Expanded;
         }
 
-        public override string ToString() => ToString();
+        public override string ToString() => ToString(-1, false);
 
-        public string ToString(int maxMsgLength = -1)
+        public string ToString(bool appendNewLine) => ToString(-1, appendNewLine);
+
+        public string ToString(int maxMsgLength = -1, bool appendNewLine = false)
         {
             var sb = new StringBuilder();
 
@@ -114,6 +116,9 @@ namespace StarfallAfterlife.Launcher.ViewModels
                     sb.Append(Msg ?? "");
                 }
             }
+
+            if (appendNewLine == true)
+                sb.Append(Environment.NewLine);
 
             return sb.ToString();
         }
