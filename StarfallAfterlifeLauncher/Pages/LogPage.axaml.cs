@@ -260,6 +260,7 @@ namespace StarfallAfterlife.Launcher.Pages
                         FileName = Process.GetCurrentProcess()?.MainModule?.FileName,
                         Arguments = "-LogConsole",
                         UseShellExecute = false,
+                        StandardInputEncoding = Encoding.Unicode,
                         RedirectStandardInput = true,
                         RedirectStandardOutput = false,
                     },

@@ -24,7 +24,7 @@ namespace StarfallAfterlife.Launcher
                 var monitor = new ManualResetEvent(false);
                 var bufferSize = 1000;
                 var buffer = new Queue<string>();
-                using var stdin = Console.OpenStandardInput();
+                Console.InputEncoding = Encoding.Unicode;
                 using var reader = new StreamReader(
                     Console.OpenStandardInput(),
                     Console.InputEncoding,
