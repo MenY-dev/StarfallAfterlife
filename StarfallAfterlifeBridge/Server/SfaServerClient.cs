@@ -540,6 +540,9 @@ namespace StarfallAfterlife.Bridge.Server
             client.PlayerId = PlayerId;
             client.ProfileId = ProfileId;
             client.IsPlayer = IsPlayer;
+            client.IsSpectator = IsSpectator;
+            client.Localization = Localization;
+            client.LastInput = LastInput;
             client.Server = Server;
             client.Galaxy = Galaxy;
             client.DiscoveryClient = DiscoveryClient;

@@ -393,7 +393,8 @@ namespace StarfallAfterlife.Bridge.Server
                 return null;
 
             lock (ClientsLocker)
-                return Characters.FirstOrDefault(c => c.Fleet == fleet);
+                return Characters.FirstOrDefault(c => c.Fleet == fleet) ??
+                       Characters.FirstOrDefault(c => fleet.IsSystemObjectEquals(c.Fleet));
         }
 
 
