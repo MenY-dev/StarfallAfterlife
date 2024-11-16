@@ -278,6 +278,51 @@ namespace StarfallAfterlife.Bridge.Server
                 else context.PrintParametersError();
             });
 
+            newConsole.AddHandler("add boost", context =>
+            {
+                var seconds = int.TryParse(context.Input, out int value) ? Math.Max(1, Math.Min(short.MaxValue, value)) : 300;
+
+                if (DiscoveryClient.CurrentCharacter is ServerCharacter character)
+                {
+                    character.Fleet?.AddEffect(new() { Duration = seconds, Logic = GameplayEffectType.SpeedBoost, EngineBoost = 2.5f });
+                    context.Print($">>>boost>>> (speed: x2.5, time: {seconds}s)");
+                }
+            });
+
+            newConsole.AddHandler("add vision", context =>
+            {
+                var seconds = int.TryParse(context.Input, out int value) ? Math.Max(1, Math.Min(short.MaxValue, value)) : 20;
+
+                if (DiscoveryClient.CurrentCharacter is ServerCharacter character)
+                {
+                    character.Fleet?.AddEffect(new() { Duration = seconds, Logic = GameplayEffectType.Vision, Vision = Math.Max(character.Fleet?.Vision ?? 0, 32)});
+                    context.Print($"<<<vision>>> (radius: 32, time: {seconds}s)");
+                }
+            });
+
+            newConsole.AddHandler("chars", context =>
+            {
+                if (DiscoveryClient.CurrentCharacter is ServerCharacter character)
+                {
+                    var chars = new List<ServerCharacter>();
+
+                    Server?.UseClients(clients =>
+                    {
+                        foreach (var item in Server.Characters)
+                        {
+                            if (item.IsOnline == true)
+                                chars.Add(item);
+                        }
+                    });
+
+                    context.Print("List of chars:");
+                    context.Print("Name | SystemId | Status");
+
+                    foreach (var item in chars)
+                        context.Print($"{item.UniqueName} | {item.Fleet?.System.Id ?? -1} | {item.DiscoveryClient?.Client?.UserStatus}");
+                }
+            });
+
             Console = newConsole; 
         }
 
