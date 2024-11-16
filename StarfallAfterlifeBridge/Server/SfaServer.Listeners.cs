@@ -19,20 +19,28 @@ namespace StarfallAfterlife.Bridge.Server
         {
             if (battle.IsUserAdded == true)
             {
+                var battleMembers = battle.Members.ToArray();
+
                 Invoke(() =>
                 {
                     var matchmakerBattle = Matchmaker?.DiscoveryGameMode?.GetBattle(battle);
 
-                    if (matchmakerBattle is not null)
+                    if (matchmakerBattle is null)
+                    {
+                        matchmakerBattle ??= Matchmaker?.DiscoveryGameMode?.CreateNewBattle(battle);
+                    }
+                    else if (matchmakerBattle.State != Matchmakers.MatchmakerBattleState.Created)
                     {
                         SfaDebug.Print($"The battle has already started! (BattleAuth = {matchmakerBattle.InstanceInfo.Auth}, Systen = {battle?.System?.Id}, Hex = {battle.Hex})", GetType().Name);
                         return;
                     }
 
-                    matchmakerBattle = Matchmaker?.DiscoveryGameMode?.CreateNewBattle(battle);
-
                     if (matchmakerBattle is not null)
                     {
+                        foreach (var member in battleMembers)
+                            if (matchmakerBattle.ContainsMember(member) == false)
+                                matchmakerBattle.AddToBattle(member);
+
                         matchmakerBattle.Start();
                         SfaDebug.Print($"Battle started! (Systen = {battle?.System?.Id}, Hex = {battle.Hex})", GetType().Name);
                     }

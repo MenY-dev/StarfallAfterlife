@@ -759,7 +759,29 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 return false;
 
             lock (_locker)
-                return Characters?.Any(c => c?.ServerCharacter == character) == true;
+                return GetCharacter(character) is not null;
+        }
+
+        public virtual bool ContainsMember(BattleMember member)
+        {
+            if (member is null)
+                return false;
+
+            lock (_locker)
+            {
+                if (PendingMembers.Contains(member) == true)
+                    return true;
+
+                foreach (var character in Characters)
+                    if (character.Member == member || member.Fleet == character.Member.Fleet)
+                        return true;
+
+                foreach (var mob in Mobs)
+                    if (mob.Member == member || member.Fleet == mob.Member.Fleet)
+                        return true;
+
+                return false;
+            }
         }
 
         protected virtual List<TileInfo> CreateLocationTiles()
