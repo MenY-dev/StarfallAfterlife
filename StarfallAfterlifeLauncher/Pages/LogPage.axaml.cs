@@ -276,12 +276,6 @@ namespace StarfallAfterlife.Launcher.Pages
                     writer.Write(text);
             }
             catch { }
-
-            try
-            {
-                _fileLogger?.Log(text);
-            }
-            catch { }
         }
 
         public void OpenConsole()
