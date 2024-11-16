@@ -365,7 +365,8 @@ namespace StarfallAfterlife.Bridge.Server
                             }
                             else
                             {
-                                battle.Leave(battleChar, systemBattle.Hex);
+                                if (battleChar is not null)
+                                    battle.Leave(battleChar, systemBattle.Hex);
 
                                 Galaxy.BeginPreUpdateAction(g =>
                                 {

@@ -151,6 +151,9 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
         {
             lock (_locker)
             {
+                if (character is null)
+                    return;
+
                 character.InBattle = false;
                 Characters.Remove(character);
                 Galaxy?.BeginPreUpdateAction(g => SystemBattle?.Leave(character.Member, spawnHex, destroyed));
