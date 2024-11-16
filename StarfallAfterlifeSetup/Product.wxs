@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?define var.AppVersion = "0.10.5" ?>
-<?define var.AppProductCode="5c6d87b0-5476-4d85-99b2-9005d378c258" ?>
+<?define var.AppVersion = "0.10.6" ?>
+<?define var.AppProductCode="5b4119bc-3b41-4d14-9410-e211406402cc" ?>
 
 <?define var.AppName = "Starfall Afterlife" ?>
 <?define var.AppManufacturer = "Eduard Shein (MenY)" ?>
