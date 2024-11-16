@@ -244,6 +244,7 @@ namespace StarfallAfterlife.Bridge.Server.Discovery
             if (System is null ||
                 target is null ||
                 target.System != System ||
+                (target is DiscoveryFleet attackFleet && CanAttack(attackFleet) == false) ||
                 GetBattle() is not null)
                 return;
 
