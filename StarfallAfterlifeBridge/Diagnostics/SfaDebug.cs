@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace StarfallAfterlife.Bridge.Diagnostics
 {
@@ -16,10 +17,16 @@ namespace StarfallAfterlife.Bridge.Diagnostics
 
         public static event NewDebugMsgDelegate Update;
 
+        public static void Print(object obj, object channel = null) =>
+            Print(obj, channel?.GetType().Name);
+
         public static void Print(object obj, string channel = null)
         {
             Print(obj?.ToString() ?? "NULL!", channel);
         }
+
+        public static void Print(string msg, object channel = null) =>
+            Print(msg, channel?.GetType().Name);
 
         public static void Print(string msg, string channel = null)
         {
