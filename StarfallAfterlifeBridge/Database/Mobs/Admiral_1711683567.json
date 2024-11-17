@@ -430,7 +430,7 @@
         "fleet_max": -1,
         "drop_state": true,
         "role": 1,
-        "bt": "/Game/gameplay/ai/ships/BT_Sniper.BT_Sniper",
+        "bt": "/Game/gameplay/ai/ships/BT_Ship_Default.BT_Ship_Default",
         "tags": [],
         "drop_tree": {
           "type": 1,
