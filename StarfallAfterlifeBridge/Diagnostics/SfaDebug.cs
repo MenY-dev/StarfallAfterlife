@@ -17,7 +17,7 @@ namespace StarfallAfterlife.Bridge.Diagnostics
 
         public static event NewDebugMsgDelegate Update;
 
-        public static void Print(object obj, object channel = null) =>
+        public static void Print(object obj, object channel) =>
             Print(obj, channel?.GetType().Name);
 
         public static void Print(object obj, string channel = null)
@@ -25,7 +25,7 @@ namespace StarfallAfterlife.Bridge.Diagnostics
             Print(obj?.ToString() ?? "NULL!", channel);
         }
 
-        public static void Print(string msg, object channel = null) =>
+        public static void Print(string msg, object channel) =>
             Print(msg, channel?.GetType().Name);
 
         public static void Print(string msg, string channel = null)
