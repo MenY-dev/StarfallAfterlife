@@ -19,7 +19,6 @@ using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace StarfallAfterlife.Bridge.Server.Matchmakers
 {
@@ -47,6 +46,7 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
 
         protected CancellationTokenSource _cts;
         protected readonly object _locker = new();
+        protected ServerCharacter _lastInstanceObjectInteractChar = null;
 
         public virtual void AddToBattle(BattleMember member)
         {
@@ -861,8 +861,16 @@ namespace StarfallAfterlife.Bridge.Server.Matchmakers
                 if (JsonHelpers.ParseNodeUnbuffered(data ?? "") is JsonObject doc &&
                     (int?)doc["obj_id"] is int secretId)
                 {
-                    foreach (var item in Characters)
-                        item?.ServerCharacter?.HandleSecretObjectLooted(secretId);
+                    if (_lastInstanceObjectInteractChar is not null)
+                    {
+                        _lastInstanceObjectInteractChar.HandleSecretObjectLooted(secretId);
+                        _lastInstanceObjectInteractChar = null;
+                    }
+                    else
+                    {
+                        foreach (var item in Characters)
+                            item?.ServerCharacter?.HandleSecretObjectLooted(secretId);
+                    }
                 }
             }
         }
