@@ -432,6 +432,15 @@ namespace StarfallAfterlife.Bridge.Server
                             DiscoveryClient.Characters.FirstOrDefault(c => c.Guid == guid) :
                             DiscoveryClient.Characters.FirstOrDefault(c => c.Id == id);
 
+                        if (character is not null &&
+                            Server.GetCharacter(ProfileId, character.Guid) is null ||
+                            Server.GetCharacter(character.UniqueId) is null)
+                        {
+                            DiscoveryClient.Characters.Remove(character);
+                            Galaxy.BeginPreUpdateAction(_ => character.Fleet?.LeaveFromGalaxy());
+                            character = null;
+                        }
+
                         if (character is null)
                         {
                             character = new ServerCharacter()
