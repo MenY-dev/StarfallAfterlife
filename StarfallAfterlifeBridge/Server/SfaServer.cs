@@ -178,7 +178,7 @@ namespace StarfallAfterlife.Bridge.Server
 
                         if (c.IsPlayer == true &&
                             (c.IsConnected == false || c.UserStatus == UserInGameStatus.None) &&
-                            (now - c.LastInput).TotalMinutes > 1 &&
+                            (now - c.LastInput).TotalMinutes > 5 &&
                             c.DiscoveryClient?.Characters?.ToArray() is ServerCharacter[]  characters)
                         {
                             foreach (var item in characters)
@@ -186,12 +186,23 @@ namespace StarfallAfterlife.Bridge.Server
                                 if (item is ServerCharacter character)
                                 {
                                     character.Party?.RemoveMember(character.UniqueId);
-                                    Characters.RemoveId(character.UniqueId);
 
                                     if (character.Fleet is UserFleet fleet)
                                     {
-                                        character.Fleet = null;
-                                        Galaxy?.BeginPreUpdateAction(_ => fleet.LeaveFromGalaxy());
+                                        Galaxy?.BeginPreUpdateAction(_ =>
+                                        {
+                                            if (fleet.GetBattle() is StarSystemBattle battle &&
+                                                battle.IsFinished == false)
+                                                return;
+
+                                            fleet.LeaveFromGalaxy();
+
+                                            Invoke(() =>
+                                            {
+                                                character.Fleet = null;
+                                                SfaDebug.Print($"Removing inactive fleet! (Name = {fleet.Name}, Id = {fleet.Id})", this);
+                                            });
+                                        });
                                     }
                                 }
                             }
