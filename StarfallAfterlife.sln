@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarfallAfterlifeBridge", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarfallAfterlifeLauncher", "StarfallAfterlifeLauncher\StarfallAfterlifeLauncher.csproj", "{BD31D221-2264-4467-84A1-DD6AD3FB8A74}"
 EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "StarfallAfterlifeSetup", "StarfallAfterlifeSetup\StarfallAfterlifeSetup.wixproj", "{BAB37F54-8856-4FD5-A0A8-323C4B03DB65}"
+Project("{B7DD6F7E-DEF8-4E67-B5B7-07EF123DB6F0}") = "StarfallAfterlifeSetup", "StarfallAfterlifeSetup\StarfallAfterlifeSetup.wixproj", "{BAB37F54-8856-4FD5-A0A8-323C4B03DB65}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
