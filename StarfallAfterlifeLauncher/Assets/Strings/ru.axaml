@@ -43,6 +43,7 @@
 	<sys:String x:Key="s_page_cs_settings_network_lbl">Сеть</sys:String>
 	<sys:String x:Key="s_page_cs_settings_port_lbl">Порт</sys:String>
 	<sys:String x:Key="s_page_cs_settings_port_forwarding_lbl">Проброс Портов</sys:String>
+	<sys:String x:Key="s_page_cs_settings_enable_chat_console_lbl">Консоль В Чате</sys:String>
 	<sys:String x:Key="s_page_cs_settings_password_lbl">Пароль</sys:String>
 	<sys:String x:Key="s_page_cs_settings_password_use_lbl">Вкл</sys:String>
 	<sys:String x:Key="s_page_cs_settings_password_set_btn">УСТАНОВИТЬ</sys:String>

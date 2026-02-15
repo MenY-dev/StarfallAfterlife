@@ -79,6 +79,19 @@ namespace StarfallAfterlife.Launcher.ViewModels
             }
         }
 
+        public bool EnableChatConsole
+        {
+            get => Launcher?.ServerEnableChatConsole ?? false;
+            set
+            {
+                if (Launcher is SfaLauncher launcher)
+                    SetAndRaise(launcher.ServerEnableChatConsole, value, v => launcher.ServerEnableChatConsole = v);
+
+                if (Server is { } server && server.EnableChatConsole != value)
+                    server.EnableChatConsole = value;
+            }
+        }
+
         public ObservableCollection<InterfaceInfo> Interfaces { get; } = new();
 
         private bool _serverStarted;

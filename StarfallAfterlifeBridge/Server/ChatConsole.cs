@@ -130,8 +130,14 @@ namespace StarfallAfterlife.Bridge.Server
         {
             command = command?.TrimStart('\\');
 
-            if (string.IsNullOrWhiteSpace(command))
+            if (string.IsNullOrWhiteSpace(command) || Client == null)
                 return;
+
+            if (Client.IsChatConsoleAvailable == false)
+            {
+                Print("The console is unavailable.", channel, "SERVER");
+                return;
+            }
 
             Nodes.Exec(new ChatConsoleContext(command, channel, this));
         }

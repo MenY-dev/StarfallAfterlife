@@ -77,6 +77,8 @@ namespace StarfallAfterlife.Bridge.Server
 
         public static Version Version => AssemblyVersion.Value;
 
+        public bool EnableChatConsole { get; set; } = true;
+
         private static Lazy<Version> AssemblyVersion { get; } = new(
             () => Assembly.GetAssembly(typeof(SfaServer)).GetName().Version);
 
@@ -545,6 +547,8 @@ namespace StarfallAfterlife.Bridge.Server
                 catch { }
             }
         }
+
+        public bool IsChatConsoleAvailable(SfaServerClient client) => EnableChatConsole;
 
         public virtual void Invoke(Action action) => ActionBuffer?.Invoke(action);
 

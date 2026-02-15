@@ -43,6 +43,7 @@
 	<sys:String x:Key="s_page_cs_settings_network_lbl">Network</sys:String>
 	<sys:String x:Key="s_page_cs_settings_port_lbl">Port</sys:String>
 	<sys:String x:Key="s_page_cs_settings_port_forwarding_lbl">Port Forwarding</sys:String>
+	<sys:String x:Key="s_page_cs_settings_enable_chat_console_lbl">Console In Chat</sys:String>
 	<sys:String x:Key="s_page_cs_settings_password_lbl">Password</sys:String>
 	<sys:String x:Key="s_page_cs_settings_password_use_lbl">Use</sys:String>
 	<sys:String x:Key="s_page_cs_settings_password_set_btn">SET</sys:String>

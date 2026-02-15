@@ -29,5 +29,8 @@ namespace StarfallAfterlife.Bridge.Launcher
 
         [JsonPropertyName("use_port_forwarding")]
         public bool UsePortForwarding { get; set; } = true;
+
+        [JsonPropertyName("enable_chat_console")]
+        public bool EnableChatConsole { get; set; } = true;
     }
 }

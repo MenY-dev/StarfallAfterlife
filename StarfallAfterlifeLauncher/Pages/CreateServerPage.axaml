@@ -64,8 +64,8 @@
 							HeaderText="{DynamicResource s_page_cs_settings_headet}"
 							ShowHeader="True" Margin="10 10 5 5">
 					<ScrollViewer>
-						<StackPanel IsEnabled="{Binding !ServerStarted}" Margin="10" Spacing="3">
-							<c:Property Text="{DynamicResource s_page_cs_settings_realm_lbl}">
+						<StackPanel Margin="10" Spacing="3">
+							<c:Property Text="{DynamicResource s_page_cs_settings_realm_lbl}" IsEnabled="{Binding !ServerStarted}">
 								<c:SfaButton Height="30"  HorizontalAlignment="Stretch">
 									<c:SfaButton.Flyout>
 										<c:SfaMenuFlyout ItemsSource="{Binding AppVM.Realms}"
@@ -86,7 +86,7 @@
 									</Panel>
 								</c:SfaButton>
 							</c:Property>
-							<c:Property Text="{DynamicResource s_page_cs_settings_network_lbl}">
+							<c:Property Text="{DynamicResource s_page_cs_settings_network_lbl}" IsEnabled="{Binding !ServerStarted}">
 								<c:SfaTextBox Text="{Binding ServerAddress}" HorizontalAlignment="Stretch">
 									<c:SfaTextBox.InnerRightContent>
 										<c:SfaButton Classes="clear"
@@ -113,7 +113,7 @@
 									</c:SfaTextBox.InnerRightContent>
 								</c:SfaTextBox>
 							</c:Property>
-							<c:Property Text="{DynamicResource s_page_cs_settings_port_lbl}">
+							<c:Property Text="{DynamicResource s_page_cs_settings_port_lbl}" IsEnabled="{Binding !ServerStarted}">
 								<c:SfaNumericUpDown Value="{Binding ServerPort}"
 													Minimum="1"
 													Maximum="65535"
@@ -121,7 +121,7 @@
 													HorizontalAlignment="Stretch"/>
 							</c:Property>
 							
-							<c:Property Text="{DynamicResource s_page_cs_settings_port_forwarding_lbl}">
+							<c:Property Text="{DynamicResource s_page_cs_settings_port_forwarding_lbl}" IsEnabled="{Binding !ServerStarted}">
 								<c:SfaButton Height="30" HorizontalAlignment="Stretch">
 									<c:SfaButton.Flyout>
 										<c:SfaMenuFlyout Placement="BottomEdgeAlignedRight"
@@ -150,13 +150,42 @@
 								</c:SfaButton>
 							</c:Property>
 
-							<c:Property Text="{DynamicResource s_page_cs_settings_password_lbl}">
+							<c:Property Text="{DynamicResource s_page_cs_settings_password_lbl}" IsEnabled="{Binding !ServerStarted}">
 								<Grid ColumnDefinitions="Auto 6 *">
 									<c:SfaCheckBox Grid.Column="0" Content="{DynamicResource s_page_cs_settings_password_use_lbl}" IsChecked="{Binding UsePassword}"/>
 									<c:SfaButton Grid.Column="2" Content="{DynamicResource s_page_cs_settings_password_set_btn}" Height="30"
 												 IsEnabled="{Binding UsePassword}" Command="{Binding ShowPasswordDialog}"
 												 HorizontalContentAlignment="Center" HorizontalAlignment="Stretch"/>
 								</Grid>
+							</c:Property>
+
+							<c:Property Text="{DynamicResource s_page_cs_settings_enable_chat_console_lbl}">
+								<c:SfaButton Height="30" HorizontalAlignment="Stretch">
+									<c:SfaButton.Flyout>
+										<c:SfaMenuFlyout Placement="BottomEdgeAlignedRight"
+														 SelectedItem="{Binding EnableChatConsole}">
+											<c:SfaMenuFlyout.ItemTemplate>
+												<DataTemplate >
+													<c:Switch Value="{Binding}">
+														<Label c:Switch.Case="{x:True}" Width="{Binding $parent[Button].Bounds.Width}"
+															   Foreground="White" Content="{DynamicResource s_type_bool_true}"/>
+														<Label c:Switch.Case="{x:False}" Width="{Binding $parent[Button].Bounds.Width}"
+															   Foreground="White" Content="{DynamicResource s_type_bool_false}"/>
+													</c:Switch>
+												</DataTemplate>
+											</c:SfaMenuFlyout.ItemTemplate>
+											<x:True/>
+											<x:False/>
+										</c:SfaMenuFlyout>
+									</c:SfaButton.Flyout>
+									<Panel>
+										<c:Switch Value="{Binding EnableChatConsole}">
+											<TextBlock c:Switch.Case="{x:True}" Foreground="White" Text="{DynamicResource s_type_bool_true}"/>
+											<TextBlock c:Switch.Case="{x:False}" Foreground="White" Text="{DynamicResource s_type_bool_false}"/>
+										</c:Switch>
+										<c:DropdownIcon HorizontalAlignment="Right"/>
+									</Panel>
+								</c:SfaButton>
 							</c:Property>
 						</StackPanel>
 					</ScrollViewer>

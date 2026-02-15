@@ -94,6 +94,16 @@ namespace StarfallAfterlife.Bridge.Launcher
             }
         }
 
+        public bool ServerEnableChatConsole
+        {
+            get => (ServerSettings ??= new ServerSettings()).EnableChatConsole;
+            set
+            {
+                (ServerSettings ??= new ServerSettings()).EnableChatConsole = value;
+                SaveServerSettings();
+            }
+        }
+
         public SfaServer StartServer()
         {
             StopServer();

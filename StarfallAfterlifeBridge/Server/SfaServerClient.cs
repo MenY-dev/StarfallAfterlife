@@ -57,6 +57,8 @@ namespace StarfallAfterlife.Bridge.Server
 
         public bool IsSpectator { get; set; }
 
+        public bool IsChatConsoleAvailable => Server?.IsChatConsoleAvailable(this) ?? false;
+
         public bool IsPlayer { get; set; }
 
         public string Localization { get; set; }
