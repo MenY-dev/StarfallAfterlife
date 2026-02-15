@@ -98,19 +98,24 @@ namespace StarfallAfterlife.Bridge.Instances
                         "bPromptForRemoteDebugging=false",
                         "bPromptForRemoteDebugOnEnsure=false",
                     },
-                    new(@"/script/onlinesubsystemutils.ipnetdriver")
-                    {
-                        "LanServerMaxTickRate=15",
-                        "NetServerMaxTickRate=15",
-                    },
-                    new(@"/script/onlinesubsystemutils.ipnetdriver")
+                    new(@"/script/engine.engine")
                     {
                         "bSmoothFrameRate=true",
                         "bUseFixedFrameRate=false",
                         "SmoothedFrameRateRange=(LowerBound=(Type=Inclusive,Value=5.000000),UpperBound=(Type=Exclusive,Value=15.000000))",
                         "MinDesiredFrameRate=5",
                         "FixedFrameRate=15",
-                        "NetClientTicksPerSecond=15",
+                        "NetClientTicksPerSecond=1000"
+                    },
+                    new(@"/script/engine.player")
+                    {
+                        "ConfiguredInternetSpeed=104857600",
+                        "ConfiguredLanSpeed=104857600",
+                    },
+                    new(@"/script/onlinesubsystemutils.ipnetdriver")
+                    {
+                        "LanServerMaxTickRate=15",
+                        "NetServerMaxTickRate=15",
                     },
                     new(@"/script/engine.networksettings")
                     {
@@ -130,7 +135,7 @@ namespace StarfallAfterlife.Bridge.Instances
                 EnableLog = true,
                 DisableSplashScreen = true,
                 DisableLoadingScreen = true,
-                ProcessArguments = new() { "CULTUREFORCOOKING=en" },
+                ProcessArguments = new() { "CULTUREFORCOOKING=en", "NoTimeouts" },
                 ConsoleCommands =
                 {
                     "DebugRemovePlayer 0"
