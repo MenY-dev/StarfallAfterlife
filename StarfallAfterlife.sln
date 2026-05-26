@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.5.33402.96
+# Visual Studio Version 18
+VisualStudioVersion = 18.4.11612.150
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarfallAfterlifeBridge", "StarfallAfterlifeBridge\StarfallAfterlifeBridge.csproj", "{C53ED83C-2DB1-4512-92E8-EA5A999CB077}"
 EndProject
