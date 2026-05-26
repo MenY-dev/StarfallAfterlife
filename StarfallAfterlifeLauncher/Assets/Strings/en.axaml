@@ -123,6 +123,8 @@
 	<sys:String x:Key="s_page_settings_game_show_log_lbl">Show Log</sys:String>
 	<sys:String x:Key="s_page_settings_game_hide_splash_screen_lbl">Disable Splash Screen</sys:String>
 	<sys:String x:Key="s_page_settings_game_hide_loading_screen_lbl">Disable Loading Screen </sys:String>
+	<sys:String x:Key="s_page_settings_experemental_header">EXPERIMENTAL FUNCTIONS</sys:String>
+	<sys:String x:Key="s_page_settings_experemental_description">These features are under development and may not work reliably.</sys:String>
 	<sys:String x:Key="s_page_settings_other_header">OTHER</sys:String>
 	<sys:String x:Key="s_page_settings_show_licenses_btn">LICENSES</sys:String>
 

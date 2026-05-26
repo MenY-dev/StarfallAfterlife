@@ -95,16 +95,32 @@
 							<c:SfaCheckBox IsChecked="{Binding HideGameLoadingScreen}"/>
 						</c:Property>
 
+						<TextBlock Text="{DynamicResource s_page_settings_experemental_header}"
+								   Padding="0 20 0 0"
+								   FontSize="24"
+								   FontWeight="DemiBold"
+								   Foreground="{DynamicResource AccentColor}"/>
+
+						<TextBlock Text="{DynamicResource s_page_settings_experemental_description}"
+								   Padding="10 0 0 0"
+								   FontSize="16"
+								   FontWeight="SemiLight"
+								   Foreground="{DynamicResource TextColor}"/>
+
+						<WrapPanel Name="ExperementalFuncsView" Margin="0 10 0 10">
+						</WrapPanel>
+
 						<TextBlock Text="{DynamicResource s_page_settings_other_header}"
 								   Padding="0 20 0 0"
 								   FontSize="24"
 								   FontWeight="DemiBold"
 								   Foreground="{DynamicResource AccentColor}"/>
 
-						<WrapPanel Name="DebugUtilsView" Margin="0 10 0 10">
+						<WrapPanel Margin="0 10 0 10">
 							<c:SfaButton Content="{DynamicResource s_page_settings_show_licenses_btn}"
 										 Command="{Binding ShowLicenses}"/>
 						</WrapPanel>
+						
 					</StackPanel>
 				</Grid>
 			</ScrollViewer>

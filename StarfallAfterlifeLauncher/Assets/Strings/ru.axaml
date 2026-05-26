@@ -123,6 +123,8 @@
 	<sys:String x:Key="s_page_settings_game_show_log_lbl">Показывать Лог</sys:String>
 	<sys:String x:Key="s_page_settings_game_hide_splash_screen_lbl">Отключить Заставку</sys:String>
 	<sys:String x:Key="s_page_settings_game_hide_loading_screen_lbl">Отключить Экран Загрузки </sys:String>
+	<sys:String x:Key="s_page_settings_experemental_header">ЭКСПЕРИМЕНТАЛЬНЫЕ ФУНКЦИИ</sys:String>
+	<sys:String x:Key="s_page_settings_experemental_description">Эти функции находятся в стадии разработки и могут работать нестабильно.</sys:String>
 	<sys:String x:Key="s_page_settings_other_header">РАЗНОЕ</sys:String>
 	<sys:String x:Key="s_page_settings_show_licenses_btn">ЛИЦЕНЗИИ</sys:String>
 	
