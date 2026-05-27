@@ -3,6 +3,7 @@ using Avalonia.Controls.Selection;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using StarfallAfterlife.Bridge.Database;
+using StarfallAfterlife.Bridge.Environment;
 using StarfallAfterlife.Bridge.Launcher;
 using StarfallAfterlife.Bridge.Serialization;
 using System.Collections.Generic;
@@ -85,6 +86,22 @@ namespace StarfallAfterlife.Launcher.MobsEditor
         {
             if (MobsDirectory is string mobsDir)
                 Process.Start("explorer.exe", $"\"{mobsDir}\"");
+        }
+
+        public static async void OpenInGameEditor()
+        {
+            var process = new SfaProcess
+            {
+                Executable = Path.Combine(App.Launcher.GameDirectory, "Msk", "starfall_game", "Starfall", "Binaries", "Win64", "Starfall.exe"),
+                DisableLoadingScreen = true,
+                DisableSplashScreen = true,
+                EnableLog = true,
+                Windowed = true
+            };
+
+            process.ConsoleCommands.Add("defer ke LoginWidget RemoveFromViewport");
+            process.ConsoleCommands.Add("defer ke MainMenuWidget RequestChangePage MobEditor true");
+            process.Start();
         }
 
         protected override void OnLoaded(RoutedEventArgs e)

@@ -30,6 +30,13 @@ namespace StarfallAfterlife.Launcher.Pages
                 Command = new Command(() => new MobsEditorWindow().Show()),
                 Margin = new Thickness(3),
             });
+
+            ExperementalFuncsView?.Children.Add(new SfaButton()
+            {
+                Content = "INGAME MOBS EDITOR",
+                Command = new Command(() => MobsEditorWindow.OpenInGameEditor()),
+                Margin = new Thickness(3),
+            });
 #endif
         }
     }

@@ -17,6 +17,7 @@
 			<Label Content="Mobs" FontSize="20" FontWeight="DemiBold" HorizontalAlignment="Left"/>
 			<StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Right">
 				<Button Content="Open Folder" Command="{Binding $parent[Window].OpenFolder}"/>
+				<Button Content="Open In-game Editor" Command="{Binding $parent[Window].OpenInGameEditor}"/>
 				<Button Content="Update" Command="{Binding $parent[Window].UpdateMobsList}"/>
 			</StackPanel>
 		</Panel>
