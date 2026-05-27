@@ -18,22 +18,25 @@ namespace StarfallAfterlife.Bridge.Environment
             WinProcess = new WindowsProcess() { AttachToMainProcess = true };
             var startupInfo = new StartupInfo();
 
+            if (Listen == true || RedirectOutput == true)
+                startupInfo.dwFlags |= STARTF.USESTDHANDLES;
+
             if (Listen == true)
             {
-                startupInfo.dwFlags |= STARTF.USESTDHANDLES;
                 startupInfo.dwFlags |= STARTF.USESHOWWINDOW;
                 startupInfo.wShowWindow |= ShowWindowType.SHOWMINNOACTIVE;
-            };
+            }
 
             WinProcess.Start(null, $"{Executable} {BuildArguments()}", startupInfo);
 
-            if (Listen == true)
+            if (Listen == true || RedirectOutput == true)
             {
                 if (WinProcess.StandartOutput is StreamReader output)
                     BeginReadingOutput(output);
-
-                HideWin32Window();
             }
+
+            if (Listen == true)
+                HideWin32Window();
         }
 
         public void HideWin32Window()

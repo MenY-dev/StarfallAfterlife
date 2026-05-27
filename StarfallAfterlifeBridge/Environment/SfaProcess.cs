@@ -30,6 +30,8 @@ namespace StarfallAfterlife.Bridge.Environment
 
         public bool Listen { get; set; }
 
+        public bool RedirectOutput { get; set; }
+
         public bool Windowed { get; set; }
 
         public bool DisableSplashScreen { get; set; }
